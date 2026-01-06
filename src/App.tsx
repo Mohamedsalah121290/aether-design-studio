@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import ResourcesPage from "./pages/ResourcesPage";
 import Dashboard from "./pages/Dashboard";
+import ContentHub from "./pages/ContentHub";
 import NotFound from "./pages/NotFound";
 import "@/lib/i18n";
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/resources" element={<ResourcesPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/content-hub" element={<ContentHub />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
