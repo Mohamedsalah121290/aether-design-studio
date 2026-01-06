@@ -29,10 +29,10 @@ const Navbar = () => {
   const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
 
   const navLinks = [
-    { href: '#features', label: t('nav.features') },
-    { href: '#pricing', label: t('nav.pricing') },
-    { href: '#resources', label: t('nav.resources') },
-    { href: '#about', label: t('nav.about') },
+    { href: '/#features', label: t('nav.features') },
+    { href: '/#pricing', label: t('nav.pricing') },
+    { href: '/resources', label: t('nav.resources') },
+    { href: '/#about', label: t('nav.about') },
   ];
 
   return (

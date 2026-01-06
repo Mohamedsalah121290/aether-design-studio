@@ -140,9 +140,11 @@ const Resources = () => {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="text-center mt-12"
         >
-          <Button variant="heroOutline" size="lg" className="group">
-            View All Resources
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <Button variant="heroOutline" size="lg" className="group" asChild>
+            <a href="/resources">
+              View All Resources
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </a>
           </Button>
         </motion.div>
       </div>
