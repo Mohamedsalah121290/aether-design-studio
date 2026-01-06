@@ -1,8 +1,20 @@
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Play, Zap, Shield, TrendingUp } from 'lucide-react';
+import { ArrowRight, Play, Zap, Shield, TrendingUp, Brain, Sparkles, Bot, Cpu, Code, MessageSquare, Wand2, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
+// Floating 3D icon configuration
+const floatingIcons = [
+  { Icon: Brain, x: '10%', y: '20%', size: 48, delay: 0, parallaxFactor: 30 },
+  { Icon: Sparkles, x: '85%', y: '15%', size: 36, delay: 0.5, parallaxFactor: 25 },
+  { Icon: Bot, x: '5%', y: '60%', size: 40, delay: 1, parallaxFactor: 35 },
+  { Icon: Cpu, x: '90%', y: '55%', size: 44, delay: 0.3, parallaxFactor: 28 },
+  { Icon: Code, x: '15%', y: '80%', size: 32, delay: 0.7, parallaxFactor: 20 },
+  { Icon: MessageSquare, x: '80%', y: '75%', size: 38, delay: 1.2, parallaxFactor: 32 },
+  { Icon: Wand2, x: '25%', y: '10%', size: 34, delay: 0.2, parallaxFactor: 22 },
+  { Icon: Lightbulb, x: '75%', y: '35%', size: 42, delay: 0.8, parallaxFactor: 26 },
+];
 
 const Hero = () => {
   const { t } = useTranslation();
@@ -67,6 +79,104 @@ const Hero = () => {
           transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full bg-accent/10 blur-3xl"
         />
+      </div>
+
+      {/* Floating 3D AI Tool Icons with Parallax */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {floatingIcons.map((item, index) => {
+          const { Icon, x, y, size, delay, parallaxFactor } = item;
+          const iconX = useTransform(mouseX, [-0.5, 0.5], [-parallaxFactor, parallaxFactor]);
+          const iconY = useTransform(mouseY, [-0.5, 0.5], [-parallaxFactor, parallaxFactor]);
+          const springX = useSpring(iconX, { stiffness: 100, damping: 20 });
+          const springY = useSpring(iconY, { stiffness: 100, damping: 20 });
+
+          return (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                y: [0, -15, 0],
+              }}
+              transition={{
+                opacity: { duration: 0.5, delay: delay + 0.5 },
+                scale: { duration: 0.5, delay: delay + 0.5, type: 'spring' },
+                y: { duration: 4 + index * 0.5, repeat: Infinity, ease: 'easeInOut', delay: delay },
+              }}
+              style={{
+                left: x,
+                top: y,
+                x: springX,
+                y: springY,
+              }}
+              className="absolute"
+            >
+              <div className="relative group">
+                {/* Glow effect behind icon */}
+                <div 
+                  className="absolute inset-0 rounded-full blur-xl opacity-60"
+                  style={{
+                    background: `radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%)`,
+                    transform: 'scale(2)',
+                  }}
+                />
+                {/* Glass container */}
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  className="relative glass-strong rounded-2xl p-3 sm:p-4 border border-primary/20 shadow-lg"
+                  style={{
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <Icon 
+                    size={size} 
+                    className="text-primary drop-shadow-lg"
+                    strokeWidth={1.5}
+                  />
+                </motion.div>
+              </div>
+            </motion.div>
+          );
+        })}
+
+        {/* Central AI Brain with enhanced 3D effect */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.3, type: 'spring' }}
+          style={{
+            x: useSpring(useTransform(mouseX, [-0.5, 0.5], [-40, 40]), { stiffness: 80, damping: 25 }),
+            y: useSpring(useTransform(mouseY, [-0.5, 0.5], [-40, 40]), { stiffness: 80, damping: 25 }),
+          }}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:block"
+        >
+          <motion.div
+            animate={{
+              rotateY: [0, 360],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            className="relative"
+          >
+            {/* Outer ring */}
+            <div className="absolute inset-0 rounded-full border-2 border-dashed border-primary/30 animate-[spin_20s_linear_infinite]" style={{ width: '280px', height: '280px', marginLeft: '-140px', marginTop: '-140px' }} />
+            
+            {/* Middle ring */}
+            <div className="absolute inset-0 rounded-full border border-primary/20 animate-[spin_15s_linear_infinite_reverse]" style={{ width: '220px', height: '220px', marginLeft: '-110px', marginTop: '-110px' }} />
+            
+            {/* Inner glow */}
+            <div 
+              className="absolute rounded-full blur-3xl opacity-40"
+              style={{
+                width: '200px',
+                height: '200px',
+                marginLeft: '-100px',
+                marginTop: '-100px',
+                background: 'radial-gradient(circle, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, transparent 70%)',
+              }}
+            />
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Floating Grid */}
