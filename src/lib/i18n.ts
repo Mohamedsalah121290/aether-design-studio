@@ -94,11 +94,11 @@ const resources = {
       },
       cta: {
         title: 'Ready to Transform Your Workflow?',
-        description: 'Join thousands of teams already using NexusAI to achieve more.',
+        description: 'Join thousands of teams already using AI DEALS to achieve more.',
         button: 'Start Your Free Trial',
       },
       footer: {
-        description: 'Next-generation AI platform for modern teams.',
+        description: 'Premium AI tools subscriptions at unbeatable prices.',
         product: 'Product',
         company: 'Company',
         legal: 'Legal',
@@ -198,11 +198,11 @@ const resources = {
       },
       cta: {
         title: 'هل أنت مستعد لتحويل سير عملك؟',
-        description: 'انضم إلى آلاف الفرق التي تستخدم NexusAI بالفعل لتحقيق المزيد.',
+        description: 'انضم إلى آلاف الفرق التي تستخدم AI DEALS بالفعل لتحقيق المزيد.',
         button: 'ابدأ تجربتك المجانية',
       },
       footer: {
-        description: 'منصة الذكاء الاصطناعي من الجيل القادم للفرق الحديثة.',
+        description: 'اشتراكات أدوات الذكاء الاصطناعي المتميزة بأسعار لا تقبل المنافسة.',
         product: 'المنتج',
         company: 'الشركة',
         legal: 'قانوني',
@@ -262,7 +262,7 @@ const resources = {
       },
       resources: { title: 'Leer & Groei', subtitle: 'Bronnen', description: 'Ontdek tutorials en best practices.', readMore: 'Lees Artikel', watchVideo: 'Bekijk Video' },
       cta: { title: 'Klaar om Uw Workflow te Transformeren?', description: 'Sluit u aan bij duizenden teams.', button: 'Start Uw Gratis Proef' },
-      footer: { description: 'Next-gen AI platform voor moderne teams.', product: 'Product', company: 'Bedrijf', legal: 'Juridisch', rights: 'Alle rechten voorbehouden.' },
+      footer: { description: 'Premium AI tools subscriptions.', product: 'Product', company: 'Bedrijf', legal: 'Juridisch', rights: 'Alle rechten voorbehouden.' },
     },
   },
   fr: {
@@ -273,7 +273,7 @@ const resources = {
       pricing: { title: 'Tarifs Simples', subtitle: 'Choisissez Votre Plan', description: 'Commencez gratuitement, évoluez selon vos besoins.', monthly: 'Mensuel', perMonth: '/mois', popular: 'Le Plus Populaire', cta: 'Commencer', plans: { starter: { name: 'Starter', price: '29', description: 'Parfait pour les individus.', features: ['5 000 crédits IA/mois', 'Analyses de base', 'Support email', '2 membres', 'Accès API'] }, pro: { name: 'Pro', price: '99', description: 'Idéal pour les équipes en croissance.', features: ['50 000 crédits IA/mois', 'Analyses avancées', 'Support prioritaire', '10 membres', 'Intégrations personnalisées', 'Marque blanche'] }, enterprise: { name: 'Entreprise', price: '299', description: 'Pour les grandes organisations.', features: ['Crédits illimités', 'Analyses entreprise', 'Support dédié', 'Membres illimités', 'Développement sur mesure', 'Garantie SLA', 'Option sur site'] } } },
       resources: { title: 'Apprendre & Grandir', subtitle: 'Ressources', description: 'Explorez les tutoriels et guides.', readMore: 'Lire l\'Article', watchVideo: 'Voir la Vidéo' },
       cta: { title: 'Prêt à Transformer Votre Workflow?', description: 'Rejoignez des milliers d\'équipes.', button: 'Démarrer Votre Essai Gratuit' },
-      footer: { description: 'Plateforme IA nouvelle génération.', product: 'Produit', company: 'Entreprise', legal: 'Légal', rights: 'Tous droits réservés.' },
+      footer: { description: 'Abonnements IA premium.', product: 'Produit', company: 'Entreprise', legal: 'Légal', rights: 'Tous droits réservés.' },
     },
   },
   de: {

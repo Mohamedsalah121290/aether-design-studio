@@ -29,14 +29,14 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <motion.a
-              href="#"
+              href="/"
               className="flex items-center gap-2 mb-6"
               whileHover={{ scale: 1.02 }}
             >
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-display font-bold gradient-text">NexusAI</span>
+              <span className="text-xl font-display font-black tracking-tight gradient-text uppercase">AI DEALS</span>
             </motion.a>
             <p className="text-muted-foreground mb-6 max-w-sm">
               {t('footer.description')}
@@ -116,7 +116,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="py-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} NexusAI. {t('footer.rights')}
+            © {new Date().getFullYear()} AI DEALS. {t('footer.rights')}
           </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">

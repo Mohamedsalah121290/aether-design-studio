@@ -47,14 +47,14 @@ const Navbar = () => {
       <nav className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <motion.a
-          href="#"
+          href="/"
           className="flex items-center gap-2 group"
           whileHover={{ scale: 1.02 }}
         >
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
             <Sparkles className="w-5 h-5 text-primary-foreground" />
           </div>
-          <span className="text-xl font-display font-bold gradient-text">NexusAI</span>
+          <span className="text-xl font-display font-black tracking-tight gradient-text uppercase">AI DEALS</span>
         </motion.a>
 
         {/* Desktop Nav */}
