@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Play, Clock, Eye, ArrowRight, Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
@@ -466,60 +467,53 @@ const ContentHub = () => {
                   transition={{ delay: index * 0.05 }}
                   className="group"
                 >
-                  <div className="glass rounded-2xl overflow-hidden h-full flex flex-col hover:border-primary/30 transition-all duration-300">
-                    {/* Thumbnail */}
-                    <div className="relative aspect-[16/10] overflow-hidden">
-                      <img
-                        src={article.thumbnail}
-                        alt={article.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                      {/* Category Tag */}
-                      <div className="absolute top-4 left-4">
-                        <span className="px-3 py-1.5 rounded-full bg-primary/90 text-primary-foreground text-xs font-semibold backdrop-blur-sm">
-                          {article.category}
+                  <Link to={`/article/${article.id}`} className="block h-full">
+                    <div className="glass rounded-2xl overflow-hidden h-full flex flex-col hover:border-primary/30 transition-all duration-300">
+                      {/* Thumbnail */}
+                      <div className="relative aspect-[16/10] overflow-hidden">
+                        <img
+                          src={article.thumbnail}
+                          alt={article.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                        {/* Category Tag */}
+                        <div className="absolute top-4 left-4">
+                          <span className="px-3 py-1.5 rounded-full bg-primary/90 text-primary-foreground text-xs font-semibold backdrop-blur-sm">
+                            {article.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-6 flex flex-col flex-grow">
+                        {/* Meta */}
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
+                          <span>{article.author}</span>
+                          <span>•</span>
+                          <span>{article.date}</span>
+                          <span>•</span>
+                          <span>{article.readTime}</span>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="font-display font-bold text-lg leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                          {article.title}
+                        </h3>
+
+                        {/* Snippet */}
+                        <p className="text-sm text-muted-foreground line-clamp-2 mb-4 flex-grow">
+                          {article.snippet}
+                        </p>
+
+                        {/* Read More */}
+                        <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                          Read Article
+                          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                         </span>
                       </div>
                     </div>
-
-                    {/* Content */}
-                    <div className="p-6 flex flex-col flex-grow">
-                      {/* Meta */}
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
-                        <span>{article.author}</span>
-                        <span>•</span>
-                        <span>{article.date}</span>
-                        <span>•</span>
-                        <span>{article.readTime}</span>
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="font-display font-bold text-lg leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                        {article.title}
-                      </h3>
-
-                      {/* Snippet */}
-                      <p className="text-sm text-muted-foreground line-clamp-2 mb-4 flex-grow">
-                        {article.snippet}
-                      </p>
-
-                      {/* Read More */}
-                      <motion.a
-                        href="#"
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-primary group/link"
-                      >
-                        Read Article
-                        <motion.span
-                          className="inline-block"
-                          initial={{ x: 0 }}
-                          whileHover={{ x: 5 }}
-                        >
-                          <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
-                        </motion.span>
-                      </motion.a>
-                    </div>
-                  </div>
+                  </Link>
                 </motion.article>
               ))}
             </AnimatePresence>
