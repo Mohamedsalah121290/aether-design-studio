@@ -59,14 +59,14 @@ const Navbar = () => {
               <img 
                 src={logo} 
                 alt="" 
-                className="h-12 w-auto"
+                className="h-16 w-auto"
                 aria-hidden="true"
               />
             </div>
             <img 
               src={logo} 
               alt="AI DEALS" 
-              className="h-12 w-auto relative z-10 drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(168,85,247,0.7)]"
+              className="h-16 w-auto relative z-10 drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(168,85,247,0.7)]"
             />
           </div>
           
