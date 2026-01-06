@@ -31,14 +31,47 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <motion.a
               href="/"
-              className="flex items-center mb-6 group"
+              className="flex items-center gap-3 mb-6 group"
               whileHover={{ scale: 1.02 }}
             >
-              <img 
-                src={logo} 
-                alt="AI DEALS" 
-                className="h-12 w-auto drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_30px_rgba(168,85,247,0.7)]"
-              />
+              {/* Logo with Neon Glow */}
+              <div className="relative">
+                <div className="absolute inset-0 blur-xl opacity-60">
+                  <img 
+                    src={logo} 
+                    alt="" 
+                    className="h-14 w-auto"
+                    aria-hidden="true"
+                  />
+                </div>
+                <img 
+                  src={logo} 
+                  alt="AI DEALS" 
+                  className="h-14 w-auto relative z-10 drop-shadow-[0_0_25px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_40px_rgba(168,85,247,0.7)]"
+                />
+              </div>
+              
+              {/* Dual-tone Brand Name */}
+              <div className="flex items-baseline">
+                <span 
+                  className="text-2xl font-display font-black tracking-tight text-primary drop-shadow-[0_0_10px_rgba(168,85,247,0.6)]"
+                  style={{
+                    textShadow: '0 0 20px hsl(var(--primary) / 0.5), 0 2px 4px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  AI
+                </span>
+                <span 
+                  className="text-2xl font-display font-black tracking-tight text-foreground ml-1"
+                  style={{
+                    background: 'linear-gradient(180deg, hsl(var(--foreground)) 0%, hsl(var(--muted-foreground)) 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  DEALS
+                </span>
+              </div>
             </motion.a>
             <p className="text-muted-foreground mb-6 max-w-sm">
               {t('footer.description')}

@@ -47,17 +47,52 @@ const Navbar = () => {
       }`}
     >
       <nav className="container mx-auto px-4 flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo with Dual-tone Brand Name */}
         <motion.a
           href="/"
-          className="flex items-center group"
+          className="flex items-center gap-3 group"
           whileHover={{ scale: 1.02 }}
         >
-          <img 
-            src={logo} 
-            alt="AI DEALS" 
-            className="h-10 w-auto drop-shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all duration-300 group-hover:drop-shadow-[0_0_25px_rgba(168,85,247,0.6)]"
-          />
+          {/* Logo with Neon Glow */}
+          <div className="relative">
+            <div className="absolute inset-0 blur-xl opacity-60">
+              <img 
+                src={logo} 
+                alt="" 
+                className="h-12 w-auto"
+                aria-hidden="true"
+              />
+            </div>
+            <img 
+              src={logo} 
+              alt="AI DEALS" 
+              className="h-12 w-auto relative z-10 drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(168,85,247,0.7)]"
+            />
+          </div>
+          
+          {/* Dual-tone Brand Name with Metallic Effect */}
+          <div className="hidden sm:flex items-baseline">
+            <span 
+              className="text-2xl font-display font-black tracking-tight text-primary drop-shadow-[0_0_10px_rgba(168,85,247,0.6)]"
+              style={{
+                textShadow: '0 0 20px hsl(var(--primary) / 0.5), 0 2px 4px rgba(0,0,0,0.3)',
+              }}
+            >
+              AI
+            </span>
+            <span 
+              className="text-2xl font-display font-black tracking-tight text-foreground ml-1"
+              style={{
+                background: 'linear-gradient(180deg, hsl(var(--foreground)) 0%, hsl(var(--muted-foreground)) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                filter: 'drop-shadow(0 1px 1px rgba(255,255,255,0.1))',
+              }}
+            >
+              DEALS
+            </span>
+          </div>
         </motion.a>
 
         {/* Desktop Nav */}
