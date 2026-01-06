@@ -112,8 +112,8 @@ const Navbar = () => {
             </AnimatePresence>
           </div>
 
-          <Button variant="heroOutline" size="sm">
-            {t('nav.dashboard')}
+          <Button variant="heroOutline" size="sm" asChild>
+            <a href="/dashboard">{t('nav.dashboard')}</a>
           </Button>
           <Button variant="hero" size="sm">
             {t('nav.getStarted')}
