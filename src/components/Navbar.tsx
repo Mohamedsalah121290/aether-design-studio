@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, Globe, ChevronDown, Sparkles } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languages } from '@/lib/i18n';
+import logo from '@/assets/logo.png';
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -49,13 +50,14 @@ const Navbar = () => {
         {/* Logo */}
         <motion.a
           href="/"
-          className="flex items-center gap-2 group"
+          className="flex items-center group"
           whileHover={{ scale: 1.02 }}
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <span className="text-xl font-display font-black tracking-tight gradient-text uppercase">AI DEALS</span>
+          <img 
+            src={logo} 
+            alt="AI DEALS" 
+            className="h-10 w-auto drop-shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all duration-300 group-hover:drop-shadow-[0_0_25px_rgba(168,85,247,0.6)]"
+          />
         </motion.a>
 
         {/* Desktop Nav */}

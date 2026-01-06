@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -30,13 +31,14 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <motion.a
               href="/"
-              className="flex items-center gap-2 mb-6"
+              className="flex items-center mb-6 group"
               whileHover={{ scale: 1.02 }}
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-display font-black tracking-tight gradient-text uppercase">AI DEALS</span>
+              <img 
+                src={logo} 
+                alt="AI DEALS" 
+                className="h-12 w-auto drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_30px_rgba(168,85,247,0.7)]"
+              />
             </motion.a>
             <p className="text-muted-foreground mb-6 max-w-sm">
               {t('footer.description')}
