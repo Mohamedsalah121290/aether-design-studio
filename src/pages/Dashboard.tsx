@@ -78,11 +78,32 @@ const toolAccessUrls: Record<string, string> = {
 interface Order {
   id: string;
   tool_id: string;
-  tool_name: string;
-  tool_price: string;
   status: string;
   created_at: string;
+  activation_deadline: string | null;
+  customer_data: Record<string, string>;
+  tool?: {
+    tool_id: string;
+    name: string;
+    price: number;
+    access_url: string;
+  };
 }
+
+// Calculate remaining time
+const getRemainingTime = (deadline: string | null) => {
+  if (!deadline) return null;
+  const now = new Date().getTime();
+  const end = new Date(deadline).getTime();
+  const diff = end - now;
+  
+  if (diff <= 0) return { hours: 0, minutes: 0, expired: true };
+  
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  
+  return { hours, minutes, expired: false };
+};
 
 // Vault Tool Card Component
 const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
@@ -91,12 +112,24 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
   const [logoError, setLogoError] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(getRemainingTime(order.activation_deadline));
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), { stiffness: 300, damping: 30 });
   const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), { stiffness: 300, damping: 30 });
+
+  // Update countdown timer
+  useEffect(() => {
+    if (order.status !== 'pending') return;
+    
+    const interval = setInterval(() => {
+      setTimeRemaining(getRemainingTime(order.activation_deadline));
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval);
+  }, [order.activation_deadline, order.status]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -113,10 +146,12 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
     setIsHovered(false);
   };
 
-  const logoUrl = toolLogos[order.tool_id];
-  const colors = toolColors[order.tool_id] || { primary: '#a855f7', glow: '270 85% 65%' };
-  const accessUrl = toolAccessUrls[order.tool_id] || '#';
+  const toolId = order.tool?.tool_id || '';
+  const logoUrl = toolLogos[toolId];
+  const colors = toolColors[toolId] || { primary: '#a855f7', glow: '270 85% 65%' };
+  const accessUrl = order.tool?.access_url || toolAccessUrls[toolId] || '#';
   const isPending = order.status === 'pending';
+  const isActive = order.status === 'active';
 
   return (
     <motion.div
@@ -172,21 +207,17 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
           {/* Status Indicator */}
           <div 
             className={`absolute top-4 end-4 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium z-10 ${
-              isPending ? 'bg-yellow-500/20 text-yellow-500' : ''
+              isPending ? 'bg-yellow-500/20 text-yellow-500' : 'bg-green-500/20 text-green-500'
             }`}
-            style={!isPending ? { background: `${colors.primary}20`, color: colors.primary } : {}}
           >
             {isPending ? (
               <>
-                <Clock className="w-3 h-3" />
+                <Clock className="w-3 h-3 animate-pulse" />
                 {t('checkout.pending')}
               </>
             ) : (
               <>
-                <span 
-                  className="w-2 h-2 rounded-full animate-pulse"
-                  style={{ background: colors.primary }}
-                />
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                 {t('dashboard.active')}
               </>
             )}
@@ -224,7 +255,7 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
                 {logoUrl && !logoError ? (
                   <img
                     src={logoUrl}
-                    alt={`${order.tool_name} logo`}
+                    alt={`${order.tool?.name} logo`}
                     className={`w-10 h-10 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => setLogoLoaded(true)}
                     onError={() => setLogoError(true)}
@@ -238,7 +269,7 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
                     className="text-2xl font-bold text-white"
                     style={{ textShadow: `0 2px 10px ${colors.primary}` }}
                   >
-                    {order.tool_name.charAt(0)}
+                    {order.tool?.name?.charAt(0) || '?'}
                   </span>
                 )}
 
@@ -253,12 +284,31 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
             </div>
 
             {/* Tool Name */}
-            <h3 className="text-xl font-display font-bold mb-2">{order.tool_name}</h3>
+            <h3 className="text-xl font-display font-bold mb-2">{order.tool?.name || 'Unknown Tool'}</h3>
             
-            {/* Purchase Date */}
-            <p className="text-xs text-muted-foreground mb-6">
-              {t('dashboard.purchasedOn')}: {new Date(order.created_at).toLocaleDateString()}
-            </p>
+            {/* Status Info */}
+            {isPending && timeRemaining && !timeRemaining.expired ? (
+              <div className="mb-4 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+                <p className="text-xs text-yellow-500 font-medium mb-1">{t('dashboard.activatingIn')}</p>
+                <p className="text-lg font-bold text-yellow-400">
+                  {timeRemaining.hours}h {timeRemaining.minutes}m
+                </p>
+              </div>
+            ) : isPending ? (
+              <p className="text-xs text-yellow-500 mb-4">{t('dashboard.processingOrder')}</p>
+            ) : (
+              <p className="text-xs text-muted-foreground mb-4">
+                {t('dashboard.purchasedOn')}: {new Date(order.created_at).toLocaleDateString()}
+              </p>
+            )}
+
+            {/* Credentials for Active Orders */}
+            {isActive && order.customer_data?.email && (
+              <div className="mb-4 p-3 rounded-xl bg-white/5 border border-white/10">
+                <p className="text-xs text-muted-foreground mb-1">{t('dashboard.credentials')}</p>
+                <p className="text-sm font-medium text-white truncate">{order.customer_data.email}</p>
+              </div>
+            )}
 
             {/* Launch Button */}
             <Button
@@ -326,12 +376,32 @@ const Dashboard = () => {
     try {
       const { data, error } = await supabase
         .from('orders')
-        .select('*')
+        .select(`
+          *,
+          tool:tools(tool_id, name, price, access_url)
+        `)
         .eq('buyer_email', email)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setOrders(data || []);
+      
+      // Type assertion for the joined data
+      const mappedOrders: Order[] = (data || []).map((order: any) => ({
+        id: order.id,
+        tool_id: order.tool_id,
+        status: order.status,
+        created_at: order.created_at,
+        activation_deadline: order.activation_deadline,
+        customer_data: order.customer_data || {},
+        tool: order.tool ? {
+          tool_id: order.tool.tool_id,
+          name: order.tool.name,
+          price: Number(order.tool.price),
+          access_url: order.tool.access_url,
+        } : undefined,
+      }));
+      
+      setOrders(mappedOrders);
     } catch (error) {
       console.error('Error fetching orders:', error);
     } finally {
@@ -340,8 +410,11 @@ const Dashboard = () => {
   };
 
   const filteredOrders = orders.filter(order =>
-    order.tool_name.toLowerCase().includes(searchQuery.toLowerCase())
+    order.tool?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const pendingCount = orders.filter(o => o.status === 'pending').length;
+  const activeCount = orders.filter(o => o.status === 'active').length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -416,11 +489,19 @@ const Dashboard = () => {
               transition={{ delay: 0.2 }}
               className="glass-strong rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4"
             >
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-sm font-medium">{t('dashboard.allToolsActive')}</span>
-                </div>
+              <div className="flex items-center gap-4 flex-wrap">
+                {activeCount > 0 && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-sm font-medium">{activeCount} {t('dashboard.active')}</span>
+                  </div>
+                )}
+                {pendingCount > 0 && (
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-3 h-3 text-yellow-500" />
+                    <span className="text-sm font-medium text-yellow-500">{pendingCount} {t('checkout.pending')}</span>
+                  </div>
+                )}
                 <div className="h-4 w-px bg-border hidden sm:block" />
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Shield className="w-4 h-4" />
