@@ -59,7 +59,10 @@ const Navbar = () => {
     y: 0
   }} transition={{
     duration: 0.5
-  }} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass-strong py-3' : 'py-5'}`}>
+  }} className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-background/80 backdrop-blur-xl border-b border-white/10 py-3' : 'backdrop-blur-md bg-black/20 py-5'}`}
+  style={{
+    boxShadow: isScrolled ? '0 4px 30px rgba(0,0,0,0.3)' : 'none',
+  }}>
       <nav className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo with Dual-tone Brand Name */}
         <motion.a href="/" className="flex items-center gap-3 group" whileHover={{
