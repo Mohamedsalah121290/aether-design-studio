@@ -3,47 +3,45 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { 
   ExternalLink, Sparkles, Search, X,
-  MessageSquare, Image, Video, Music, 
-  Code, Palette, Wand2, Bot,
   Settings, Bell, User, Shield, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 
-// Tool icon mapping
-const toolIcons: Record<string, React.ElementType> = {
-  'chatgpt': MessageSquare,
-  'claude': Bot,
-  'gemini': Sparkles,
-  'perplexity': Search,
-  'jasper': Palette,
-  'midjourney': Image,
-  'leonardo': Wand2,
-  'capcut': Video,
-  'runway': Video,
-  'elevenlabs': Music,
-  'murf': Music,
-  'claude-code': Code,
-  'adobe': Palette,
-  'windows': Code,
+// Official brand logos from reliable CDN sources
+const toolLogos: Record<string, string> = {
+  'chatgpt': 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg',
+  'claude': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
+  'gemini': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg',
+  'perplexity': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1706190595/ioembezzxqjmblqoqnlw.png',
+  'jasper': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1673294837/ozjn5b2qcxk5c6ivddpc.png',
+  'midjourney': 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.png',
+  'leonardo': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1677753796/sjslmlpj1cjomspzavzs.png',
+  'capcut': 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/CapCut_logo.svg/1024px-CapCut_logo.svg.png',
+  'runway': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1615813352/vu1cjc3gidyrbivrqdip.png',
+  'elevenlabs': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1673539371/hrmn0g6eozdxcjfmqpnr.png',
+  'murf': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1632913011/wj4qr1d1n1lbcojthqjn.png',
+  'claude-code': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
+  'adobe': 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Adobe_Experience_Cloud_logo.svg',
+  'windows': 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg',
 };
 
 // Brand colors for each tool
-const toolColors: Record<string, string> = {
-  'chatgpt': '#10a37f',
-  'claude': '#cc785c',
-  'gemini': '#4285f4',
-  'perplexity': '#20808d',
-  'jasper': '#ff5c5c',
-  'midjourney': '#7c3aed',
-  'leonardo': '#f59e0b',
-  'capcut': '#00f0ff',
-  'runway': '#ff2d55',
-  'elevenlabs': '#8b5cf6',
-  'murf': '#06b6d4',
-  'claude-code': '#ff6b35',
-  'adobe': '#ff0000',
-  'windows': '#0078d4',
+const toolColors: Record<string, { primary: string; glow: string }> = {
+  'chatgpt': { primary: '#10a37f', glow: '160 84% 40%' },
+  'claude': { primary: '#cc785c', glow: '20 55% 58%' },
+  'gemini': { primary: '#4285f4', glow: '217 89% 61%' },
+  'perplexity': { primary: '#20808d', glow: '187 63% 34%' },
+  'jasper': { primary: '#ff5c5c', glow: '0 100% 68%' },
+  'midjourney': { primary: '#000000', glow: '0 0% 30%' },
+  'leonardo': { primary: '#8b5cf6', glow: '258 90% 66%' },
+  'capcut': { primary: '#00f0ff', glow: '184 100% 50%' },
+  'runway': { primary: '#ff2d55', glow: '349 100% 59%' },
+  'elevenlabs': { primary: '#000000', glow: '0 0% 40%' },
+  'murf': { primary: '#6366f1', glow: '239 84% 67%' },
+  'claude-code': { primary: '#ff6b35', glow: '18 100% 60%' },
+  'adobe': { primary: '#ff0000', glow: '0 100% 50%' },
+  'windows': { primary: '#0078d4', glow: '206 100% 42%' },
 };
 
 interface PurchasedTool {
@@ -61,11 +59,13 @@ const purchasedTools: PurchasedTool[] = [
   { id: 'runway', name: 'Runway Gen-4', purchaseDate: '2026-01-06', accessUrl: 'https://runway.ml' },
 ];
 
-// 3D Vault Tool Card
+// 3D Vault Tool Card with Official Logos
 const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) => {
   const { t } = useTranslation();
   const cardRef = { current: null as HTMLDivElement | null };
   const [isHovered, setIsHovered] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -88,8 +88,8 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
     setIsHovered(false);
   };
 
-  const Icon = toolIcons[tool.id] || Sparkles;
-  const color = toolColors[tool.id] || '#a855f7';
+  const logoUrl = toolLogos[tool.id];
+  const colors = toolColors[tool.id] || { primary: '#a855f7', glow: '270 85% 65%' };
 
   return (
     <motion.div
@@ -110,7 +110,7 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
         }}
         className="relative group"
       >
-        {/* Glow Effect */}
+        {/* Glow Effect with Brand Color */}
         <motion.div
           animate={{
             opacity: isHovered ? 0.5 : 0.2,
@@ -118,7 +118,7 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
           }}
           className="absolute -inset-2 rounded-3xl blur-xl"
           style={{
-            background: `radial-gradient(ellipse at center, ${color}50 0%, transparent 70%)`,
+            background: `radial-gradient(ellipse at center, hsl(${colors.glow} / 0.5) 0%, transparent 70%)`,
           }}
         />
 
@@ -134,28 +134,36 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
             `,
           }}
         >
+          {/* Top Shine Effect */}
+          <div 
+            className="absolute top-0 left-0 right-0 h-24 pointer-events-none"
+            style={{
+              background: `linear-gradient(180deg, ${colors.primary}15 0%, transparent 100%)`,
+            }}
+          />
+
           {/* Active Indicator */}
           <div 
-            className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
-            style={{ background: `${color}20`, color }}
+            className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium z-10"
+            style={{ background: `${colors.primary}20`, color: colors.primary }}
           >
             <span 
               className="w-2 h-2 rounded-full animate-pulse"
-              style={{ background: color }}
+              style={{ background: colors.primary }}
             />
             Active
           </div>
 
           <div className="p-6">
-            {/* 3D Icon */}
+            {/* 3D Logo with Glassmorphism */}
             <div className="mb-6 relative">
               <motion.div
                 animate={{
-                  y: isHovered ? 4 : 2,
+                  y: isHovered ? 6 : 3,
                   opacity: isHovered ? 0.4 : 0.2,
                 }}
                 className="absolute left-0 top-2 w-16 h-16 rounded-2xl blur-lg"
-                style={{ background: color }}
+                style={{ background: colors.primary }}
               />
               <motion.div
                 animate={{
@@ -163,13 +171,46 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
                   scale: isHovered ? 1.1 : 1,
                 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                className="relative w-16 h-16 rounded-2xl flex items-center justify-center"
+                className="relative w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden"
                 style={{
-                  background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
-                  boxShadow: `0 10px 40px ${color}60, inset 0 1px 0 rgba(255,255,255,0.3)`,
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+                  backdropFilter: 'blur(10px)',
+                  boxShadow: `
+                    0 10px 40px ${colors.primary}40,
+                    0 0 0 1px rgba(255,255,255,0.1),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2)
+                  `,
                 }}
               >
-                <Icon className="w-8 h-8 text-white" strokeWidth={1.5} />
+                {/* Official Brand Logo */}
+                {logoUrl && !logoError ? (
+                  <img
+                    src={logoUrl}
+                    alt={`${tool.name} logo`}
+                    className={`w-10 h-10 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    onLoad={() => setLogoLoaded(true)}
+                    onError={() => setLogoError(true)}
+                    loading="lazy"
+                  />
+                ) : null}
+                
+                {/* Fallback: First letter if logo fails */}
+                {(!logoUrl || logoError || !logoLoaded) && (
+                  <span 
+                    className="text-2xl font-bold text-white"
+                    style={{ textShadow: `0 2px 10px ${colors.primary}` }}
+                  >
+                    {tool.name.charAt(0)}
+                  </span>
+                )}
+
+                {/* Inner glow ring */}
+                <div 
+                  className="absolute inset-0 rounded-2xl pointer-events-none"
+                  style={{
+                    boxShadow: `inset 0 0 15px ${colors.primary}30`,
+                  }}
+                />
               </motion.div>
             </div>
 
@@ -185,7 +226,7 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
             <Button
               className="w-full relative overflow-hidden group/btn"
               style={{
-                background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
+                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
               }}
               onClick={() => window.open(tool.accessUrl, '_blank')}
             >
@@ -193,8 +234,27 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
                 {t('dashboard.launchTool')}
                 <ExternalLink className="w-4 h-4" />
               </span>
+              <motion.div
+                className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.primary}ee 0%, ${colors.primary} 100%)`,
+                }}
+              />
             </Button>
           </div>
+
+          {/* Animated Border on Hover */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            className="absolute inset-0 rounded-3xl pointer-events-none"
+            style={{
+              background: `linear-gradient(135deg, ${colors.primary}40 0%, transparent 50%, ${colors.primary}20 100%)`,
+              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+              maskComposite: 'xor',
+              padding: '1px',
+            }}
+          />
         </div>
       </motion.div>
     </motion.div>
@@ -206,7 +266,7 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
     window.scrollTo(0, 0);
   }, [i18n.language]);
 
@@ -225,8 +285,8 @@ const Dashboard = () => {
           
           {/* Vault decorative circles */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-10 left-10 w-32 h-32 border border-primary/10 rounded-full" />
-            <div className="absolute bottom-10 right-10 w-40 h-40 border border-secondary/10 rounded-full" />
+            <div className="absolute top-10 start-10 w-32 h-32 border border-primary/10 rounded-full" />
+            <div className="absolute bottom-10 end-10 w-40 h-40 border border-secondary/10 rounded-full" />
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
@@ -316,18 +376,18 @@ const Dashboard = () => {
               className="max-w-md"
             >
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Search className="absolute start-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t('dashboard.searchTools')}
-                  className="w-full pl-12 pr-10 py-3 rounded-xl bg-card/80 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="w-full ps-12 pe-10 py-3 rounded-xl bg-card/80 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute end-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     <X className="w-5 h-5" />
                   </button>

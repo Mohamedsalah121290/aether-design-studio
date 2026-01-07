@@ -1,44 +1,40 @@
 import { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { 
-  MessageSquare, Image, Video, Music, 
-  Code, Palette, Wand2, BarChart3, 
-  FileText, Bot, Sparkles, Search as SearchIcon
-} from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Tool icon mapping
-const toolIcons: Record<string, React.ElementType> = {
-  'chatgpt': MessageSquare,
-  'claude': Bot,
-  'gemini': Sparkles,
-  'perplexity': SearchIcon,
-  'jasper': FileText,
-  'midjourney': Image,
-  'leonardo': Wand2,
-  'capcut': Video,
-  'runway': Video,
-  'elevenlabs': Music,
-  'murf': Music,
-  'claude-code': Code,
-  'adobe': Palette,
-  'windows': Code,
+// Official brand logos from reliable CDN sources
+const toolLogos: Record<string, string> = {
+  'chatgpt': 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg',
+  'claude': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
+  'gemini': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg',
+  'perplexity': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1706190595/ioembezzxqjmblqoqnlw.png',
+  'jasper': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1673294837/ozjn5b2qcxk5c6ivddpc.png',
+  'midjourney': 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.png',
+  'leonardo': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1677753796/sjslmlpj1cjomspzavzs.png',
+  'capcut': 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/CapCut_logo.svg/1024px-CapCut_logo.svg.png',
+  'runway': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1615813352/vu1cjc3gidyrbivrqdip.png',
+  'elevenlabs': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1673539371/hrmn0g6eozdxcjfmqpnr.png',
+  'murf': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1632913011/wj4qr1d1n1lbcojthqjn.png',
+  'claude-code': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
+  'adobe': 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Adobe_Experience_Cloud_logo.svg',
+  'windows': 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg',
 };
 
-// Brand colors for each tool
+// Brand colors for each tool (kept for glow effects)
 const toolColors: Record<string, { primary: string; glow: string }> = {
   'chatgpt': { primary: '#10a37f', glow: '160 84% 40%' },
   'claude': { primary: '#cc785c', glow: '20 55% 58%' },
   'gemini': { primary: '#4285f4', glow: '217 89% 61%' },
   'perplexity': { primary: '#20808d', glow: '187 63% 34%' },
   'jasper': { primary: '#ff5c5c', glow: '0 100% 68%' },
-  'midjourney': { primary: '#7c3aed', glow: '263 84% 58%' },
-  'leonardo': { primary: '#f59e0b', glow: '38 92% 50%' },
+  'midjourney': { primary: '#000000', glow: '0 0% 30%' },
+  'leonardo': { primary: '#8b5cf6', glow: '258 90% 66%' },
   'capcut': { primary: '#00f0ff', glow: '184 100% 50%' },
   'runway': { primary: '#ff2d55', glow: '349 100% 59%' },
-  'elevenlabs': { primary: '#8b5cf6', glow: '258 90% 66%' },
-  'murf': { primary: '#06b6d4', glow: '188 91% 43%' },
+  'elevenlabs': { primary: '#000000', glow: '0 0% 40%' },
+  'murf': { primary: '#6366f1', glow: '239 84% 67%' },
   'claude-code': { primary: '#ff6b35', glow: '18 100% 60%' },
   'adobe': { primary: '#ff0000', glow: '0 100% 50%' },
   'windows': { primary: '#0078d4', glow: '206 100% 42%' },
@@ -60,6 +56,8 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
   const { t } = useTranslation();
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   // Mouse position for 3D tilt effect
   const mouseX = useMotionValue(0);
@@ -84,7 +82,7 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
     setIsHovered(false);
   };
 
-  const Icon = toolIcons[tool.id] || Sparkles;
+  const logoUrl = toolLogos[tool.id];
   const colors = toolColors[tool.id] || { primary: '#a855f7', glow: '270 85% 65%' };
 
   return (
@@ -143,9 +141,9 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
 
           {/* Content */}
           <div className="relative p-6 flex flex-col h-full" style={{ transform: 'translateZ(20px)' }}>
-            {/* 3D Floating Icon */}
+            {/* 3D Floating Logo */}
             <div className="mb-6 relative">
-              {/* Icon Shadow */}
+              {/* Logo Shadow */}
               <motion.div
                 animate={{
                   y: isHovered ? 8 : 4,
@@ -156,25 +154,56 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
                 style={{ background: colors.primary }}
               />
               
-              {/* Icon Container */}
+              {/* Logo Container with Glassmorphism */}
               <motion.div
                 animate={{
                   y: isHovered ? -8 : 0,
                   scale: isHovered ? 1.1 : 1,
                 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                className="relative w-20 h-20 rounded-2xl flex items-center justify-center"
+                className="relative w-20 h-20 rounded-2xl flex items-center justify-center overflow-hidden"
                 style={{
-                  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+                  backdropFilter: 'blur(10px)',
                   boxShadow: `
-                    0 10px 40px ${colors.primary}60,
-                    0 0 0 1px ${colors.primary}30,
-                    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                    inset 0 -2px 0 rgba(0, 0, 0, 0.2)
+                    0 10px 40px ${colors.primary}40,
+                    0 0 0 1px rgba(255,255,255,0.1),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                    inset 0 -2px 0 rgba(0, 0, 0, 0.1)
                   `,
                 }}
               >
-                <Icon className="w-10 h-10 text-white drop-shadow-lg" strokeWidth={1.5} />
+                {/* Official Brand Logo */}
+                {logoUrl && !logoError ? (
+                  <img
+                    src={logoUrl}
+                    alt={`${tool.name} logo`}
+                    className={`w-12 h-12 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    onLoad={() => setLogoLoaded(true)}
+                    onError={() => setLogoError(true)}
+                    loading="lazy"
+                  />
+                ) : null}
+                
+                {/* Fallback: Show first letter if logo fails */}
+                {(!logoUrl || logoError || !logoLoaded) && (
+                  <span 
+                    className="text-2xl font-bold text-white"
+                    style={{ 
+                      textShadow: `0 2px 10px ${colors.primary}`,
+                    }}
+                  >
+                    {tool.name.charAt(0)}
+                  </span>
+                )}
+                
+                {/* Glow ring around logo */}
+                <div 
+                  className="absolute inset-0 rounded-2xl pointer-events-none"
+                  style={{
+                    boxShadow: `inset 0 0 20px ${colors.primary}30`,
+                  }}
+                />
               </motion.div>
             </div>
 
