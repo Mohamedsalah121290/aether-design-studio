@@ -129,15 +129,50 @@ const lessons: Lesson[] = [
   },
 ];
 
-// Tool prices for linking
-const toolPrices: Record<string, { price: number; color: string }> = {
-  'ChatGPT Plus': { price: 12, color: '#10A37F' },
-  'Claude Pro': { price: 15, color: '#D97757' },
-  'Midjourney': { price: 18, color: '#7C3AED' },
-  'Runway Gen-4': { price: 22, color: '#EF4444' },
-  'ElevenLabs': { price: 16, color: '#3B82F6' },
-  'Notion AI': { price: 8, color: '#000000' },
-  'DeepL Pro': { price: 10, color: '#0F2B46' },
+// Tool data with official logos and brand colors
+const toolData: Record<string, { price: number; color: string; glow: string; logo: string }> = {
+  'ChatGPT Plus': { 
+    price: 12, 
+    color: '#10A37F', 
+    glow: '160 84% 40%',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg'
+  },
+  'Claude Pro': { 
+    price: 15, 
+    color: '#D97757', 
+    glow: '20 55% 58%',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg'
+  },
+  'Midjourney': { 
+    price: 18, 
+    color: '#7C3AED', 
+    glow: '258 90% 66%',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.png'
+  },
+  'Runway Gen-4': { 
+    price: 22, 
+    color: '#FF2D55', 
+    glow: '349 100% 59%',
+    logo: 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1615813352/vu1cjc3gidyrbivrqdip.png'
+  },
+  'ElevenLabs': { 
+    price: 16, 
+    color: '#000000', 
+    glow: '0 0% 50%',
+    logo: 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1673539371/hrmn0g6eozdxcjfmqpnr.png'
+  },
+  'Notion AI': { 
+    price: 8, 
+    color: '#000000', 
+    glow: '0 0% 40%',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png'
+  },
+  'DeepL Pro': { 
+    price: 10, 
+    color: '#0F2B46', 
+    glow: '206 100% 42%',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/DeepL_logo.svg'
+  },
 };
 
 const Academy = () => {
@@ -390,20 +425,37 @@ const Academy = () => {
                     {t(lesson.descriptionKey)}
                   </p>
 
-                  {/* Tools used preview */}
+                  {/* Tools used preview with official logos */}
                   <div className="flex items-center gap-2">
-                    {lesson.toolsUsed.slice(0, 2).map((tool) => (
-                      <div 
-                        key={tool}
-                        className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
-                        style={{ backgroundColor: toolPrices[tool]?.color || '#666' }}
-                        title={tool}
-                      >
-                        {tool.charAt(0)}
-                      </div>
-                    ))}
-                    {lesson.toolsUsed.length > 2 && (
-                      <span className="text-xs text-muted-foreground">+{lesson.toolsUsed.length - 2}</span>
+                    {lesson.toolsUsed.slice(0, 3).map((tool) => {
+                      const toolInfo = toolData[tool];
+                      return (
+                        <div 
+                          key={tool}
+                          className="w-8 h-8 rounded-lg flex items-center justify-center p-1.5 transition-all duration-300"
+                          style={{ 
+                            backgroundColor: `${toolInfo?.color}15`,
+                            boxShadow: toolInfo ? `0 0 12px hsl(${toolInfo.glow} / 0.4), 0 0 4px hsl(${toolInfo.glow} / 0.2)` : 'none',
+                            border: `1px solid ${toolInfo?.color}30`
+                          }}
+                          title={tool}
+                        >
+                          {toolInfo?.logo ? (
+                            <img 
+                              src={toolInfo.logo} 
+                              alt={tool}
+                              className="w-full h-full object-contain"
+                            />
+                          ) : (
+                            <span className="text-xs font-bold" style={{ color: toolInfo?.color || '#666' }}>
+                              {tool.charAt(0)}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                    {lesson.toolsUsed.length > 3 && (
+                      <span className="text-xs text-muted-foreground">+{lesson.toolsUsed.length - 3}</span>
                     )}
                   </div>
                 </div>
@@ -476,25 +528,58 @@ const Academy = () => {
                     {t('academy.toolsUsed')}
                   </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {selectedLesson.toolsUsed.map((tool) => (
-                      <Link
-                        key={tool}
-                        to="/"
-                        className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border hover:border-primary/50 transition-colors group"
-                      >
-                        <div 
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold"
-                          style={{ backgroundColor: toolPrices[tool]?.color || '#666' }}
+                    {selectedLesson.toolsUsed.map((tool) => {
+                      const toolInfo = toolData[tool];
+                      return (
+                        <Link
+                          key={tool}
+                          to="/"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 group"
+                          style={{
+                            boxShadow: toolInfo ? `0 0 0 0 hsl(${toolInfo.glow} / 0)` : 'none',
+                          }}
+                          onMouseEnter={(e) => {
+                            if (toolInfo) {
+                              e.currentTarget.style.boxShadow = `0 4px 20px hsl(${toolInfo.glow} / 0.3), 0 0 30px hsl(${toolInfo.glow} / 0.15)`;
+                              e.currentTarget.style.borderColor = toolInfo.color;
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.boxShadow = 'none';
+                            e.currentTarget.style.borderColor = '';
+                          }}
                         >
-                          {tool.charAt(0)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm truncate group-hover:text-primary transition-colors">{tool}</p>
-                          <p className="text-xs text-muted-foreground">${toolPrices[tool]?.price}/mo</p>
-                        </div>
-                        <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                      </Link>
-                    ))}
+                          <div 
+                            className="w-12 h-12 rounded-xl flex items-center justify-center p-2 transition-all duration-300"
+                            style={{ 
+                              backgroundColor: `${toolInfo?.color}15`,
+                              boxShadow: toolInfo ? `0 0 16px hsl(${toolInfo.glow} / 0.5), 0 0 8px hsl(${toolInfo.glow} / 0.3)` : 'none',
+                              border: `1px solid ${toolInfo?.color}40`
+                            }}
+                          >
+                            {toolInfo?.logo ? (
+                              <img 
+                                src={toolInfo.logo} 
+                                alt={tool}
+                                className="w-full h-full object-contain drop-shadow-lg"
+                                style={{
+                                  filter: `drop-shadow(0 0 6px ${toolInfo.color}80)`
+                                }}
+                              />
+                            ) : (
+                              <span className="text-lg font-bold" style={{ color: toolInfo?.color || '#666' }}>
+                                {tool.charAt(0)}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm truncate group-hover:text-primary transition-colors">{tool}</p>
+                            <p className="text-xs text-muted-foreground">${toolInfo?.price}/mo</p>
+                          </div>
+                          <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
