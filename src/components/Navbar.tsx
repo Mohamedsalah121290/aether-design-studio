@@ -48,9 +48,9 @@ const Navbar = () => {
 
   const navLinks = [
     { href: '/#store', label: t('nav.store') },
+    { href: '/academy', label: t('nav.academy') },
     { href: '/content-hub', label: t('nav.contentHub') },
     { href: '/resources', label: t('nav.tutorials') },
-    { href: '/#about', label: t('nav.about') },
   ];
 
   return (
