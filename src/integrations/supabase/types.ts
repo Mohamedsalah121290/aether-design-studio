@@ -14,7 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      orders: {
+        Row: {
+          buyer_email: string
+          created_at: string
+          id: string
+          status: string
+          tool_id: string
+          tool_name: string
+          tool_password: string | null
+          tool_price: string
+          updated_at: string
+        }
+        Insert: {
+          buyer_email: string
+          created_at?: string
+          id?: string
+          status?: string
+          tool_id: string
+          tool_name: string
+          tool_password?: string | null
+          tool_price: string
+          updated_at?: string
+        }
+        Update: {
+          buyer_email?: string
+          created_at?: string
+          id?: string
+          status?: string
+          tool_id?: string
+          tool_name?: string
+          tool_password?: string | null
+          tool_price?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
