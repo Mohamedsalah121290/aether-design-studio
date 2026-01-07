@@ -42,10 +42,10 @@ const Footer = () => {
           }}>
               {/* Logo with Neon Glow */}
               <div className="relative">
-                <div className="absolute inset-0 blur-xl opacity-60">
+              <div className="absolute inset-0 blur-xl opacity-60">
                 <img src={logo} alt="" className="h-20 w-auto" aria-hidden="true" />
-                </div>
-                <img alt="AI DEALS" src="/lovable-uploads/64d447c1-4f6f-4d56-8e09-a6f5cc5a84e0.png" className="h-20 w-auto relative z-10 drop-shadow-[0_0_25px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_40px_rgba(168,85,247,0.7)] border-solid rounded-md shadow-md" />
+              </div>
+              <img alt="AI DEALS" src={logo} className="h-20 w-auto relative z-10 drop-shadow-[0_0_25px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_40px_rgba(168,85,247,0.7)] rounded-md shadow-md" />
               </div>
               
               {/* Dual-tone Brand Name */}
