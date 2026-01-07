@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import ContentHub from "./pages/ContentHub";
 import ArticlePage from "./pages/ArticlePage";
 import Academy from "./pages/Academy";
+import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import "@/lib/i18n";
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="/content-hub" element={<ContentHub />} />
             <Route path="/academy" element={<Academy />} />
             <Route path="/article/:articleId" element={<ArticlePage />} />
+            <Route path="/admin" element={<AdminPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
