@@ -2,37 +2,239 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { 
-  Sparkles, Lock, Shield, Zap, ExternalLink, 
-  MessageSquare, Image, Music, Video, Code, 
-  Brain, Wand2, FileText, Search, Bot,
-  Settings, Bell, User, LogOut, ChevronRight
+  ExternalLink, Lock, Sparkles,
+  MessageSquare, Image, Video, Music, 
+  FileText, BarChart3, Palette, Wand2,
+  Settings, Bell, User, Search
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 
-// 3D Icon component with depth effect
-const Icon3D = ({ Icon, gradient }: { Icon: React.ElementType; gradient: string }) => (
-  <div className="relative group-hover:scale-110 transition-transform duration-300">
-    {/* Shadow layer */}
-    <div className="absolute inset-0 translate-x-1 translate-y-1 opacity-30 blur-sm">
-      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${gradient}`} />
-    </div>
-    {/* Main icon container */}
-    <div 
-      className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg`}
-      style={{
-        boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
-        transform: 'perspective(500px) rotateX(5deg)',
-      }}
+// Tool data with actual branding colors
+const aiTools = [
+  {
+    id: 'chatgpt',
+    name: 'ChatGPT Plus',
+    description: 'GPT-4 access with all premium features including DALL-E 3 and advanced analysis.',
+    icon: MessageSquare,
+    gradient: 'from-emerald-500 to-teal-600',
+    category: 'text',
+    plan: 'starter',
+    url: '#',
+  },
+  {
+    id: 'canva',
+    name: 'Canva Pro',
+    description: 'Premium design platform with unlimited templates, fonts, and AI features.',
+    icon: Palette,
+    gradient: 'from-cyan-500 to-blue-600',
+    category: 'image',
+    plan: 'starter',
+    url: '#',
+  },
+  {
+    id: 'grammarly',
+    name: 'Grammarly Premium',
+    description: 'Advanced writing assistant with tone, clarity, and plagiarism detection.',
+    icon: FileText,
+    gradient: 'from-green-500 to-emerald-600',
+    category: 'text',
+    plan: 'starter',
+    url: '#',
+  },
+  {
+    id: 'midjourney',
+    name: 'Midjourney',
+    description: 'Create stunning AI-generated artwork and illustrations with V6.',
+    icon: Image,
+    gradient: 'from-violet-500 to-purple-600',
+    category: 'image',
+    plan: 'pro',
+    url: '#',
+  },
+  {
+    id: 'runway',
+    name: 'Runway ML',
+    description: 'Professional AI video generation and editing with Gen-3 Alpha.',
+    icon: Video,
+    gradient: 'from-pink-500 to-rose-600',
+    category: 'video',
+    plan: 'pro',
+    url: '#',
+  },
+  {
+    id: 'leonardo',
+    name: 'Leonardo AI',
+    description: 'Professional AI image generation with custom models and styles.',
+    icon: Wand2,
+    gradient: 'from-amber-500 to-orange-600',
+    category: 'image',
+    plan: 'pro',
+    url: '#',
+  },
+  {
+    id: 'elevenlabs',
+    name: 'ElevenLabs',
+    description: 'Ultra-realistic AI voice synthesis, cloning, and dubbing.',
+    icon: Music,
+    gradient: 'from-indigo-500 to-violet-600',
+    category: 'video',
+    plan: 'pro',
+    url: '#',
+  },
+  {
+    id: 'claude',
+    name: 'Claude Pro',
+    description: 'Anthropic\'s advanced AI for complex reasoning and analysis.',
+    icon: MessageSquare,
+    gradient: 'from-orange-500 to-amber-600',
+    category: 'text',
+    plan: 'pro',
+    url: '#',
+  },
+  {
+    id: 'semrush',
+    name: 'Semrush',
+    description: 'Complete SEO toolkit for keyword research, site audits, and competitor analysis.',
+    icon: BarChart3,
+    gradient: 'from-orange-600 to-red-600',
+    category: 'seo',
+    plan: 'agency',
+    url: '#',
+  },
+  {
+    id: 'ahrefs',
+    name: 'Ahrefs',
+    description: 'Powerful backlink analysis, keyword research, and SEO tools.',
+    icon: BarChart3,
+    gradient: 'from-blue-600 to-indigo-600',
+    category: 'seo',
+    plan: 'agency',
+    url: '#',
+  },
+  {
+    id: 'envato',
+    name: 'Envato Elements',
+    description: 'Unlimited downloads of graphics, templates, video, and audio assets.',
+    icon: FileText,
+    gradient: 'from-green-600 to-teal-600',
+    category: 'productivity',
+    plan: 'agency',
+    url: '#',
+  },
+  {
+    id: 'adobe',
+    name: 'Adobe Creative Cloud',
+    description: 'Full Adobe suite including Photoshop, Illustrator, Premiere Pro.',
+    icon: Palette,
+    gradient: 'from-red-500 to-pink-600',
+    category: 'image',
+    plan: 'agency',
+    url: '#',
+  },
+];
+
+// 3D Tool Card component
+const ToolCard = ({ tool, index, userPlan }: { tool: typeof aiTools[0]; index: number; userPlan: string }) => {
+  const { t } = useTranslation();
+  const planOrder = { starter: 1, pro: 2, agency: 3 };
+  const userPlanLevel = planOrder[userPlan as keyof typeof planOrder] || 1;
+  const toolPlanLevel = planOrder[tool.plan as keyof typeof planOrder];
+  const isLocked = toolPlanLevel > userPlanLevel;
+  const Icon = tool.icon;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.05 }}
+      className="group"
     >
-      <Icon className="w-8 h-8 text-white drop-shadow-lg" />
-    </div>
-  </div>
-);
+      <div 
+        className={`relative glass-strong rounded-3xl p-6 h-full flex flex-col transition-all duration-300 overflow-hidden ${
+          isLocked ? 'opacity-60' : 'hover:border-primary/30'
+        }`}
+        style={{
+          boxShadow: '0 4px 20px -5px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
+        }}
+      >
+        {/* Gradient overlay on hover */}
+        {!isLocked && (
+          <div className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+        )}
+        
+        {/* Locked overlay */}
+        {isLocked && (
+          <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-10 flex items-center justify-center">
+            <div className="text-center">
+              <Lock className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+              <span className="text-sm font-medium text-muted-foreground capitalize">
+                {tool.plan} Plan
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* 3D Tool Icon */}
+        <div className="mb-4 relative">
+          <div className="absolute inset-0 translate-x-1 translate-y-1 opacity-30 blur-sm">
+            <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${tool.gradient}`} />
+          </div>
+          <div 
+            className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center shadow-lg`}
+            style={{
+              boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
+              transform: 'perspective(500px) rotateX(5deg)',
+            }}
+          >
+            <Icon className="w-8 h-8 text-white drop-shadow-lg" />
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 relative z-0">
+          <h3 className="text-xl font-display font-bold mb-2 group-hover:text-primary transition-colors">
+            {tool.name}
+          </h3>
+          <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2">
+            {tool.description}
+          </p>
+        </div>
+
+        {/* Plan badge */}
+        <div className="mb-4">
+          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium capitalize ${
+            tool.plan === 'starter' ? 'bg-blue-500/20 text-blue-400' :
+            tool.plan === 'pro' ? 'bg-purple-500/20 text-purple-400' :
+            'bg-amber-500/20 text-amber-400'
+          }`}>
+            <Sparkles className="w-3 h-3" />
+            {tool.plan}
+          </span>
+        </div>
+
+        {/* Launch Button */}
+        <Button 
+          variant="hero" 
+          size="sm" 
+          className="w-full group/btn relative z-0"
+          disabled={isLocked}
+        >
+          {t('dashboard.launchTool')}
+          <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+        </Button>
+      </div>
+    </motion.div>
+  );
+};
 
 const Dashboard = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Simulated user plan - in real app this would come from auth/subscription
+  const userPlan = 'pro';
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
@@ -40,140 +242,27 @@ const Dashboard = () => {
   }, [i18n.language]);
 
   const categories = [
-    { id: 'all', label: 'All Tools', count: 12 },
-    { id: 'text', label: 'Text AI', count: 4 },
-    { id: 'image', label: 'Image AI', count: 3 },
-    { id: 'audio', label: 'Audio AI', count: 2 },
-    { id: 'video', label: 'Video AI', count: 2 },
-    { id: 'code', label: 'Code AI', count: 1 },
+    { id: 'all', labelKey: 'all' },
+    { id: 'text', labelKey: 'text' },
+    { id: 'image', labelKey: 'image' },
+    { id: 'video', labelKey: 'video' },
+    { id: 'seo', labelKey: 'seo' },
+    { id: 'productivity', labelKey: 'productivity' },
   ];
 
-  const aiTools = [
-    {
-      id: 'chatgpt',
-      name: 'ChatGPT',
-      description: 'Advanced conversational AI for text generation and analysis.',
-      icon: MessageSquare,
-      gradient: 'from-emerald-500 to-teal-600',
-      category: 'text',
-      status: 'active',
-      usage: '2,450 / 5,000 credits',
-    },
-    {
-      id: 'midjourney',
-      name: 'Midjourney',
-      description: 'Create stunning AI-generated artwork and illustrations.',
-      icon: Image,
-      gradient: 'from-violet-500 to-purple-600',
-      category: 'image',
-      status: 'active',
-      usage: '180 / 500 images',
-    },
-    {
-      id: 'claude',
-      name: 'Claude AI',
-      description: 'Thoughtful AI assistant for complex reasoning tasks.',
-      icon: Brain,
-      gradient: 'from-amber-500 to-orange-600',
-      category: 'text',
-      status: 'active',
-      usage: '1,200 / 3,000 credits',
-    },
-    {
-      id: 'dalle',
-      name: 'DALL-E 3',
-      description: 'Generate photorealistic images from text descriptions.',
-      icon: Wand2,
-      gradient: 'from-pink-500 to-rose-600',
-      category: 'image',
-      status: 'active',
-      usage: '95 / 200 images',
-    },
-    {
-      id: 'suno',
-      name: 'Suno AI',
-      description: 'Create original music and songs with AI composition.',
-      icon: Music,
-      gradient: 'from-cyan-500 to-blue-600',
-      category: 'audio',
-      status: 'active',
-      usage: '25 / 100 songs',
-    },
-    {
-      id: 'runway',
-      name: 'Runway Gen-3',
-      description: 'Professional AI video generation and editing tools.',
-      icon: Video,
-      gradient: 'from-red-500 to-pink-600',
-      category: 'video',
-      status: 'active',
-      usage: '15 / 50 videos',
-    },
-    {
-      id: 'copilot',
-      name: 'GitHub Copilot',
-      description: 'AI-powered code completion and generation.',
-      icon: Code,
-      gradient: 'from-gray-600 to-gray-800',
-      category: 'code',
-      status: 'active',
-      usage: 'Unlimited',
-    },
-    {
-      id: 'gemini',
-      name: 'Google Gemini',
-      description: 'Multimodal AI for text, images, and more.',
-      icon: Sparkles,
-      gradient: 'from-blue-500 to-indigo-600',
-      category: 'text',
-      status: 'active',
-      usage: '3,100 / 5,000 credits',
-    },
-    {
-      id: 'elevenlabs',
-      name: 'ElevenLabs',
-      description: 'Ultra-realistic AI voice synthesis and cloning.',
-      icon: Bot,
-      gradient: 'from-green-500 to-emerald-600',
-      category: 'audio',
-      status: 'active',
-      usage: '45 / 100 minutes',
-    },
-    {
-      id: 'pika',
-      name: 'Pika Labs',
-      description: 'Create and edit videos with AI-powered tools.',
-      icon: Video,
-      gradient: 'from-yellow-500 to-amber-600',
-      category: 'video',
-      status: 'active',
-      usage: '20 / 50 videos',
-    },
-    {
-      id: 'perplexity',
-      name: 'Perplexity',
-      description: 'AI-powered search and research assistant.',
-      icon: Search,
-      gradient: 'from-indigo-500 to-violet-600',
-      category: 'text',
-      status: 'active',
-      usage: '500 / 1,000 queries',
-    },
-    {
-      id: 'stable',
-      name: 'Stable Diffusion',
-      description: 'Open-source image generation with custom models.',
-      icon: Image,
-      gradient: 'from-fuchsia-500 to-purple-600',
-      category: 'image',
-      status: 'active',
-      usage: '300 / 500 images',
-    },
-  ];
+  // Filter tools
+  const filteredTools = aiTools.filter(tool => {
+    const matchesCategory = activeCategory === 'all' || tool.category === activeCategory;
+    const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         tool.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
-  const filteredTools = activeCategory === 'all' 
-    ? aiTools 
-    : aiTools.filter(tool => tool.category === activeCategory);
+  // Count tools per category
+  const getCategoryCount = (categoryId: string) => {
+    if (categoryId === 'all') return aiTools.length;
+    return aiTools.filter(t => t.category === categoryId).length;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -184,12 +273,11 @@ const Dashboard = () => {
         <section className="relative py-8 overflow-hidden">
           <div className="absolute inset-0 mesh-gradient opacity-20" />
           
-          {/* Vault-like decorative elements */}
+          {/* Vault decorative elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-10 left-10 w-32 h-32 border border-primary/10 rounded-full" />
             <div className="absolute top-20 left-20 w-24 h-24 border border-primary/20 rounded-full" />
             <div className="absolute bottom-10 right-10 w-40 h-40 border border-secondary/10 rounded-full" />
-            <div className="absolute bottom-20 right-20 w-28 h-28 border border-secondary/20 rounded-full" />
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
@@ -199,15 +287,15 @@ const Dashboard = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-3 mb-2">
                   <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-primary-foreground" />
+                    <Sparkles className="w-6 h-6 text-primary-foreground" />
                   </div>
                   <div>
                     <h1 className="text-3xl md:text-4xl font-display font-bold">
-                      AI Command Center
+                      {t('dashboard.title')}
                     </h1>
-                    <p className="text-muted-foreground">Your secure vault of AI tools</p>
+                    <p className="text-muted-foreground">{t('dashboard.subtitle')}</p>
                   </div>
                 </div>
               </motion.div>
@@ -229,14 +317,17 @@ const Dashboard = () => {
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
                     <User className="w-4 h-4 text-primary-foreground" />
                   </div>
-                  <span className="font-medium hidden sm:block">John Doe</span>
+                  <div className="hidden sm:block">
+                    <span className="font-medium block text-sm">Pro Member</span>
+                    <span className="text-xs text-muted-foreground capitalize">{userPlan} Plan</span>
+                  </div>
                 </div>
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* Security Status Bar */}
+        {/* Tools Status Bar */}
         <section className="py-4">
           <div className="container mx-auto px-4">
             <motion.div
@@ -248,31 +339,47 @@ const Dashboard = () => {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-sm font-medium">Vault Secured</span>
+                  <span className="text-sm font-medium">All Tools Available</span>
                 </div>
                 <div className="h-4 w-px bg-border hidden sm:block" />
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Lock className="w-4 h-4" />
-                  <span>256-bit encryption active</span>
+                  <span>Secure Access</span>
                 </div>
               </div>
               <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-primary" />
-                  <span><strong>12</strong> tools connected</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-secondary" />
-                  <span><strong>4,521</strong> requests today</span>
+                  <Sparkles className="w-4 h-4 text-primary" />
+                  <span><strong>{aiTools.length}</strong> {t('dashboard.toolsConnected')}</span>
                 </div>
               </div>
             </motion.div>
           </div>
         </section>
 
-        {/* Category Filter */}
+        {/* Search & Category Filter */}
         <section className="py-4">
           <div className="container mx-auto px-4">
+            {/* Search Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="mb-4"
+            >
+              <div className="relative max-w-md">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search tools..."
+                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-card/80 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                />
+              </div>
+            </motion.div>
+
+            {/* Categories */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -289,13 +396,13 @@ const Dashboard = () => {
                       : 'glass hover:bg-muted'
                   }`}
                 >
-                  {category.label}
+                  {t(`dashboard.categories.${category.labelKey}`)}
                   <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                     activeCategory === category.id
                       ? 'bg-primary-foreground/20'
                       : 'bg-muted'
                   }`}>
-                    {category.count}
+                    {getCategoryCount(category.id)}
                   </span>
                 </button>
               ))}
@@ -303,122 +410,31 @@ const Dashboard = () => {
           </div>
         </section>
 
-        {/* AI Tools Grid */}
+        {/* Tools Grid */}
         <section className="py-8">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredTools.map((tool, index) => (
-                <motion.div
-                  key={tool.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
-                  className="group"
-                >
-                  <div 
-                    className="glass-strong rounded-3xl p-6 h-full flex flex-col hover:border-primary/30 transition-all duration-300 relative overflow-hidden"
-                    style={{
-                      boxShadow: '0 4px 20px -5px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
-                    }}
-                  >
-                    {/* Subtle gradient overlay on hover */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                    
-                    {/* Status indicator */}
-                    <div className="absolute top-4 right-4">
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-2 h-2 rounded-full bg-green-500" />
-                        <span className="text-xs text-muted-foreground capitalize">{tool.status}</span>
-                      </div>
-                    </div>
-
-                    {/* 3D Icon */}
-                    <div className="mb-4">
-                      <Icon3D Icon={tool.icon} gradient={tool.gradient} />
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 relative z-10">
-                      <h3 className="text-xl font-display font-bold mb-2 group-hover:text-primary transition-colors">
-                        {tool.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                        {tool.description}
-                      </p>
-                    </div>
-
-                    {/* Usage bar */}
-                    <div className="mb-4 relative z-10">
-                      <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                        <span>Usage</span>
-                        <span>{tool.usage}</span>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: tool.usage === 'Unlimited' ? '100%' : '60%' }}
-                          transition={{ duration: 1, delay: 0.5 + index * 0.05 }}
-                          className={`h-full rounded-full bg-gradient-to-r ${tool.gradient}`}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Launch Button */}
-                    <Button 
-                      variant="hero" 
-                      size="sm" 
-                      className="w-full group/btn relative z-10"
-                    >
-                      Launch
-                      <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                    </Button>
-                  </div>
-                </motion.div>
+                <ToolCard 
+                  key={tool.id} 
+                  tool={tool} 
+                  index={index} 
+                  userPlan={userPlan}
+                />
               ))}
             </div>
-          </div>
-        </section>
 
-        {/* Quick Actions */}
-        <section className="py-8">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="glass-strong rounded-3xl p-6 md:p-8"
-            >
-              <h2 className="text-2xl font-display font-bold mb-6">Quick Actions</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[
-                  { label: 'Manage API Keys', icon: Lock, desc: 'View and rotate your keys' },
-                  { label: 'Usage Analytics', icon: FileText, desc: 'Track your consumption' },
-                  { label: 'Team Settings', icon: User, desc: 'Manage access controls' },
-                  { label: 'Billing & Plans', icon: Zap, desc: 'Upgrade your limits' },
-                ].map((action, index) => (
-                  <motion.button
-                    key={action.label}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="glass rounded-2xl p-4 text-left hover:border-primary/30 hover:bg-muted/50 transition-all duration-300 group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                        <action.icon className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-semibold group-hover:text-primary transition-colors">{action.label}</div>
-                        <div className="text-xs text-muted-foreground">{action.desc}</div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                    </div>
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
+            {filteredTools.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-12"
+              >
+                <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No tools found</h3>
+                <p className="text-muted-foreground">Try adjusting your search or filters</p>
+              </motion.div>
+            )}
           </div>
         </section>
       </main>
