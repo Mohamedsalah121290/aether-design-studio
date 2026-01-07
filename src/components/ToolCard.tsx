@@ -160,7 +160,7 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
                   opacity: isHovered ? 0.4 : 0.2,
                   scale: isHovered ? 0.9 : 0.95,
                 }}
-                className="absolute left-0 top-2 w-20 h-20 rounded-2xl blur-lg"
+                className="absolute left-0 top-2 w-24 h-24 rounded-2xl blur-lg"
                 style={{ background: colors.primary }}
               />
               
@@ -171,7 +171,7 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
                   scale: isHovered ? 1.1 : 1,
                 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                className="relative w-20 h-20 rounded-2xl flex items-center justify-center overflow-hidden"
+                className="relative w-24 h-24 rounded-2xl flex items-center justify-center overflow-hidden"
                 style={{
                   background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
                   backdropFilter: 'blur(10px)',
@@ -188,7 +188,7 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
                   <img
                     src={logoUrl}
                     alt={`${tool.name} logo`}
-                    className={`w-12 h-12 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    className={`w-16 h-16 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => setLogoLoaded(true)}
                     onError={() => setLogoError(true)}
                     loading="lazy"
