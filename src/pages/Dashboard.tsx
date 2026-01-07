@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 // Import local logos
 import perplexityLogo from '@/assets/perplexity-logo.png';
@@ -78,7 +79,7 @@ const toolAccessUrls: Record<string, string> = {
 interface Order {
   id: string;
   tool_id: string;
-  status: string; // 'pending' | 'processing' | 'active'
+  status: string;
   created_at: string;
   activation_deadline: string | null;
   customer_data: Record<string, string>;
@@ -405,6 +406,7 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
 
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -413,31 +415,59 @@ const Dashboard = () => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
     window.scrollTo(0, 0);
     fetchOrders();
-  }, [i18n.language]);
+    
+    // Set up real-time subscription for order updates
+    const channel = supabase
+      .channel('orders-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'orders',
+        },
+        (payload) => {
+          console.log('Order update received:', payload);
+          // Refetch orders when any change happens
+          fetchOrders();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [i18n.language, user]);
 
   const fetchOrders = async () => {
+    // Get email from localStorage (for guest users) or use authenticated user's id
     const email = localStorage.getItem('buyer_email');
-    if (!email) {
+    
+    if (!user && !email) {
       setLoading(false);
       return;
     }
 
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('orders')
         .select(`
           *,
           tool:tools(tool_id, name, price, access_url, delivery_type)
         `)
-        .eq('buyer_email', email)
         .order('created_at', { ascending: false });
+
+      // If authenticated, fetch by user_id; otherwise by email
+      if (user) {
+        query = query.eq('user_id', user.id);
+      } else if (email) {
+        query = query.eq('buyer_email', email);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       
-      // Type assertion for the joined data
-      // TODO: When order status changes to 'active', send email notification to user
-      // This should be implemented as an edge function or database trigger
-      // that listens for status updates and sends confirmation emails
       const mappedOrders: Order[] = (data || []).map((order: any) => ({
         id: order.id,
         tool_id: order.tool_id,

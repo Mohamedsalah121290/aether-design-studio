@@ -3,7 +3,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import ResourcesPage from "./pages/ResourcesPage";
 import Dashboard from "./pages/Dashboard";
@@ -17,11 +18,51 @@ import "@/lib/i18n";
 
 const queryClient = new QueryClient();
 
+// Protected route for admin only
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAdmin, loading, user } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  
+  if (!user || !isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/resources" element={<ResourcesPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/content-hub" element={<ContentHub />} />
+      <Route path="/academy" element={<Academy />} />
+      <Route path="/article/:articleId" element={<ArticlePage />} />
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminPage />
+          </AdminRoute>
+        }
+      />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate initial load time for splash screen
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -31,24 +72,16 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <SplashScreen isLoading={isLoading} />
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/resources" element={<ResourcesPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/content-hub" element={<ContentHub />} />
-            <Route path="/academy" element={<Academy />} />
-            <Route path="/article/:articleId" element={<ArticlePage />} />
-            <Route path="/admin" element={<AdminPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <SplashScreen isLoading={isLoading} />
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
