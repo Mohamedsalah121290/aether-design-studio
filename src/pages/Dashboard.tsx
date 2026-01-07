@@ -144,14 +144,14 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
 
           {/* Active Indicator */}
           <div 
-            className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium z-10"
+            className="absolute top-4 end-4 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium z-10"
             style={{ background: `${colors.primary}20`, color: colors.primary }}
           >
             <span 
               className="w-2 h-2 rounded-full animate-pulse"
               style={{ background: colors.primary }}
             />
-            Active
+            {t('dashboard.active')}
           </div>
 
           <div className="p-6">
@@ -331,7 +331,7 @@ const Dashboard = () => {
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
                     <User className="w-4 h-4 text-primary-foreground" />
                   </div>
-                  <span className="font-medium text-sm hidden sm:block">Member</span>
+                  <span className="font-medium text-sm hidden sm:block">{t('dashboard.member')}</span>
                 </div>
               </motion.div>
             </div>

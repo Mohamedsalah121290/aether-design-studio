@@ -8,27 +8,27 @@ const Resources = () => {
 
   const articles = [
     {
-      title: 'Getting Started with AI Automation',
-      description: 'Learn how to set up your first AI workflow in under 10 minutes.',
+      titleKey: 'resources.articles.aiAutomation.title',
+      descriptionKey: 'resources.articles.aiAutomation.description',
       type: 'article',
-      category: 'Tutorial',
-      readTime: '5 min read',
+      categoryKey: 'resources.article.tutorial',
+      readTimeKey: 'resources.articles.aiAutomation.readTime',
       gradient: 'from-primary/20 to-secondary/20',
     },
     {
-      title: 'Advanced Prompt Engineering',
-      description: 'Master the art of crafting prompts that get you better results.',
+      titleKey: 'resources.articles.promptEngineering.title',
+      descriptionKey: 'resources.articles.promptEngineering.description',
       type: 'video',
-      category: 'Guide',
+      categoryKey: 'resources.article.guide',
       duration: '15 min',
       gradient: 'from-secondary/20 to-accent/20',
     },
     {
-      title: 'Building Custom AI Agents',
-      description: 'Create intelligent agents that understand your business context.',
+      titleKey: 'resources.articles.aiAgents.title',
+      descriptionKey: 'resources.articles.aiAgents.description',
       type: 'article',
-      category: 'Deep Dive',
-      readTime: '12 min read',
+      categoryKey: 'resources.article.deepDive',
+      readTimeKey: 'resources.articles.aiAgents.readTime',
       gradient: 'from-accent/20 to-primary/20',
     },
   ];
@@ -62,7 +62,7 @@ const Resources = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {articles.map((article, index) => (
             <motion.article
-              key={article.title}
+              key={article.titleKey}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -82,9 +82,9 @@ const Resources = () => {
                       </motion.div>
                     ) : (
                       <div className="w-20 h-20 rounded-2xl glass flex items-center justify-center">
-                        {article.category === 'Tutorial' && <BookOpen className="w-8 h-8 text-primary" />}
-                        {article.category === 'Guide' && <Video className="w-8 h-8 text-secondary" />}
-                        {article.category === 'Deep Dive' && <Lightbulb className="w-8 h-8 text-accent" />}
+                        {article.categoryKey === 'resources.article.tutorial' && <BookOpen className="w-8 h-8 text-primary" />}
+                        {article.categoryKey === 'resources.article.guide' && <Video className="w-8 h-8 text-secondary" />}
+                        {article.categoryKey === 'resources.article.deepDive' && <Lightbulb className="w-8 h-8 text-accent" />}
                       </div>
                     )}
                   </div>
@@ -92,7 +92,7 @@ const Resources = () => {
                   {/* Category Badge */}
                   <div className="absolute top-4 left-4">
                     <span className="glass px-3 py-1 rounded-full text-xs font-medium">
-                      {article.category}
+                      {t(article.categoryKey)}
                     </span>
                   </div>
                 </div>
@@ -100,15 +100,15 @@ const Resources = () => {
                 {/* Content */}
                 <div className="p-6 flex-1 flex flex-col">
                   <h3 className="text-xl font-display font-bold mb-3 group-hover:text-primary transition-colors">
-                    {article.title}
+                    {t(article.titleKey)}
                   </h3>
                   <p className="text-muted-foreground mb-4 flex-1">
-                    {article.description}
+                    {t(article.descriptionKey)}
                   </p>
 
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">
-                      {article.type === 'video' ? article.duration : article.readTime}
+                      {article.type === 'video' ? article.duration : t(article.readTimeKey || '')}
                     </span>
                     <Button variant="ghost" size="sm" className="group/btn">
                       {article.type === 'video' ? t('resources.watchVideo') : t('resources.readMore')}
@@ -142,7 +142,7 @@ const Resources = () => {
         >
           <Button variant="heroOutline" size="lg" className="group" asChild>
             <a href="/resources">
-              View All Resources
+              {t('resources.viewAll')}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
           </Button>
