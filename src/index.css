@@ -75,11 +75,35 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body, 'Inter'), 'Noto Sans', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Space Grotesk', var(--font-body, 'Inter'), sans-serif;
+  }
+
+  /* RTL-specific font families */
+  [dir="rtl"] body {
+    font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
+  }
+  
+  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 {
+    font-family: 'Cairo', 'Noto Sans Arabic', sans-serif;
+  }
+
+  /* Chinese font */
+  [lang="zh"] body, [lang="zh"] h1, [lang="zh"] h2, [lang="zh"] h3 {
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  /* Hindi/Devanagari font */
+  [lang="hi"] body, [lang="hi"] h1, [lang="hi"] h2, [lang="hi"] h3 {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+  }
+
+  /* Bengali font */
+  [lang="bn"] body, [lang="bn"] h1, [lang="bn"] h2, [lang="bn"] h3 {
+    font-family: 'Noto Sans Bengali', sans-serif;
   }
 }
 

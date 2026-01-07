@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, Globe, ChevronDown } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languages } from '@/lib/i18n';
 import logo from '@/assets/logo.png';
@@ -11,29 +11,45 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [langSearch, setLangSearch] = useState('');
+  const langMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleClickOutside = (e: MouseEvent) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
+        setIsLangMenuOpen(false);
+        setLangSearch('');
+      }
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const changeLanguage = (code: string) => {
     i18n.changeLanguage(code);
     const lang = languages.find(l => l.code === code);
     document.documentElement.dir = lang?.rtl ? 'rtl' : 'ltr';
+    document.documentElement.lang = code;
     setIsLangMenuOpen(false);
+    setLangSearch('');
   };
+
+  const filteredLanguages = languages.filter(lang =>
+    lang.name.toLowerCase().includes(langSearch.toLowerCase()) ||
+    lang.code.toLowerCase().includes(langSearch.toLowerCase())
+  );
 
   const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
 
   const navLinks = [
-    { href: '/#features', label: t('nav.features') },
-    { href: '/#pricing', label: t('nav.pricing') },
-    { href: '/content-hub', label: 'Content Hub' },
-    { href: '/resources', label: t('nav.resources') },
+    { href: '/#store', label: t('nav.store') },
+    { href: '/content-hub', label: t('nav.contentHub') },
+    { href: '/resources', label: t('nav.tutorials') },
     { href: '/#about', label: t('nav.about') },
   ];
 
@@ -112,16 +128,18 @@ const Navbar = () => {
 
         {/* Right Section */}
         <div className="hidden lg:flex items-center gap-4">
-          {/* Language Selector */}
-          <div className="relative">
+          {/* Language Selector with Search */}
+          <div className="relative" ref={langMenuRef}>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
               className="flex items-center gap-2 text-muted-foreground"
+              title={t('tooltips.languageSelector')}
             >
               <Globe className="w-4 h-4" />
               <span>{currentLang.flag}</span>
+              <span className="hidden xl:inline text-xs">{currentLang.name}</span>
               <ChevronDown className={`w-4 h-4 transition-transform ${isLangMenuOpen ? 'rotate-180' : ''}`} />
             </Button>
 
@@ -131,20 +149,44 @@ const Navbar = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute top-full right-0 mt-2 w-48 glass-strong rounded-xl overflow-hidden"
+                  className="absolute top-full end-0 mt-2 w-56 glass-strong rounded-xl overflow-hidden shadow-xl"
                 >
-                  {languages.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => changeLanguage(lang.code)}
-                      className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-muted/50 transition-colors ${
-                        i18n.language === lang.code ? 'text-primary' : 'text-foreground'
-                      }`}
-                    >
-                      <span className="text-lg">{lang.flag}</span>
-                      <span>{lang.name}</span>
-                    </button>
-                  ))}
+                  {/* Search Input */}
+                  <div className="p-2 border-b border-border">
+                    <div className="relative">
+                      <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <input
+                        type="text"
+                        value={langSearch}
+                        onChange={(e) => setLangSearch(e.target.value)}
+                        placeholder="Search..."
+                        className="w-full ps-9 pe-3 py-2 text-sm rounded-lg bg-background/50 border border-border focus:border-primary focus:outline-none"
+                        autoFocus
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Language List */}
+                  <div className="max-h-64 overflow-y-auto">
+                    {filteredLanguages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => changeLanguage(lang.code)}
+                        className={`w-full px-4 py-2.5 text-start flex items-center gap-3 hover:bg-muted/50 transition-colors ${
+                          i18n.language === lang.code ? 'text-primary bg-primary/10' : 'text-foreground'
+                        }`}
+                      >
+                        <span className="text-lg">{lang.flag}</span>
+                        <span className="flex-1">{lang.name}</span>
+                        {lang.rtl && <span className="text-xs text-muted-foreground">RTL</span>}
+                      </button>
+                    ))}
+                    {filteredLanguages.length === 0 && (
+                      <div className="px-4 py-3 text-sm text-muted-foreground text-center">
+                        No languages found
+                      </div>
+                    )}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
