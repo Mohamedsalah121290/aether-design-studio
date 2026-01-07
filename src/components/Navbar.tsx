@@ -70,7 +70,7 @@ const Navbar = () => {
             <div className="absolute inset-0 blur-xl opacity-60">
               <img src={logo} alt="" className="h-20 w-auto" aria-hidden="true" />
             </div>
-            <img alt="AI DEALS" src="/lovable-uploads/4645b42b-e413-4263-b006-f7e6571b50fc.png" className="h-20 w-auto relative z-10 drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(168,85,247,0.7)] rounded-md shadow-md border-gray-300 border-0 border-solid" />
+            <img alt="AI DEALS" src={logo} className="h-20 w-auto relative z-10 drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(168,85,247,0.7)] rounded-md shadow-md" />
           </div>
           
           {/* Dual-tone Brand Name with Metallic Effect */}
