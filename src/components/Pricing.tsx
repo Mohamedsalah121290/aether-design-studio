@@ -1,7 +1,24 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Check, Sparkles, Zap } from 'lucide-react';
+import { Check, Sparkles, Zap, Crown, MessageSquare, Image, Wand2, Video, Music, BarChart3, FileText, Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
+// Tool icons mapping
+const toolIcons: Record<string, React.ElementType> = {
+  'ChatGPT Plus': MessageSquare,
+  'Canva Pro': Palette,
+  'Grammarly Premium': FileText,
+  'Midjourney': Image,
+  'Runway ML': Video,
+  'Leonardo AI': Wand2,
+  'ElevenLabs': Music,
+  'Claude Pro': MessageSquare,
+  'Semrush': BarChart3,
+  'Ahrefs': BarChart3,
+  'Envato Elements': FileText,
+  'Adobe Creative Cloud': Palette,
+  'Notion AI': FileText,
+};
 
 const Pricing = () => {
   const { t } = useTranslation();
@@ -11,16 +28,19 @@ const Pricing = () => {
       key: 'starter',
       popular: false,
       icon: Zap,
+      gradient: 'from-blue-500 to-cyan-500',
     },
     {
       key: 'pro',
       popular: true,
       icon: Sparkles,
+      gradient: 'from-primary to-secondary',
     },
     {
-      key: 'enterprise',
+      key: 'agency',
       popular: false,
-      icon: Zap,
+      icon: Crown,
+      gradient: 'from-amber-500 to-orange-500',
     },
   ];
 
@@ -57,13 +77,16 @@ const Pricing = () => {
             className="inline-flex items-center gap-2 glass-strong px-6 py-3 rounded-full mt-8 border border-primary/30"
           >
             <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-sm font-semibold text-primary">Monthly Billing Only</span>
+            <span className="text-sm font-semibold text-primary">
+              {t('pricing.monthly')} — {t('pricing.description').includes('Cancel') ? 'Cancel Anytime' : t('pricing.description')}
+            </span>
           </motion.div>
         </motion.div>
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => {
+            const tools = t(`pricing.plans.${plan.key}.tools`, { returnObjects: true }) as string[];
             const features = t(`pricing.plans.${plan.key}.features`, { returnObjects: true }) as string[];
 
             return (
@@ -102,7 +125,6 @@ const Pricing = () => {
                   {/* Animated Glowing Border for Pro Plan */}
                   {plan.popular && (
                     <>
-                      {/* Animated gradient border */}
                       <motion.div
                         className="absolute -inset-[2px] rounded-3xl opacity-75"
                         style={{
@@ -118,7 +140,6 @@ const Pricing = () => {
                           ease: 'linear',
                         }}
                       />
-                      {/* Glow effect */}
                       <motion.div
                         className="absolute -inset-4 rounded-3xl blur-xl opacity-30"
                         style={{
@@ -151,12 +172,8 @@ const Pricing = () => {
                     }}
                   >
                     {/* Plan Icon */}
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${
-                      plan.popular 
-                        ? 'bg-gradient-to-br from-primary to-secondary' 
-                        : 'glass border border-border/50'
-                    }`}>
-                      <plan.icon className={`w-6 h-6 ${plan.popular ? 'text-primary-foreground' : 'text-primary'}`} />
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${plan.gradient} flex items-center justify-center mb-6 shadow-lg`}>
+                      <plan.icon className="w-7 h-7 text-white" />
                     </div>
 
                     {/* Plan Name */}
@@ -167,15 +184,15 @@ const Pricing = () => {
                       {t(`pricing.plans.${plan.key}.description`)}
                     </p>
 
-                    {/* Price with Per Month */}
-                    <div className="mb-8">
+                    {/* Price */}
+                    <div className="mb-6">
                       <div className="flex items-baseline gap-1">
                         <span className={`text-5xl font-display font-bold ${plan.popular ? 'gradient-text' : ''}`}>
                           ${t(`pricing.plans.${plan.key}.price`)}
                         </span>
                       </div>
                       <span className="text-sm font-medium text-primary mt-1 inline-block">
-                        Per Month
+                        {t('pricing.perMonth')}
                       </span>
                     </div>
 
@@ -183,35 +200,74 @@ const Pricing = () => {
                     <Button
                       variant={plan.popular ? 'hero' : 'heroOutline'}
                       size="lg"
-                      className="w-full mb-8"
+                      className="w-full mb-6"
                     >
-                      {plan.popular ? 'Get Started Now' : t('pricing.cta')}
+                      {t('pricing.cta')}
                     </Button>
 
+                    {/* Tools Included */}
+                    <div className="mb-6">
+                      <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                        <span className="w-6 h-px bg-gradient-to-r from-primary to-transparent" />
+                        Tools Included
+                      </h4>
+                      <ul className="space-y-2">
+                        {tools.map((tool, i) => {
+                          const ToolIcon = toolIcons[tool] || Check;
+                          const isInherit = tool.includes('+');
+                          return (
+                            <motion.li 
+                              key={i} 
+                              initial={{ opacity: 0, x: -10 }}
+                              whileInView={{ opacity: 1, x: 0 }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.3, delay: 0.1 * i }}
+                              className={`flex items-center gap-2 ${isInherit ? 'text-primary font-medium' : ''}`}
+                            >
+                              <div className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                isInherit 
+                                  ? 'bg-primary/20' 
+                                  : plan.popular 
+                                    ? 'bg-gradient-to-br from-primary/20 to-secondary/20' 
+                                    : 'bg-muted'
+                              }`}>
+                                <ToolIcon className={`w-3.5 h-3.5 ${isInherit ? 'text-primary' : plan.popular ? 'text-primary' : 'text-muted-foreground'}`} />
+                              </div>
+                              <span className={`text-sm ${plan.popular && !isInherit ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                {tool}
+                              </span>
+                            </motion.li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+
                     {/* Features */}
-                    <ul className="space-y-4">
-                      {features.map((feature, i) => (
-                        <motion.li 
-                          key={i} 
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.3, delay: 0.1 * i }}
-                          className="flex items-start gap-3"
-                        >
-                          <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                            plan.popular 
-                              ? 'bg-gradient-to-br from-primary to-secondary' 
-                              : 'bg-primary/20'
-                          }`}>
-                            <Check className={`w-3 h-3 ${plan.popular ? 'text-primary-foreground' : 'text-primary'}`} />
-                          </div>
-                          <span className={`text-sm ${plan.popular ? 'text-foreground' : 'text-muted-foreground'}`}>
-                            {feature}
-                          </span>
-                        </motion.li>
-                      ))}
-                    </ul>
+                    <div className="pt-4 border-t border-border/50">
+                      <ul className="space-y-2">
+                        {features.map((feature, i) => (
+                          <motion.li 
+                            key={i} 
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.3, delay: 0.1 * i }}
+                            className="flex items-start gap-2"
+                          >
+                            <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                              plan.popular 
+                                ? 'bg-gradient-to-br from-primary to-secondary' 
+                                : 'bg-primary/20'
+                            }`}>
+                              <Check className={`w-2.5 h-2.5 ${plan.popular ? 'text-primary-foreground' : 'text-primary'}`} />
+                            </div>
+                            <span className={`text-xs ${plan.popular ? 'text-foreground' : 'text-muted-foreground'}`}>
+                              {feature}
+                            </span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -227,7 +283,7 @@ const Pricing = () => {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="text-center text-sm text-muted-foreground mt-12"
         >
-          All plans are billed monthly. Cancel anytime with no questions asked.
+          All plans are billed monthly. Cancel anytime with no questions asked. Instant access to all tools.
         </motion.p>
       </div>
     </section>
