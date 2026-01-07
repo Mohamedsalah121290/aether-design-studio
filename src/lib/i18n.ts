@@ -13,6 +13,7 @@ const resources = {
         contentHub: 'Content Hub',
         getStarted: 'Browse Tools',
         dashboard: 'My Vault',
+        academy: 'AI Academy',
       },
       hero: {
         badge: 'Premium AI Tools Store',
@@ -137,6 +138,43 @@ const resources = {
         searchTools: 'Search by tool name',
         languageSelector: 'Change language',
       },
+      academy: {
+        badge: 'AI Academy',
+        title: 'Master AI with',
+        titleHighlight: 'Expert Courses',
+        description: 'Learn from curated video lessons and step-by-step guides. Track your progress and become an AI expert.',
+        yourProgress: 'Your Progress',
+        lessonsCompleted: 'lessons completed',
+        featured: 'Featured This Month',
+        allLessons: 'All Lessons',
+        video: 'Video',
+        article: 'Article',
+        completed: 'Completed',
+        markComplete: 'Mark Complete',
+        toolsUsed: 'Tools Used in This Lesson',
+        categories: {
+          all: 'All Categories',
+          language: 'Language Learning',
+          content: 'Content Creation',
+          business: 'AI for Business',
+          tutorials: 'Tool Tutorials',
+        },
+        difficulty: {
+          beginner: 'Beginner',
+          intermediate: 'Intermediate',
+          expert: 'Expert',
+        },
+        lessons: {
+          chatgptMastery: { title: 'ChatGPT Mastery: From Zero to Hero', description: 'Learn advanced prompting techniques and unlock the full power of ChatGPT.' },
+          aiContentCreation: { title: 'AI Content Creation Masterclass', description: 'Create stunning visuals and videos using Midjourney and Runway.' },
+          languageLearning: { title: 'Learn Any Language with AI', description: 'Use ChatGPT and ElevenLabs to master new languages faster.' },
+          businessAutomation: { title: 'Automate Your Business with AI', description: 'Build AI-powered workflows that save hours every week.' },
+          midjourneyArt: { title: 'Midjourney Art & Design', description: 'Master prompt engineering for stunning AI-generated artwork.' },
+          promptEngineering: { title: 'Advanced Prompt Engineering', description: 'The ultimate guide to crafting prompts that get perfect results.' },
+          videoGeneration: { title: 'AI Video Generation Guide', description: 'Create professional videos with Runway and ElevenLabs.' },
+          aiTranslation: { title: 'AI Translation & Localization', description: 'Use AI tools to translate content into any language.' },
+        },
+      },
     },
   },
 
@@ -151,6 +189,7 @@ const resources = {
         contentHub: '内容中心',
         getStarted: '浏览工具',
         dashboard: '我的工具库',
+        academy: 'AI学院',
       },
       hero: {
         badge: '高级AI工具商店',
@@ -213,13 +252,14 @@ const resources = {
       common: { loading: '加载中...', error: '发生错误', success: '成功！', cancel: '取消', confirm: '确认', save: '保存', delete: '删除', edit: '编辑', close: '关闭', search: '搜索', filter: '筛选', sortBy: '排序', noResults: '无结果', tryAgain: '重试', learnMore: '了解更多', returnHome: '返回首页', clearSearch: '清除搜索' },
       errors: { notFound: '页面未找到', serverError: '服务器错误', networkError: '网络错误', unauthorized: '未授权', forbidden: '访问被拒绝' },
       tooltips: { launchTool: '在新标签页中打开此工具', buyTool: '添加到购物车并结账', searchTools: '按工具名称搜索', languageSelector: '更改语言' },
+      academy: { badge: 'AI学院', title: '通过专家课程', titleHighlight: '掌握AI', description: '从精选视频课程和分步指南中学习。跟踪您的进度，成为AI专家。', yourProgress: '您的进度', lessonsCompleted: '课程已完成', featured: '本月精选', allLessons: '所有课程', video: '视频', article: '文章', completed: '已完成', markComplete: '标记完成', toolsUsed: '本课使用的工具', categories: { all: '所有类别', language: '语言学习', content: '内容创作', business: '商业AI', tutorials: '工具教程' }, difficulty: { beginner: '初级', intermediate: '中级', expert: '专家' }, lessons: { chatgptMastery: { title: 'ChatGPT精通：从零到英雄', description: '学习高级提示技术，解锁ChatGPT的全部力量。' }, aiContentCreation: { title: 'AI内容创作大师班', description: '使用Midjourney和Runway创建令人惊叹的视觉效果和视频。' }, languageLearning: { title: '用AI学习任何语言', description: '使用ChatGPT和ElevenLabs更快地掌握新语言。' }, businessAutomation: { title: '用AI自动化您的业务', description: '构建每周节省数小时的AI驱动工作流。' }, midjourneyArt: { title: 'Midjourney艺术与设计', description: '掌握提示工程以创建令人惊叹的AI生成艺术作品。' }, promptEngineering: { title: '高级提示工程', description: '打造完美结果提示的终极指南。' }, videoGeneration: { title: 'AI视频生成指南', description: '使用Runway和ElevenLabs创建专业视频。' }, aiTranslation: { title: 'AI翻译与本地化', description: '使用AI工具将内容翻译成任何语言。' } } },
     },
   },
 
   // Hindi - हिन्दी
   hi: {
     translation: {
-      nav: { store: 'स्टोर', tools: 'टूल्स', tutorials: 'ट्यूटोरियल', about: 'हमारे बारे में', contentHub: 'कंटेंट हब', getStarted: 'टूल्स ब्राउज़ करें', dashboard: 'मेरी वॉल्ट' },
+      nav: { store: 'स्टोर', tools: 'टूल्स', tutorials: 'ट्यूटोरियल', about: 'हमारे बारे में', contentHub: 'कंटेंट हब', getStarted: 'टूल्स ब्राउज़ करें', dashboard: 'मेरी वॉल्ट', academy: 'AI अकादमी' },
       hero: {
         badge: 'प्रीमियम AI टूल्स स्टोर',
         title: 'प्रीमियम AI टूल्स खरीदें',
@@ -250,13 +290,14 @@ const resources = {
       common: { loading: 'लोड हो रहा है...', error: 'एक त्रुटि हुई', success: 'सफलता!', cancel: 'रद्द करें', confirm: 'पुष्टि करें', save: 'सहेजें', delete: 'हटाएं', edit: 'संपादित करें', close: 'बंद करें', search: 'खोजें', filter: 'फ़िल्टर', sortBy: 'क्रमबद्ध', noResults: 'कोई परिणाम नहीं', tryAgain: 'पुनः प्रयास करें', learnMore: 'और जानें', returnHome: 'होम पर वापस जाएं', clearSearch: 'खोज साफ़ करें' },
       errors: { notFound: 'पेज नहीं मिला', serverError: 'सर्वर त्रुटि', networkError: 'नेटवर्क त्रुटि', unauthorized: 'अनधिकृत', forbidden: 'पहुंच अस्वीकृत' },
       tooltips: { launchTool: 'इस टूल को नए टैब में खोलें', buyTool: 'कार्ट में जोड़ें', searchTools: 'टूल नाम से खोजें', languageSelector: 'भाषा बदलें' },
+      academy: { badge: 'AI अकादमी', title: 'विशेषज्ञ पाठ्यक्रमों से', titleHighlight: 'AI में महारत हासिल करें', description: 'क्यूरेटेड वीडियो पाठों और चरण-दर-चरण गाइड से सीखें। अपनी प्रगति ट्रैक करें और AI विशेषज्ञ बनें।', yourProgress: 'आपकी प्रगति', lessonsCompleted: 'पाठ पूरे हुए', featured: 'इस महीने फीचर्ड', allLessons: 'सभी पाठ', video: 'वीडियो', article: 'लेख', completed: 'पूर्ण', markComplete: 'पूर्ण चिह्नित करें', toolsUsed: 'इस पाठ में उपयोग किए गए टूल्स', categories: { all: 'सभी श्रेणियां', language: 'भाषा सीखना', content: 'कंटेंट क्रिएशन', business: 'व्यापार के लिए AI', tutorials: 'टूल ट्यूटोरियल' }, difficulty: { beginner: 'शुरुआती', intermediate: 'मध्यम', expert: 'विशेषज्ञ' }, lessons: { chatgptMastery: { title: 'ChatGPT में महारत: शून्य से हीरो तक', description: 'उन्नत प्रॉम्प्टिंग तकनीकें सीखें और ChatGPT की पूरी शक्ति अनलॉक करें।' }, aiContentCreation: { title: 'AI कंटेंट क्रिएशन मास्टरक्लास', description: 'Midjourney और Runway का उपयोग करके शानदार विजुअल और वीडियो बनाएं।' }, languageLearning: { title: 'AI के साथ कोई भी भाषा सीखें', description: 'ChatGPT और ElevenLabs का उपयोग करके तेजी से नई भाषाएं सीखें।' }, businessAutomation: { title: 'AI के साथ अपना व्यवसाय स्वचालित करें', description: 'AI-संचालित वर्कफ़्लो बनाएं जो हर हफ्ते घंटे बचाते हैं।' }, midjourneyArt: { title: 'Midjourney कला और डिज़ाइन', description: 'शानदार AI-जनित कलाकृति के लिए प्रॉम्प्ट इंजीनियरिंग में महारत हासिल करें।' }, promptEngineering: { title: 'उन्नत प्रॉम्प्ट इंजीनियरिंग', description: 'परिपूर्ण परिणाम प्राप्त करने वाले प्रॉम्प्ट बनाने की अंतिम गाइड।' }, videoGeneration: { title: 'AI वीडियो जनरेशन गाइड', description: 'Runway और ElevenLabs के साथ पेशेवर वीडियो बनाएं।' }, aiTranslation: { title: 'AI अनुवाद और स्थानीयकरण', description: 'AI टूल्स का उपयोग करके सामग्री को किसी भी भाषा में अनुवाद करें।' } } },
     },
   },
 
   // Spanish - Español
   es: {
     translation: {
-      nav: { store: 'Tienda', tools: 'Herramientas', tutorials: 'Tutoriales', about: 'Acerca de', contentHub: 'Centro de Contenido', getStarted: 'Ver Herramientas', dashboard: 'Mi Bóveda' },
+      nav: { store: 'Tienda', tools: 'Herramientas', tutorials: 'Tutoriales', about: 'Acerca de', contentHub: 'Centro de Contenido', getStarted: 'Ver Herramientas', dashboard: 'Mi Bóveda', academy: 'Academia IA' },
       hero: {
         badge: 'Tienda de Herramientas IA Premium',
         title: 'Compra Herramientas IA Premium',
@@ -287,13 +328,14 @@ const resources = {
       common: { loading: 'Cargando...', error: 'Ocurrió un error', success: '¡Éxito!', cancel: 'Cancelar', confirm: 'Confirmar', save: 'Guardar', delete: 'Eliminar', edit: 'Editar', close: 'Cerrar', search: 'Buscar', filter: 'Filtrar', sortBy: 'Ordenar por', noResults: 'Sin resultados', tryAgain: 'Intentar de nuevo', learnMore: 'Saber más', returnHome: 'Volver al Inicio', clearSearch: 'Limpiar Búsqueda' },
       errors: { notFound: 'Página no encontrada', serverError: 'Error del servidor', networkError: 'Error de red', unauthorized: 'No autorizado', forbidden: 'Acceso denegado' },
       tooltips: { launchTool: 'Abrir esta herramienta en una nueva pestaña', buyTool: 'Añadir al carrito', searchTools: 'Buscar por nombre', languageSelector: 'Cambiar idioma' },
+      academy: { badge: 'Academia IA', title: 'Domina la IA con', titleHighlight: 'Cursos Expertos', description: 'Aprende de lecciones en video seleccionadas y guías paso a paso. Sigue tu progreso y conviértete en experto en IA.', yourProgress: 'Tu Progreso', lessonsCompleted: 'lecciones completadas', featured: 'Destacados Este Mes', allLessons: 'Todas las Lecciones', video: 'Video', article: 'Artículo', completed: 'Completado', markComplete: 'Marcar Completo', toolsUsed: 'Herramientas Usadas en Esta Lección', categories: { all: 'Todas las Categorías', language: 'Aprendizaje de Idiomas', content: 'Creación de Contenido', business: 'IA para Negocios', tutorials: 'Tutoriales de Herramientas' }, difficulty: { beginner: 'Principiante', intermediate: 'Intermedio', expert: 'Experto' }, lessons: { chatgptMastery: { title: 'Dominio de ChatGPT: De Cero a Héroe', description: 'Aprende técnicas avanzadas de prompting y desbloquea todo el poder de ChatGPT.' }, aiContentCreation: { title: 'Masterclass de Creación de Contenido IA', description: 'Crea visuales y videos impresionantes usando Midjourney y Runway.' }, languageLearning: { title: 'Aprende Cualquier Idioma con IA', description: 'Usa ChatGPT y ElevenLabs para dominar nuevos idiomas más rápido.' }, businessAutomation: { title: 'Automatiza Tu Negocio con IA', description: 'Construye flujos de trabajo impulsados por IA que ahorran horas cada semana.' }, midjourneyArt: { title: 'Arte y Diseño con Midjourney', description: 'Domina la ingeniería de prompts para crear obras de arte IA impresionantes.' }, promptEngineering: { title: 'Ingeniería de Prompts Avanzada', description: 'La guía definitiva para crear prompts que obtienen resultados perfectos.' }, videoGeneration: { title: 'Guía de Generación de Video IA', description: 'Crea videos profesionales con Runway y ElevenLabs.' }, aiTranslation: { title: 'Traducción y Localización con IA', description: 'Usa herramientas IA para traducir contenido a cualquier idioma.' } } },
     },
   },
 
   // French - Français
   fr: {
     translation: {
-      nav: { store: 'Boutique', tools: 'Outils', tutorials: 'Tutoriels', about: 'À Propos', contentHub: 'Hub de Contenu', getStarted: 'Parcourir les Outils', dashboard: 'Mon Coffre' },
+      nav: { store: 'Boutique', tools: 'Outils', tutorials: 'Tutoriels', about: 'À Propos', contentHub: 'Hub de Contenu', getStarted: 'Parcourir les Outils', dashboard: 'Mon Coffre', academy: 'Académie IA' },
       hero: {
         badge: 'Boutique d\'Outils IA Premium',
         title: 'Achetez des Outils IA Premium',
@@ -324,13 +366,14 @@ const resources = {
       common: { loading: 'Chargement...', error: 'Une erreur s\'est produite', success: 'Succès!', cancel: 'Annuler', confirm: 'Confirmer', save: 'Enregistrer', delete: 'Supprimer', edit: 'Modifier', close: 'Fermer', search: 'Rechercher', filter: 'Filtrer', sortBy: 'Trier par', noResults: 'Aucun résultat', tryAgain: 'Réessayer', learnMore: 'En savoir plus', returnHome: 'Retour à l\'Accueil', clearSearch: 'Effacer la Recherche' },
       errors: { notFound: 'Page non trouvée', serverError: 'Erreur serveur', networkError: 'Erreur réseau', unauthorized: 'Non autorisé', forbidden: 'Accès refusé' },
       tooltips: { launchTool: 'Ouvrir cet outil dans un nouvel onglet', buyTool: 'Ajouter au panier', searchTools: 'Rechercher par nom', languageSelector: 'Changer de langue' },
+      academy: { badge: 'Académie IA', title: 'Maîtrisez l\'IA avec', titleHighlight: 'des Cours Experts', description: 'Apprenez grâce à des leçons vidéo sélectionnées et des guides étape par étape. Suivez vos progrès et devenez expert en IA.', yourProgress: 'Votre Progression', lessonsCompleted: 'leçons terminées', featured: 'En Vedette Ce Mois', allLessons: 'Toutes les Leçons', video: 'Vidéo', article: 'Article', completed: 'Terminé', markComplete: 'Marquer Terminé', toolsUsed: 'Outils Utilisés dans Cette Leçon', categories: { all: 'Toutes les Catégories', language: 'Apprentissage des Langues', content: 'Création de Contenu', business: 'IA pour les Entreprises', tutorials: 'Tutoriels Outils' }, difficulty: { beginner: 'Débutant', intermediate: 'Intermédiaire', expert: 'Expert' }, lessons: { chatgptMastery: { title: 'Maîtrise de ChatGPT: De Zéro à Héros', description: 'Apprenez des techniques de prompting avancées et libérez toute la puissance de ChatGPT.' }, aiContentCreation: { title: 'Masterclass Création de Contenu IA', description: 'Créez des visuels et vidéos époustouflants avec Midjourney et Runway.' }, languageLearning: { title: 'Apprenez N\'importe Quelle Langue avec l\'IA', description: 'Utilisez ChatGPT et ElevenLabs pour maîtriser de nouvelles langues plus rapidement.' }, businessAutomation: { title: 'Automatisez Votre Entreprise avec l\'IA', description: 'Créez des workflows alimentés par l\'IA qui économisent des heures chaque semaine.' }, midjourneyArt: { title: 'Art et Design Midjourney', description: 'Maîtrisez l\'ingénierie de prompts pour des œuvres d\'art IA époustouflantes.' }, promptEngineering: { title: 'Ingénierie de Prompts Avancée', description: 'Le guide ultime pour créer des prompts qui obtiennent des résultats parfaits.' }, videoGeneration: { title: 'Guide de Génération Vidéo IA', description: 'Créez des vidéos professionnelles avec Runway et ElevenLabs.' }, aiTranslation: { title: 'Traduction et Localisation IA', description: 'Utilisez les outils IA pour traduire du contenu dans n\'importe quelle langue.' } } },
     },
   },
 
   // Arabic - العربية (RTL)
   ar: {
     translation: {
-      nav: { store: 'المتجر', tools: 'الأدوات', tutorials: 'الدروس', about: 'من نحن', contentHub: 'مركز المحتوى', getStarted: 'تصفح الأدوات', dashboard: 'خزنتي' },
+      nav: { store: 'المتجر', tools: 'الأدوات', tutorials: 'الدروس', about: 'من نحن', contentHub: 'مركز المحتوى', getStarted: 'تصفح الأدوات', dashboard: 'خزنتي', academy: 'أكاديمية AI' },
       hero: {
         badge: 'متجر أدوات الذكاء الاصطناعي المميزة',
         title: 'اشترِ أدوات AI المميزة',
@@ -361,13 +404,14 @@ const resources = {
       common: { loading: 'جاري التحميل...', error: 'حدث خطأ', success: 'نجاح!', cancel: 'إلغاء', confirm: 'تأكيد', save: 'حفظ', delete: 'حذف', edit: 'تحرير', close: 'إغلاق', search: 'بحث', filter: 'تصفية', sortBy: 'ترتيب حسب', noResults: 'لا توجد نتائج', tryAgain: 'حاول مرة أخرى', learnMore: 'اعرف المزيد', returnHome: 'العودة للرئيسية', clearSearch: 'مسح البحث' },
       errors: { notFound: 'الصفحة غير موجودة', serverError: 'خطأ في الخادم', networkError: 'خطأ في الشبكة', unauthorized: 'غير مصرح', forbidden: 'الوصول مرفوض' },
       tooltips: { launchTool: 'افتح هذه الأداة في علامة تبويب جديدة', buyTool: 'أضف إلى السلة', searchTools: 'ابحث باسم الأداة', languageSelector: 'تغيير اللغة' },
+      academy: { badge: 'أكاديمية AI', title: 'أتقن الذكاء الاصطناعي مع', titleHighlight: 'دورات الخبراء', description: 'تعلم من دروس الفيديو المختارة والأدلة خطوة بخطوة. تتبع تقدمك وكن خبيراً في AI.', yourProgress: 'تقدمك', lessonsCompleted: 'دروس مكتملة', featured: 'مميزات هذا الشهر', allLessons: 'جميع الدروس', video: 'فيديو', article: 'مقال', completed: 'مكتمل', markComplete: 'وضع علامة مكتمل', toolsUsed: 'الأدوات المستخدمة في هذا الدرس', categories: { all: 'جميع الفئات', language: 'تعلم اللغات', content: 'إنشاء المحتوى', business: 'AI للأعمال', tutorials: 'دروس الأدوات' }, difficulty: { beginner: 'مبتدئ', intermediate: 'متوسط', expert: 'خبير' }, lessons: { chatgptMastery: { title: 'إتقان ChatGPT: من الصفر إلى البطل', description: 'تعلم تقنيات الأوامر المتقدمة وأطلق العنان لقوة ChatGPT الكاملة.' }, aiContentCreation: { title: 'ماستركلاس إنشاء المحتوى بالـ AI', description: 'أنشئ مرئيات وفيديوهات مذهلة باستخدام Midjourney و Runway.' }, languageLearning: { title: 'تعلم أي لغة مع AI', description: 'استخدم ChatGPT و ElevenLabs لإتقان لغات جديدة بشكل أسرع.' }, businessAutomation: { title: 'أتمتة عملك مع AI', description: 'بناء سير عمل مدعوم بـ AI يوفر ساعات كل أسبوع.' }, midjourneyArt: { title: 'فن وتصميم Midjourney', description: 'أتقن هندسة الأوامر لإنشاء أعمال فنية AI مذهلة.' }, promptEngineering: { title: 'هندسة الأوامر المتقدمة', description: 'الدليل النهائي لصياغة أوامر تحصل على نتائج مثالية.' }, videoGeneration: { title: 'دليل إنشاء الفيديو بـ AI', description: 'أنشئ فيديوهات احترافية مع Runway و ElevenLabs.' }, aiTranslation: { title: 'الترجمة والتوطين بـ AI', description: 'استخدم أدوات AI لترجمة المحتوى إلى أي لغة.' } } },
     },
   },
 
   // Bengali - বাংলা
   bn: {
     translation: {
-      nav: { store: 'স্টোর', tools: 'টুলস', tutorials: 'টিউটোরিয়াল', about: 'সম্পর্কে', contentHub: 'কন্টেন্ট হাব', getStarted: 'টুলস ব্রাউজ করুন', dashboard: 'আমার ভল্ট' },
+      nav: { store: 'স্টোর', tools: 'টুলস', tutorials: 'টিউটোরিয়াল', about: 'সম্পর্কে', contentHub: 'কন্টেন্ট হাব', getStarted: 'টুলস ব্রাউজ করুন', dashboard: 'আমার ভল্ট', academy: 'AI একাডেমি' },
       hero: {
         badge: 'প্রিমিয়াম AI টুলস স্টোর',
         title: 'প্রিমিয়াম AI টুলস কিনুন',
