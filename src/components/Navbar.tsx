@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, Globe, ChevronDown, Search } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown, Search, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languages } from '@/lib/i18n';
 import logo from '@/assets/logo.png';
@@ -150,6 +150,12 @@ const Navbar = () => {
           <Button variant="heroOutline" size="sm" asChild>
             <a href="/dashboard">{t('nav.dashboard')}</a>
           </Button>
+          <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
+            <a href="/admin" className="flex items-center gap-1.5">
+              <Shield className="w-4 h-4" />
+              Admin
+            </a>
+          </Button>
           <Button variant="hero" size="sm">
             {t('nav.getStarted')}
           </Button>
@@ -185,12 +191,20 @@ const Navbar = () => {
                     {lang.flag} {lang.name}
                   </button>)}
               </div>
-              <div className="flex gap-3 pt-4">
-                <Button variant="heroOutline" className="flex-1">
-                  {t('nav.dashboard')}
-                </Button>
-                <Button variant="hero" className="flex-1">
-                  {t('nav.getStarted')}
+              <div className="flex flex-col gap-3 pt-4">
+                <div className="flex gap-3">
+                  <Button variant="heroOutline" className="flex-1" asChild>
+                    <a href="/dashboard">{t('nav.dashboard')}</a>
+                  </Button>
+                  <Button variant="hero" className="flex-1">
+                    {t('nav.getStarted')}
+                  </Button>
+                </div>
+                <Button variant="ghost" className="w-full text-muted-foreground" asChild>
+                  <a href="/admin" className="flex items-center justify-center gap-2">
+                    <Shield className="w-4 h-4" />
+                    Admin Panel
+                  </a>
                 </Button>
               </div>
             </div>
