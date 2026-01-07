@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import Features from '@/components/Features';
-import Pricing from '@/components/Pricing';
+import Storefront from '@/components/Storefront';
 import Resources from '@/components/Resources';
 import CTA from '@/components/CTA';
 import Footer from '@/components/Footer';
@@ -24,8 +23,7 @@ const Index = () => {
       
       <main>
         <Hero />
-        <Features />
-        <Pricing />
+        <Storefront />
         <Resources />
         <CTA />
       </main>
