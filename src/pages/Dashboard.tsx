@@ -2,27 +2,42 @@ import { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { 
-  ExternalLink, Sparkles, Search, X,
-  Settings, Bell, User, Shield, Zap
+  ExternalLink, Search, X,
+  Settings, Bell, User, Shield, Zap, Clock, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
+import { supabase } from '@/integrations/supabase/client';
 
-// Official brand logos from reliable CDN sources
+// Import local logos
+import perplexityLogo from '@/assets/perplexity-logo.png';
+import jasperLogo from '@/assets/jasper-logo.png';
+import capcutLogo from '@/assets/capcut-logo.png';
+import leonardoLogo from '@/assets/leonardo-logo.png';
+import runwayLogo from '@/assets/runway-logo.png';
+import elevenlabsLogo from '@/assets/elevenlabs-logo.png';
+import murfLogo from '@/assets/murf-logo.png';
+import adobeLogo from '@/assets/adobe-logo.png';
+import chatgptLogo from '@/assets/chatgpt-logo.png';
+import claudeLogo from '@/assets/claude-logo.png';
+import geminiLogo from '@/assets/gemini-logo.png';
+import midjourneyLogo from '@/assets/midjourney-logo.png';
+
+// Official brand logos using local files
 const toolLogos: Record<string, string> = {
-  'chatgpt': 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg',
-  'claude': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
-  'gemini': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg',
-  'perplexity': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1706190595/ioembezzxqjmblqoqnlw.png',
-  'jasper': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1673294837/ozjn5b2qcxk5c6ivddpc.png',
-  'midjourney': 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.png',
-  'leonardo': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1677753796/sjslmlpj1cjomspzavzs.png',
-  'capcut': 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/CapCut_logo.svg/1024px-CapCut_logo.svg.png',
-  'runway': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1615813352/vu1cjc3gidyrbivrqdip.png',
-  'elevenlabs': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1673539371/hrmn0g6eozdxcjfmqpnr.png',
-  'murf': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1632913011/wj4qr1d1n1lbcojthqjn.png',
-  'claude-code': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
-  'adobe': 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Adobe_Experience_Cloud_logo.svg',
+  'chatgpt': chatgptLogo,
+  'claude': claudeLogo,
+  'gemini': geminiLogo,
+  'perplexity': perplexityLogo,
+  'jasper': jasperLogo,
+  'midjourney': midjourneyLogo,
+  'leonardo': leonardoLogo,
+  'capcut': capcutLogo,
+  'runway': runwayLogo,
+  'elevenlabs': elevenlabsLogo,
+  'murf': murfLogo,
+  'claude-code': claudeLogo,
+  'adobe': adobeLogo,
   'windows': 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg',
 };
 
@@ -44,23 +59,33 @@ const toolColors: Record<string, { primary: string; glow: string }> = {
   'windows': { primary: '#0078d4', glow: '206 100% 42%' },
 };
 
-interface PurchasedTool {
+// Tool access URLs
+const toolAccessUrls: Record<string, string> = {
+  'chatgpt': 'https://chat.openai.com',
+  'claude': 'https://claude.ai',
+  'gemini': 'https://gemini.google.com',
+  'perplexity': 'https://perplexity.ai',
+  'jasper': 'https://jasper.ai',
+  'midjourney': 'https://midjourney.com',
+  'leonardo': 'https://leonardo.ai',
+  'capcut': 'https://capcut.com',
+  'runway': 'https://runwayml.com',
+  'elevenlabs': 'https://elevenlabs.io',
+  'murf': 'https://murf.ai',
+  'adobe': 'https://adobe.com',
+};
+
+interface Order {
   id: string;
-  name: string;
-  purchaseDate: string;
-  accessUrl: string;
+  tool_id: string;
+  tool_name: string;
+  tool_price: string;
+  status: string;
+  created_at: string;
 }
 
-// Simulated purchased tools - in production this would come from database
-const purchasedTools: PurchasedTool[] = [
-  { id: 'chatgpt', name: 'ChatGPT Plus', purchaseDate: '2026-01-01', accessUrl: 'https://chat.openai.com' },
-  { id: 'midjourney', name: 'Midjourney', purchaseDate: '2026-01-03', accessUrl: 'https://midjourney.com' },
-  { id: 'claude', name: 'Claude Pro', purchaseDate: '2026-01-05', accessUrl: 'https://claude.ai' },
-  { id: 'runway', name: 'Runway Gen-4', purchaseDate: '2026-01-06', accessUrl: 'https://runway.ml' },
-];
-
-// 3D Vault Tool Card with Official Logos
-const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) => {
+// Vault Tool Card Component
+const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
   const { t } = useTranslation();
   const cardRef = { current: null as HTMLDivElement | null };
   const [isHovered, setIsHovered] = useState(false);
@@ -88,8 +113,10 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
     setIsHovered(false);
   };
 
-  const logoUrl = toolLogos[tool.id];
-  const colors = toolColors[tool.id] || { primary: '#a855f7', glow: '270 85% 65%' };
+  const logoUrl = toolLogos[order.tool_id];
+  const colors = toolColors[order.tool_id] || { primary: '#a855f7', glow: '270 85% 65%' };
+  const accessUrl = toolAccessUrls[order.tool_id] || '#';
+  const isPending = order.status === 'pending';
 
   return (
     <motion.div
@@ -142,16 +169,27 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
             }}
           />
 
-          {/* Active Indicator */}
+          {/* Status Indicator */}
           <div 
-            className="absolute top-4 end-4 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium z-10"
-            style={{ background: `${colors.primary}20`, color: colors.primary }}
+            className={`absolute top-4 end-4 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium z-10 ${
+              isPending ? 'bg-yellow-500/20 text-yellow-500' : ''
+            }`}
+            style={!isPending ? { background: `${colors.primary}20`, color: colors.primary } : {}}
           >
-            <span 
-              className="w-2 h-2 rounded-full animate-pulse"
-              style={{ background: colors.primary }}
-            />
-            {t('dashboard.active')}
+            {isPending ? (
+              <>
+                <Clock className="w-3 h-3" />
+                {t('checkout.pending')}
+              </>
+            ) : (
+              <>
+                <span 
+                  className="w-2 h-2 rounded-full animate-pulse"
+                  style={{ background: colors.primary }}
+                />
+                {t('dashboard.active')}
+              </>
+            )}
           </div>
 
           <div className="p-6">
@@ -186,7 +224,7 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
                 {logoUrl && !logoError ? (
                   <img
                     src={logoUrl}
-                    alt={`${tool.name} logo`}
+                    alt={`${order.tool_name} logo`}
                     className={`w-10 h-10 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => setLogoLoaded(true)}
                     onError={() => setLogoError(true)}
@@ -200,7 +238,7 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
                     className="text-2xl font-bold text-white"
                     style={{ textShadow: `0 2px 10px ${colors.primary}` }}
                   >
-                    {tool.name.charAt(0)}
+                    {order.tool_name.charAt(0)}
                   </span>
                 )}
 
@@ -215,31 +253,36 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
             </div>
 
             {/* Tool Name */}
-            <h3 className="text-xl font-display font-bold mb-2">{tool.name}</h3>
+            <h3 className="text-xl font-display font-bold mb-2">{order.tool_name}</h3>
             
             {/* Purchase Date */}
             <p className="text-xs text-muted-foreground mb-6">
-              {t('dashboard.purchasedOn')}: {new Date(tool.purchaseDate).toLocaleDateString()}
+              {t('dashboard.purchasedOn')}: {new Date(order.created_at).toLocaleDateString()}
             </p>
 
             {/* Launch Button */}
             <Button
               className="w-full relative overflow-hidden group/btn"
               style={{
-                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
+                background: isPending 
+                  ? 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
+                  : `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
               }}
-              onClick={() => window.open(tool.accessUrl, '_blank')}
+              onClick={() => !isPending && window.open(accessUrl, '_blank')}
+              disabled={isPending}
             >
               <span className="relative z-10 flex items-center gap-2 font-semibold text-white">
-                {t('dashboard.launchTool')}
-                <ExternalLink className="w-4 h-4" />
+                {isPending ? t('checkout.pending') : t('dashboard.launchTool')}
+                {isPending ? <Clock className="w-4 h-4" /> : <ExternalLink className="w-4 h-4" />}
               </span>
-              <motion.div
-                className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity"
-                style={{
-                  background: `linear-gradient(135deg, ${colors.primary}ee 0%, ${colors.primary} 100%)`,
-                }}
-              />
+              {!isPending && (
+                <motion.div
+                  className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors.primary}ee 0%, ${colors.primary} 100%)`,
+                  }}
+                />
+              )}
             </Button>
           </div>
 
@@ -264,14 +307,40 @@ const VaultToolCard = ({ tool, index }: { tool: PurchasedTool; index: number }) 
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
     window.scrollTo(0, 0);
+    fetchOrders();
   }, [i18n.language]);
 
-  const filteredTools = purchasedTools.filter(tool =>
-    tool.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const fetchOrders = async () => {
+    const email = localStorage.getItem('buyer_email');
+    if (!email) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('buyer_email', email)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setOrders(data || []);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredOrders = orders.filter(order =>
+    order.tool_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -360,7 +429,7 @@ const Dashboard = () => {
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Zap className="w-4 h-4 text-primary" />
-                <span><strong>{purchasedTools.length}</strong> {t('dashboard.toolsOwned')}</span>
+                <span><strong>{orders.length}</strong> {t('dashboard.toolsOwned')}</span>
               </div>
             </motion.div>
           </div>
@@ -400,10 +469,14 @@ const Dashboard = () => {
         {/* Tools Grid */}
         <section className="py-8">
           <div className="container mx-auto px-4">
-            {filteredTools.length > 0 ? (
+            {loading ? (
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : filteredOrders.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredTools.map((tool, index) => (
-                  <VaultToolCard key={tool.id} tool={tool} index={index} />
+                {filteredOrders.map((order, index) => (
+                  <VaultToolCard key={order.id} order={order} index={index} />
                 ))}
               </div>
             ) : (

@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { CheckoutDialog } from '@/components/CheckoutDialog';
 
 // Import local logos
 import perplexityLogo from '@/assets/perplexity-logo.png';
@@ -119,6 +120,7 @@ export const ToolCard = ({
   const [isHovered, setIsHovered] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
   const [logoError, setLogoError] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   // Mouse position for 3D tilt effect
   const mouseX = useMotionValue(0);
@@ -268,33 +270,44 @@ export const ToolCard = ({
             </div>
 
             {/* Buy Now Button */}
-            <Button className="w-full relative overflow-hidden group/btn" style={{
-            background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
-            border: 'none'
-          }}>
+            <Button 
+              className="w-full relative overflow-hidden group/btn" 
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
+                border: 'none'
+              }}
+              onClick={() => setCheckoutOpen(true)}
+            >
               <span className="relative z-10 flex items-center gap-2 font-semibold text-white">
                 {t('store.buyNow')}
                 <Sparkles className="w-4 h-4" />
               </span>
               <motion.div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity" style={{
-              background: `linear-gradient(135deg, ${colors.primary}ee 0%, ${colors.primary} 100%)`
-            }} />
+                background: `linear-gradient(135deg, ${colors.primary}ee 0%, ${colors.primary} 100%)`
+              }} />
             </Button>
           </div>
 
           {/* Animated Border Gradient on Hover */}
           <motion.div initial={{
-          opacity: 0
-        }} animate={{
-          opacity: isHovered ? 1 : 0
-        }} className="absolute inset-0 rounded-3xl pointer-events-none" style={{
-          background: `linear-gradient(135deg, ${colors.primary}40 0%, transparent 50%, ${colors.primary}20 100%)`,
-          mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          maskComposite: 'xor',
-          padding: '1px'
-        }} />
+            opacity: 0
+          }} animate={{
+            opacity: isHovered ? 1 : 0
+          }} className="absolute inset-0 rounded-3xl pointer-events-none" style={{
+            background: `linear-gradient(135deg, ${colors.primary}40 0%, transparent 50%, ${colors.primary}20 100%)`,
+            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+            maskComposite: 'xor',
+            padding: '1px'
+          }} />
         </div>
       </motion.div>
+
+      {/* Checkout Dialog */}
+      <CheckoutDialog 
+        tool={tool} 
+        open={checkoutOpen} 
+        onOpenChange={setCheckoutOpen} 
+      />
     </motion.div>;
 };
 export default ToolCard;
