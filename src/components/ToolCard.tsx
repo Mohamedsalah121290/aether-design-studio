@@ -4,21 +4,31 @@ import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Official brand logos from reliable CDN sources
+// Import local logos
+import perplexityLogo from '@/assets/perplexity-logo.png';
+import jasperLogo from '@/assets/jasper-logo.png';
+import capcutLogo from '@/assets/capcut-logo.png';
+import leonardoLogo from '@/assets/leonardo-logo.png';
+import runwayLogo from '@/assets/runway-logo.png';
+import elevenlabsLogo from '@/assets/elevenlabs-logo.png';
+import murfLogo from '@/assets/murf-logo.png';
+import adobeLogo from '@/assets/adobe-logo.png';
+
+// Official brand logos - using local files where available
 const toolLogos: Record<string, string> = {
   'chatgpt': 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg',
   'claude': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
   'gemini': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg',
-  'perplexity': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1706190595/ioembezzxqjmblqoqnlw.png',
-  'jasper': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1673294837/ozjn5b2qcxk5c6ivddpc.png',
+  'perplexity': perplexityLogo,
+  'jasper': jasperLogo,
   'midjourney': 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.png',
-  'leonardo': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1677753796/sjslmlpj1cjomspzavzs.png',
-  'capcut': 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/CapCut_logo.svg/1024px-CapCut_logo.svg.png',
-  'runway': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1615813352/vu1cjc3gidyrbivrqdip.png',
-  'elevenlabs': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1673539371/hrmn0g6eozdxcjfmqpnr.png',
-  'murf': 'https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1632913011/wj4qr1d1n1lbcojthqjn.png',
+  'leonardo': leonardoLogo,
+  'capcut': capcutLogo,
+  'runway': runwayLogo,
+  'elevenlabs': elevenlabsLogo,
+  'murf': murfLogo,
   'claude-code': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
-  'adobe': 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Adobe_Experience_Cloud_logo.svg',
+  'adobe': adobeLogo,
   'windows': 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg',
 };
 
