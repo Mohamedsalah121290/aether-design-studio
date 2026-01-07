@@ -1,33 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { MessageSquare, Image, Video, Code, Sparkles, Search, X } from 'lucide-react';
+import { MessageSquare, Image, Video, Code, Sparkles, Search, X, Loader2 } from 'lucide-react';
 import { ToolCard, Tool } from './ToolCard';
-
-// All available tools organized by category
-const allTools: Tool[] = [
-  // Text & Chat
-  { id: 'chatgpt', name: 'ChatGPT Plus', price: 9, category: 'text' },
-  { id: 'claude', name: 'Claude Pro', price: 9, category: 'text' },
-  { id: 'gemini', name: 'Gemini Advanced', price: 8, category: 'text' },
-  { id: 'perplexity', name: 'Perplexity Pro', price: 7, category: 'text' },
-  { id: 'jasper', name: 'Jasper AI', price: 12, category: 'text' },
-  
-  // Image Generation
-  { id: 'midjourney', name: 'Midjourney', price: 12, category: 'image' },
-  { id: 'leonardo', name: 'Leonardo AI', price: 8, category: 'image' },
-  
-  // Video & Audio
-  { id: 'capcut', name: 'CapCut Pro', price: 6, category: 'video' },
-  { id: 'runway', name: 'Runway Gen-4', price: 15, category: 'video' },
-  { id: 'elevenlabs', name: 'ElevenLabs', price: 11, category: 'video' },
-  { id: 'murf', name: 'Murf.ai', price: 8, category: 'video' },
-  
-  // Coding & Software
-  { id: 'claude-code', name: 'Claude Code', price: 10, category: 'coding' },
-  { id: 'adobe', name: 'Adobe Creative Cloud', price: 18, category: 'coding' },
-  { id: 'windows', name: 'Windows 11 Pro Key', price: 5, category: 'coding' },
-];
+import { supabase } from '@/integrations/supabase/client';
 
 const categories = [
   { id: 'all', icon: Sparkles },
@@ -39,11 +15,46 @@ const categories = [
 
 const Storefront = () => {
   const { t } = useTranslation();
+  const [tools, setTools] = useState<Tool[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    fetchTools();
+  }, []);
+
+  const fetchTools = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('tools')
+        .select('*')
+        .eq('is_active', true)
+        .order('name');
+
+      if (error) throw error;
+      
+      // Map database response to Tool interface
+      const mappedTools: Tool[] = (data || []).map(tool => ({
+        id: tool.id,
+        tool_id: tool.tool_id,
+        name: tool.name,
+        price: Number(tool.price),
+        category: tool.category as 'text' | 'image' | 'video' | 'coding',
+        delivery_type: tool.delivery_type as 'subscribe_for_them' | 'email_only' | 'provide_account',
+        activation_time: tool.activation_time,
+      }));
+      
+      setTools(mappedTools);
+    } catch (error) {
+      console.error('Error fetching tools:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Filter tools
-  const filteredTools = allTools.filter(tool => {
+  const filteredTools = tools.filter(tool => {
     const matchesCategory = activeCategory === 'all' || tool.category === activeCategory;
     const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
@@ -125,8 +136,8 @@ const Storefront = () => {
           {categories.map((cat) => {
             const Icon = cat.icon;
             const count = cat.id === 'all' 
-              ? allTools.length 
-              : allTools.filter(t => t.category === cat.id).length;
+              ? tools.length 
+              : tools.filter(t => t.category === cat.id).length;
             
             return (
               <button
@@ -152,24 +163,33 @@ const Storefront = () => {
           })}
         </motion.div>
 
-        {/* Tools Grid - Bento Style */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredTools.map((tool, index) => (
-            <ToolCard key={tool.id} tool={tool} index={index} />
-          ))}
-        </div>
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+          </div>
+        ) : (
+          <>
+            {/* Tools Grid - Bento Style */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredTools.map((tool, index) => (
+                <ToolCard key={tool.id} tool={tool} index={index} />
+              ))}
+            </div>
 
-        {/* Empty State */}
-        {filteredTools.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16"
-          >
-            <Search className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
-            <h3 className="text-xl font-display font-bold mb-2">{t('store.noResults')}</h3>
-            <p className="text-muted-foreground">{t('store.tryAgain')}</p>
-          </motion.div>
+            {/* Empty State */}
+            {filteredTools.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-16"
+              >
+                <Search className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
+                <h3 className="text-xl font-display font-bold mb-2">{t('store.noResults')}</h3>
+                <p className="text-muted-foreground">{t('store.tryAgain')}</p>
+              </motion.div>
+            )}
+          </>
         )}
       </div>
     </section>

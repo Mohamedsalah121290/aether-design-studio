@@ -16,36 +16,89 @@ export type Database = {
     Tables: {
       orders: {
         Row: {
+          activated_at: string | null
+          activation_deadline: string | null
+          admin_notes: string | null
           buyer_email: string
           created_at: string
+          customer_data: Json
           id: string
           status: string
           tool_id: string
-          tool_name: string
-          tool_password: string | null
-          tool_price: string
           updated_at: string
         }
         Insert: {
+          activated_at?: string | null
+          activation_deadline?: string | null
+          admin_notes?: string | null
           buyer_email: string
           created_at?: string
+          customer_data?: Json
           id?: string
           status?: string
           tool_id: string
-          tool_name: string
-          tool_password?: string | null
-          tool_price: string
           updated_at?: string
         }
         Update: {
+          activated_at?: string | null
+          activation_deadline?: string | null
+          admin_notes?: string | null
           buyer_email?: string
           created_at?: string
+          customer_data?: Json
           id?: string
           status?: string
           tool_id?: string
-          tool_name?: string
-          tool_password?: string | null
-          tool_price?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tools: {
+        Row: {
+          access_url: string | null
+          activation_time: number
+          category: string
+          created_at: string
+          delivery_type: string
+          id: string
+          is_active: boolean
+          name: string
+          price: number
+          tool_id: string
+          updated_at: string
+        }
+        Insert: {
+          access_url?: string | null
+          activation_time?: number
+          category: string
+          created_at?: string
+          delivery_type: string
+          id?: string
+          is_active?: boolean
+          name: string
+          price: number
+          tool_id: string
+          updated_at?: string
+        }
+        Update: {
+          access_url?: string | null
+          activation_time?: number
+          category?: string
+          created_at?: string
+          delivery_type?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          price?: number
+          tool_id?: string
           updated_at?: string
         }
         Relationships: []
