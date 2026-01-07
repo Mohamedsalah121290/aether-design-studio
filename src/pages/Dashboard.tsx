@@ -78,7 +78,7 @@ const toolAccessUrls: Record<string, string> = {
 interface Order {
   id: string;
   tool_id: string;
-  status: string;
+  status: string; // 'pending' | 'processing' | 'active'
   created_at: string;
   activation_deadline: string | null;
   customer_data: Record<string, string>;
@@ -87,6 +87,7 @@ interface Order {
     name: string;
     price: number;
     access_url: string;
+    delivery_type?: string;
   };
 }
 
@@ -151,7 +152,9 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
   const colors = toolColors[toolId] || { primary: '#a855f7', glow: '270 85% 65%' };
   const accessUrl = order.tool?.access_url || toolAccessUrls[toolId] || '#';
   const isPending = order.status === 'pending';
+  const isProcessing = order.status === 'processing';
   const isActive = order.status === 'active';
+  const deliveryType = order.tool?.delivery_type || '';
 
   return (
     <motion.div
@@ -207,17 +210,33 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
           {/* Status Indicator */}
           <div 
             className={`absolute top-4 end-4 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium z-10 ${
-              isPending ? 'bg-yellow-500/20 text-yellow-500' : 'bg-green-500/20 text-green-500'
+              isPending 
+                ? 'bg-orange-500/20 text-orange-400' 
+                : isProcessing 
+                  ? 'bg-blue-500/20 text-blue-400' 
+                  : 'bg-green-500/20 text-green-400'
             }`}
           >
             {isPending ? (
               <>
-                <Clock className="w-3 h-3 animate-pulse" />
-                {t('checkout.pending')}
+                {/* Animated pulsing clock for pending */}
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Clock className="w-3.5 h-3.5" />
+                </motion.div>
+                {t('dashboard.pending')}
+              </>
+            ) : isProcessing ? (
+              <>
+                {/* Animated spinning loader for processing */}
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                {t('dashboard.processing')}
               </>
             ) : (
               <>
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                 {t('dashboard.active')}
               </>
             )}
@@ -287,53 +306,83 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
             <h3 className="text-xl font-display font-bold mb-2">{order.tool?.name || 'Unknown Tool'}</h3>
             
             {/* Status Info */}
-            {isPending && timeRemaining && !timeRemaining.expired ? (
-              <div className="mb-4 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                <p className="text-xs text-yellow-500 font-medium mb-1">{t('dashboard.activatingIn')}</p>
-                <p className="text-lg font-bold text-yellow-400">
-                  {timeRemaining.hours}h {timeRemaining.minutes}m
-                </p>
+            {isPending && (
+              <div className="mb-4 p-3 rounded-xl bg-orange-500/10 border border-orange-500/20">
+                <div className="flex items-center gap-2 mb-1">
+                  <motion.div
+                    animate={{ scale: [1, 1.15, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Clock className="w-4 h-4 text-orange-400" />
+                  </motion.div>
+                  <p className="text-xs text-orange-400 font-semibold">{t('dashboard.pending')}</p>
+                </div>
+                <p className="text-sm text-orange-300">{t('dashboard.pendingMessage')}</p>
               </div>
-            ) : isPending ? (
-              <p className="text-xs text-yellow-500 mb-4">{t('dashboard.processingOrder')}</p>
-            ) : (
+            )}
+            
+            {isProcessing && (
+              <div className="mb-4 p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                <div className="flex items-center gap-2 mb-1">
+                  <Loader2 className="w-4 h-4 text-blue-400 animate-spin" />
+                  <p className="text-xs text-blue-400 font-semibold">{t('dashboard.processing')}</p>
+                </div>
+                <p className="text-sm text-blue-300">{t('dashboard.processingMessage')}</p>
+              </div>
+            )}
+            
+            {isActive && (
               <p className="text-xs text-muted-foreground mb-4">
                 {t('dashboard.purchasedOn')}: {new Date(order.created_at).toLocaleDateString()}
               </p>
             )}
 
-            {/* Credentials for Active Orders */}
-            {isActive && order.customer_data?.email && (
-              <div className="mb-4 p-3 rounded-xl bg-white/5 border border-white/10">
-                <p className="text-xs text-muted-foreground mb-1">{t('dashboard.credentials')}</p>
-                <p className="text-sm font-medium text-white truncate">{order.customer_data.email}</p>
+            {/* Login Credentials for Active 'provide_account' Orders */}
+            {isActive && deliveryType === 'provide_account' && order.customer_data?.provided_email && (
+              <div className="mb-4 p-3 rounded-xl bg-green-500/10 border border-green-500/20 space-y-2">
+                <p className="text-xs text-green-400 font-semibold">{t('dashboard.credentials')}</p>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground">{t('dashboard.username')}:</span>
+                    <span className="text-sm font-medium text-white">{order.customer_data.provided_email}</span>
+                  </div>
+                  {order.customer_data?.provided_password && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">{t('dashboard.password')}:</span>
+                      <span className="text-sm font-medium text-white font-mono">{order.customer_data.provided_password}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
-            {/* Launch Button */}
-            <Button
-              className="w-full relative overflow-hidden group/btn"
-              style={{
-                background: isPending 
-                  ? 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
-                  : `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
-              }}
-              onClick={() => !isPending && window.open(accessUrl, '_blank')}
-              disabled={isPending}
-            >
-              <span className="relative z-10 flex items-center gap-2 font-semibold text-white">
-                {isPending ? t('checkout.pending') : t('dashboard.launchTool')}
-                {isPending ? <Clock className="w-4 h-4" /> : <ExternalLink className="w-4 h-4" />}
-              </span>
-              {!isPending && (
+            {/* Launch Button - Only prominent when Active */}
+            {isActive ? (
+              <Button
+                className="w-full relative overflow-hidden group/btn"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
+                }}
+                onClick={() => window.open(accessUrl, '_blank')}
+              >
+                <span className="relative z-10 flex items-center gap-2 font-semibold text-white">
+                  {t('dashboard.launchTool')}
+                  <ExternalLink className="w-4 h-4" />
+                </span>
                 <motion.div
                   className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity"
                   style={{
                     background: `linear-gradient(135deg, ${colors.primary}ee 0%, ${colors.primary} 100%)`,
                   }}
                 />
-              )}
-            </Button>
+              </Button>
+            ) : (
+              <div className="w-full py-3 rounded-lg bg-muted/50 border border-border text-center">
+                <span className="text-sm text-muted-foreground">
+                  {isPending ? t('dashboard.waitingActivation') : t('dashboard.beingProcessed')}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Animated Border on Hover */}
@@ -378,7 +427,7 @@ const Dashboard = () => {
         .from('orders')
         .select(`
           *,
-          tool:tools(tool_id, name, price, access_url)
+          tool:tools(tool_id, name, price, access_url, delivery_type)
         `)
         .eq('buyer_email', email)
         .order('created_at', { ascending: false });
@@ -386,6 +435,9 @@ const Dashboard = () => {
       if (error) throw error;
       
       // Type assertion for the joined data
+      // TODO: When order status changes to 'active', send email notification to user
+      // This should be implemented as an edge function or database trigger
+      // that listens for status updates and sends confirmation emails
       const mappedOrders: Order[] = (data || []).map((order: any) => ({
         id: order.id,
         tool_id: order.tool_id,
@@ -398,6 +450,7 @@ const Dashboard = () => {
           name: order.tool.name,
           price: Number(order.tool.price),
           access_url: order.tool.access_url,
+          delivery_type: order.tool.delivery_type,
         } : undefined,
       }));
       
@@ -414,6 +467,7 @@ const Dashboard = () => {
   );
 
   const pendingCount = orders.filter(o => o.status === 'pending').length;
+  const processingCount = orders.filter(o => o.status === 'processing').length;
   const activeCount = orders.filter(o => o.status === 'active').length;
 
   return (
@@ -492,14 +546,20 @@ const Dashboard = () => {
               <div className="flex items-center gap-4 flex-wrap">
                 {activeCount > 0 && (
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-sm font-medium">{activeCount} {t('dashboard.active')}</span>
+                    <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
+                    <span className="text-sm font-medium text-green-400">{activeCount} {t('dashboard.active')}</span>
+                  </div>
+                )}
+                {processingCount > 0 && (
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="w-3 h-3 text-blue-400 animate-spin" />
+                    <span className="text-sm font-medium text-blue-400">{processingCount} {t('dashboard.processing')}</span>
                   </div>
                 )}
                 {pendingCount > 0 && (
                   <div className="flex items-center gap-2">
-                    <Clock className="w-3 h-3 text-yellow-500" />
-                    <span className="text-sm font-medium text-yellow-500">{pendingCount} {t('checkout.pending')}</span>
+                    <Clock className="w-3 h-3 text-orange-400" />
+                    <span className="text-sm font-medium text-orange-400">{pendingCount} {t('dashboard.pending')}</span>
                   </div>
                 )}
                 <div className="h-4 w-px bg-border hidden sm:block" />
