@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -7,8 +8,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { Loader2, Clock, CheckCircle, Mail, Lock, Gift, Sparkles } from 'lucide-react';
+import { z } from 'zod';
 
 interface Tool {
   id: string;
@@ -26,34 +29,50 @@ interface CheckoutDialogProps {
   onSuccess?: () => void;
 }
 
+// Validation schemas
+const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
+const passwordSchema = z.string().min(1, 'Password is required').max(100);
+
 export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: CheckoutDialogProps) => {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+
+  const validateForm = (): boolean => {
+    const newErrors: { email?: string; password?: string } = {};
+    
+    // Email validation
+    if (tool?.delivery_type !== 'provide_account' || !user) {
+      const emailResult = emailSchema.safeParse(email);
+      if (!emailResult.success) {
+        newErrors.email = emailResult.error.errors[0]?.message || 'Invalid email';
+      }
+    }
+    
+    // Password validation for subscribe_for_them
+    if (tool?.delivery_type === 'subscribe_for_them') {
+      const passwordResult = passwordSchema.safeParse(password);
+      if (!passwordResult.success) {
+        newErrors.password = passwordResult.error.errors[0]?.message || 'Password is required';
+      }
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!tool) return;
 
-    // Validate based on delivery type
-    if (tool.delivery_type === 'subscribe_for_them' && (!email || !password)) {
-      toast({
-        title: t('checkout.error'),
-        description: t('checkout.fillAllFields'),
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    if (tool.delivery_type === 'email_only' && !email) {
-      toast({
-        title: t('checkout.error'),
-        description: t('checkout.emailRequired'),
-        variant: 'destructive',
-      });
+    // Validate form
+    if (!validateForm()) {
       return;
     }
 
@@ -76,15 +95,17 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
       } else if (tool.delivery_type === 'email_only') {
         customerData.email = email;
       }
-      // provide_account doesn't need customer data
 
       // Calculate activation deadline
       const activationDeadline = new Date();
       activationDeadline.setHours(activationDeadline.getHours() + tool.activation_time);
 
+      const buyerEmail = email || user?.email || 'pending@aitools.com';
+
       const { error } = await supabase.from('orders').insert({
         tool_id: tool.id,
-        buyer_email: email || 'pending@aitools.com',
+        buyer_email: buyerEmail,
+        user_id: user?.id || null,
         status: 'pending',
         customer_data: customerData,
         activation_deadline: activationDeadline.toISOString(),
@@ -98,9 +119,9 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
         description: t('checkout.successMessage'),
       });
       
-      // Store email in localStorage for vault access
-      if (email) {
-        localStorage.setItem('buyer_email', email);
+      // Store email in localStorage for vault access (for non-authenticated users)
+      if (buyerEmail && !user) {
+        localStorage.setItem('buyer_email', buyerEmail);
       }
       
       setTimeout(() => {
@@ -108,8 +129,11 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
         setEmail('');
         setPassword('');
         setAgreedToTerms(false);
+        setErrors({});
         onOpenChange(false);
         onSuccess?.();
+        // Redirect to dashboard
+        navigate('/dashboard');
       }, 2500);
     } catch (error) {
       console.error('Checkout error:', error);
@@ -280,11 +304,12 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       type="email"
                       placeholder="your@email.com"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: undefined })); }}
                       required
                       disabled={isLoading}
-                      className="h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
+                      className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${errors.email ? 'border-red-500' : ''}`}
                     />
+                    {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
                   </motion.div>
                 )}
 
@@ -306,11 +331,12 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       type="password"
                       placeholder="••••••••"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: undefined })); }}
                       required
                       disabled={isLoading}
-                      className="h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
+                      className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${errors.password ? 'border-red-500' : ''}`}
                     />
+                    {errors.password && <p className="text-xs text-red-400 mt-1">{errors.password}</p>}
                     <p className="text-xs text-muted-foreground">{t('checkout.passwordNote')}</p>
                   </motion.div>
                 )}
