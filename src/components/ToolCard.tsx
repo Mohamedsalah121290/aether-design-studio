@@ -13,21 +13,25 @@ import runwayLogo from '@/assets/runway-logo.png';
 import elevenlabsLogo from '@/assets/elevenlabs-logo.png';
 import murfLogo from '@/assets/murf-logo.png';
 import adobeLogo from '@/assets/adobe-logo.png';
+import chatgptLogo from '@/assets/chatgpt-logo.png';
+import claudeLogo from '@/assets/claude-logo.png';
+import geminiLogo from '@/assets/gemini-logo.png';
+import midjourneyLogo from '@/assets/midjourney-logo.png';
 
-// Official brand logos - using local files where available
+// Official brand logos - all using local high-resolution files
 const toolLogos: Record<string, string> = {
-  'chatgpt': 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg',
-  'claude': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
-  'gemini': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg',
+  'chatgpt': chatgptLogo,
+  'claude': claudeLogo,
+  'gemini': geminiLogo,
   'perplexity': perplexityLogo,
   'jasper': jasperLogo,
-  'midjourney': 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.png',
+  'midjourney': midjourneyLogo,
   'leonardo': leonardoLogo,
   'capcut': capcutLogo,
   'runway': runwayLogo,
   'elevenlabs': elevenlabsLogo,
   'murf': murfLogo,
-  'claude-code': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg',
+  'claude-code': claudeLogo,
   'adobe': adobeLogo,
   'windows': 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg',
 };
