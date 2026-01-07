@@ -7,9 +7,9 @@ const Footer = () => {
   const { t } = useTranslation();
 
   const footerLinks = {
-    product: ['Features', 'Pricing', 'Integrations', 'Changelog', 'Roadmap'],
-    company: ['About', 'Blog', 'Careers', 'Press', 'Partners'],
-    legal: ['Privacy', 'Terms', 'Security', 'Cookies'],
+    product: ['features', 'pricing', 'integrations', 'changelog', 'roadmap'],
+    company: ['about', 'blog', 'careers', 'press', 'partners'],
+    legal: ['privacy', 'terms', 'security', 'cookies'],
   };
 
   const socialLinks = [
@@ -106,7 +106,7 @@ const Footer = () => {
                     href="#"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {link}
+                    {t(`footer.links.${link}`)}
                   </a>
                 </li>
               ))}
@@ -123,7 +123,7 @@ const Footer = () => {
                     href="#"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {link}
+                    {t(`footer.links.${link}`)}
                   </a>
                 </li>
               ))}
@@ -140,7 +140,7 @@ const Footer = () => {
                     href="#"
                     className="text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {link}
+                    {t(`footer.links.${link}`)}
                   </a>
                 </li>
               ))}
@@ -155,11 +155,11 @@ const Footer = () => {
           </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">
-              Status
+              {t('footer.links.status')}
             </a>
             <span>•</span>
             <a href="#" className="hover:text-foreground transition-colors">
-              Sitemap
+              {t('footer.links.sitemap')}
             </a>
           </div>
         </div>

@@ -29,16 +29,17 @@ interface ArticleItem {
 }
 
 const ContentHub = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
   const [visibleArticles, setVisibleArticles] = useState(6);
   const [videoScrollPosition, setVideoScrollPosition] = useState(0);
+  const isRTL = i18n.language === 'ar' || i18n.language === 'ur';
 
   useEffect(() => {
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
     window.scrollTo(0, 0);
-  }, [i18n.language]);
+  }, [i18n.language, isRTL]);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -277,14 +278,14 @@ const ContentHub = () => {
             className="text-center max-w-3xl mx-auto"
           >
             <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-6">
-              Content Hub
+              {t('contentHub.title')}
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-black mb-6 leading-tight tracking-tight">
-              Expert AI{' '}
-              <span className="gradient-text">Knowledge</span>
+              {t('contentHub.subtitle').split(' ')[0]}{' '}
+              <span className="gradient-text">{t('contentHub.subtitle').split(' ').slice(1).join(' ')}</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed mb-10">
-              Curated tutorials, in-depth guides, and expert insights to master every AI tool.
+              {t('contentHub.description')}
             </p>
 
             {/* Search Bar */}
@@ -303,8 +304,8 @@ const ContentHub = () => {
                     setSearchQuery(e.target.value);
                     setVisibleArticles(6);
                   }}
-                  placeholder="Search articles by topic, tool, or category..."
-                  className="w-full pl-14 pr-5 py-4 rounded-2xl bg-card/80 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground text-base"
+                  placeholder={t('contentHub.searchPlaceholder')}
+                  className="w-full ps-14 pe-5 py-4 rounded-2xl bg-card/80 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground text-base"
                 />
                 {searchQuery && (
                   <button
@@ -331,10 +332,10 @@ const ContentHub = () => {
           >
             <div>
               <h2 className="text-2xl md:text-3xl font-display font-bold mb-2">
-                Featured This Month
+                {t('contentHub.featuredVideos')}
               </h2>
               <p className="text-muted-foreground">
-                7 hand-picked video tutorials from our experts
+                7 {t('contentHub.videoCount')}
               </p>
             </div>
             <div className="hidden md:flex gap-2">
@@ -423,7 +424,7 @@ const ContentHub = () => {
                       </h3>
                       <div className="flex items-center gap-3 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
-                          <Eye className="w-3 h-3" /> {video.views} views
+                          <Eye className="w-3 h-3" /> {video.views} {t('contentHub.views')}
                         </span>
                       </div>
                     </div>
@@ -445,12 +446,12 @@ const ContentHub = () => {
             className="mb-10"
           >
             <h2 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              Latest Articles
+              {t('contentHub.articles')}
             </h2>
             <p className="text-muted-foreground">
               {searchQuery 
-                ? `${filteredArticles.length} results for "${searchQuery}"` 
-                : 'In-depth guides and expert insights'}
+                ? `${filteredArticles.length} ${t('common.noResults').toLowerCase().includes('no') ? t('common.search').toLowerCase() : ''} "${searchQuery}"` 
+                : t('contentHub.description')}
             </p>
           </motion.div>
 
@@ -508,8 +509,8 @@ const ContentHub = () => {
 
                         {/* Read More */}
                         <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                          Read Article
-                          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                          {t('resources.readMore')}
+                          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180" />
                         </span>
                       </div>
                     </div>
@@ -532,8 +533,8 @@ const ContentHub = () => {
                 onClick={() => setVisibleArticles(prev => prev + 6)}
                 className="px-8"
               >
-                Load More Articles
-                <ArrowRight className="w-4 h-4 ml-2" />
+                {t('contentHub.loadMore')}
+                <ArrowRight className="w-4 h-4 ms-2 rtl:rotate-180" />
               </Button>
             </motion.div>
           )}
@@ -545,9 +546,9 @@ const ContentHub = () => {
               animate={{ opacity: 1 }}
               className="text-center py-16"
             >
-              <p className="text-xl text-muted-foreground mb-4">No articles found for "{searchQuery}"</p>
+              <p className="text-xl text-muted-foreground mb-4">{t('store.noResults')} "{searchQuery}"</p>
               <Button variant="outline" onClick={() => setSearchQuery('')}>
-                Clear Search
+                {t('common.clearSearch')}
               </Button>
             </motion.div>
           )}
@@ -609,7 +610,7 @@ const ContentHub = () => {
                     </span>
                     <span>•</span>
                     <span className="flex items-center gap-1.5">
-                      <Eye className="w-4 h-4" /> {selectedVideo.views} views
+                      <Eye className="w-4 h-4" /> {selectedVideo.views} {t('contentHub.views')}
                     </span>
                   </div>
                   <h2 className="text-xl md:text-2xl font-display font-bold mb-3">
