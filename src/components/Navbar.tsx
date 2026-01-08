@@ -144,42 +144,66 @@ const Navbar = () => {
               <AnimatePresence>
                 {isLangMenuOpen && (
                   <motion.div 
-                    initial={{ opacity: 0, y: 10 }} 
-                    animate={{ opacity: 1, y: 0 }} 
-                    exit={{ opacity: 0, y: 10 }} 
-                    className="absolute top-full end-0 mt-2 w-56 glass-strong rounded-xl overflow-hidden shadow-xl"
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }} 
+                    animate={{ opacity: 1, y: 0, scale: 1 }} 
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ type: 'spring', damping: 25, stiffness: 400 }}
+                    className="absolute top-full end-0 mt-2 w-64 rounded-2xl overflow-hidden z-50"
+                    style={{
+                      background: 'linear-gradient(135deg, hsl(222 47% 12% / 0.98) 0%, hsl(222 47% 8% / 0.99) 100%)',
+                      backdropFilter: 'blur(40px)',
+                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 40px rgba(168, 85, 247, 0.1)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                    }}
                   >
-                    <div className="p-2 border-b border-border">
+                    {/* Header with glassmorphism effect */}
+                    <div className="p-3 border-b border-white/10" style={{ background: 'rgba(255,255,255,0.02)' }}>
                       <div className="relative">
                         <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                         <input 
                           type="text" 
                           value={langSearch} 
                           onChange={e => setLangSearch(e.target.value)} 
-                          placeholder="Search..." 
-                          className="w-full ps-9 pe-3 py-2 text-sm rounded-lg bg-background/50 border border-border focus:border-primary focus:outline-none" 
+                          placeholder={t('common.search')} 
+                          className="w-full ps-9 pe-3 py-2.5 text-sm rounded-xl bg-white/5 border border-white/10 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground transition-all" 
                           autoFocus 
                         />
                       </div>
                     </div>
                     
-                    <div className="max-h-64 overflow-y-auto">
-                      {filteredLanguages.map(lang => (
-                        <button 
-                          key={lang.code} 
+                    <div className="max-h-72 overflow-y-auto py-2">
+                      {filteredLanguages.map((lang, index) => (
+                        <motion.button 
+                          key={lang.code}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.02 }}
                           onClick={() => changeLanguage(lang.code)} 
-                          className={`w-full px-4 py-2.5 text-start flex items-center gap-3 hover:bg-muted/50 transition-colors ${
-                            i18n.language === lang.code ? 'text-primary bg-primary/10' : 'text-foreground'
+                          className={`w-full px-4 py-3 text-start flex items-center gap-3 transition-all duration-200 ${
+                            i18n.language === lang.code 
+                              ? 'text-primary bg-primary/10' 
+                              : 'text-foreground hover:bg-white/5'
                           }`}
                         >
-                          <span className="text-lg">{lang.flag}</span>
-                          <span className="flex-1">{lang.name}</span>
-                          {lang.rtl && <span className="text-xs text-muted-foreground">RTL</span>}
-                        </button>
+                          <span className="text-xl">{lang.flag}</span>
+                          <span className="flex-1 font-medium">{lang.name}</span>
+                          {lang.rtl && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/20 text-primary font-medium">
+                              RTL
+                            </span>
+                          )}
+                          {i18n.language === lang.code && (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              className="w-2 h-2 rounded-full bg-primary"
+                            />
+                          )}
+                        </motion.button>
                       ))}
                       {filteredLanguages.length === 0 && (
-                        <div className="px-4 py-3 text-sm text-muted-foreground text-center">
-                          No languages found
+                        <div className="px-4 py-6 text-sm text-muted-foreground text-center">
+                          {t('common.noResults')}
                         </div>
                       )}
                     </div>
