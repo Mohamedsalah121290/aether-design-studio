@@ -14,6 +14,38 @@ export type Database = {
   }
   public: {
     Tables: {
+      order_credentials: {
+        Row: {
+          created_at: string
+          email: string
+          encrypted_password: string
+          id: string
+          order_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          encrypted_password: string
+          id?: string
+          order_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          encrypted_password?: string
+          id?: string
+          order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_credentials_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           activated_at: string | null
