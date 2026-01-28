@@ -87,11 +87,11 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
 
     setIsLoading(true);
     try {
-      // Build customer data based on delivery type
+      // Build customer data - NO PASSWORD STORED HERE (security fix)
       const customerData: Record<string, string> = {};
       if (tool.delivery_type === 'subscribe_for_them') {
         customerData.email = email;
-        customerData.password = password;
+        // Password is stored securely via edge function, not in customer_data
       } else if (tool.delivery_type === 'email_only') {
         customerData.email = email;
       }
@@ -102,14 +102,33 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
 
       const buyerEmail = email || user?.email || 'pending@aitools.com';
 
-      const { error } = await supabase.from('orders').insert({
+      // Create the order first (without password)
+      const { data: orderData, error } = await supabase.from('orders').insert({
         tool_id: tool.id,
         buyer_email: buyerEmail,
         user_id: user?.id || null,
         status: 'pending',
         customer_data: customerData,
         activation_deadline: activationDeadline.toISOString(),
-      });
+      }).select('id').single();
+
+      if (error) throw error;
+
+      // If this is a subscribe_for_them order, securely store credentials via edge function
+      if (tool.delivery_type === 'subscribe_for_them' && password && orderData?.id) {
+        const credResponse = await supabase.functions.invoke('store-credentials', {
+          body: {
+            order_id: orderData.id,
+            email: email,
+            password: password
+          }
+        });
+        
+        if (credResponse.error) {
+          console.error('Credential storage error:', credResponse.error);
+          // Don't throw - order was created, just log the issue
+        }
+      }
 
       if (error) throw error;
 

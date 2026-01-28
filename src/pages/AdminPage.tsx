@@ -6,6 +6,11 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import Navbar from '@/components/Navbar';
 
+interface OrderCredential {
+  email: string;
+  encrypted_password: string;
+}
+
 interface AdminOrder {
   id: string;
   status: string;
@@ -13,11 +18,13 @@ interface AdminOrder {
   buyer_email: string;
   customer_data: Record<string, string>;
   tool?: { name: string; tool_id: string };
+  credentials?: OrderCredential;
 }
 
 const AdminPage = () => {
   const { t } = useTranslation();
   const [orders, setOrders] = useState<AdminOrder[]>([]);
+  const [credentials, setCredentials] = useState<Record<string, OrderCredential>>({});
   const [loading, setLoading] = useState(true);
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
 
@@ -27,13 +34,30 @@ const AdminPage = () => {
 
   const fetchOrders = async () => {
     try {
-      const { data, error } = await supabase
+      // Fetch orders
+      const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
         .select(`*, tool:tools(name, tool_id)`)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setOrders(data as any[] || []);
+      if (ordersError) throw ordersError;
+      setOrders(ordersData as any[] || []);
+
+      // Fetch credentials separately from secure table (admin-only access)
+      const { data: credsData, error: credsError } = await supabase
+        .from('order_credentials')
+        .select('order_id, email, encrypted_password');
+
+      if (!credsError && credsData) {
+        const credsMap: Record<string, OrderCredential> = {};
+        credsData.forEach((cred: any) => {
+          credsMap[cred.order_id] = {
+            email: cred.email,
+            encrypted_password: cred.encrypted_password
+          };
+        });
+        setCredentials(credsMap);
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -102,12 +126,12 @@ const AdminPage = () => {
                             {new Date(order.created_at).toLocaleString()}
                           </p>
                           <div className="space-y-1">
-                            <p className="text-sm"><strong>Email:</strong> {order.customer_data?.email || order.buyer_email}</p>
-                            {order.customer_data?.password && (
+                            <p className="text-sm"><strong>Email:</strong> {credentials[order.id]?.email || order.customer_data?.email || order.buyer_email}</p>
+                            {credentials[order.id]?.encrypted_password && (
                               <div className="flex items-center gap-2">
                                 <p className="text-sm">
-                                  <strong>Password:</strong>{' '}
-                                  {showPasswords[order.id] ? order.customer_data.password : '••••••••'}
+                                  <strong>Credentials:</strong>{' '}
+                                  {showPasswords[order.id] ? '🔒 Encrypted (stored securely)' : '••••••••'}
                                 </p>
                                 <button onClick={() => togglePassword(order.id)} className="text-muted-foreground hover:text-foreground">
                                   {showPasswords[order.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
