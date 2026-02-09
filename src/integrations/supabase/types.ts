@@ -14,6 +14,89 @@ export type Database = {
   }
   public: {
     Tables: {
+      courses: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          difficulty: string
+          id: string
+          is_free: boolean
+          is_published: boolean
+          price: number | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string
+          id?: string
+          is_free?: boolean
+          is_published?: boolean
+          price?: number | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string
+          id?: string
+          is_free?: boolean
+          is_published?: boolean
+          price?: number | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lessons: {
+        Row: {
+          content_type: string
+          content_url: string | null
+          course_id: string
+          created_at: string
+          duration: string | null
+          id: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          content_type?: string
+          content_url?: string | null
+          course_id: string
+          created_at?: string
+          duration?: string | null
+          id?: string
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          content_type?: string
+          content_url?: string | null
+          course_id?: string
+          created_at?: string
+          duration?: string | null
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_credentials: {
         Row: {
           created_at: string
@@ -55,7 +138,10 @@ export type Database = {
           created_at: string
           customer_data: Json
           id: string
+          payment_status: string | null
           status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
           tool_id: string
           updated_at: string
           user_id: string | null
@@ -68,7 +154,10 @@ export type Database = {
           created_at?: string
           customer_data?: Json
           id?: string
+          payment_status?: string | null
           status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
           tool_id: string
           updated_at?: string
           user_id?: string | null
@@ -81,7 +170,10 @@ export type Database = {
           created_at?: string
           customer_data?: Json
           id?: string
+          payment_status?: string | null
           status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
           tool_id?: string
           updated_at?: string
           user_id?: string | null
@@ -89,6 +181,66 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "orders_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          order_id: string | null
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          tool_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          order_id?: string | null
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tool_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          order_id?: string | null
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tool_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_tool_id_fkey"
             columns: ["tool_id"]
             isOneToOne: false
             referencedRelation: "tools"
@@ -137,6 +289,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      user_progress: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          id: string
+          lesson_id: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lesson_id: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
