@@ -87,73 +87,27 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
 
     setIsLoading(true);
     try {
-      // Build customer data - NO PASSWORD STORED HERE (security fix)
-      const customerData: Record<string, string> = {};
-      if (tool.delivery_type === 'subscribe_for_them') {
-        customerData.email = email;
-        // Password is stored securely via edge function, not in customer_data
-      } else if (tool.delivery_type === 'email_only') {
-        customerData.email = email;
-      }
-
-      // Calculate activation deadline
-      const activationDeadline = new Date();
-      activationDeadline.setHours(activationDeadline.getHours() + tool.activation_time);
-
-      const buyerEmail = email || user?.email || 'pending@aitools.com';
-
-      // Create the order first (without password)
-      const { data: orderData, error } = await supabase.from('orders').insert({
-        tool_id: tool.id,
-        buyer_email: buyerEmail,
-        user_id: user?.id || null,
-        status: 'pending',
-        customer_data: customerData,
-        activation_deadline: activationDeadline.toISOString(),
-      }).select('id').single();
-
-      if (error) throw error;
-
-      // If this is a subscribe_for_them order, securely store credentials via edge function
-      if (tool.delivery_type === 'subscribe_for_them' && password && orderData?.id) {
-        const credResponse = await supabase.functions.invoke('store-credentials', {
-          body: {
-            order_id: orderData.id,
-            email: email,
-            password: password
-          }
-        });
-        
-        if (credResponse.error) {
-          console.error('Credential storage error:', credResponse.error);
-          // Don't throw - order was created, just log the issue
-        }
-      }
-
-      if (error) throw error;
-
-      setIsSuccess(true);
-      toast({
-        title: t('checkout.success'),
-        description: t('checkout.successMessage'),
-      });
+      const buyerEmail = email || user?.email;
       
-      // Store email in localStorage for vault access (for non-authenticated users)
+      // Call Stripe checkout edge function
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: {
+          toolId: tool.id,
+          customerEmail: tool.delivery_type === 'subscribe_for_them' || tool.delivery_type === 'email_only' ? email : buyerEmail,
+          customerPassword: tool.delivery_type === 'subscribe_for_them' ? password : undefined,
+        }
+      });
+
+      if (error) throw error;
+      if (!data?.url) throw new Error('No checkout URL returned');
+
+      // Store email for vault access
       if (buyerEmail && !user) {
         localStorage.setItem('buyer_email', buyerEmail);
       }
-      
-      setTimeout(() => {
-        setIsSuccess(false);
-        setEmail('');
-        setPassword('');
-        setAgreedToTerms(false);
-        setErrors({});
-        onOpenChange(false);
-        onSuccess?.();
-        // Redirect to dashboard
-        navigate('/dashboard');
-      }, 2500);
+
+      // Redirect to Stripe Checkout
+      window.location.href = data.url;
     } catch (error) {
       console.error('Checkout error:', error);
       toast({
