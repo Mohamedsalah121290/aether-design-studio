@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
-  Sparkles, Search, X, Loader2, PenTool, Palette, Film, Mic,
+  Sparkles, Search, Loader2, PenTool, Palette, Film, Mic,
   Code, Zap, Briefcase, ShieldCheck, Monitor, Users,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
@@ -33,7 +32,6 @@ const SECTION_ORDER: {
 const FEATURED_TOOL_IDS = ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva', 'perplexity'];
 const POPULAR_TOOL_IDS  = ['jasper', 'leonardo', 'runway', 'elevenlabs', 'adobe', 'capcut', 'murf'];
 
-/* Filter mapping (client-side) */
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   creators: ['image', 'video', 'audio'],
   marketers: ['text'],
@@ -92,34 +90,28 @@ const Storefront = () => {
     : POPULAR_TOOL_IDS.includes(toolId) ? 'popular'
     : 'standard';
 
-  /* Filtered + sorted tools */
   const processedTools = useMemo(() => {
     let result = tools.filter(t =>
       t.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Chip filters
     if (activeFilter === 'trending') {
       result = result.filter(t => FEATURED_TOOL_IDS.includes(t.tool_id) || POPULAR_TOOL_IDS.includes(t.tool_id));
     } else if (activeFilter === 'new') {
-      // "New" = last added tools (we just reverse for now since no created_at on client)
       result = [...result].reverse();
     } else if (activeFilter !== 'all' && FILTER_CATEGORY_MAP[activeFilter]) {
       result = result.filter(t => FILTER_CATEGORY_MAP[activeFilter].includes(t.category));
     }
 
-    // Sort
     if (sortBy === 'price-asc') {
       result = [...result].sort((a, b) => (a.starting_price ?? Infinity) - (b.starting_price ?? Infinity));
     } else if (sortBy === 'newest') {
       result = [...result].reverse();
     }
-    // 'popular' = default order (alphabetical + tiers)
 
     return result;
   }, [tools, searchQuery, activeFilter, sortBy]);
 
-  /* Category sections */
   const sections = SECTION_ORDER.map(section => ({
     ...section,
     tools: processedTools.filter(t => t.category === section.key),
@@ -127,64 +119,47 @@ const Storefront = () => {
 
   return (
     <>
-      {/* ═══ TRUST STRIP ═══════════════════════════════════════════ */}
+      {/* ═══ TRUST STRIP ═══ */}
       <TrustStrip />
 
       <section id="store" className="relative overflow-hidden">
-        {/* ═══ CINEMATIC HERO ════════════════════════════════════════ */}
-        <div className="relative pt-28 pb-16 overflow-hidden">
-          {/* Aurora gradient */}
+        {/* ═══ HERO ═══ */}
+        <div className="relative py-16 lg:py-24 overflow-hidden">
+          {/* Aurora gradient (low opacity) */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background: `
-                radial-gradient(ellipse 90% 70% at 50% 20%, hsl(var(--primary) / 0.14) 0%, transparent 60%),
-                radial-gradient(ellipse 70% 50% at 80% 60%, hsl(var(--secondary) / 0.1) 0%, transparent 55%),
-                radial-gradient(ellipse 60% 45% at 15% 70%, hsl(var(--accent) / 0.07) 0%, transparent 55%),
-                radial-gradient(ellipse 50% 50% at 50% 50%, hsl(var(--primary) / 0.04) 0%, transparent 80%)
+                radial-gradient(ellipse 80% 60% at 50% 20%, rgba(139,92,246,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(34,211,238,0.06) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 15% 70%, rgba(168,85,247,0.04) 0%, transparent 55%)
               `,
             }}
           />
-          {/* Noise */}
+          {/* Noise overlay */}
           <div
-            className="absolute inset-0 opacity-[0.03] pointer-events-none"
+            className="absolute inset-0 opacity-[0.02] pointer-events-none"
             style={{
               backgroundImage:
                 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")',
             }}
           />
 
-          <div className="container mx-auto px-4 relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center max-w-4xl mx-auto"
-            >
-              <motion.span
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-8"
-              >
-                <Sparkles className="w-4 h-4" />
+          <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 relative z-10">
+            <div className="text-center max-w-3xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/60 text-xs font-medium mb-8">
+                <Sparkles className="w-3.5 h-3.5" />
                 {t('store.badge')}
-              </motion.span>
+              </div>
 
-              <h2
-                className="text-5xl sm:text-6xl md:text-7xl font-display font-black mb-3 tracking-tight leading-[1.05]"
-                style={{ textShadow: '0 0 80px hsl(var(--primary) / 0.25)' }}
-              >
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3 tracking-tight leading-[1.1] text-white">
                 {t('store.title')}
               </h2>
-              <h2
-                className="text-5xl sm:text-6xl md:text-7xl font-display font-black mb-6 tracking-tight leading-[1.05] gradient-text"
-              >
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight leading-[1.1] bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                 {t('store.titleHighlight')}
               </h2>
 
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
+              <p className="text-base md:text-lg text-white/40 max-w-2xl mx-auto mb-8 leading-relaxed">
                 {t('store.description')}
               </p>
 
@@ -192,54 +167,40 @@ const Storefront = () => {
               <div className="flex flex-wrap justify-center gap-4 mb-8">
                 <a
                   href="#tools-grid"
-                  className="px-8 py-3.5 rounded-2xl font-semibold text-sm text-white transition-all duration-300 hover:scale-105"
-                  style={{
-                    background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)',
-                    boxShadow: '0 8px 30px hsl(var(--primary) / 0.35)',
-                  }}
+                  className="px-8 py-3 rounded-xl font-medium text-sm text-white bg-white/10 border border-white/15 transition-all duration-300 hover:bg-white/15 hover:border-white/25"
                 >
                   Browse Tools
                 </a>
                 <a
                   href="#trust-faq"
-                  className="px-8 py-3.5 rounded-2xl font-semibold text-sm glass text-foreground hover:bg-muted/50 transition-all duration-300"
+                  className="px-8 py-3 rounded-xl font-medium text-sm text-white/50 border border-white/5 transition-all duration-300 hover:text-white/70 hover:border-white/10"
                 >
                   How It Works
                 </a>
               </div>
 
               {/* Social proof */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className="flex items-center justify-center gap-2 text-sm text-muted-foreground"
-              >
-                <Users className="w-4 h-4 text-primary" />
+              <div className="flex items-center justify-center gap-2 text-xs text-white/30">
+                <Users className="w-3.5 h-3.5" />
                 <span>1,000+ active members</span>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* ═══ MAIN CONTENT ══════════════════════════════════════════ */}
+        {/* ═══ MAIN CONTENT ═══ */}
         <div className="relative pb-8">
-          <div className="absolute inset-0 mesh-gradient" />
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-40 right-10 w-72 h-72 bg-secondary/5 rounded-full blur-3xl" />
-
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="relative z-10">
             {loading ? (
               <div className="flex items-center justify-center py-24">
-                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+                <Loader2 className="w-8 h-8 animate-spin text-white/20" />
               </div>
             ) : (
               <>
-                {/* ── FEATURED CAROUSEL ──────────────────────────── */}
+                {/* Featured carousel */}
                 <FeaturedCarousel tools={tools} />
 
-                {/* ── SEARCH & FILTERS ───────────────────────────── */}
+                {/* Search + Filters */}
                 <div id="tools-grid">
                   <FiltersBar
                     searchQuery={searchQuery}
@@ -251,78 +212,53 @@ const Storefront = () => {
                   />
                 </div>
 
-                {/* ── CATEGORY SECTIONS ──────────────────────────── */}
+                {/* Category sections */}
                 {sections.map((section) => {
                   const Icon = section.icon;
                   return (
-                    <motion.div
-                      key={section.key}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-60px' }}
-                      transition={{ duration: 0.5 }}
-                      className="mb-24 relative"
-                    >
-                      {/* Faint radial background highlight */}
-                      <div
-                        className="absolute -top-20 left-1/2 -translate-x-1/2 w-[700px] h-[300px] rounded-full blur-3xl pointer-events-none opacity-[0.04]"
-                        style={{ background: 'hsl(var(--primary))' }}
-                      />
-
-                      {/* Section header */}
-                      <div className="flex items-center gap-3 mb-2 relative z-10">
+                    <section key={section.key} className="py-12">
+                      <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 relative">
+                        {/* Faint radial highlight */}
                         <div
-                          className="w-10 h-10 flex items-center justify-center rounded-xl"
-                          style={{
-                            background: 'hsl(var(--primary) / 0.1)',
-                            boxShadow: '0 0 20px hsl(var(--primary) / 0.08)',
-                          }}
-                        >
-                          <Icon className="w-5 h-5" style={{ color: 'hsl(var(--primary))' }} />
+                          className="absolute -top-16 left-1/2 -translate-x-1/2 w-[600px] h-[250px] rounded-full blur-3xl pointer-events-none opacity-[0.03]"
+                          style={{ background: 'rgba(139,92,246,1)' }}
+                        />
+
+                        {/* Header */}
+                        <div className="flex items-center gap-3 relative z-10">
+                          <div className="h-9 w-9 rounded-lg grid place-items-center bg-white/5 border border-white/10">
+                            <Icon className="w-4 h-4 text-white/40" />
+                          </div>
+                          <div className="space-y-0.5">
+                            <h2 className="text-white text-xl font-semibold tracking-tight">{section.label}</h2>
+                            <p className="text-white/50 text-sm">{section.subtitle}</p>
+                          </div>
+                          <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/5 text-white/40 border border-white/10">
+                            {section.tools.length}
+                          </span>
                         </div>
-                        <div>
-                          <h3
-                            className="text-2xl md:text-3xl font-display font-black tracking-tight"
-                            style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.15)' }}
-                          >
-                            {section.label}
-                          </h3>
+
+                        {/* Divider */}
+                        <div className="h-px mt-4 mb-6 bg-gradient-to-r from-white/10 via-white/5 to-transparent relative z-10" />
+
+                        {/* Grid */}
+                        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 relative z-10">
+                          {section.tools.map((tool, index) => (
+                            <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
+                          ))}
                         </div>
-                        <span className="ml-auto px-3 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
-                          {section.tools.length}
-                        </span>
                       </div>
-
-                      <p className="text-sm text-muted-foreground mb-4 ml-[52px] relative z-10">
-                        {section.subtitle}
-                      </p>
-
-                      {/* Divider glow */}
-                      <div
-                        className="h-px mb-8 rounded-full relative z-10"
-                        style={{
-                          background: 'linear-gradient(90deg, hsl(var(--primary) / 0.25) 0%, hsl(var(--border)) 50%, transparent 100%)',
-                          boxShadow: '0 0 8px hsl(var(--primary) / 0.1)',
-                        }}
-                      />
-
-                      {/* Tools Grid */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
-                        {section.tools.map((tool, index) => (
-                          <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
-                        ))}
-                      </div>
-                    </motion.div>
+                    </section>
                   );
                 })}
 
-                {/* ── EMPTY STATE ────────────────────────────────── */}
+                {/* Empty state */}
                 {sections.length === 0 && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                    <Search className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
-                    <h3 className="text-xl font-display font-bold mb-2">{t('store.noResults')}</h3>
-                    <p className="text-muted-foreground">{t('store.tryAgain')}</p>
-                  </motion.div>
+                  <div className="text-center py-20">
+                    <Search className="w-12 h-12 text-white/10 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-white/60 mb-2">{t('store.noResults')}</h3>
+                    <p className="text-sm text-white/30">{t('store.tryAgain')}</p>
+                  </div>
                 )}
               </>
             )}
@@ -330,7 +266,7 @@ const Storefront = () => {
         </div>
       </section>
 
-      {/* ═══ TRUST & FAQ ══════════════════════════════════════════ */}
+      {/* Trust & FAQ */}
       <div id="trust-faq">
         <TrustAndFAQ />
       </div>
