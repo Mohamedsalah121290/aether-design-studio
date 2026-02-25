@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,15 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { Loader2, Clock, CheckCircle, Mail, Lock, Gift, Sparkles } from 'lucide-react';
 import { z } from 'zod';
-
-interface Tool {
-  id: string;
-  tool_id: string;
-  name: string;
-  price: number;
-  delivery_type: 'subscribe_for_them' | 'email_only' | 'provide_account';
-  activation_time: number;
-}
+import type { Tool, ToolPlan } from './ToolCard';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -44,19 +36,63 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
+  // Plan state
+  const [plans, setPlans] = useState<ToolPlan[]>([]);
+  const [selectedPlan, setSelectedPlan] = useState<ToolPlan | null>(null);
+  const [plansLoading, setPlansLoading] = useState(false);
+
+  // Fetch plans when dialog opens
+  useEffect(() => {
+    if (open && tool) {
+      fetchPlans(tool.tool_id);
+    }
+  }, [open, tool]);
+
+  const fetchPlans = async (toolId: string) => {
+    setPlansLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('tool_plans')
+        .select('*')
+        .eq('tool_id', toolId)
+        .eq('is_active', true)
+        .order('monthly_price', { ascending: true, nullsFirst: false });
+
+      if (error) throw error;
+
+      const mapped: ToolPlan[] = (data || []).map(p => ({
+        id: p.id,
+        tool_id: p.tool_id,
+        plan_id: p.plan_id,
+        plan_name: p.plan_name,
+        monthly_price: p.monthly_price ? Number(p.monthly_price) : null,
+        delivery_type: p.delivery_type as ToolPlan['delivery_type'],
+        activation_time: p.activation_time,
+        is_active: p.is_active,
+      }));
+
+      setPlans(mapped);
+      if (mapped.length > 0) {
+        setSelectedPlan(mapped[0]);
+      }
+    } catch (err) {
+      console.error('Error fetching plans:', err);
+    } finally {
+      setPlansLoading(false);
+    }
+  };
+
   const validateForm = (): boolean => {
     const newErrors: { email?: string; password?: string } = {};
     
-    // Email validation
-    if (tool?.delivery_type !== 'provide_account' || !user) {
+    if (selectedPlan?.delivery_type !== 'provide_account' || !user) {
       const emailResult = emailSchema.safeParse(email);
       if (!emailResult.success) {
         newErrors.email = emailResult.error.errors[0]?.message || 'Invalid email';
       }
     }
     
-    // Password validation for subscribe_for_them
-    if (tool?.delivery_type === 'subscribe_for_them') {
+    if (selectedPlan?.delivery_type === 'subscribe_for_them') {
       const passwordResult = passwordSchema.safeParse(password);
       if (!passwordResult.success) {
         newErrors.password = passwordResult.error.errors[0]?.message || 'Password is required';
@@ -69,12 +105,9 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!tool) return;
+    if (!tool || !selectedPlan) return;
 
-    // Validate form
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     if (!agreedToTerms) {
       toast({
@@ -89,24 +122,22 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
     try {
       const buyerEmail = email || user?.email;
       
-      // Call Stripe checkout edge function
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: {
           toolId: tool.id,
-          customerEmail: tool.delivery_type === 'subscribe_for_them' || tool.delivery_type === 'email_only' ? email : buyerEmail,
-          customerPassword: tool.delivery_type === 'subscribe_for_them' ? password : undefined,
+          planId: selectedPlan.plan_id,
+          customerEmail: selectedPlan.delivery_type === 'subscribe_for_them' || selectedPlan.delivery_type === 'email_only' ? email : buyerEmail,
+          customerPassword: selectedPlan.delivery_type === 'subscribe_for_them' ? password : undefined,
         }
       });
 
       if (error) throw error;
       if (!data?.url) throw new Error('No checkout URL returned');
 
-      // Store email for vault access
       if (buyerEmail && !user) {
         localStorage.setItem('buyer_email', buyerEmail);
       }
 
-      // Redirect to Stripe Checkout
       window.location.href = data.url;
     } catch (error) {
       console.error('Checkout error:', error);
@@ -126,13 +157,15 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
       setEmail('');
       setPassword('');
       setAgreedToTerms(false);
+      setSelectedPlan(null);
+      setPlans([]);
       onOpenChange(false);
     }
   };
 
-  // Get delivery type icon and description
   const getDeliveryInfo = () => {
-    switch (tool?.delivery_type) {
+    const dt = selectedPlan?.delivery_type;
+    switch (dt) {
       case 'subscribe_for_them':
         return {
           icon: <Lock className="w-5 h-5" />,
@@ -157,6 +190,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   };
 
   const deliveryInfo = getDeliveryInfo();
+  const displayPrice = selectedPlan?.monthly_price;
+  const activationTime = selectedPlan?.activation_time || 6;
 
   if (isSuccess) {
     return (
@@ -186,7 +221,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
               <p className="text-muted-foreground mb-4">{t('checkout.checkVault')}</p>
               <div className="flex items-center gap-2 text-sm text-green-400">
                 <Clock className="w-4 h-4" />
-                <span>{t('checkout.activatingIn', { hours: tool?.activation_time || 6 })}</span>
+                <span>{t('checkout.activatingIn', { hours: activationTime })}</span>
               </div>
             </div>
           </motion.div>
@@ -227,15 +262,73 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                 </DialogTitle>
                 <DialogDescription className="text-base">
                   <span className="text-primary font-semibold">{tool?.name}</span>
-                  <span className="text-muted-foreground"> - </span>
-                  <span className="text-white font-bold">${tool?.price}</span>
-                  <span className="text-muted-foreground">/{t('store.perMonth')}</span>
+                  {displayPrice != null && displayPrice > 0 && (
+                    <>
+                      <span className="text-muted-foreground"> - </span>
+                      <span className="text-white font-bold">${displayPrice}</span>
+                      <span className="text-muted-foreground">/{t('store.perMonth')}</span>
+                    </>
+                  )}
                 </DialogDescription>
               </motion.div>
             </DialogHeader>
 
+            {/* Plan Selector */}
+            {plans.length > 1 && (
+              <motion.div
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.12 }}
+                className="mb-6"
+              >
+                <Label className="text-sm font-medium text-white mb-3 block">
+                  {t('checkout.selectPlan', 'Select Plan')}
+                </Label>
+                <div className="grid gap-2">
+                  {plans.map((plan) => (
+                    <button
+                      key={plan.id}
+                      type="button"
+                      onClick={() => setSelectedPlan(plan)}
+                      className={`flex items-center justify-between p-4 rounded-2xl border transition-all duration-200 text-left ${
+                        selectedPlan?.id === plan.id
+                          ? 'border-primary bg-primary/10 shadow-lg shadow-primary/10'
+                          : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
+                          selectedPlan?.id === plan.id ? 'border-primary' : 'border-white/30'
+                        }`}>
+                          {selectedPlan?.id === plan.id && (
+                            <div className="w-2 h-2 rounded-full bg-primary" />
+                          )}
+                        </div>
+                        <span className="font-semibold text-white">{plan.plan_name}</span>
+                      </div>
+                      {plan.monthly_price != null && plan.monthly_price > 0 ? (
+                        <span className="font-bold text-white">
+                          ${plan.monthly_price}<span className="text-xs text-muted-foreground">/{t('store.perMonth')}</span>
+                        </span>
+                      ) : (
+                        <span className="text-sm text-muted-foreground">
+                          {t('store.contactForPrice', 'Contact')}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {plansLoading && (
+              <div className="flex justify-center py-6">
+                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+              </div>
+            )}
+
             {/* Delivery Type Info Card */}
-            {deliveryInfo && (
+            {deliveryInfo && !plansLoading && (
               <motion.div
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -257,164 +350,165 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
               </motion.div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <AnimatePresence mode="wait">
-                {/* Email Field - For subscribe_for_them and email_only */}
-                {(tool?.delivery_type === 'subscribe_for_them' || tool?.delivery_type === 'email_only') && (
-                  <motion.div
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: 20, opacity: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="space-y-2"
-                  >
-                    <Label htmlFor="email" className="text-sm font-medium text-white flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-primary" />
-                      {t('checkout.yourEmail')}
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="your@email.com"
-                      value={email}
-                      onChange={(e) => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: undefined })); }}
-                      required
-                      disabled={isLoading}
-                      className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${errors.email ? 'border-red-500' : ''}`}
-                    />
-                    {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
-                  </motion.div>
-                )}
-
-                {/* Password Field - Only for subscribe_for_them */}
-                {tool?.delivery_type === 'subscribe_for_them' && (
-                  <motion.div
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: 20, opacity: 0 }}
-                    transition={{ delay: 0.25 }}
-                    className="space-y-2"
-                  >
-                    <Label htmlFor="password" className="text-sm font-medium text-white flex items-center gap-2">
-                      <Lock className="w-4 h-4 text-primary" />
-                      {t('checkout.yourPassword')}
-                    </Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: undefined })); }}
-                      required
-                      disabled={isLoading}
-                      className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${errors.password ? 'border-red-500' : ''}`}
-                    />
-                    {errors.password && <p className="text-xs text-red-400 mt-1">{errors.password}</p>}
-                    <p className="text-xs text-muted-foreground">{t('checkout.passwordNote')}</p>
-                  </motion.div>
-                )}
-
-                {/* Provide Account Message */}
-                {tool?.delivery_type === 'provide_account' && (
-                  <motion.div
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                    className="p-6 rounded-2xl text-center"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0.05) 100%)',
-                      border: '1px solid rgba(168, 85, 247, 0.2)',
-                    }}
-                  >
-                    <Sparkles className="w-10 h-10 text-primary mx-auto mb-3" />
-                    <p className="text-white font-medium">{t('checkout.accountProvided')}</p>
-                    <p className="text-sm text-muted-foreground mt-2">{t('checkout.accountProvidedNote')}</p>
-                    
-                    {/* Still need email for notification */}
-                    <div className="mt-4 space-y-2 text-left">
-                      <Label htmlFor="notify-email" className="text-sm font-medium text-white">
-                        {t('checkout.notificationEmail')}
+            {!plansLoading && selectedPlan && (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <AnimatePresence mode="wait">
+                  {/* Email Field - For subscribe_for_them and email_only */}
+                  {(selectedPlan.delivery_type === 'subscribe_for_them' || selectedPlan.delivery_type === 'email_only') && (
+                    <motion.div
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: 20, opacity: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="space-y-2"
+                    >
+                      <Label htmlFor="email" className="text-sm font-medium text-white flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-primary" />
+                        {t('checkout.yourEmail')}
                       </Label>
                       <Input
-                        id="notify-email"
+                        id="email"
                         type="email"
                         placeholder="your@email.com"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: undefined })); }}
                         required
                         disabled={isLoading}
-                        className="h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
+                        className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${errors.email ? 'border-red-500' : ''}`}
                       />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                      {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+                    </motion.div>
+                  )}
 
-              {/* Terms Checkbox */}
-              <motion.div
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10"
-              >
-                <Checkbox
-                  id="terms"
-                  checked={agreedToTerms}
-                  onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
-                  className="mt-0.5 border-white/20 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                />
-                <div className="flex-1">
-                  <Label htmlFor="terms" className="text-sm text-white cursor-pointer font-medium">
-                    {t('checkout.termsTitle')}
-                  </Label>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {t('checkout.termsDescription', { hours: tool?.activation_time || 6 })}
-                  </p>
-                </div>
-              </motion.div>
+                  {/* Password Field - Only for subscribe_for_them */}
+                  {selectedPlan.delivery_type === 'subscribe_for_them' && (
+                    <motion.div
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: 20, opacity: 0 }}
+                      transition={{ delay: 0.25 }}
+                      className="space-y-2"
+                    >
+                      <Label htmlFor="password" className="text-sm font-medium text-white flex items-center gap-2">
+                        <Lock className="w-4 h-4 text-primary" />
+                        {t('checkout.yourPassword')}
+                      </Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: undefined })); }}
+                        required
+                        disabled={isLoading}
+                        className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${errors.password ? 'border-red-500' : ''}`}
+                      />
+                      {errors.password && <p className="text-xs text-red-400 mt-1">{errors.password}</p>}
+                      <p className="text-xs text-muted-foreground">{t('checkout.passwordNote')}</p>
+                    </motion.div>
+                  )}
 
-              {/* Submit Button */}
-              <motion.div
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.35 }}
-              >
-                <Button 
-                  type="submit" 
-                  className="w-full h-14 text-lg font-semibold rounded-2xl relative overflow-hidden group"
-                  disabled={isLoading || !agreedToTerms}
-                  style={{
-                    background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 100%)',
-                  }}
+                  {/* Provide Account Message */}
+                  {selectedPlan.delivery_type === 'provide_account' && (
+                    <motion.div
+                      initial={{ scale: 0.95, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="p-6 rounded-2xl text-center"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0.05) 100%)',
+                        border: '1px solid rgba(168, 85, 247, 0.2)',
+                      }}
+                    >
+                      <Sparkles className="w-10 h-10 text-primary mx-auto mb-3" />
+                      <p className="text-white font-medium">{t('checkout.accountProvided')}</p>
+                      <p className="text-sm text-muted-foreground mt-2">{t('checkout.accountProvidedNote')}</p>
+                      
+                      <div className="mt-4 space-y-2 text-left">
+                        <Label htmlFor="notify-email" className="text-sm font-medium text-white">
+                          {t('checkout.notificationEmail')}
+                        </Label>
+                        <Input
+                          id="notify-email"
+                          type="email"
+                          placeholder="your@email.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          disabled={isLoading}
+                          className="h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Terms Checkbox */}
+                <motion.div
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10"
                 >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        {t('checkout.processing')}
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-5 h-5" />
-                        {t('checkout.confirmPurchase')}
-                      </>
-                    )}
-                  </span>
-                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Button>
-              </motion.div>
+                  <Checkbox
+                    id="terms"
+                    checked={agreedToTerms}
+                    onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
+                    className="mt-0.5 border-white/20 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="terms" className="text-sm text-white cursor-pointer font-medium">
+                      {t('checkout.termsTitle')}
+                    </Label>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {t('checkout.termsDescription', { hours: activationTime })}
+                    </p>
+                  </div>
+                </motion.div>
 
-              {/* Activation Notice */}
-              <motion.div
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="flex items-center justify-center gap-2 text-sm text-muted-foreground pt-2"
-              >
-                <Clock className="w-4 h-4" />
-                <span>{t('checkout.activationTime', { hours: tool?.activation_time || 6 })}</span>
-              </motion.div>
-            </form>
+                {/* Submit Button */}
+                <motion.div
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.35 }}
+                >
+                  <Button 
+                    type="submit" 
+                    className="w-full h-14 text-lg font-semibold rounded-2xl relative overflow-hidden group"
+                    disabled={isLoading || !agreedToTerms}
+                    style={{
+                      background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 100%)',
+                    }}
+                  >
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          {t('checkout.processing')}
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5" />
+                          {t('checkout.confirmPurchase')}
+                        </>
+                      )}
+                    </span>
+                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Button>
+                </motion.div>
+
+                {/* Activation Notice */}
+                <motion.div
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="flex items-center justify-center gap-2 text-sm text-muted-foreground pt-2"
+                >
+                  <Clock className="w-4 h-4" />
+                  <span>{t('checkout.activationTime', { hours: activationTime })}</span>
+                </motion.div>
+              </form>
+            )}
           </div>
         </motion.div>
       </DialogContent>
