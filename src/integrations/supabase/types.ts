@@ -257,6 +257,7 @@ export type Database = {
           delivery_type: string
           id: string
           is_active: boolean
+          logo_url: string | null
           name: string
           price: number
           tool_id: string
@@ -270,6 +271,7 @@ export type Database = {
           delivery_type: string
           id?: string
           is_active?: boolean
+          logo_url?: string | null
           name: string
           price: number
           tool_id: string
@@ -283,6 +285,7 @@ export type Database = {
           delivery_type?: string
           id?: string
           is_active?: boolean
+          logo_url?: string | null
           name?: string
           price?: number
           tool_id?: string
