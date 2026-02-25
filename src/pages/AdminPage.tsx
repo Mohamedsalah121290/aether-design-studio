@@ -76,7 +76,8 @@ const AdminPage = () => {
     payloads: any[];
     toCreate: any[];
     toUpdate: any[];
-  }>({ show: false, replaceExisting: false, payloads: [], toCreate: [], toUpdate: [] });
+    selected: Set<string>;
+  }>({ show: false, replaceExisting: false, payloads: [], toCreate: [], toUpdate: [], selected: new Set() });
 
   useEffect(() => {
     fetchOrders();
@@ -213,23 +214,41 @@ const AdminPage = () => {
       const existingKeys = new Set(plans.map(p => `${p.tool_id}::${p.plan_id}`));
       const toUpdate = payloads.filter(p => existingKeys.has(`${p.tool_id}::${p.plan_id}`));
       const toCreate = payloads.filter(p => !existingKeys.has(`${p.tool_id}::${p.plan_id}`));
-
-      setImportPreview({ show: true, replaceExisting, payloads, toCreate, toUpdate });
+      const allKeys = new Set(payloads.map(p => `${p.tool_id}::${p.plan_id}`));
+      setImportPreview({ show: true, replaceExisting, payloads, toCreate, toUpdate, selected: allKeys });
     };
     reader.readAsText(file);
     e.target.value = '';
   };
 
   const confirmImport = async () => {
-    const { replaceExisting, payloads } = importPreview;
+    const { replaceExisting, payloads, selected } = importPreview;
+    const filtered = payloads.filter(p => selected.has(`${p.tool_id}::${p.plan_id}`));
+    if (filtered.length === 0) { setImportPreview(p => ({ ...p, show: false })); return; }
     let error;
     if (replaceExisting) {
-      ({ error } = await supabase.from('tool_plans').upsert(payloads, { onConflict: 'tool_id,plan_id' }));
+      ({ error } = await supabase.from('tool_plans').upsert(filtered, { onConflict: 'tool_id,plan_id' }));
     } else {
-      ({ error } = await supabase.from('tool_plans').insert(payloads));
+      ({ error } = await supabase.from('tool_plans').insert(filtered));
     }
     setImportPreview(p => ({ ...p, show: false }));
     if (error) { alert('Import error: ' + error.message); } else { fetchPlans(); }
+  };
+
+  const toggleImportSelection = (key: string) => {
+    setImportPreview(p => {
+      const next = new Set(p.selected);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      return { ...p, selected: next };
+    });
+  };
+
+  const toggleAllImportSelection = () => {
+    setImportPreview(p => {
+      const allKeys = p.payloads.map(pl => `${pl.tool_id}::${pl.plan_id}`);
+      const allSelected = allKeys.every(k => p.selected.has(k));
+      return { ...p, selected: allSelected ? new Set<string>() : new Set(allKeys) };
+    });
   };
 
 
@@ -640,19 +659,32 @@ const AdminPage = () => {
           <DialogHeader>
             <DialogTitle>Import Summary — {importPreview.replaceExisting ? 'Replace Mode' : 'Add Mode'}</DialogTitle>
           </DialogHeader>
+          <div className="flex items-center gap-2 pb-2 border-b border-border">
+            <input
+              type="checkbox"
+              checked={importPreview.payloads.length > 0 && importPreview.payloads.every(p => importPreview.selected.has(`${p.tool_id}::${p.plan_id}`))}
+              onChange={toggleAllImportSelection}
+              className="rounded"
+            />
+            <span className="text-sm font-medium">Select All ({importPreview.selected.size}/{importPreview.payloads.length})</span>
+          </div>
           <div className="space-y-4 max-h-80 overflow-y-auto">
             {importPreview.toCreate.length > 0 && (
               <div>
                 <p className="text-sm font-semibold flex items-center gap-2 mb-2">
                   <CheckCircle className="w-4 h-4 text-green-500" />
-                  New ({importPreview.toCreate.length})
+                  New ({importPreview.toCreate.filter(p => importPreview.selected.has(`${p.tool_id}::${p.plan_id}`)).length}/{importPreview.toCreate.length})
                 </p>
                 <div className="space-y-1">
-                  {importPreview.toCreate.map((p, i) => (
-                    <div key={i} className="text-sm px-3 py-1.5 rounded-lg bg-green-500/10 text-green-400">
-                      {p.tool_id} / {p.plan_id} — {p.plan_name} (${p.monthly_price ?? 'N/A'})
-                    </div>
-                  ))}
+                  {importPreview.toCreate.map((p, i) => {
+                    const key = `${p.tool_id}::${p.plan_id}`;
+                    return (
+                      <label key={i} className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg cursor-pointer transition-opacity ${importPreview.selected.has(key) ? 'bg-green-500/10 text-green-400' : 'bg-muted/30 text-muted-foreground opacity-60'}`}>
+                        <input type="checkbox" checked={importPreview.selected.has(key)} onChange={() => toggleImportSelection(key)} className="rounded" />
+                        {p.tool_id} / {p.plan_id} — {p.plan_name} (${p.monthly_price ?? 'N/A'})
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -660,17 +692,21 @@ const AdminPage = () => {
               <div>
                 <p className="text-sm font-semibold flex items-center gap-2 mb-2">
                   {importPreview.replaceExisting ? (
-                    <><Edit2 className="w-4 h-4 text-blue-500" /> Update ({importPreview.toUpdate.length})</>
+                    <><Edit2 className="w-4 h-4 text-blue-500" /> Update ({importPreview.toUpdate.filter(p => importPreview.selected.has(`${p.tool_id}::${p.plan_id}`)).length}/{importPreview.toUpdate.length})</>
                   ) : (
-                    <><Clock className="w-4 h-4 text-yellow-500" /> Duplicate ({importPreview.toUpdate.length})</>
+                    <><Clock className="w-4 h-4 text-yellow-500" /> Duplicate ({importPreview.toUpdate.filter(p => importPreview.selected.has(`${p.tool_id}::${p.plan_id}`)).length}/{importPreview.toUpdate.length})</>
                   )}
                 </p>
                 <div className="space-y-1">
-                  {importPreview.toUpdate.map((p, i) => (
-                    <div key={i} className={`text-sm px-3 py-1.5 rounded-lg ${importPreview.replaceExisting ? 'bg-blue-500/10 text-blue-400' : 'bg-yellow-500/10 text-yellow-400'}`}>
-                      {p.tool_id} / {p.plan_id} — {p.plan_name} (${p.monthly_price ?? 'N/A'})
-                    </div>
-                  ))}
+                  {importPreview.toUpdate.map((p, i) => {
+                    const key = `${p.tool_id}::${p.plan_id}`;
+                    return (
+                      <label key={i} className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg cursor-pointer transition-opacity ${importPreview.selected.has(key) ? (importPreview.replaceExisting ? 'bg-blue-500/10 text-blue-400' : 'bg-yellow-500/10 text-yellow-400') : 'bg-muted/30 text-muted-foreground opacity-60'}`}>
+                        <input type="checkbox" checked={importPreview.selected.has(key)} onChange={() => toggleImportSelection(key)} className="rounded" />
+                        {p.tool_id} / {p.plan_id} — {p.plan_name} (${p.monthly_price ?? 'N/A'})
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -680,8 +716,8 @@ const AdminPage = () => {
           </div>
           <DialogFooter className="gap-2">
             <Button variant="ghost" onClick={() => setImportPreview(p => ({ ...p, show: false }))}>Cancel</Button>
-            <Button onClick={confirmImport}>
-              Import {importPreview.payloads.length} Plans
+            <Button onClick={confirmImport} disabled={importPreview.selected.size === 0}>
+              Import {importPreview.selected.size} Plans
             </Button>
           </DialogFooter>
         </DialogContent>
