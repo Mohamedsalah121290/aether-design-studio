@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, DollarSign, Users, Layers, Trash2, Download, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import Navbar from '@/components/Navbar';
 
@@ -67,6 +68,15 @@ const AdminPage = () => {
   const [showPlanForm, setShowPlanForm] = useState(false);
   const [planFilter, setPlanFilter] = useState('');
   const [planForm, setPlanForm] = useState({ tool_id: '', plan_id: '', plan_name: '', monthly_price: '' as string, delivery_type: 'provide_account', activation_time: 6, is_active: true });
+
+  // Import preview state
+  const [importPreview, setImportPreview] = useState<{
+    show: boolean;
+    replaceExisting: boolean;
+    payloads: any[];
+    toCreate: any[];
+    toUpdate: any[];
+  }>({ show: false, replaceExisting: false, payloads: [], toCreate: [], toUpdate: [] });
 
   useEffect(() => {
     fetchOrders();
@@ -200,33 +210,29 @@ const AdminPage = () => {
       }));
       if (payloads.length === 0) { alert('No valid rows found'); return; }
 
-      // Build summary of creates vs updates
       const existingKeys = new Set(plans.map(p => `${p.tool_id}::${p.plan_id}`));
       const toUpdate = payloads.filter(p => existingKeys.has(`${p.tool_id}::${p.plan_id}`));
       const toCreate = payloads.filter(p => !existingKeys.has(`${p.tool_id}::${p.plan_id}`));
 
-      let summary = `Import Summary (${replaceExisting ? 'Replace mode' : 'Add mode'}):\n\n`;
-      if (toCreate.length > 0) {
-        summary += `✅ NEW (${toCreate.length}):\n${toCreate.map(p => `  • ${p.tool_id} / ${p.plan_id} — ${p.plan_name} ($${p.monthly_price ?? 'N/A'})`).join('\n')}\n\n`;
-      }
-      if (replaceExisting && toUpdate.length > 0) {
-        summary += `🔄 UPDATE (${toUpdate.length}):\n${toUpdate.map(p => `  • ${p.tool_id} / ${p.plan_id} — ${p.plan_name} ($${p.monthly_price ?? 'N/A'})`).join('\n')}\n\n`;
-      } else if (!replaceExisting && toUpdate.length > 0) {
-        summary += `⚠️ DUPLICATE (${toUpdate.length}) — will create new rows:\n${toUpdate.map(p => `  • ${p.tool_id} / ${p.plan_id}`).join('\n')}\n\n`;
-      }
-      summary += `Proceed?`;
-      if (!confirm(summary)) return;
-      let error;
-      if (replaceExisting) {
-        ({ error } = await supabase.from('tool_plans').upsert(payloads, { onConflict: 'tool_id,plan_id' }));
-      } else {
-        ({ error } = await supabase.from('tool_plans').insert(payloads));
-      }
-      if (error) { alert('Import error: ' + error.message); } else { fetchPlans(); }
+      setImportPreview({ show: true, replaceExisting, payloads, toCreate, toUpdate });
     };
     reader.readAsText(file);
     e.target.value = '';
   };
+
+  const confirmImport = async () => {
+    const { replaceExisting, payloads } = importPreview;
+    let error;
+    if (replaceExisting) {
+      ({ error } = await supabase.from('tool_plans').upsert(payloads, { onConflict: 'tool_id,plan_id' }));
+    } else {
+      ({ error } = await supabase.from('tool_plans').insert(payloads));
+    }
+    setImportPreview(p => ({ ...p, show: false }));
+    if (error) { alert('Import error: ' + error.message); } else { fetchPlans(); }
+  };
+
+
 
   const updateStatus = async (orderId: string, status: string) => {
     await supabase.from('orders').update({ 
@@ -628,6 +634,58 @@ const AdminPage = () => {
           )}
         </div>
       </main>
+      {/* Import Preview Modal */}
+      <Dialog open={importPreview.show} onOpenChange={open => !open && setImportPreview(p => ({ ...p, show: false }))}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Import Summary — {importPreview.replaceExisting ? 'Replace Mode' : 'Add Mode'}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 max-h-80 overflow-y-auto">
+            {importPreview.toCreate.length > 0 && (
+              <div>
+                <p className="text-sm font-semibold flex items-center gap-2 mb-2">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  New ({importPreview.toCreate.length})
+                </p>
+                <div className="space-y-1">
+                  {importPreview.toCreate.map((p, i) => (
+                    <div key={i} className="text-sm px-3 py-1.5 rounded-lg bg-green-500/10 text-green-400">
+                      {p.tool_id} / {p.plan_id} — {p.plan_name} (${p.monthly_price ?? 'N/A'})
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {importPreview.toUpdate.length > 0 && (
+              <div>
+                <p className="text-sm font-semibold flex items-center gap-2 mb-2">
+                  {importPreview.replaceExisting ? (
+                    <><Edit2 className="w-4 h-4 text-blue-500" /> Update ({importPreview.toUpdate.length})</>
+                  ) : (
+                    <><Clock className="w-4 h-4 text-yellow-500" /> Duplicate ({importPreview.toUpdate.length})</>
+                  )}
+                </p>
+                <div className="space-y-1">
+                  {importPreview.toUpdate.map((p, i) => (
+                    <div key={i} className={`text-sm px-3 py-1.5 rounded-lg ${importPreview.replaceExisting ? 'bg-blue-500/10 text-blue-400' : 'bg-yellow-500/10 text-yellow-400'}`}>
+                      {p.tool_id} / {p.plan_id} — {p.plan_name} (${p.monthly_price ?? 'N/A'})
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {importPreview.toCreate.length === 0 && importPreview.toUpdate.length === 0 && (
+              <p className="text-muted-foreground text-sm text-center py-4">No changes detected.</p>
+            )}
+          </div>
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" onClick={() => setImportPreview(p => ({ ...p, show: false }))}>Cancel</Button>
+            <Button onClick={confirmImport}>
+              Import {importPreview.payloads.length} Plans
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
