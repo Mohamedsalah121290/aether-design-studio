@@ -169,7 +169,7 @@ const AdminPage = () => {
     URL.revokeObjectURL(url);
   };
 
-  const importPlansCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const importPlansCSV = (e: React.ChangeEvent<HTMLInputElement>, replaceExisting: boolean) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
@@ -199,8 +199,14 @@ const AdminPage = () => {
         is_active: r.is_active !== undefined ? r.is_active === 'true' : true,
       }));
       if (payloads.length === 0) { alert('No valid rows found'); return; }
-      if (!confirm(`Import ${payloads.length} plans? Existing plans with same tool_id + plan_id will be duplicated.`)) return;
-      const { error } = await supabase.from('tool_plans').insert(payloads);
+      const mode = replaceExisting ? 'replace existing matches' : 'add as new';
+      if (!confirm(`Import ${payloads.length} plans (${mode})?`)) return;
+      let error;
+      if (replaceExisting) {
+        ({ error } = await supabase.from('tool_plans').upsert(payloads, { onConflict: 'tool_id,plan_id' }));
+      } else {
+        ({ error } = await supabase.from('tool_plans').insert(payloads));
+      }
       if (error) { alert('Import error: ' + error.message); } else { fetchPlans(); }
     };
     reader.readAsText(file);
@@ -431,8 +437,12 @@ const AdminPage = () => {
                       </select>
                       <Button onClick={exportPlansCSV} variant="outline" size="sm"><Download className="w-4 h-4 mr-2" /> Export CSV</Button>
                       <label className="cursor-pointer">
-                        <Button variant="outline" size="sm" asChild><span><Upload className="w-4 h-4 mr-2" /> Import CSV</span></Button>
-                        <input type="file" accept=".csv" onChange={importPlansCSV} className="hidden" />
+                        <Button variant="outline" size="sm" asChild><span><Upload className="w-4 h-4 mr-2" /> Import (Add)</span></Button>
+                        <input type="file" accept=".csv" onChange={e => importPlansCSV(e, false)} className="hidden" />
+                      </label>
+                      <label className="cursor-pointer">
+                        <Button variant="outline" size="sm" asChild><span><Upload className="w-4 h-4 mr-2" /> Import (Replace)</span></Button>
+                        <input type="file" accept=".csv" onChange={e => importPlansCSV(e, true)} className="hidden" />
                       </label>
                       <Button onClick={() => openPlanForm()} size="sm"><Plus className="w-4 h-4 mr-2" /> Add Plan</Button>
                     </div>

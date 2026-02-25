@@ -1,0 +1,1 @@
+ALTER TABLE public.tool_plans ADD CONSTRAINT tool_plans_tool_id_plan_id_unique UNIQUE (tool_id, plan_id);
