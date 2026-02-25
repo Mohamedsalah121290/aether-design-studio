@@ -1,36 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Zap, Crown, TrendingUp } from 'lucide-react';
+import { Sparkles, Zap, Crown } from 'lucide-react';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
-
-/* ── Tailwind class constants ─────────────────────────────────── */
-const cardClass =
-  'group relative overflow-hidden rounded-2xl bg-zinc-950/70 backdrop-blur-xl border border-white/10 shadow-[0_10px_35px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/20';
-
-const glowOverlayClass =
-  'pointer-events-none absolute -inset-1 opacity-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-fuchsia-500/20 blur-2xl transition-opacity duration-300 group-hover:opacity-100';
-
-const textureClass =
-  "pointer-events-none absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.3),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(56,189,248,0.25),transparent_40%)]";
-
-const contentClass = 'relative p-5 flex flex-col gap-4';
-
-const logoCapsuleClass =
-  'h-12 w-12 rounded-xl grid place-items-center bg-white/5 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]';
-
-const logoImgClass = 'h-7 w-7 object-contain';
-
-const titleClass = 'text-white font-semibold tracking-tight leading-tight text-base';
-const metaClass = 'text-xs text-white/50';
-
-const priceClass = 'text-lg font-semibold text-white';
-const perClass = 'text-xs text-white/45 ml-1';
-
-const badgeBase =
-  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] bg-white/[0.07] backdrop-blur-md border border-white/10';
-
-const buyBtnClass =
-  'mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white/[0.08] border border-white/10 text-white py-2.5 text-sm font-medium transition-all duration-300 hover:bg-white/[0.12] hover:border-white/20 group-hover:shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_12px_30px_rgba(168,85,247,0.15)]';
 
 /* ── Category labels ──────────────────────────────────────────── */
 const CATEGORY_LABELS: Record<string, string> = {
@@ -74,26 +45,18 @@ interface ToolCardProps {
   tier?: CardTier;
 }
 
-/* ── Badge component ──────────────────────────────────────────── */
+/* ── Badge ─────────────────────────────────────────────────────── */
 const TierBadge = ({ tier }: { tier: CardTier }) => {
   if (tier === 'featured') {
     return (
-      <span className={`${badgeBase} text-cyan-300/80`}>
+      <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium bg-cyan-500/10 border border-cyan-400/20 text-cyan-300 backdrop-blur-md">
         <Crown className="w-2.5 h-2.5" />
         Premium
       </span>
     );
   }
-  if (tier === 'popular') {
-    return (
-      <span className={`${badgeBase} text-white/80`}>
-        <span className="w-1.5 h-1.5 rounded-full bg-amber-400/70" />
-        Trending
-      </span>
-    );
-  }
   return (
-    <span className={`${badgeBase} text-white/70`}>
+    <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium bg-emerald-500/10 border border-emerald-400/20 text-emerald-300 backdrop-blur-md">
       <Zap className="w-2.5 h-2.5" />
       Instant
     </span>
@@ -113,32 +76,44 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const price = tool.starting_price;
   const categoryLabel = CATEGORY_LABELS[tool.category] || tool.category;
 
-  /* Tier-specific border accent on hover */
-  const hoverBorder =
-    tier === 'featured'
-      ? 'hover:border-cyan-400/25'
-      : tier === 'popular'
-      ? 'hover:border-white/25'
-      : '';
-
   return (
-    <div className={`${cardClass} ${hoverBorder}`}>
+    <div
+      className="group relative overflow-hidden rounded-2xl backdrop-blur-xl border border-white/[0.08] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-cyan-400/20 hover:shadow-[0_15px_40px_rgba(0,0,0,0.5),0_0_0_1px_rgba(34,211,238,0.08)]"
+      style={{
+        background: 'linear-gradient(180deg, rgba(24,24,27,0.85) 0%, rgba(9,9,11,0.95) 100%)',
+        boxShadow: '0 10px 35px rgba(0,0,0,0.45)',
+      }}
+    >
       {/* Neon glow — hover only */}
-      <div className={glowOverlayClass} />
+      <div className="pointer-events-none absolute -inset-1 opacity-0 bg-gradient-to-r from-cyan-500/15 via-purple-500/12 to-fuchsia-500/15 blur-2xl transition-opacity duration-300 group-hover:opacity-100" />
 
-      {/* Subtle internal texture */}
-      <div className={textureClass} />
+      {/* Inner top highlight (pseudo-like) */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-24"
+        style={{
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%)',
+        }}
+      />
+
+      {/* Subtle texture */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.3),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(56,189,248,0.2),transparent_40%)]" />
 
       {/* Content */}
-      <div className={contentClass}>
-        {/* Row: logo + badge */}
+      <div className="relative p-5 flex flex-col gap-4">
+        {/* Logo + badge row */}
         <div className="flex items-start justify-between">
-          <div className={logoCapsuleClass}>
+          <div
+            className="h-14 w-14 rounded-xl grid place-items-center border border-white/10"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 8px rgba(0,0,0,0.2)',
+            }}
+          >
             {showLogo ? (
               <img
                 src={logoUrl!}
                 alt={`${tool.name} logo`}
-                className={`${logoImgClass} transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                className={`h-8 w-8 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
                 onError={() => {
                   if (!logoError) { setLogoError(true); setLogoLoaded(false); }
@@ -148,7 +123,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               />
             ) : null}
             {(!showLogo || !logoLoaded) && (
-              <span className="text-sm font-semibold text-white/80">
+              <span className="text-base font-semibold text-white/80">
                 {tool.name.charAt(0)}
               </span>
             )}
@@ -159,25 +134,28 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
         {/* Title + meta */}
         <div className="space-y-1">
-          <h3 className={titleClass}>{tool.name}</h3>
-          <p className={metaClass}>Monthly Access · {categoryLabel}</p>
+          <h3 className="text-white font-semibold tracking-tight leading-tight text-base">{tool.name}</h3>
+          <p className="text-xs text-white/60">Monthly Access · {categoryLabel}</p>
         </div>
 
         {/* Price */}
         <div className="flex items-baseline">
           {price && price > 0 ? (
             <>
-              <span className={priceClass}>${price}</span>
-              <span className={perClass}>/{t('store.perMonth')}</span>
+              <span className="text-lg font-semibold text-white/90">${price}</span>
+              <span className="text-xs text-white/40 ml-1">/{t('store.perMonth')}</span>
             </>
           ) : (
-            <span className={metaClass}>{t('store.contactForPrice', 'Contact for pricing')}</span>
+            <span className="text-xs text-white/50">{t('store.contactForPrice', 'Contact for pricing')}</span>
           )}
         </div>
 
         {/* CTA */}
         <button
-          className={buyBtnClass}
+          className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-medium text-white border border-white/10 transition-all duration-300 hover:border-white/20 group-hover:shadow-[0_0_0_1px_rgba(34,211,238,0.15),0_8px_25px_rgba(168,85,247,0.12)]"
+          style={{
+            background: 'linear-gradient(135deg, rgba(34,211,238,0.12) 0%, rgba(168,85,247,0.12) 100%)',
+          }}
           onClick={() => setCheckoutOpen(true)}
         >
           {t('store.buyNow')}
