@@ -46,11 +46,15 @@ interface ToolCardProps {
 }
 
 /* ── Tailwind constants ────────────────────────────────────────── */
-const CARD_WRAPPER = "group relative overflow-visible rounded-3xl p-[1px] transition-all duration-300 hover:-translate-y-1";
+// Outermost: allows bloom to spill outside
+const BLOOM_WRAPPER = "group relative overflow-visible transition-all duration-300 hover:-translate-y-1";
 
-const NEON_RING = "absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-cyan-400/70 via-fuchsia-500/60 to-violet-500/70";
+const GLOW_BLOOM = "pointer-events-none absolute -inset-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-cyan-400/20 via-fuchsia-500/15 to-violet-500/20 blur-3xl rounded-3xl";
 
-const GLOW_BLOOM = "pointer-events-none absolute -inset-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-cyan-400/20 via-fuchsia-500/15 to-violet-500/20 blur-3xl";
+// Ring wrapper: clips the neon ring to card shape
+const RING_WRAPPER = "relative rounded-3xl p-[1px] overflow-hidden";
+
+const NEON_RING = "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-cyan-400/70 via-fuchsia-500/60 to-violet-500/70";
 
 const INNER_CARD = "relative rounded-3xl overflow-hidden backdrop-blur-xl border border-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.55)]";
 
@@ -112,18 +116,20 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
   return (
     <>
-      {/* Outer wrapper — holds glow bloom + neon ring + inner card */}
-      <div className={CARD_WRAPPER}>
-        {/* Layer 3: Glow bloom (behind everything) */}
+      {/* Outermost — bloom can spill outside */}
+      <div className={BLOOM_WRAPPER}>
+        {/* Glow bloom (outside card bounds) */}
         <div className={GLOW_BLOOM} />
 
-        {/* Layer 2: Neon ring (gradient border) */}
-        <div className={NEON_RING} />
+        {/* Ring wrapper — clips neon ring to card shape */}
+        <div className={RING_WRAPPER}>
+          {/* Neon ring */}
+          <div className={NEON_RING} />
 
-        {/* Layer 1: Inner card */}
-        <div
-          className={INNER_CARD}
-          style={{
+          {/* Inner card */}
+          <div
+            className={INNER_CARD}
+            style={{
             background: 'linear-gradient(to bottom, rgba(39,39,42,0.70), rgba(9,9,11,0.70), rgba(0,0,0,0.80))',
           }}
         >
@@ -185,6 +191,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               <Sparkles className="w-3.5 h-3.5" />
             </button>
           </div>
+        </div>
         </div>
       </div>
 
