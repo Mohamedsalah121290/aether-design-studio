@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, DollarSign, Users, Layers, Trash2 } from 'lucide-react';
+import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, DollarSign, Users, Layers, Trash2, Download, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
@@ -149,6 +149,62 @@ const AdminPage = () => {
   const togglePlanActive = async (plan: ToolPlan) => {
     await supabase.from('tool_plans').update({ is_active: !plan.is_active }).eq('id', plan.id);
     fetchPlans();
+  };
+
+  const exportPlansCSV = () => {
+    const filtered = planFilter ? plans.filter(p => p.tool_id === planFilter) : plans;
+    const headers = ['tool_id', 'plan_id', 'plan_name', 'monthly_price', 'delivery_type', 'activation_time', 'is_active'];
+    const rows = filtered.map(p => [
+      p.tool_id, p.plan_id, p.plan_name,
+      p.monthly_price !== null ? p.monthly_price : '',
+      p.delivery_type, p.activation_time, p.is_active
+    ]);
+    const csv = [headers.join(','), ...rows.map(r => r.map(v => `"${v}"`).join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `plans${planFilter ? `-${planFilter}` : ''}-export.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importPlansCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      const text = ev.target?.result as string;
+      const lines = text.trim().split('\n');
+      if (lines.length < 2) return;
+      const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+      const required = ['tool_id', 'plan_id', 'plan_name'];
+      if (!required.every(r => headers.includes(r))) {
+        alert('CSV must include columns: tool_id, plan_id, plan_name');
+        return;
+      }
+      const rows = lines.slice(1).map(line => {
+        const vals = line.match(/(".*?"|[^",]+|(?<=,)(?=,))/g)?.map(v => v.replace(/^"|"$/g, '').trim()) || [];
+        const obj: Record<string, any> = {};
+        headers.forEach((h, i) => { obj[h] = vals[i] ?? ''; });
+        return obj;
+      });
+      const payloads = rows.filter(r => r.tool_id && r.plan_id && r.plan_name).map(r => ({
+        tool_id: r.tool_id,
+        plan_id: r.plan_id,
+        plan_name: r.plan_name,
+        monthly_price: r.monthly_price !== undefined && r.monthly_price !== '' ? Number(r.monthly_price) : null,
+        delivery_type: r.delivery_type || 'provide_account',
+        activation_time: r.activation_time ? Number(r.activation_time) : 6,
+        is_active: r.is_active !== undefined ? r.is_active === 'true' : true,
+      }));
+      if (payloads.length === 0) { alert('No valid rows found'); return; }
+      if (!confirm(`Import ${payloads.length} plans? Existing plans with same tool_id + plan_id will be duplicated.`)) return;
+      const { error } = await supabase.from('tool_plans').insert(payloads);
+      if (error) { alert('Import error: ' + error.message); } else { fetchPlans(); }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
   };
 
   const updateStatus = async (orderId: string, status: string) => {
@@ -373,6 +429,11 @@ const AdminPage = () => {
                           <option key={t.tool_id} value={t.tool_id}>{t.name}</option>
                         ))}
                       </select>
+                      <Button onClick={exportPlansCSV} variant="outline" size="sm"><Download className="w-4 h-4 mr-2" /> Export CSV</Button>
+                      <label className="cursor-pointer">
+                        <Button variant="outline" size="sm" asChild><span><Upload className="w-4 h-4 mr-2" /> Import CSV</span></Button>
+                        <input type="file" accept=".csv" onChange={importPlansCSV} className="hidden" />
+                      </label>
                       <Button onClick={() => openPlanForm()} size="sm"><Plus className="w-4 h-4 mr-2" /> Add Plan</Button>
                     </div>
                   </div>
