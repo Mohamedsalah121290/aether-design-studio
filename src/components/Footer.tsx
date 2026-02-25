@@ -110,11 +110,21 @@ const Footer = () => {
           <div>
             <h4 className="font-display font-bold mb-4">{t('footer.legal')}</h4>
             <ul className="space-y-3">
-              {footerLinks.legal.map(link => <li key={link}>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t(`footer.links.${link}`)}
-                  </a>
-                </li>)}
+              {footerLinks.legal.map(link => {
+                const legalRoutes: Record<string, string> = {
+                  privacy: '/privacy',
+                  terms: '/terms',
+                  security: '#',
+                  cookies: '#',
+                };
+                return (
+                  <li key={link}>
+                    <a href={legalRoutes[link] || '#'} className="text-muted-foreground hover:text-foreground transition-colors">
+                      {t(`footer.links.${link}`)}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
