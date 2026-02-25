@@ -26,24 +26,41 @@ const Storefront = () => {
 
   const fetchTools = async () => {
     try {
-      const { data, error } = await supabase
+      // Fetch tools
+      const { data: toolsData, error: toolsError } = await supabase
         .from('tools')
         .select('*')
         .eq('is_active', true)
         .order('name');
 
-      if (error) throw error;
-      
-      // Map database response to Tool interface
-      const mappedTools: Tool[] = (data || []).map(tool => ({
+      if (toolsError) throw toolsError;
+
+      // Fetch minimum prices from tool_plans
+      const { data: plansData, error: plansError } = await supabase
+        .from('tool_plans')
+        .select('tool_id, monthly_price')
+        .eq('is_active', true);
+
+      if (plansError) throw plansError;
+
+      // Build min price map
+      const minPriceMap: Record<string, number> = {};
+      (plansData || []).forEach(p => {
+        const price = p.monthly_price ? Number(p.monthly_price) : null;
+        if (price != null && price > 0) {
+          if (!(p.tool_id in minPriceMap) || price < minPriceMap[p.tool_id]) {
+            minPriceMap[p.tool_id] = price;
+          }
+        }
+      });
+
+      const mappedTools: Tool[] = (toolsData || []).map(tool => ({
         id: tool.id,
         tool_id: tool.tool_id,
         name: tool.name,
-        price: Number(tool.price),
-        category: tool.category as 'text' | 'image' | 'video' | 'coding',
-        delivery_type: tool.delivery_type as 'subscribe_for_them' | 'email_only' | 'provide_account',
-        activation_time: tool.activation_time,
-        logo_url: (tool as any).logo_url || null,
+        category: tool.category as Tool['category'],
+        logo_url: tool.logo_url || null,
+        starting_price: minPriceMap[tool.tool_id] ?? null,
       }));
       
       setTools(mappedTools);

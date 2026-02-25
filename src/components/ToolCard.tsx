@@ -21,20 +21,28 @@ const toolColors: Record<string, {
   'runway': { primary: '#ff2d55', glow: '349 100% 59%' },
   'elevenlabs': { primary: '#000000', glow: '0 0% 40%' },
   'murf': { primary: '#6366f1', glow: '239 84% 67%' },
-  'claude-code': { primary: '#ff6b35', glow: '18 100% 60%' },
   'adobe': { primary: '#ff0000', glow: '0 100% 50%' },
   'windows': { primary: '#0078d4', glow: '206 100% 42%' }
 };
+
+export interface ToolPlan {
+  id: string;
+  tool_id: string;
+  plan_id: string;
+  plan_name: string;
+  monthly_price: number | null;
+  delivery_type: 'subscribe_for_them' | 'email_only' | 'provide_account';
+  activation_time: number;
+  is_active: boolean;
+}
 
 export interface Tool {
   id: string;
   tool_id: string;
   name: string;
-  price: number;
   category: 'text' | 'image' | 'video' | 'coding';
-  delivery_type: 'subscribe_for_them' | 'email_only' | 'provide_account';
-  activation_time: number;
   logo_url?: string | null;
+  starting_price?: number | null;
 }
 
 interface ToolCardProps {
@@ -86,6 +94,7 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
     : tool.logo_url;
   const colors = toolColors[tool.tool_id] || { primary: '#a855f7', glow: '270 85% 65%' };
   const showLogo = logoUrl && !(logoError && fallbackAttempted);
+  const price = tool.starting_price;
 
   return (
     <motion.div 
@@ -224,13 +233,14 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
             </span>
 
             {/* Price */}
-            {tool.price > 0 ? (
+            {price && price > 0 ? (
               <div className="mt-auto mb-4">
                 <div className="flex items-baseline gap-1">
+                  <span className="text-sm text-muted-foreground">{t('store.startingFrom', 'From')}</span>
                   <span className="text-3xl font-display font-bold" style={{ color: colors.primary }}>
-                    ${tool.price}
+                    ${price}
                   </span>
-                  <span className="text-sm text-muted-foreground">{t('store.perMonth')}</span>
+                  <span className="text-sm text-muted-foreground">/{t('store.perMonth')}</span>
                 </div>
               </div>
             ) : (
