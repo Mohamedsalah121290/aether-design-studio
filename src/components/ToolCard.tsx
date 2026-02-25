@@ -40,7 +40,7 @@ export interface Tool {
   id: string;
   tool_id: string;
   name: string;
-  category: 'text' | 'image' | 'video' | 'coding';
+  category: string;
   logo_url?: string | null;
   starting_price?: number | null;
 }
