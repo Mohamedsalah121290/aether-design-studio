@@ -1,52 +1,48 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Zap, Crown } from 'lucide-react';
+import { Sparkles, Zap, Crown, TrendingUp } from 'lucide-react';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
 
-/* ── Tailwind class constants (Neon Cyber Luxury) ─────────────── */
-const toolCardClass =
-  'group relative overflow-hidden rounded-2xl bg-zinc-950/60 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/20';
+/* ── Tailwind class constants ─────────────────────────────────── */
+const cardClass =
+  'group relative overflow-hidden rounded-2xl bg-zinc-950/70 backdrop-blur-xl border border-white/10 shadow-[0_10px_35px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/20';
 
-const neonGlowOverlayClass =
-  'pointer-events-none absolute -inset-1 opacity-0 bg-gradient-to-r from-fuchsia-500/25 via-cyan-400/20 to-violet-500/25 blur-2xl transition-opacity duration-300 group-hover:opacity-100';
+const glowOverlayClass =
+  'pointer-events-none absolute -inset-1 opacity-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-fuchsia-500/20 blur-2xl transition-opacity duration-300 group-hover:opacity-100';
 
-const subtleTextureClass =
-  "pointer-events-none absolute inset-0 opacity-[0.06] bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.35),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(56,189,248,0.35),transparent_40%)]";
+const textureClass =
+  "pointer-events-none absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.3),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(56,189,248,0.25),transparent_40%)]";
 
-const cardContentClass = 'relative p-5 flex flex-col gap-4';
+const contentClass = 'relative p-5 flex flex-col gap-4';
 
 const logoCapsuleClass =
   'h-12 w-12 rounded-xl grid place-items-center bg-white/5 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]';
 
 const logoImgClass = 'h-7 w-7 object-contain';
 
-const titleClass = 'text-white font-semibold tracking-tight leading-tight';
-
+const titleClass = 'text-white font-semibold tracking-tight leading-tight text-base';
 const metaClass = 'text-xs text-white/50';
 
-const priceRowClass = 'mt-1 flex items-end justify-between';
-
 const priceClass = 'text-lg font-semibold text-white';
-
 const perClass = 'text-xs text-white/45 ml-1';
 
-const badgeClass =
-  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] bg-white/[0.07] border border-white/10 text-white/80';
+const badgeBase =
+  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] bg-white/[0.07] backdrop-blur-md border border-white/10';
 
 const buyBtnClass =
   'mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white/[0.08] border border-white/10 text-white py-2.5 text-sm font-medium transition-all duration-300 hover:bg-white/[0.12] hover:border-white/20 group-hover:shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_12px_30px_rgba(168,85,247,0.15)]';
 
 /* ── Category labels ──────────────────────────────────────────── */
 const CATEGORY_LABELS: Record<string, string> = {
-  text: 'Writing & SEO',
-  image: 'Design & Image',
-  video: 'Video',
-  audio: 'Voice & Audio',
-  coding: 'Coding & Dev',
+  text: 'AI Writing',
+  image: 'AI Design',
+  video: 'AI Video',
+  audio: 'AI Audio',
+  coding: 'Dev Tools',
   automation: 'Automation',
   productivity: 'Productivity',
   security: 'Security',
-  'os-licenses': 'OS & Licenses',
+  'os-licenses': 'Licenses',
 };
 
 /* ── Types ─────────────────────────────────────────────────────── */
@@ -78,6 +74,32 @@ interface ToolCardProps {
   tier?: CardTier;
 }
 
+/* ── Badge component ──────────────────────────────────────────── */
+const TierBadge = ({ tier }: { tier: CardTier }) => {
+  if (tier === 'featured') {
+    return (
+      <span className={`${badgeBase} text-cyan-300/80`}>
+        <Crown className="w-2.5 h-2.5" />
+        Premium
+      </span>
+    );
+  }
+  if (tier === 'popular') {
+    return (
+      <span className={`${badgeBase} text-white/80`}>
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-400/70" />
+        Trending
+      </span>
+    );
+  }
+  return (
+    <span className={`${badgeBase} text-white/70`}>
+      <Zap className="w-2.5 h-2.5" />
+      Instant
+    </span>
+  );
+};
+
 /* ── Component ─────────────────────────────────────────────────── */
 export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const { t } = useTranslation();
@@ -91,37 +113,25 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const price = tool.starting_price;
   const categoryLabel = CATEGORY_LABELS[tool.category] || tool.category;
 
-  /* tier-specific glow strength */
-  const glowExtra =
+  /* Tier-specific border accent on hover */
+  const hoverBorder =
     tier === 'featured'
-      ? 'group-hover:opacity-100'
+      ? 'hover:border-cyan-400/25'
       : tier === 'popular'
-      ? 'group-hover:opacity-75'
-      : 'group-hover:opacity-60';
-
-  const borderExtra =
-    tier === 'featured'
-      ? 'border-white/15 hover:border-cyan-400/30'
-      : tier === 'popular'
-      ? 'border-white/10 hover:border-white/20'
+      ? 'hover:border-white/25'
       : '';
 
   return (
-    <div
-      className={`${toolCardClass} ${borderExtra}`}
-      style={{
-        animationDelay: `${Math.min(index * 40, 300)}ms`,
-      }}
-    >
-      {/* Neon glow overlay (hover only) */}
-      <div className={`${neonGlowOverlayClass} ${glowExtra}`} />
+    <div className={`${cardClass} ${hoverBorder}`}>
+      {/* Neon glow — hover only */}
+      <div className={glowOverlayClass} />
 
-      {/* Subtle texture */}
-      <div className={subtleTextureClass} />
+      {/* Subtle internal texture */}
+      <div className={textureClass} />
 
       {/* Content */}
-      <div className={cardContentClass}>
-        {/* Logo capsule */}
+      <div className={contentClass}>
+        {/* Row: logo + badge */}
         <div className="flex items-start justify-between">
           <div className={logoCapsuleClass}>
             {showLogo ? (
@@ -138,35 +148,28 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               />
             ) : null}
             {(!showLogo || !logoLoaded) && (
-              <span className="text-sm font-bold text-white/70">{tool.name.charAt(0)}</span>
+              <span className="text-sm font-semibold text-white/80">
+                {tool.name.charAt(0)}
+              </span>
             )}
           </div>
 
-          {/* Badge */}
-          {tier === 'featured' ? (
-            <span className={badgeClass}>
-              <Crown className="w-2.5 h-2.5" /> Premium
-            </span>
-          ) : (
-            <span className={badgeClass}>
-              <Zap className="w-2.5 h-2.5" /> Instant
-            </span>
-          )}
+          <TierBadge tier={tier} />
         </div>
 
-        {/* Name + category */}
-        <div>
+        {/* Title + meta */}
+        <div className="space-y-1">
           <h3 className={titleClass}>{tool.name}</h3>
-          <p className={metaClass}>{categoryLabel}</p>
+          <p className={metaClass}>Monthly Access · {categoryLabel}</p>
         </div>
 
         {/* Price */}
-        <div className={priceRowClass}>
+        <div className="flex items-baseline">
           {price && price > 0 ? (
-            <div className="flex items-baseline">
+            <>
               <span className={priceClass}>${price}</span>
               <span className={perClass}>/{t('store.perMonth')}</span>
-            </div>
+            </>
           ) : (
             <span className={metaClass}>{t('store.contactForPrice', 'Contact for pricing')}</span>
           )}
