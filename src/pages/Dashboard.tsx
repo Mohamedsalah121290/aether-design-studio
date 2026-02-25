@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -9,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from '@/hooks/use-toast';
 
 // Import local logos
 import perplexityLogo from '@/assets/perplexity-logo.png';
@@ -407,6 +409,7 @@ const VaultToolCard = ({ order, index }: { order: Order; index: number }) => {
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -414,6 +417,26 @@ const Dashboard = () => {
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
     window.scrollTo(0, 0);
+
+    // Handle checkout result query params
+    const checkoutStatus = searchParams.get('checkout');
+    if (checkoutStatus === 'success') {
+      toast({
+        title: t('checkout.successTitle', { defaultValue: '✅ Payment Successful!' }),
+        description: t('checkout.successMessage', { defaultValue: 'Your order is being processed. Activation will happen within the specified time.' }),
+      });
+      searchParams.delete('checkout');
+      setSearchParams(searchParams, { replace: true });
+    } else if (checkoutStatus === 'cancelled') {
+      toast({
+        title: t('checkout.cancelledTitle', { defaultValue: 'Payment Cancelled' }),
+        description: t('checkout.cancelledMessage', { defaultValue: 'Your payment was cancelled. No charges were made.' }),
+        variant: 'destructive',
+      });
+      searchParams.delete('checkout');
+      setSearchParams(searchParams, { replace: true });
+    }
+
     fetchOrders();
     
     // Set up real-time subscription for order updates

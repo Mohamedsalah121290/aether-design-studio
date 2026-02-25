@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import ResourcesPage from "./pages/ResourcesPage";
 import Dashboard from "./pages/Dashboard";
@@ -12,6 +13,8 @@ import ContentHub from "./pages/ContentHub";
 import ArticlePage from "./pages/ArticlePage";
 import Academy from "./pages/Academy";
 import AdminPage from "./pages/AdminPage";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import "@/lib/i18n";
@@ -42,10 +45,12 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/resources" element={<ResourcesPage />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/content-hub" element={<ContentHub />} />
       <Route path="/academy" element={<Academy />} />
       <Route path="/article/:articleId" element={<ArticlePage />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
       <Route
         path="/admin"
         element={
