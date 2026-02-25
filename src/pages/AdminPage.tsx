@@ -199,8 +199,23 @@ const AdminPage = () => {
         is_active: r.is_active !== undefined ? r.is_active === 'true' : true,
       }));
       if (payloads.length === 0) { alert('No valid rows found'); return; }
-      const mode = replaceExisting ? 'replace existing matches' : 'add as new';
-      if (!confirm(`Import ${payloads.length} plans (${mode})?`)) return;
+
+      // Build summary of creates vs updates
+      const existingKeys = new Set(plans.map(p => `${p.tool_id}::${p.plan_id}`));
+      const toUpdate = payloads.filter(p => existingKeys.has(`${p.tool_id}::${p.plan_id}`));
+      const toCreate = payloads.filter(p => !existingKeys.has(`${p.tool_id}::${p.plan_id}`));
+
+      let summary = `Import Summary (${replaceExisting ? 'Replace mode' : 'Add mode'}):\n\n`;
+      if (toCreate.length > 0) {
+        summary += `✅ NEW (${toCreate.length}):\n${toCreate.map(p => `  • ${p.tool_id} / ${p.plan_id} — ${p.plan_name} ($${p.monthly_price ?? 'N/A'})`).join('\n')}\n\n`;
+      }
+      if (replaceExisting && toUpdate.length > 0) {
+        summary += `🔄 UPDATE (${toUpdate.length}):\n${toUpdate.map(p => `  • ${p.tool_id} / ${p.plan_id} — ${p.plan_name} ($${p.monthly_price ?? 'N/A'})`).join('\n')}\n\n`;
+      } else if (!replaceExisting && toUpdate.length > 0) {
+        summary += `⚠️ DUPLICATE (${toUpdate.length}) — will create new rows:\n${toUpdate.map(p => `  • ${p.tool_id} / ${p.plan_id}`).join('\n')}\n\n`;
+      }
+      summary += `Proceed?`;
+      if (!confirm(summary)) return;
       let error;
       if (replaceExisting) {
         ({ error } = await supabase.from('tool_plans').upsert(payloads, { onConflict: 'tool_id,plan_id' }));
