@@ -47,9 +47,12 @@ interface ToolCardProps {
 
 /* ── Badge ─────────────────────────────────────────────────────── */
 const BADGE_VARIANTS: Record<string, string> = {
-  featured: 'bg-[hsl(195_85%_55%/0.12)] border-[hsl(195_85%_55%/0.22)] text-[hsl(195_80%_75%)]',
-  popular: 'bg-[hsl(30_90%_55%/0.12)] border-[hsl(30_90%_55%/0.22)] text-[hsl(30_85%_75%)]',
-  standard: 'bg-[hsl(155_70%_50%/0.12)] border-[hsl(155_70%_50%/0.22)] text-[hsl(155_65%_75%)]',
+  featured:
+    'bg-[hsl(200_60%_52%/0.10)] border-[hsl(200_60%_52%/0.18)] text-[hsl(200_55%_72%)]',
+  popular:
+    'bg-[hsl(28_75%_52%/0.10)] border-[hsl(28_75%_52%/0.18)] text-[hsl(28_70%_72%)]',
+  standard:
+    'bg-[hsl(155_50%_45%/0.10)] border-[hsl(155_50%_45%/0.18)] text-[hsl(155_45%_70%)]',
 };
 
 const TierBadge = ({ tier }: { tier: CardTier }) => {
@@ -91,36 +94,57 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
   return (
     <>
-      {/* Bloom wrapper – overflow-visible so glow spills outside */}
-      <div className="group relative overflow-visible transition-all duration-300 hover:-translate-y-1">
-        {/* Glow bloom */}
-        <div className="pointer-events-none absolute -inset-6 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(ellipse_at_center,hsl(265_75%_60%/0.18),hsl(195_85%_55%/0.10),transparent_70%)] blur-2xl" />
+      {/* Outer wrapper – overflow-visible so bloom spills */}
+      <div className="group relative overflow-visible transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02]">
+        {/* Subtle bloom glow – behind the card */}
+        <div
+          className="pointer-events-none absolute -inset-5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, hsl(260 50% 55% / 0.14), hsl(200 60% 50% / 0.08), transparent 70%)',
+          }}
+        />
 
-        {/* Border ring wrapper – clips gradient border */}
+        {/* Border wrapper – clips gradient border */}
         <div className="relative rounded-[22px] p-px overflow-hidden">
-          {/* Gradient border ring */}
-          <div className="absolute inset-0 opacity-30 group-hover:opacity-70 transition-opacity duration-300 bg-gradient-to-br from-[hsl(195_85%_65%/0.5)] via-[hsl(265_75%_60%/0.4)] to-[hsl(280_60%_55%/0.3)]" />
+          {/* Gradient border – subtle silver-to-violet */}
+          <div
+            className="absolute inset-0 opacity-25 group-hover:opacity-50 transition-opacity duration-300"
+            style={{
+              background:
+                'linear-gradient(160deg, hsl(0 0% 80% / 0.35), hsl(260 40% 55% / 0.30), hsl(200 50% 50% / 0.20))',
+            }}
+          />
 
           {/* Inner card */}
           <div
-            className="relative rounded-[21px] overflow-hidden backdrop-blur-xl border-0"
+            className="relative rounded-[21px] overflow-hidden backdrop-blur-xl"
             style={{
-              background: 'linear-gradient(165deg, hsla(0,0%,100%,0.08) 0%, hsla(240,30%,12%,0.85) 40%, hsla(265,40%,8%,0.90) 100%)',
-              boxShadow: '0 8px 32px hsla(240,60%,10%,0.45), 0 2px 8px hsla(0,0%,0%,0.35), inset 0 1px 0 hsla(0,0%,100%,0.08)',
+              background:
+                'linear-gradient(165deg, hsl(0 0% 100% / 0.07) 0%, hsl(235 25% 11% / 0.88) 40%, hsl(260 30% 8% / 0.92) 100%)',
+              boxShadow:
+                '0 8px 32px hsl(235 50% 12% / 0.25), 0 4px 12px hsl(0 0% 0% / 0.40), inset 0 1px 0 hsl(0 0% 100% / 0.06)',
             }}
           >
             {/* Inner top highlight */}
-            <div className="pointer-events-none absolute inset-0 opacity-35 bg-[radial-gradient(circle_at_30%_0%,hsla(0,0%,100%,0.14),transparent_50%)]" />
+            <div
+              className="pointer-events-none absolute inset-0 opacity-30"
+              style={{
+                background:
+                  'radial-gradient(circle at 30% 0%, hsl(0 0% 100% / 0.12), transparent 50%)',
+              }}
+            />
 
             {/* Content */}
             <div className="relative p-6 flex flex-col gap-4">
               {/* Logo + badge */}
               <div className="flex items-start justify-between">
                 <div
-                  className="h-14 w-14 rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.10)]"
+                  className="h-14 w-14 rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.08)]"
                   style={{
-                    background: 'linear-gradient(135deg, hsla(0,0%,100%,0.08), hsla(0,0%,100%,0.03))',
-                    boxShadow: 'inset 0 1px 0 hsla(0,0%,100%,0.10)',
+                    background:
+                      'linear-gradient(135deg, hsl(0 0% 100% / 0.06), hsl(0 0% 100% / 0.02))',
+                    boxShadow: 'inset 0 1px 0 hsl(0 0% 100% / 0.08)',
                   }}
                 >
                   {showLogo ? (
@@ -128,10 +152,17 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                       src={logoUrl!}
                       alt={`${tool.name} logo`}
                       className={`h-8 w-8 object-contain drop-shadow-sm transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                      onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
+                      onLoad={() => {
+                        setLogoLoaded(true);
+                        setLogoError(false);
+                      }}
                       onError={() => {
-                        if (!logoError) { setLogoError(true); setLogoLoaded(false); }
-                        else { setFallbackAttempted(true); }
+                        if (!logoError) {
+                          setLogoError(true);
+                          setLogoLoaded(false);
+                        } else {
+                          setFallbackAttempted(true);
+                        }
                       }}
                       loading="lazy"
                     />
@@ -150,7 +181,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                 <h3 className="text-foreground font-semibold tracking-tight leading-tight text-lg">
                   {tool.name}
                 </h3>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs" style={{ color: 'hsl(228 15% 62%)' }}>
                   Monthly Access · {categoryLabel}
                 </p>
               </div>
@@ -159,8 +190,10 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               <div className="flex items-baseline">
                 {price && price > 0 ? (
                   <>
-                    <span className="text-lg font-semibold text-foreground/90">${price}</span>
-                    <span className="text-xs text-foreground/40 ml-1">/{t('store.perMonth')}</span>
+                    <span className="text-lg font-semibold text-foreground">${price}</span>
+                    <span className="text-xs text-foreground/40 ml-1">
+                      /{t('store.perMonth')}
+                    </span>
                   </>
                 ) : (
                   <span className="text-xs text-muted-foreground">
@@ -171,9 +204,11 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
               {/* CTA */}
               <button
-                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold text-foreground transition-all duration-300 border border-[hsl(0_0%_100%/0.10)] group-hover:border-[hsl(265_75%_60%/0.30)] group-hover:shadow-[0_0_20px_hsla(265,75%,60%,0.12)]"
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold text-foreground transition-all duration-300 border border-[hsl(0_0%_100%/0.10)] group-hover:border-[hsl(260_55%_58%/0.25)]"
                 style={{
-                  background: 'linear-gradient(135deg, hsla(195,85%,55%,0.12), hsla(265,75%,60%,0.12))',
+                  background:
+                    'linear-gradient(135deg, hsl(200 65% 52% / 0.10), hsl(260 55% 58% / 0.10))',
+                  boxShadow: 'inset 0 1px 0 hsl(0 0% 100% / 0.05)',
                 }}
                 onClick={() => setCheckoutOpen(true)}
               >
