@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, DollarSign, Users } from 'lucide-react';
+import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, DollarSign, Users, Layers, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
@@ -34,7 +34,18 @@ interface Tool {
   activation_time: number;
 }
 
-type Tab = 'orders' | 'tools' | 'stats';
+interface ToolPlan {
+  id: string;
+  tool_id: string;
+  plan_id: string;
+  plan_name: string;
+  monthly_price: number | null;
+  delivery_type: string;
+  activation_time: number;
+  is_active: boolean;
+}
+
+type Tab = 'orders' | 'tools' | 'plans' | 'stats';
 
 const AdminPage = () => {
   const { t } = useTranslation();
@@ -42,6 +53,7 @@ const AdminPage = () => {
   const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [credentials, setCredentials] = useState<Record<string, OrderCredential>>({});
   const [tools, setTools] = useState<Tool[]>([]);
+  const [plans, setPlans] = useState<ToolPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
   
@@ -50,9 +62,16 @@ const AdminPage = () => {
   const [showToolForm, setShowToolForm] = useState(false);
   const [toolForm, setToolForm] = useState({ tool_id: '', name: '', category: 'ai-text', price: 0, delivery_type: 'provide_account', access_url: '', activation_time: 6, is_active: true });
 
+  // Plan form state
+  const [editingPlan, setEditingPlan] = useState<ToolPlan | null>(null);
+  const [showPlanForm, setShowPlanForm] = useState(false);
+  const [planFilter, setPlanFilter] = useState('');
+  const [planForm, setPlanForm] = useState({ tool_id: '', plan_id: '', plan_name: '', monthly_price: '' as string, delivery_type: 'provide_account', activation_time: 6, is_active: true });
+
   useEffect(() => {
     fetchOrders();
     fetchTools();
+    fetchPlans();
   }, []);
 
   const fetchOrders = async () => {
@@ -84,6 +103,52 @@ const AdminPage = () => {
   const fetchTools = async () => {
     const { data } = await supabase.from('tools').select('*').order('name');
     if (data) setTools(data as Tool[]);
+  };
+
+  const fetchPlans = async () => {
+    const { data } = await supabase.from('tool_plans').select('*').order('tool_id').order('monthly_price', { ascending: true, nullsFirst: false });
+    if (data) setPlans(data as ToolPlan[]);
+  };
+
+  const openPlanForm = (plan?: ToolPlan) => {
+    if (plan) {
+      setEditingPlan(plan);
+      setPlanForm({ tool_id: plan.tool_id, plan_id: plan.plan_id, plan_name: plan.plan_name, monthly_price: plan.monthly_price?.toString() ?? '', delivery_type: plan.delivery_type, activation_time: plan.activation_time, is_active: plan.is_active });
+    } else {
+      setEditingPlan(null);
+      setPlanForm({ tool_id: planFilter || '', plan_id: '', plan_name: '', monthly_price: '', delivery_type: 'provide_account', activation_time: 6, is_active: true });
+    }
+    setShowPlanForm(true);
+  };
+
+  const savePlan = async () => {
+    const payload = {
+      tool_id: planForm.tool_id.trim(),
+      plan_id: planForm.plan_id.trim(),
+      plan_name: planForm.plan_name.trim(),
+      monthly_price: planForm.monthly_price ? Number(planForm.monthly_price) : null,
+      delivery_type: planForm.delivery_type,
+      activation_time: Number(planForm.activation_time),
+      is_active: planForm.is_active,
+    };
+    if (editingPlan) {
+      await supabase.from('tool_plans').update(payload).eq('id', editingPlan.id);
+    } else {
+      await supabase.from('tool_plans').insert(payload);
+    }
+    setShowPlanForm(false);
+    fetchPlans();
+  };
+
+  const deletePlan = async (plan: ToolPlan) => {
+    if (!confirm(`Delete plan "${plan.plan_name}" for ${plan.tool_id}?`)) return;
+    await supabase.from('tool_plans').delete().eq('id', plan.id);
+    fetchPlans();
+  };
+
+  const togglePlanActive = async (plan: ToolPlan) => {
+    await supabase.from('tool_plans').update({ is_active: !plan.is_active }).eq('id', plan.id);
+    fetchPlans();
   };
 
   const updateStatus = async (orderId: string, status: string) => {
@@ -131,6 +196,7 @@ const AdminPage = () => {
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: 'orders', label: 'Orders', icon: <Package className="w-4 h-4" /> },
     { id: 'tools', label: 'Tools', icon: <Edit2 className="w-4 h-4" /> },
+    { id: 'plans', label: 'Plans', icon: <Layers className="w-4 h-4" /> },
     { id: 'stats', label: 'Stats', icon: <BarChart3 className="w-4 h-4" /> },
   ];
 
@@ -288,6 +354,162 @@ const AdminPage = () => {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* PLANS TAB */}
+              {activeTab === 'plans' && (
+                <div>
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <h2 className="text-xl font-bold">Plans Management</h2>
+                    <div className="flex items-center gap-3">
+                      <select
+                        value={planFilter}
+                        onChange={e => setPlanFilter(e.target.value)}
+                        className="px-3 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none text-sm"
+                      >
+                        <option value="">All Tools</option>
+                        {tools.map(t => (
+                          <option key={t.tool_id} value={t.tool_id}>{t.name}</option>
+                        ))}
+                      </select>
+                      <Button onClick={() => openPlanForm()} size="sm"><Plus className="w-4 h-4 mr-2" /> Add Plan</Button>
+                    </div>
+                  </div>
+
+                  {showPlanForm && (
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass-strong rounded-2xl p-6 mb-6">
+                      <h3 className="font-bold mb-4">{editingPlan ? 'Edit Plan' : 'Add New Plan'}</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                          <label className="text-xs text-muted-foreground mb-1 block">Tool ID</label>
+                          <select
+                            value={planForm.tool_id}
+                            onChange={e => setPlanForm(f => ({ ...f, tool_id: e.target.value }))}
+                            className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none"
+                            disabled={!!editingPlan}
+                          >
+                            <option value="">Select tool...</option>
+                            {tools.map(t => (
+                              <option key={t.tool_id} value={t.tool_id}>{t.name} ({t.tool_id})</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-xs text-muted-foreground mb-1 block">Plan ID (slug)</label>
+                          <input
+                            placeholder="e.g. pro, basic, premium"
+                            value={planForm.plan_id}
+                            onChange={e => setPlanForm(f => ({ ...f, plan_id: e.target.value }))}
+                            className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none"
+                            disabled={!!editingPlan}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-muted-foreground mb-1 block">Plan Name</label>
+                          <input
+                            placeholder="e.g. Pro, Basic, Premium"
+                            value={planForm.plan_name}
+                            onChange={e => setPlanForm(f => ({ ...f, plan_name: e.target.value }))}
+                            className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-muted-foreground mb-1 block">Monthly Price ($)</label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            placeholder="Leave empty for contact pricing"
+                            value={planForm.monthly_price}
+                            onChange={e => setPlanForm(f => ({ ...f, monthly_price: e.target.value }))}
+                            className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-muted-foreground mb-1 block">Delivery Type</label>
+                          <select
+                            value={planForm.delivery_type}
+                            onChange={e => setPlanForm(f => ({ ...f, delivery_type: e.target.value }))}
+                            className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none"
+                          >
+                            <option value="provide_account">Provide Account</option>
+                            <option value="subscribe_for_them">Subscribe For Them</option>
+                            <option value="email_only">Email Only</option>
+                            <option value="link_access">Link Access</option>
+                            <option value="api_key">API Key</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-xs text-muted-foreground mb-1 block">Activation Time (hours)</label>
+                          <input
+                            type="number"
+                            value={planForm.activation_time}
+                            onChange={e => setPlanForm(f => ({ ...f, activation_time: Number(e.target.value) }))}
+                            className="w-full px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 mt-4">
+                        <label className="flex items-center gap-2 text-sm">
+                          <input
+                            type="checkbox"
+                            checked={planForm.is_active}
+                            onChange={e => setPlanForm(f => ({ ...f, is_active: e.target.checked }))}
+                            className="rounded"
+                          />
+                          Active
+                        </label>
+                      </div>
+                      <div className="flex gap-3 mt-4">
+                        <Button onClick={savePlan}>{editingPlan ? 'Update' : 'Create'}</Button>
+                        <Button variant="ghost" onClick={() => setShowPlanForm(false)}>Cancel</Button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Group plans by tool */}
+                  {(() => {
+                    const filtered = planFilter ? plans.filter(p => p.tool_id === planFilter) : plans;
+                    const grouped = filtered.reduce<Record<string, ToolPlan[]>>((acc, plan) => {
+                      (acc[plan.tool_id] = acc[plan.tool_id] || []).push(plan);
+                      return acc;
+                    }, {});
+                    const toolNames = tools.reduce<Record<string, string>>((acc, t) => { acc[t.tool_id] = t.name; return acc; }, {});
+
+                    return Object.entries(grouped).map(([toolId, toolPlans]) => (
+                      <div key={toolId} className="mb-6">
+                        <h3 className="text-sm font-semibold text-muted-foreground mb-2 uppercase tracking-wider">
+                          {toolNames[toolId] || toolId} ({toolPlans.length} {toolPlans.length === 1 ? 'plan' : 'plans'})
+                        </h3>
+                        <div className="grid gap-2">
+                          {toolPlans.map(plan => (
+                            <div key={plan.id} className="glass rounded-xl p-4 flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-2.5 h-2.5 rounded-full ${plan.is_active ? 'bg-green-400' : 'bg-red-400'}`} />
+                                <div>
+                                  <p className="font-medium">{plan.plan_name}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {plan.plan_id} • {plan.monthly_price !== null ? `$${plan.monthly_price}/mo` : 'Contact'} • {plan.delivery_type} • {plan.activation_time}h
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Button variant="ghost" size="sm" onClick={() => togglePlanActive(plan)}>
+                                  {plan.is_active ? 'Deactivate' : 'Activate'}
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => openPlanForm(plan)}>
+                                  <Edit2 className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => deletePlan(plan)} className="text-destructive hover:text-destructive">
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ));
+                  })()}
                 </div>
               )}
 
