@@ -45,58 +45,33 @@ interface ToolCardProps {
   tier?: CardTier;
 }
 
-/* ── Tailwind constants ────────────────────────────────────────── */
-// Outermost: allows bloom to spill outside
-const BLOOM_WRAPPER = "group relative overflow-visible transition-all duration-300 hover:-translate-y-1";
-
-const GLOW_BLOOM = "pointer-events-none absolute -inset-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-cyan-400/20 via-fuchsia-500/15 to-violet-500/20 blur-3xl rounded-3xl";
-
-// Ring wrapper: clips the neon ring to card shape
-const RING_WRAPPER = "relative rounded-3xl p-[1px] overflow-hidden";
-
-const NEON_RING = "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-cyan-400/70 via-fuchsia-500/60 to-violet-500/70";
-
-const INNER_CARD = "relative rounded-3xl overflow-hidden backdrop-blur-xl border border-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.55)]";
-
-const TOP_HIGHLIGHT = "pointer-events-none absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_30%_0%,rgba(255,255,255,0.18),transparent_45%)]";
-
-const CONTENT = "relative p-6 flex flex-col gap-4";
-
-const LOGO_CAPSULE = "h-14 w-14 rounded-2xl grid place-items-center bg-white/[0.06] border border-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]";
-
-const BUY_BTN = "mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-500/20 to-violet-500/20 border border-white/[0.12] text-white py-3 text-sm font-semibold transition-all duration-300 hover:from-cyan-500/35 hover:to-violet-500/35 hover:border-white/20 group-hover:shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_18px_60px_rgba(168,85,247,0.18)]";
-
 /* ── Badge ─────────────────────────────────────────────────────── */
 const BADGE_VARIANTS: Record<string, string> = {
-  featured: "bg-cyan-400/10 border-cyan-300/20 text-cyan-200",
-  popular: "bg-orange-400/10 border-orange-300/20 text-orange-200",
-  standard: "bg-emerald-400/10 border-emerald-300/20 text-emerald-200",
+  featured: 'bg-[hsl(195_85%_55%/0.12)] border-[hsl(195_85%_55%/0.22)] text-[hsl(195_80%_75%)]',
+  popular: 'bg-[hsl(30_90%_55%/0.12)] border-[hsl(30_90%_55%/0.22)] text-[hsl(30_85%_75%)]',
+  standard: 'bg-[hsl(155_70%_50%/0.12)] border-[hsl(155_70%_50%/0.22)] text-[hsl(155_65%_75%)]',
 };
 
 const TierBadge = ({ tier }: { tier: CardTier }) => {
-  const base = "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur-md border";
+  const base =
+    'inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur-md border';
   const variant = BADGE_VARIANTS[tier];
 
-  if (tier === 'featured') {
+  if (tier === 'featured')
     return (
       <span className={`${base} ${variant}`}>
-        <Crown className="w-2.5 h-2.5" />
-        Premium
+        <Crown className="w-2.5 h-2.5" /> Premium
       </span>
     );
-  }
-  if (tier === 'popular') {
+  if (tier === 'popular')
     return (
       <span className={`${base} ${variant}`}>
-        <TrendingUp className="w-2.5 h-2.5" />
-        Trending
+        <TrendingUp className="w-2.5 h-2.5" /> Trending
       </span>
     );
-  }
   return (
     <span className={`${base} ${variant}`}>
-      <Zap className="w-2.5 h-2.5" />
-      Instant
+      <Zap className="w-2.5 h-2.5" /> Instant
     </span>
   );
 };
@@ -116,82 +91,97 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
   return (
     <>
-      {/* Outermost — bloom can spill outside */}
-      <div className={BLOOM_WRAPPER}>
-        {/* Glow bloom (outside card bounds) */}
-        <div className={GLOW_BLOOM} />
+      {/* Bloom wrapper – overflow-visible so glow spills outside */}
+      <div className="group relative overflow-visible transition-all duration-300 hover:-translate-y-1">
+        {/* Glow bloom */}
+        <div className="pointer-events-none absolute -inset-6 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(ellipse_at_center,hsl(265_75%_60%/0.18),hsl(195_85%_55%/0.10),transparent_70%)] blur-2xl" />
 
-        {/* Ring wrapper — clips neon ring to card shape */}
-        <div className={RING_WRAPPER}>
-          {/* Neon ring */}
-          <div className={NEON_RING} />
+        {/* Border ring wrapper – clips gradient border */}
+        <div className="relative rounded-[22px] p-px overflow-hidden">
+          {/* Gradient border ring */}
+          <div className="absolute inset-0 opacity-30 group-hover:opacity-70 transition-opacity duration-300 bg-gradient-to-br from-[hsl(195_85%_65%/0.5)] via-[hsl(265_75%_60%/0.4)] to-[hsl(280_60%_55%/0.3)]" />
 
           {/* Inner card */}
           <div
-            className={INNER_CARD}
+            className="relative rounded-[21px] overflow-hidden backdrop-blur-xl border-0"
             style={{
-            background: 'linear-gradient(to bottom, rgba(39,39,42,0.70), rgba(9,9,11,0.70), rgba(0,0,0,0.80))',
-          }}
-        >
-          {/* Inner top highlight */}
-          <div className={TOP_HIGHLIGHT} />
+              background: 'linear-gradient(165deg, hsla(0,0%,100%,0.08) 0%, hsla(240,30%,12%,0.85) 40%, hsla(265,40%,8%,0.90) 100%)',
+              boxShadow: '0 8px 32px hsla(240,60%,10%,0.45), 0 2px 8px hsla(0,0%,0%,0.35), inset 0 1px 0 hsla(0,0%,100%,0.08)',
+            }}
+          >
+            {/* Inner top highlight */}
+            <div className="pointer-events-none absolute inset-0 opacity-35 bg-[radial-gradient(circle_at_30%_0%,hsla(0,0%,100%,0.14),transparent_50%)]" />
 
-          {/* Content */}
-          <div className={CONTENT}>
-            {/* Logo + badge row */}
-            <div className="flex items-start justify-between">
-              <div className={LOGO_CAPSULE}>
-                {showLogo ? (
-                  <img
-                    src={logoUrl!}
-                    alt={`${tool.name} logo`}
-                    className={`h-8 w-8 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                    onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
-                    onError={() => {
-                      if (!logoError) { setLogoError(true); setLogoLoaded(false); }
-                      else { setFallbackAttempted(true); }
-                    }}
-                    loading="lazy"
-                  />
-                ) : null}
-                {(!showLogo || !logoLoaded) && (
-                  <span className="text-base font-semibold text-white/80">
-                    {tool.name.charAt(0)}
+            {/* Content */}
+            <div className="relative p-6 flex flex-col gap-4">
+              {/* Logo + badge */}
+              <div className="flex items-start justify-between">
+                <div
+                  className="h-14 w-14 rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.10)]"
+                  style={{
+                    background: 'linear-gradient(135deg, hsla(0,0%,100%,0.08), hsla(0,0%,100%,0.03))',
+                    boxShadow: 'inset 0 1px 0 hsla(0,0%,100%,0.10)',
+                  }}
+                >
+                  {showLogo ? (
+                    <img
+                      src={logoUrl!}
+                      alt={`${tool.name} logo`}
+                      className={`h-8 w-8 object-contain drop-shadow-sm transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                      onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
+                      onError={() => {
+                        if (!logoError) { setLogoError(true); setLogoLoaded(false); }
+                        else { setFallbackAttempted(true); }
+                      }}
+                      loading="lazy"
+                    />
+                  ) : null}
+                  {(!showLogo || !logoLoaded) && (
+                    <span className="text-base font-semibold text-foreground/80">
+                      {tool.name.charAt(0)}
+                    </span>
+                  )}
+                </div>
+                <TierBadge tier={tier} />
+              </div>
+
+              {/* Title + meta */}
+              <div className="space-y-1">
+                <h3 className="text-foreground font-semibold tracking-tight leading-tight text-lg">
+                  {tool.name}
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  Monthly Access · {categoryLabel}
+                </p>
+              </div>
+
+              {/* Price */}
+              <div className="flex items-baseline">
+                {price && price > 0 ? (
+                  <>
+                    <span className="text-lg font-semibold text-foreground/90">${price}</span>
+                    <span className="text-xs text-foreground/40 ml-1">/{t('store.perMonth')}</span>
+                  </>
+                ) : (
+                  <span className="text-xs text-muted-foreground">
+                    {t('store.contactForPrice', 'Contact for pricing')}
                   </span>
                 )}
               </div>
 
-              <TierBadge tier={tier} />
+              {/* CTA */}
+              <button
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold text-foreground transition-all duration-300 border border-[hsl(0_0%_100%/0.10)] group-hover:border-[hsl(265_75%_60%/0.30)] group-hover:shadow-[0_0_20px_hsla(265,75%,60%,0.12)]"
+                style={{
+                  background: 'linear-gradient(135deg, hsla(195,85%,55%,0.12), hsla(265,75%,60%,0.12))',
+                }}
+                onClick={() => setCheckoutOpen(true)}
+              >
+                {t('store.buyNow')}
+                <Sparkles className="w-3.5 h-3.5" />
+              </button>
             </div>
-
-            {/* Title + meta */}
-            <div className="space-y-1">
-              <h3 className="text-white font-semibold tracking-tight leading-tight text-lg">{tool.name}</h3>
-              <p className="text-xs text-white/60">Monthly Access · {categoryLabel}</p>
-            </div>
-
-            {/* Price */}
-            <div className="flex items-baseline">
-              {price && price > 0 ? (
-                <>
-                  <span className="text-lg font-semibold text-white/90">${price}</span>
-                  <span className="text-xs text-white/40 ml-1">/{t('store.perMonth')}</span>
-                </>
-              ) : (
-                <span className="text-xs text-white/50">{t('store.contactForPrice', 'Contact for pricing')}</span>
-              )}
-            </div>
-
-            {/* CTA */}
-            <button
-              className={BUY_BTN}
-              onClick={() => setCheckoutOpen(true)}
-            >
-              {t('store.buyNow')}
-              <Sparkles className="w-3.5 h-3.5" />
-            </button>
           </div>
-        </div>
         </div>
       </div>
 
