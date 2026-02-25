@@ -5,38 +5,6 @@ import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
 
-// Import local logos
-import perplexityLogo from '@/assets/perplexity-logo.png';
-import jasperLogo from '@/assets/jasper-logo.png';
-import capcutLogo from '@/assets/capcut-logo.png';
-import leonardoLogo from '@/assets/leonardo-logo.png';
-import runwayLogo from '@/assets/runway-logo.png';
-import elevenlabsLogo from '@/assets/elevenlabs-logo.png';
-import murfLogo from '@/assets/murf-logo.png';
-import adobeLogo from '@/assets/adobe-logo.png';
-import chatgptLogo from '@/assets/chatgpt-logo.png';
-import claudeLogo from '@/assets/claude-logo.png';
-import geminiLogo from '@/assets/gemini-logo.png';
-import midjourneyLogo from '@/assets/midjourney-logo.png';
-
-// Official brand logos - all using local high-resolution files
-const toolLogos: Record<string, string> = {
-  'chatgpt': chatgptLogo,
-  'claude': claudeLogo,
-  'gemini': geminiLogo,
-  'perplexity': perplexityLogo,
-  'jasper': jasperLogo,
-  'midjourney': midjourneyLogo,
-  'leonardo': leonardoLogo,
-  'capcut': capcutLogo,
-  'runway': runwayLogo,
-  'elevenlabs': elevenlabsLogo,
-  'murf': murfLogo,
-  'claude-code': claudeLogo,
-  'adobe': adobeLogo,
-  'windows': 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg'
-};
-
 // Brand colors for each tool (kept for glow effects)
 const toolColors: Record<string, {
   primary: string;
@@ -66,6 +34,7 @@ export interface Tool {
   category: 'text' | 'image' | 'video' | 'coding';
   delivery_type: 'subscribe_for_them' | 'email_only' | 'provide_account';
   activation_time: number;
+  logo_url?: string | null;
 }
 
 interface ToolCardProps {
@@ -79,6 +48,7 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
   const [logoError, setLogoError] = useState(false);
+  const [fallbackAttempted, setFallbackAttempted] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   // Mouse position for 3D tilt effect
@@ -110,8 +80,12 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
     setIsHovered(false);
   };
 
-  const logoUrl = toolLogos[tool.tool_id];
+  // Logo fallback chain: tool.logo_url -> /logos/<tool_id>.svg -> first letter
+  const logoUrl = logoError && !fallbackAttempted
+    ? `/logos/${tool.tool_id}.svg`
+    : tool.logo_url;
   const colors = toolColors[tool.tool_id] || { primary: '#a855f7', glow: '270 85% 65%' };
+  const showLogo = logoUrl && !(logoError && fallbackAttempted);
 
   return (
     <motion.div 
@@ -202,19 +176,26 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
                 }}
               >
                 {/* Official Brand Logo */}
-                {logoUrl && !logoError ? (
+                {showLogo ? (
                   <img 
-                    src={logoUrl} 
+                    src={logoUrl!} 
                     alt={`${tool.name} logo`} 
                     className={`w-16 h-16 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`} 
-                    onLoad={() => setLogoLoaded(true)} 
-                    onError={() => setLogoError(true)} 
+                    onLoad={() => { setLogoLoaded(true); setLogoError(false); }} 
+                    onError={() => {
+                      if (!logoError) {
+                        setLogoError(true);
+                        setLogoLoaded(false);
+                      } else {
+                        setFallbackAttempted(true);
+                      }
+                    }} 
                     loading="lazy" 
                   />
                 ) : null}
                 
-                {/* Fallback: Show first letter if logo fails */}
-                {(!logoUrl || logoError || !logoLoaded) && (
+                {/* Fallback: Show first letter if all logo sources fail */}
+                {(!showLogo || !logoLoaded) && (
                   <span 
                     className="text-2xl font-bold text-white" 
                     style={{ textShadow: `0 2px 10px ${colors.primary}` }}
@@ -243,14 +224,22 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
             </span>
 
             {/* Price */}
-            <div className="mt-auto mb-4">
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-display font-bold" style={{ color: colors.primary }}>
-                  ${tool.price}
-                </span>
-                <span className="text-sm text-muted-foreground">{t('store.perMonth')}</span>
+            {tool.price > 0 ? (
+              <div className="mt-auto mb-4">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-3xl font-display font-bold" style={{ color: colors.primary }}>
+                    ${tool.price}
+                  </span>
+                  <span className="text-sm text-muted-foreground">{t('store.perMonth')}</span>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="mt-auto mb-4">
+                <span className="text-lg font-display font-semibold text-muted-foreground">
+                  {t('store.contactForPrice', 'Contact for pricing')}
+                </span>
+              </div>
+            )}
 
             {/* Buy Now Button */}
             <Button 

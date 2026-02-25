@@ -43,6 +43,7 @@ const Storefront = () => {
         category: tool.category as 'text' | 'image' | 'video' | 'coding',
         delivery_type: tool.delivery_type as 'subscribe_for_them' | 'email_only' | 'provide_account',
         activation_time: tool.activation_time,
+        logo_url: (tool as any).logo_url || null,
       }));
       
       setTools(mappedTools);
