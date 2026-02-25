@@ -248,6 +248,42 @@ export type Database = {
           },
         ]
       }
+      tool_plans: {
+        Row: {
+          activation_time: number
+          created_at: string
+          delivery_type: string
+          id: string
+          is_active: boolean
+          monthly_price: number | null
+          plan_id: string
+          plan_name: string
+          tool_id: string
+        }
+        Insert: {
+          activation_time?: number
+          created_at?: string
+          delivery_type?: string
+          id?: string
+          is_active?: boolean
+          monthly_price?: number | null
+          plan_id: string
+          plan_name: string
+          tool_id: string
+        }
+        Update: {
+          activation_time?: number
+          created_at?: string
+          delivery_type?: string
+          id?: string
+          is_active?: boolean
+          monthly_price?: number | null
+          plan_id?: string
+          plan_name?: string
+          tool_id?: string
+        }
+        Relationships: []
+      }
       tools: {
         Row: {
           access_url: string | null
