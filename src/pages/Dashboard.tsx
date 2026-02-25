@@ -4,7 +4,8 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { 
   ExternalLink, Search, X,
-  Settings, Bell, User, Shield, Zap, Clock, Loader2
+  Settings, Bell, User, Shield, Zap, Clock, Loader2,
+  CreditCard, RefreshCw, CalendarDays
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
@@ -413,6 +414,9 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const [subsLoading, setSubsLoading] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
@@ -438,7 +442,7 @@ const Dashboard = () => {
     }
 
     fetchOrders();
-    
+    if (user) fetchSubscriptions();
     // Set up real-time subscription for order updates
     const channel = supabase
       .channel('orders-realtime')
@@ -512,6 +516,42 @@ const Dashboard = () => {
       console.error('Error fetching orders:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSubscriptions = async () => {
+    if (!user) return;
+    setSubsLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const { data, error } = await supabase.functions.invoke('check-subscription', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (error) throw error;
+      setSubscriptions(data?.subscriptions || []);
+    } catch (err) {
+      console.error('Error fetching subscriptions:', err);
+    } finally {
+      setSubsLoading(false);
+    }
+  };
+
+  const openCustomerPortal = async () => {
+    setPortalLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const { data, error } = await supabase.functions.invoke('customer-portal', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (error) throw error;
+      if (data?.url) window.open(data.url, '_blank');
+    } catch (err) {
+      console.error('Error opening portal:', err);
+      toast({ title: 'Error', description: 'Could not open subscription management.', variant: 'destructive' });
+    } finally {
+      setPortalLoading(false);
     }
   };
 
@@ -628,6 +668,98 @@ const Dashboard = () => {
             </motion.div>
           </div>
         </section>
+
+        {/* Subscriptions Section */}
+        {user && (
+          <section className="py-4">
+            <div className="container mx-auto px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-display font-bold flex items-center gap-2">
+                    <CreditCard className="w-5 h-5 text-primary" />
+                    {t('dashboard.mySubscriptions', { defaultValue: 'My Subscriptions' })}
+                  </h2>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => fetchSubscriptions()}
+                    disabled={subsLoading}
+                  >
+                    <RefreshCw className={`w-4 h-4 ${subsLoading ? 'animate-spin' : ''}`} />
+                  </Button>
+                </div>
+
+                {subsLoading ? (
+                  <div className="glass-strong rounded-2xl p-8 flex justify-center">
+                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                  </div>
+                ) : subscriptions.length > 0 ? (
+                  <div className="grid gap-3">
+                    {subscriptions.map((sub: any) => {
+                      const toolId = sub.tool_id || '';
+                      const colors = toolColors[toolId] || { primary: '#a855f7', glow: '270 85% 65%' };
+                      return (
+                        <div
+                          key={sub.id}
+                          className="glass-strong rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="w-10 h-10 rounded-xl flex items-center justify-center"
+                              style={{ background: `linear-gradient(135deg, ${colors.primary}40, ${colors.primary}20)` }}
+                            >
+                              {toolLogos[toolId] ? (
+                                <img src={toolLogos[toolId]} alt="" className="w-6 h-6 object-contain" />
+                              ) : (
+                                <CreditCard className="w-5 h-5 text-primary" />
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-semibold">{sub.tool_name || 'Subscription'}</p>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${
+                                  sub.cancel_at_period_end 
+                                    ? 'bg-orange-500/20 text-orange-400' 
+                                    : 'bg-green-500/20 text-green-400'
+                                }`}>
+                                  <span className={`w-1.5 h-1.5 rounded-full ${sub.cancel_at_period_end ? 'bg-orange-400' : 'bg-green-400'}`} />
+                                  {sub.cancel_at_period_end ? t('dashboard.cancelling', { defaultValue: 'Cancelling' }) : t('dashboard.activeSub', { defaultValue: 'Active' })}
+                                </span>
+                                {sub.current_period_end && (
+                                  <span className="flex items-center gap-1">
+                                    <CalendarDays className="w-3 h-3" />
+                                    {t('dashboard.renewsOn', { defaultValue: 'Renews' })}: {new Date(sub.current_period_end).toLocaleDateString()}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={openCustomerPortal}
+                            disabled={portalLoading}
+                          >
+                            {portalLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Settings className="w-4 h-4" />}
+                            <span className="ms-1">{t('dashboard.manageSub', { defaultValue: 'Manage' })}</span>
+                          </Button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="glass rounded-2xl p-6 text-center text-muted-foreground text-sm">
+                    {t('dashboard.noSubscriptions', { defaultValue: 'No active subscriptions' })}
+                  </div>
+                )}
+              </motion.div>
+            </div>
+          </section>
+        )}
 
         {/* Search */}
         <section className="py-4">
