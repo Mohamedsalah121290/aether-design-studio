@@ -114,8 +114,8 @@ const Footer = () => {
                 const legalRoutes: Record<string, string> = {
                   privacy: '/privacy',
                   terms: '/terms',
-                  security: '#',
-                  cookies: '#',
+                  security: '/privacy#security',
+                  cookies: '/privacy#cookies',
                 };
                 return (
                   <li key={link}>
