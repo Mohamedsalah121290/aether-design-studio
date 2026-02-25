@@ -45,12 +45,15 @@ export interface Tool {
   starting_price?: number | null;
 }
 
+export type CardTier = 'featured' | 'popular' | 'standard';
+
 interface ToolCardProps {
   tool: Tool;
   index: number;
+  tier?: CardTier;
 }
 
-export const ToolCard = ({ tool, index }: ToolCardProps) => {
+export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const { t } = useTranslation();
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -95,6 +98,7 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
   const colors = toolColors[tool.tool_id] || { primary: '#a855f7', glow: '270 85% 65%' };
   const showLogo = logoUrl && !(logoError && fallbackAttempted);
   const price = tool.starting_price;
+  const glowIntensity = tier === 'featured' ? { idle: 0.4, hover: 0.8 } : tier === 'popular' ? { idle: 0.25, hover: 0.6 } : { idle: 0.15, hover: 0.45 };
 
   return (
     <motion.div 
@@ -118,15 +122,27 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
         {/* Dynamic Glow Effect */}
         <motion.div 
           animate={{
-            opacity: isHovered ? 0.6 : 0.2,
+            opacity: isHovered ? glowIntensity.hover : glowIntensity.idle,
             scale: isHovered ? 1.05 : 1
           }} 
           transition={{ duration: 0.3 }} 
           className="absolute -inset-1 rounded-3xl blur-xl" 
           style={{
-            background: `radial-gradient(ellipse at center, hsl(${colors.glow} / 0.5) 0%, transparent 70%)`
+            background: `radial-gradient(ellipse at center, hsl(${colors.glow} / ${tier === 'featured' ? '0.7' : '0.5'}) 0%, transparent 70%)`
           }} 
         />
+
+        {/* Gradient Border for Featured */}
+        {tier === 'featured' && (
+          <div
+            className="absolute -inset-[1px] rounded-3xl pointer-events-none z-0"
+            style={{
+              background: `linear-gradient(135deg, ${colors.primary}60 0%, transparent 40%, transparent 60%, ${colors.primary}40 100%)`,
+              opacity: isHovered ? 1 : 0.5,
+              transition: 'opacity 0.3s ease',
+            }}
+          />
+        )}
 
         {/* Card Container */}
         <div 
@@ -138,6 +154,7 @@ export const ToolCard = ({ tool, index }: ToolCardProps) => {
               0 0 0 1px rgba(255, 255, 255, 0.05),
               inset 0 1px 0 rgba(255, 255, 255, 0.1),
               inset 0 -1px 0 rgba(0, 0, 0, 0.2)
+              ${tier === 'featured' ? `, 0 0 60px ${colors.primary}25` : ''}
             `,
             transform: 'translateZ(0)'
           }}
