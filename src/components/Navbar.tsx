@@ -230,12 +230,12 @@ const Navbar = () => {
             {!loading && (
               user ? (
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+                  <a href="/profile" className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors">
                     <User className="w-4 h-4 text-primary" />
                     <span className="text-sm text-primary truncate max-w-[120px]">
                       {user.email?.split('@')[0]}
                     </span>
-                  </div>
+                  </a>
                   <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground">
                     <LogOut className="w-4 h-4" />
                   </Button>

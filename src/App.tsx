@@ -15,6 +15,7 @@ import Academy from "./pages/Academy";
 import AdminPage from "./pages/AdminPage";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import "@/lib/i18n";
@@ -51,6 +52,7 @@ const AppRoutes = () => {
       <Route path="/article/:articleId" element={<ArticlePage />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route
         path="/admin"
         element={
