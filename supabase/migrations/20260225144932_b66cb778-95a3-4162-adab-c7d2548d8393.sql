@@ -1,0 +1,1 @@
+ALTER TABLE public.tools ADD COLUMN logo_url text;
