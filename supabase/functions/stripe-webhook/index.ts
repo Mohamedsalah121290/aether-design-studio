@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import { Resend } from "npm:resend@4.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -54,6 +55,60 @@ serve(async (req) => {
           logStep("Order update error", { error: orderError.message });
         } else {
           logStep("Order updated to paid", { orderId: order.id });
+
+          // Send payment confirmed email
+          try {
+            const { data: toolData } = await supabaseAdmin
+              .from("tools")
+              .select("name, price, activation_time")
+              .eq("id", order.tool_id)
+              .single();
+
+            if (toolData) {
+              const resend = new Resend(Deno.env.get("RESEND_API_KEY") as string);
+              const dashboardUrl = "https://id-preview--92b6864c-4966-485c-b321-32542f78bf88.lovable.app/dashboard";
+              const subject = `Payment confirmed — ${toolData.name}`;
+
+              const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+                body{margin:0;padding:0;background:#fff;font-family:'Inter',-apple-system,sans-serif}
+                .c{max-width:520px;margin:0 auto;padding:40px 24px}
+                .hdr{text-align:center;padding-bottom:24px}
+                .brand{font-size:22px;font-weight:700;color:#0A0D1A;margin:12px 0 0}
+                hr{border:none;border-top:1px solid #E5E7EB;margin:0}
+                h1{font-size:24px;font-weight:700;color:#0A0D1A;margin:0 0 16px}
+                .t{font-size:15px;color:#374151;line-height:24px;margin:0 0 20px}
+                .s{background:#F3F4F6;border-radius:12px;padding:20px;margin:0 0 28px}
+                .sr{display:flex;justify-content:space-between;font-size:14px;color:#374151;margin:0 0 8px}
+                .sl{color:#6B7280}.sv{font-weight:600;color:#0A0D1A}
+                .bw{text-align:center;margin:0 0 28px}
+                .btn{display:inline-block;background:#6C3FA0;color:#fff!important;font-size:15px;font-weight:600;padding:14px 32px;border-radius:12px;text-decoration:none}
+                .m{font-size:13px;color:#9CA3AF;text-align:center;margin:0}
+                .ft{padding-top:24px;text-align:center}.ftx{font-size:13px;color:#6B7280;margin:0 0 8px}.fm{font-size:12px;color:#9CA3AF;margin:0}
+              </style></head><body><div class="c">
+                <div class="hdr"><img src="https://pilskrumnpvnvtkadbez.supabase.co/storage/v1/object/public/email-assets/logo.png?v=1" alt="AI DEALS" width="48" height="48" style="border-radius:12px"/><p class="brand">AI DEALS</p></div><hr/>
+                <div style="padding:32px 0">
+                  <h1>Payment Confirmed ✓</h1>
+                  <p class="t">Thank you for your purchase! Your payment has been received and your order is now being processed.</p>
+                  <div class="s">
+                    <div class="sr"><span class="sl">Product</span><span class="sv">${toolData.name}</span></div>
+                    <div class="sr"><span class="sl">Amount</span><span class="sv">$${Number(toolData.price).toFixed(2)}/mo</span></div>
+                    <div class="sr" style="margin:0"><span class="sl">Activation</span><span class="sv">Within ${toolData.activation_time} hours</span></div>
+                  </div>
+                  <div class="bw"><a href="${dashboardUrl}" class="btn">View My Orders →</a></div>
+                  <p class="m">You'll receive another email once your subscription is activated.</p>
+                </div><hr/>
+                <div class="ft"><p class="ftx">© ${new Date().getFullYear()} AI DEALS. All rights reserved.</p><p class="fm">You received this email because you placed an order with AI DEALS.</p></div>
+              </div></body></html>`;
+
+              const buyerEmail = (await supabaseAdmin.from("orders").select("buyer_email").eq("id", order.id).single()).data?.buyer_email;
+              if (buyerEmail) {
+                await resend.emails.send({ from: "AI DEALS <noreply@resend.dev>", to: [buyerEmail], subject, html });
+                logStep("Payment confirmed email sent", { to: buyerEmail });
+              }
+            }
+          } catch (emailErr) {
+            logStep("Email send failed (non-fatal)", { error: String(emailErr) });
+          }
 
           // Create subscription record if user exists
           if (order.user_id && session.subscription) {

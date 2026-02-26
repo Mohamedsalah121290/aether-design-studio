@@ -257,6 +257,21 @@ const AdminPage = () => {
     await supabase.from('orders').update({ 
       status, activated_at: status === 'active' ? new Date().toISOString() : null 
     }).eq('id', orderId);
+
+    // Send activation email when admin activates an order
+    if (status === 'active') {
+      try {
+        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+        await fetch(`https://${projectId}.supabase.co/functions/v1/order-notification`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'order_activated', orderId }),
+        });
+      } catch (err) {
+        console.error('Failed to send activation email:', err);
+      }
+    }
+
     fetchOrders();
   };
 
