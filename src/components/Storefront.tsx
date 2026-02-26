@@ -152,7 +152,7 @@ const Storefront = () => {
                 {t('store.badge')}
               </div>
 
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3 tracking-tight leading-[1.1] text-white">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3 tracking-tight leading-[1.1] text-white heading-glow">
                 {t('store.title')}
               </h2>
               <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 tracking-tight leading-[1.1] bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
@@ -230,7 +230,7 @@ const Storefront = () => {
                             <Icon className="w-4 h-4 text-white/40" />
                           </div>
                           <div className="space-y-0.5">
-                            <h2 className="text-white text-xl font-semibold tracking-tight">{section.label}</h2>
+                            <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">{section.label}</h2>
                             <p className="text-white/50 text-sm">{section.subtitle}</p>
                           </div>
                           <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/5 text-white/40 border border-white/10">

@@ -95,88 +95,88 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   return (
     <>
       <div
-        className="group relative rounded-[14px] border border-[hsl(0_0%_100%/0.08)] hover:border-[hsl(0_0%_100%/0.14)] transition-all duration-300 ease-out hover:-translate-y-1 overflow-hidden"
+        className="group relative rounded-[16px] border border-[hsl(0_0%_100%/0.06)] hover:border-[hsl(260_55%_58%/0.20)] transition-all duration-500 ease-out hover:-translate-y-1 overflow-hidden backdrop-blur-[18px]"
         style={{
-          background: '#121212',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)',
+          background: 'hsl(240 20% 10% / 0.35)',
+          boxShadow: '0 4px 30px hsl(240 40% 5% / 0.5), inset 0 1px 0 hsl(0 0% 100% / 0.04)',
         }}
       >
-            <div className="p-6 flex flex-col gap-4">
-              {/* Logo + badge */}
-              <div className="flex items-start justify-between">
-                <div
-                  className="h-14 w-14 rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.08)]"
-                  style={{ background: 'rgba(255,255,255,0.06)' }}
-                >
-                  {showLogo ? (
-                    <img
-                      src={logoUrl!}
-                      alt={`${tool.name} logo`}
-                      className={`h-8 w-8 object-contain drop-shadow-sm transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                      onLoad={() => {
-                        setLogoLoaded(true);
-                        setLogoError(false);
-                      }}
-                      onError={() => {
-                        if (!logoError) {
-                          setLogoError(true);
-                          setLogoLoaded(false);
-                        } else {
-                          setFallbackAttempted(true);
-                        }
-                      }}
-                      loading="lazy"
-                    />
-                  ) : null}
-                  {(!showLogo || !logoLoaded) && (
-                    <span className="text-base font-semibold text-foreground/80">
-                      {tool.name.charAt(0)}
-                    </span>
-                  )}
-                </div>
-                <TierBadge tier={tier} />
-              </div>
+        {/* Neon border glow on hover */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-[16px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            boxShadow: 'inset 0 0 20px hsl(260 55% 58% / 0.06), 0 0 15px hsl(210 100% 55% / 0.05)',
+          }}
+        />
 
-              {/* Title + meta */}
-              <div className="space-y-1">
-                <h3 className="text-foreground font-semibold tracking-tight leading-tight text-lg">
-                  {tool.name}
-                </h3>
-                <p className="text-xs text-[#888]">
-                  Monthly Access · {categoryLabel}
-                </p>
-              </div>
-
-              {/* Price */}
-              <div className="flex items-baseline">
-                {price && price > 0 ? (
-                  <>
-                    <span className="text-xl font-bold text-white">${price}</span>
-                    <span className="text-xs text-foreground/40 ml-1">
-                      /{t('store.perMonth')}
-                    </span>
-                  </>
-                ) : (
-                  <span className="text-xs text-muted-foreground">
-                    {t('store.contactForPrice', 'Contact for pricing')}
-                  </span>
-                )}
-              </div>
-
-              {/* CTA */}
-              <button
-                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white bg-[#007BFF] hover:bg-[#339DFF] transition-all duration-300"
-                style={{
-                  boxShadow: '0 0 0 rgba(0,123,255,0)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 0 16px rgba(0,123,255,0.4)')}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '0 0 0 rgba(0,123,255,0)')}
-                onClick={() => setCheckoutOpen(true)}
-              >
-                {t('store.buyNow')}
-                <Sparkles className="w-3.5 h-3.5" />
-              </button>
+        <div className="relative p-6 flex flex-col gap-4">
+          {/* Logo + badge */}
+          <div className="flex items-start justify-between">
+            <div
+              className="h-14 w-14 rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm"
+              style={{ background: 'hsl(0 0% 100% / 0.05)' }}
+            >
+              {showLogo ? (
+                <img
+                  src={logoUrl!}
+                  alt={`${tool.name} logo`}
+                  className={`h-8 w-8 object-contain drop-shadow-sm transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
+                  onError={() => {
+                    if (!logoError) { setLogoError(true); setLogoLoaded(false); }
+                    else { setFallbackAttempted(true); }
+                  }}
+                  loading="lazy"
+                />
+              ) : null}
+              {(!showLogo || !logoLoaded) && (
+                <span className="text-base font-semibold text-foreground/80">
+                  {tool.name.charAt(0)}
+                </span>
+              )}
             </div>
+            <TierBadge tier={tier} />
+          </div>
+
+          {/* Title + meta */}
+          <div className="space-y-1">
+            <h3 className="text-foreground font-semibold tracking-tight leading-tight text-lg heading-glow">
+              {tool.name}
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Monthly Access · {categoryLabel}
+            </p>
+          </div>
+
+          {/* Price */}
+          <div className="flex items-baseline">
+            {price && price > 0 ? (
+              <>
+                <span className="text-xl font-bold text-white price-glow">${price}</span>
+                <span className="text-xs text-foreground/40 ml-1">
+                  /{t('store.perMonth')}
+                </span>
+              </>
+            ) : (
+              <span className="text-xs text-muted-foreground">
+                {t('store.contactForPrice', 'Contact for pricing')}
+              </span>
+            )}
+          </div>
+
+          {/* CTA — gradient blue→violet with glow */}
+          <button
+            className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_20px_hsl(210_100%_55%/0.30)]"
+            style={{
+              background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 60% 55%))',
+              boxShadow: '0 0 12px hsl(210 100% 55% / 0.15)',
+            }}
+            onClick={() => setCheckoutOpen(true)}
+          >
+            {t('store.buyNow')}
+            <Sparkles className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       <CheckoutDialog tool={tool} open={checkoutOpen} onOpenChange={setCheckoutOpen} />
