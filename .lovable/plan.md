@@ -1,63 +1,53 @@
 
 
-# Order Status Notification Emails
+# Redesign Product Card (ToolCard)
 
-## Overview
-Send branded notification emails to users when their order status changes (payment confirmed, order activated) using the existing Resend integration. This extends the `stripe-webhook` function and adds a new dedicated email-sending function.
+## What changes
+Simplify and modernize the ToolCard component to match a clean, dark card aesthetic with a vibrant blue "Buy Now" button.
 
-## Email Types
-1. **Payment Confirmed** -- Sent when `checkout.session.completed` fires and order moves to `paid/processing`
-2. **Order Activated** -- Sent when an admin marks an order as `activated` (or via future automation)
+## Visual Changes
 
-## Implementation
+### Card Container
+- Background: Solid dark (`#121212`) instead of complex layered gradients
+- Border: 1px subtle border (`rgba(255,255,255,0.08)`) with a faint inner glow via `inset` box-shadow
+- Corner radius: `14px` (between the requested 12-16px)
+- Padding: Uniform `24px`
+- Shadow: Subtle outer shadow (`0 4px 24px rgba(0,0,0,0.5)`)
+- Remove the bloom glow layer, gradient border wrapper, and inner highlight overlay -- simplify to a single card `div`
 
-### 1. Create `order-notification` Edge Function
-A new edge function at `supabase/functions/order-notification/index.ts` that:
-- Accepts `{ type, orderId }` as input
-- Fetches order + tool details from the database using service role
-- Renders a branded HTML email using inline styles (matching the existing email template aesthetic)
-- Sends via Resend using the existing `RESEND_API_KEY`
-- Supports two templates: `payment_confirmed` and `order_activated`
+### Hover Effect
+- Keep the subtle lift (`hover:-translate-y-1`) but remove `hover:scale-[1.02]` for a cleaner feel
+- Border brightens slightly on hover (`rgba(255,255,255,0.14)`)
 
-### 2. Update `stripe-webhook` to Trigger Notification
-After successfully updating an order to `paid/processing` in the `checkout.session.completed` handler:
-- Call the `order-notification` function internally (via fetch to the function URL) or inline the Resend send logic directly in the webhook
-- **Chosen approach**: Inline the Resend call directly in the webhook to avoid an extra network hop and keep it simple
+### Logo
+- Keep the 56px logo capsule in the top-left, retain existing fallback logic
+- Simplify the capsule background to a flat `rgba(255,255,255,0.06)` with border
 
-### 3. Add Admin-Triggered Activation Email
-When the admin updates an order status to `activated`:
-- Add a call from the frontend (or create a small wrapper) that invokes `order-notification` with `type: "order_activated"`
-- Alternatively, add a database trigger approach -- but a direct function call from the admin page is simpler and more transparent
+### Typography
+- Title: White (`#fff`), bold, `text-lg` -- keep as-is
+- Subtitle ("Monthly Access"): `text-xs`, muted grey (`#888`) -- simplify from HSL
+- Price: Bump to `text-xl font-bold text-white` for prominence
 
-### 4. Update `supabase/config.toml`
-Add the new function entry:
-```text
-[functions.order-notification]
-verify_jwt = false
-```
+### Buy Now Button
+- Solid vibrant blue background: `#007BFF`
+- White bold text, centered with Sparkles icon
+- Rounded corners: `rounded-xl` (matching card style)
+- Hover: Lighter blue (`#339DFF`) + subtle glow shadow (`0 0 16px rgba(0,123,255,0.4)`)
+- Remove the current transparent gradient background
 
-## Email Templates (Inline HTML)
+### Tier Badge
+- Keep existing badge styling (already clean and fits the new design)
 
-### Payment Confirmed Email
-- Subject: "Payment confirmed -- [Tool Name]"
-- Body: Thank you message, order summary (tool name, price), expected activation time, link to dashboard
+## Technical Details
 
-### Order Activated Email
-- Subject: "Your [Tool Name] subscription is ready!"
-- Body: Confirmation that the subscription is active, access instructions, link to dashboard
+### File: `src/components/ToolCard.tsx`
+- Flatten the card structure from 4 nested divs (outer wrapper > bloom > border wrapper > inner card) down to 2 (outer wrapper > card)
+- Remove the bloom glow div and the gradient border wrapper div
+- Remove the inner top highlight div
+- Replace inline `style` objects with Tailwind classes where possible, falling back to `style` only for the card background/shadow
+- Update the button from transparent gradient to solid `bg-[#007BFF] hover:bg-[#339DFF]` with a hover glow shadow
+- Update price text to `text-xl font-bold text-white`
+- Update subtitle color to `text-[#888]`
 
-Both templates will use the same visual style as the existing auth email templates (clean, white background, centered layout, brand header with logo).
+No other files need changes.
 
-## Files Changed
-| File | Change |
-|------|--------|
-| `supabase/functions/order-notification/index.ts` | **New** -- Resend-powered notification sender |
-| `supabase/functions/stripe-webhook/index.ts` | **Modified** -- Add Resend call after order status update |
-| `supabase/config.toml` | **Modified** -- Add `order-notification` function config |
-| `src/pages/AdminPage.tsx` | **Modified** -- Call `order-notification` when admin activates an order |
-
-## Technical Notes
-- Uses existing `RESEND_API_KEY` secret (already configured)
-- Sender address: `AI DEALS <noreply@resend.dev>` (same as auth emails; can be updated to custom domain later)
-- No new database tables needed
-- No new secrets needed
