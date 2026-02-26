@@ -6,6 +6,7 @@ import Storefront from '@/components/Storefront';
 import Resources from '@/components/Resources';
 import CTA from '@/components/CTA';
 import Footer from '@/components/Footer';
+import ScrollToTop from '@/components/ScrollToTop';
 
 const Index = () => {
   const { i18n } = useTranslation();
@@ -29,6 +30,7 @@ const Index = () => {
       </main>
       
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };
