@@ -134,8 +134,9 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
           />
 
           <div className="relative p-4 sm:p-6 flex flex-col gap-3 sm:gap-4">
-            {/* Logo + badge */}
+            {/* Badge + Logo row */}
             <div className="flex items-start justify-between">
+              <TierBadge tier={tier} />
               <div
                 className="h-11 w-11 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative"
                 style={{ background: 'hsl(210 50% 50% / 0.06)' }}
@@ -164,7 +165,6 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   </span>
                 )}
               </div>
-              <TierBadge tier={tier} />
             </div>
 
             {/* Title + meta */}
