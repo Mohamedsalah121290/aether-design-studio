@@ -1,52 +1,63 @@
 
 
-# Stripe Webhook Edge Function
+# Order Status Notification Emails
 
-## What This Does
-Automatically updates order and subscription status in your database when Stripe sends payment events (success, failure, cancellation) -- eliminating the need for manual admin updates.
+## Overview
+Send branded notification emails to users when their order status changes (payment confirmed, order activated) using the existing Resend integration. This extends the `stripe-webhook` function and adds a new dedicated email-sending function.
 
-## Events Handled
-- **checkout.session.completed** -- Mark order as paid, create subscription record
-- **invoice.payment_succeeded** -- Keep subscription active on renewal
-- **invoice.payment_failed** -- Mark subscription as past_due
-- **customer.subscription.deleted** -- Mark subscription as cancelled
+## Email Types
+1. **Payment Confirmed** -- Sent when `checkout.session.completed` fires and order moves to `paid/processing`
+2. **Order Activated** -- Sent when an admin marks an order as `activated` (or via future automation)
 
-## Implementation Steps
+## Implementation
 
-### 1. Add Stripe Webhook Signing Secret
-You'll need to create a webhook endpoint in your Stripe Dashboard first, then provide the signing secret (`whsec_...`) so the function can verify incoming events are genuinely from Stripe.
+### 1. Create `order-notification` Edge Function
+A new edge function at `supabase/functions/order-notification/index.ts` that:
+- Accepts `{ type, orderId }` as input
+- Fetches order + tool details from the database using service role
+- Renders a branded HTML email using inline styles (matching the existing email template aesthetic)
+- Sends via Resend using the existing `RESEND_API_KEY`
+- Supports two templates: `payment_confirmed` and `order_activated`
 
-### 2. Create `stripe-webhook` Edge Function
-A new file at `supabase/functions/stripe-webhook/index.ts` that:
-- Verifies the Stripe signature using the webhook secret
-- Parses the event type
-- On `checkout.session.completed`: updates the matching order (by `stripe_session_id`) to `payment_status = 'paid'` and `status = 'processing'`, and creates a subscription record linking the user, tool, and Stripe subscription ID
-- On `invoice.payment_succeeded`: updates subscription status to `active` and refreshes period dates
-- On `invoice.payment_failed`: updates subscription status to `past_due`
-- On `customer.subscription.deleted`: updates subscription status to `cancelled`
-- Uses `SUPABASE_SERVICE_ROLE_KEY` to bypass RLS for admin-level writes
+### 2. Update `stripe-webhook` to Trigger Notification
+After successfully updating an order to `paid/processing` in the `checkout.session.completed` handler:
+- Call the `order-notification` function internally (via fetch to the function URL) or inline the Resend send logic directly in the webhook
+- **Chosen approach**: Inline the Resend call directly in the webhook to avoid an extra network hop and keep it simple
 
-### 3. Update `supabase/config.toml`
-Add the new function with `verify_jwt = false` (webhooks come from Stripe, not authenticated users).
+### 3. Add Admin-Triggered Activation Email
+When the admin updates an order status to `activated`:
+- Add a call from the frontend (or create a small wrapper) that invokes `order-notification` with `type: "order_activated"`
+- Alternatively, add a database trigger approach -- but a direct function call from the admin page is simpler and more transparent
 
-### 4. Stripe Dashboard Setup
-After deployment, you'll configure a webhook endpoint in Stripe pointing to:
-`https://pilskrumnpvnvtkadbez.supabase.co/functions/v1/stripe-webhook`
-
----
-
-## Technical Details
-
-### Webhook Signature Verification
+### 4. Update `supabase/config.toml`
+Add the new function entry:
 ```text
-Raw body + Stripe-Signature header --> stripe.webhooks.constructEvent()
+[functions.order-notification]
+verify_jwt = false
 ```
-This ensures only genuine Stripe events are processed.
 
-### Database Updates (via service role)
-- `orders` table: update `payment_status` and `status` columns
-- `subscriptions` table: insert/update with Stripe subscription details
+## Email Templates (Inline HTML)
 
-### No Frontend Changes Required
-The webhook runs server-side. The Dashboard already displays order statuses dynamically, so once orders move from "pending" to "processing"/"active", users will see the change on refresh.
+### Payment Confirmed Email
+- Subject: "Payment confirmed -- [Tool Name]"
+- Body: Thank you message, order summary (tool name, price), expected activation time, link to dashboard
 
+### Order Activated Email
+- Subject: "Your [Tool Name] subscription is ready!"
+- Body: Confirmation that the subscription is active, access instructions, link to dashboard
+
+Both templates will use the same visual style as the existing auth email templates (clean, white background, centered layout, brand header with logo).
+
+## Files Changed
+| File | Change |
+|------|--------|
+| `supabase/functions/order-notification/index.ts` | **New** -- Resend-powered notification sender |
+| `supabase/functions/stripe-webhook/index.ts` | **Modified** -- Add Resend call after order status update |
+| `supabase/config.toml` | **Modified** -- Add `order-notification` function config |
+| `src/pages/AdminPage.tsx` | **Modified** -- Call `order-notification` when admin activates an order |
+
+## Technical Notes
+- Uses existing `RESEND_API_KEY` secret (already configured)
+- Sender address: `AI DEALS <noreply@resend.dev>` (same as auth emails; can be updated to custom domain later)
+- No new database tables needed
+- No new secrets needed
