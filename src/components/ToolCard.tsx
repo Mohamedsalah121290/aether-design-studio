@@ -56,7 +56,7 @@ const TierBadge = ({ tier }: { tier: CardTier }) => {
   const { icon: Icon, text } = TIER_LABEL[tier];
   return (
     <span
-      className="relative inline-flex items-center gap-1.5 rounded-full px-3 py-[5px] text-[10px] font-semibold uppercase tracking-[0.1em] overflow-hidden whitespace-nowrap"
+      className="relative inline-flex items-center gap-1.5 rounded-full px-3 py-[5px] text-[10px] font-semibold uppercase tracking-[0.1em] overflow-hidden"
       style={{
         background: 'linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(184,134,11,0.10) 50%, rgba(212,175,55,0.18) 100%)',
         border: '1px solid rgba(212,175,55,0.30)',
@@ -133,15 +133,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             }}
           />
 
-          {/* Trending badge — absolute, inside card, never clipped */}
-          {tier !== 'standard' && (
-            <div className="absolute z-20" style={{ top: 14, left: 14 }}>
-              <TierBadge tier={tier} />
-            </div>
-          )}
-
           <div className="relative p-4 sm:p-6 flex flex-col gap-3 sm:gap-4">
-            {/* Logo + Premium badge */}
+            {/* Logo + badge */}
             <div className="flex items-start justify-between">
               <div
                 className="h-11 w-11 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative"
@@ -171,8 +164,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   </span>
                 )}
               </div>
-              {/* Standard tier still shows badge in top-right */}
-              {tier === 'standard' && <TierBadge tier={tier} />}
+              <TierBadge tier={tier} />
             </div>
 
             {/* Title + meta */}
