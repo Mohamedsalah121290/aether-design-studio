@@ -56,15 +56,25 @@ const TierBadge = ({ tier }: { tier: CardTier }) => {
   const { icon: Icon, text } = TIER_LABEL[tier];
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] backdrop-blur-md border border-[#C9A227]/25 shadow-[0_0_10px_#C9A22720,inset_0_1px_0_#F7D77430]"
+      className="relative inline-flex items-center gap-1.5 rounded-full px-3 py-[5px] text-[10px] font-semibold uppercase tracking-[0.1em] overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, rgba(247,215,116,0.12), rgba(201,162,39,0.08))',
-        color: '#F0D060',
-        textShadow: '0 0 8px rgba(247,215,116,0.25)',
+        background: 'linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(184,134,11,0.10) 50%, rgba(212,175,55,0.18) 100%)',
+        border: '1px solid rgba(212,175,55,0.30)',
+        color: '#E8D48B',
+        boxShadow: '0 0 12px rgba(212,175,55,0.12), 0 0 4px rgba(212,175,55,0.08), inset 0 1px 0 rgba(255,245,200,0.12)',
+        textShadow: '0 1px 3px rgba(0,0,0,0.4)',
+        backdropFilter: 'blur(12px)',
       }}
     >
-      <Icon className="w-2.5 h-2.5 opacity-90" />
-      {text}
+      {/* Shimmer sweep */}
+      <span
+        className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_3s_ease-in-out_infinite]"
+        style={{
+          background: 'linear-gradient(105deg, transparent 40%, rgba(255,245,200,0.12) 50%, transparent 60%)',
+        }}
+      />
+      <Icon className="w-2.5 h-2.5 relative z-10 opacity-80" style={{ filter: 'drop-shadow(0 0 2px rgba(212,175,55,0.4))' }} />
+      <span className="relative z-10">{text}</span>
     </span>
   );
 };
