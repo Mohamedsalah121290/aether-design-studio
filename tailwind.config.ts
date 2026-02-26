@@ -88,6 +88,10 @@ export default {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-20px)" },
         },
+        "shimmer": {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
         "glow-pulse": {
           "0%, 100%": { boxShadow: "0 0 20px hsl(187 100% 50% / 0.3)" },
           "50%": { boxShadow: "0 0 40px hsl(187 100% 50% / 0.6)" },
@@ -99,6 +103,7 @@ export default {
         "fade-in": "fade-in 0.6s ease-out",
         "scale-in": "scale-in 0.3s ease-out",
         "float": "float 6s ease-in-out infinite",
+        "shimmer": "shimmer 3s ease-in-out infinite",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
       },
     },
