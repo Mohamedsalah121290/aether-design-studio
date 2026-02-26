@@ -46,35 +46,25 @@ interface ToolCardProps {
 }
 
 /* ── Badge ─────────────────────────────────────────────────────── */
-const BADGE_VARIANTS: Record<string, string> = {
-  featured:
-    'bg-[hsl(200_60%_52%/0.10)] border-[hsl(200_60%_52%/0.18)] text-[hsl(200_55%_72%)]',
-  popular:
-    'bg-[hsl(28_75%_52%/0.10)] border-[hsl(28_75%_52%/0.18)] text-[hsl(28_70%_72%)]',
-  standard:
-    'bg-[hsl(155_50%_45%/0.10)] border-[hsl(155_50%_45%/0.18)] text-[hsl(155_45%_70%)]',
+const TIER_LABEL: Record<CardTier, { icon: typeof Crown; text: string }> = {
+  featured: { icon: Crown, text: 'Premium' },
+  popular: { icon: TrendingUp, text: 'Trending' },
+  standard: { icon: Zap, text: 'Instant' },
 };
 
 const TierBadge = ({ tier }: { tier: CardTier }) => {
-  const base =
-    'inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur-md border';
-  const variant = BADGE_VARIANTS[tier];
-
-  if (tier === 'featured')
-    return (
-      <span className={`${base} ${variant}`}>
-        <Crown className="w-2.5 h-2.5" /> Premium
-      </span>
-    );
-  if (tier === 'popular')
-    return (
-      <span className={`${base} ${variant}`}>
-        <TrendingUp className="w-2.5 h-2.5" /> Trending
-      </span>
-    );
+  const { icon: Icon, text } = TIER_LABEL[tier];
   return (
-    <span className={`${base} ${variant}`}>
-      <Zap className="w-2.5 h-2.5" /> Instant
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] backdrop-blur-md border border-[#C9A227]/25 shadow-[0_0_10px_#C9A22720,inset_0_1px_0_#F7D77430]"
+      style={{
+        background: 'linear-gradient(135deg, rgba(247,215,116,0.12), rgba(201,162,39,0.08))',
+        color: '#F0D060',
+        textShadow: '0 0 8px rgba(247,215,116,0.25)',
+      }}
+    >
+      <Icon className="w-2.5 h-2.5 opacity-90" />
+      {text}
     </span>
   );
 };
