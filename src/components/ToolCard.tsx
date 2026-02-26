@@ -133,11 +133,11 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             }}
           />
 
-          <div className="relative p-6 flex flex-col gap-4">
+          <div className="relative p-4 sm:p-6 flex flex-col gap-3 sm:gap-4">
             {/* Logo + badge */}
             <div className="flex items-start justify-between">
               <div
-                className="h-14 w-14 rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative"
+                className="h-11 w-11 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative"
                 style={{ background: 'hsl(210 50% 50% / 0.06)' }}
               >
                 {/* Icon glow on hover */}
@@ -149,7 +149,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   <img
                     src={logoUrl!}
                     alt={`${tool.name} logo`}
-                    className={`h-8 w-8 object-contain drop-shadow-sm transition-opacity duration-300 relative z-10 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    className={`h-6 w-6 sm:h-8 sm:w-8 object-contain drop-shadow-sm transition-opacity duration-300 relative z-10 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
                     onError={() => {
                       if (!logoError) { setLogoError(true); setLogoLoaded(false); }
@@ -169,7 +169,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
             {/* Title + meta */}
             <div className="space-y-1">
-              <h3 className="text-foreground font-bold tracking-tight leading-tight text-lg heading-glow">
+              <h3 className="text-foreground font-bold tracking-tight leading-tight text-base sm:text-lg heading-glow">
                 {tool.name}
               </h3>
               <p className="text-xs text-muted-foreground">
@@ -181,7 +181,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             <div className="flex items-baseline">
               {price && price > 0 ? (
                 <>
-                  <span className="text-xl font-bold text-[hsl(185_80%_60%)]" style={{ textShadow: '0 0 14px hsl(185 80% 55% / 0.25)' }}>${price}</span>
+                  <span className="text-lg sm:text-xl font-bold text-[hsl(185_80%_60%)]" style={{ textShadow: '0 0 14px hsl(185 80% 55% / 0.25)' }}>${price}</span>
                   <span className="text-xs text-foreground/40 ml-1">
                     /{t('store.perMonth')}
                   </span>
@@ -195,7 +195,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
             {/* CTA — gradient with neon glow */}
             <button
-              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(210_100%_55%/0.35)]"
+              className="mt-1 sm:mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(210_100%_55%/0.35)]"
               style={{
                 background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
                 boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
