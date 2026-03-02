@@ -350,7 +350,49 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     {item}
                   </div>
                 ))}
-              </div>
+               </div>
+
+              {/* Wallet Credit Toggle */}
+              {walletBalance > 0 && selectedPlan && !plansLoading && (
+                <div
+                  className="p-4 rounded-2xl border border-white/10"
+                  style={{ background: 'linear-gradient(135deg, rgba(232,212,139,0.08) 0%, rgba(232,212,139,0.02) 100%)' }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'rgba(232,212,139,0.15)' }}>
+                        <Wallet className="w-5 h-5" style={{ color: '#E8D48B' }} />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-white text-sm">Apply Wallet Credit</h4>
+                        <p className="text-xs text-muted-foreground">
+                          Available: <span style={{ color: '#E8D48B' }} className="font-semibold">${walletBalance.toFixed(2)}</span>
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={applyWalletCredit}
+                      onCheckedChange={setApplyWalletCredit}
+                    />
+                  </div>
+                  {applyWalletCredit && walletDeduction > 0 && (
+                    <div className="mt-3 pt-3 border-t border-white/10 space-y-1">
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>Original price</span>
+                        <span>${displayPrice?.toFixed(2)}/mo</span>
+                      </div>
+                      <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
+                        <span>Wallet credit</span>
+                        <span>-${walletDeduction.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between text-sm font-semibold text-white">
+                        <span>You pay</span>
+                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `$${effectivePrice?.toFixed(2)}/mo`}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Form */}
               {!plansLoading && selectedPlan && (
