@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock } from 'lucide-react';
+import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap } from 'lucide-react';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -302,17 +302,26 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                 </button>
               </div>
             ) : (
-              <button
-                className="mt-1 sm:mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(210_100%_55%/0.35)]"
-                style={{
-                  background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
-                  boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
-                }}
-                onClick={() => setCheckoutOpen(true)}
-              >
-                {t('store.buyNow')}
-                <Sparkles className="w-3.5 h-3.5" />
-              </button>
+              <div className="mt-1 sm:mt-2 space-y-1">
+                <button
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(210_100%_55%/0.35)]"
+                  style={{
+                    background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
+                    boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
+                  }}
+                  onClick={() => setCheckoutOpen(true)}
+                >
+                  {t('store.buyNow')}
+                  <Sparkles className="w-3.5 h-3.5" />
+                </button>
+                <a
+                  href={`/academy?tool_id=${tool.tool_id}`}
+                  className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <GraduationCap className="w-3 h-3" />
+                  Learn This Tool
+                </a>
+              </div>
             )}
           </div>
         </div>

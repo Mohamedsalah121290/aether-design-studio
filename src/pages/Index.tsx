@@ -30,11 +30,10 @@ import logo from '@/assets/logo.png';
    ══════════════════════════════════════════════════════════════ */
 
 const trustBadges = [
-  { icon: Shield, label: 'GDPR-First Privacy' },
-  { icon: Lock, label: 'Secure Checkout' },
   { icon: UserCheck, label: 'No Password Sharing' },
-  { icon: Calendar, label: 'Monthly Flexible Access' },
-  { icon: Globe, label: 'Global Access' },
+  { icon: Lock, label: 'Secure Checkout' },
+  { icon: Calendar, label: 'Monthly Only' },
+  { icon: Shield, label: 'Privacy-First' },
 ];
 
 const audiences = [
@@ -274,16 +273,16 @@ const Index = () => {
                 className="text-4xl sm:text-5xl md:text-7xl font-display font-black mb-4 md:mb-6 leading-[0.95] tracking-tight"
                 style={{ textShadow: '0 0 60px hsl(var(--primary) / 0.5), 0 4px 20px rgba(0,0,0,0.8)' }}
               >
-                <span className="text-white drop-shadow-2xl">Powerful AI.</span>
+  <span className="text-white drop-shadow-2xl">AI Tools Made Simple</span>
                 <br />
                 <span className="gradient-text" style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))' }}>
-                  Made Safe.
+                  For Students & Creators
                 </span>
               </motion.h1>
 
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="mb-8 md:mb-10">
                 <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed px-6 py-4 rounded-2xl backdrop-blur-md border border-white/10" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%)' }}>
-                  AI DEALS was built to give students and creators secure, affordable access to premium AI tools — without complexity, without risk, and without password sharing.
+                  Safe, affordable, guided access to premium AI tools — no complexity, no risk, no password sharing.
                 </p>
               </motion.div>
 
@@ -291,14 +290,14 @@ const Index = () => {
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
                 <Button variant="hero" size="xl" className="group min-w-[200px] shadow-2xl" asChild>
                   <a href="/store">
-                    Explore Tools
+                    Explore Store
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </a>
                 </Button>
                 <Button variant="heroOutline" size="xl" className="backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
-                  <a href="#how-it-works">
-                    How It Works
-                    <ChevronDown className="ml-2 w-5 h-5" />
+                  <a href="/academy">
+                    Enter Academy
+                    <GraduationCap className="ml-2 w-5 h-5" />
                   </a>
                 </Button>
               </motion.div>
@@ -710,10 +709,10 @@ const Index = () => {
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-4xl font-display font-bold mb-3">
-                  Stay Ahead of AI — <span className="gradient-text">Responsibly</span>
+                  Weekly AI Tips <span className="gradient-text">for Students & Creators</span>
                 </h2>
                 <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-md mx-auto mb-8">
-                  Weekly insights for students and creators across Europe and beyond. Safe tools, study hacks, and responsible AI practices.
+                  Stay ahead with curated AI tips, study hacks, and creator workflows — delivered weekly.
                 </p>
                 <form
                   onSubmit={newsletter.subscribe}
@@ -729,7 +728,7 @@ const Index = () => {
                   />
                   <Button variant="hero" size="lg" type="submit" disabled={newsletter.loading} className="h-12 rounded-xl whitespace-nowrap">
                     <Mail className="w-4 h-4 mr-2" />
-                    {newsletter.loading ? 'Joining...' : 'Join 1,200+ Learners'}
+                    {newsletter.loading ? 'Joining...' : 'Join the List'}
                   </Button>
                 </form>
               </motion.div>

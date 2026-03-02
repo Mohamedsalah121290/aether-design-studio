@@ -704,12 +704,10 @@ const Dashboard = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
               className="glass-strong rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4 flex-wrap">
-                {deliveredCount > 0 && (
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
-                    <span className="text-sm font-medium text-green-400">{deliveredCount} Delivered</span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-sm font-medium text-green-400">{deliveredCount} Active Tools</span>
+                </div>
                 {pendingCount > 0 && (
                   <div className="flex items-center gap-2">
                     <Clock className="w-3 h-3 text-orange-400" />
@@ -717,16 +715,24 @@ const Dashboard = () => {
                   </div>
                 )}
                 <div className="h-4 w-px bg-border hidden sm:block" />
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Shield className="w-4 h-4" />
-                  <span>Secure access</span>
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-sm font-medium text-primary">{academySubs.length} Academy Courses</span>
                 </div>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Package className="w-4 h-4 text-primary" />
-                <span><strong>{orders.length}</strong> subscriptions</span>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Shield className="w-4 h-4" />
+                <span>Secure access</span>
               </div>
             </motion.div>
+
+            {pendingCount > 0 && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+                className="mt-3 p-3 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center gap-2">
+                <Clock className="w-4 h-4 text-orange-400 flex-shrink-0" />
+                <p className="text-sm text-orange-300">Activation in progress — you'll see login details here once ready.</p>
+              </motion.div>
+            )}
           </div>
         </section>
 

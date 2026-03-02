@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Play, BookOpen, Clock, Star, CheckCircle, Lock,
@@ -50,6 +51,8 @@ const categoryThumbnails: Record<string, string> = {
 const Academy = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const toolIdParam = searchParams.get('tool_id');
   const [courses, setCourses] = useState<Course[]>([]);
   const [lessons, setLessons] = useState<Record<string, Lesson[]>>({});
   const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(new Set());
@@ -59,6 +62,7 @@ const Academy = () => {
   const [loading, setLoading] = useState(true);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [playingLesson, setPlayingLesson] = useState<Lesson | null>(null);
+  const courseRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
@@ -77,7 +81,20 @@ const Academy = () => {
         supabase.from('lessons').select('*').order('sort_order'),
       ]);
 
-      if (coursesRes.data) setCourses(coursesRes.data as Course[]);
+      const loadedCourses = (coursesRes.data || []) as Course[];
+      setCourses(loadedCourses);
+
+      // Deep link: auto-open course matching tool_id param
+      if (toolIdParam && loadedCourses.length > 0) {
+        const match = loadedCourses.find(c => c.tool_id === toolIdParam);
+        if (match) {
+          setSelectedCourse(match);
+          // Scroll to course card after render
+          setTimeout(() => {
+            courseRefs.current[match.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
+        }
+      }
       
       if (lessonsRes.data) {
         const grouped: Record<string, Lesson[]> = {};
@@ -276,10 +293,11 @@ const Academy = () => {
                 return (
                   <motion.div
                     key={course.id}
+                    ref={el => { courseRefs.current[course.id] = el; }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className="group relative bg-card rounded-2xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 cursor-pointer"
+                    className={`group relative bg-card rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 cursor-pointer ${toolIdParam && course.tool_id === toolIdParam ? 'border-primary/60 ring-2 ring-primary/20' : 'border-border/50 hover:border-primary/50'}`}
                     onClick={() => setSelectedCourse(course)}
                   >
                     <div className="aspect-video relative overflow-hidden">
