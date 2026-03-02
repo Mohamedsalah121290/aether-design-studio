@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, DollarSign, Users, Layers, Trash2, Download, Upload } from 'lucide-react';
+import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, DollarSign, Users, Layers, Trash2, Download, Upload, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -47,7 +47,13 @@ interface ToolPlan {
   is_active: boolean;
 }
 
-type Tab = 'orders' | 'tools' | 'plans' | 'stats';
+interface Subscriber {
+  id: string;
+  email: string;
+  created_at: string;
+}
+
+type Tab = 'orders' | 'tools' | 'plans' | 'subscribers' | 'stats';
 
 const AdminPage = () => {
   const { t } = useTranslation();
@@ -56,6 +62,7 @@ const AdminPage = () => {
   const [credentials, setCredentials] = useState<Record<string, OrderCredential>>({});
   const [tools, setTools] = useState<Tool[]>([]);
   const [plans, setPlans] = useState<ToolPlan[]>([]);
+  const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
   
@@ -84,6 +91,7 @@ const AdminPage = () => {
     fetchOrders();
     fetchTools();
     fetchPlans();
+    fetchSubscribers();
   }, []);
 
   const fetchOrders = async () => {
@@ -314,6 +322,30 @@ const AdminPage = () => {
     fetchTools();
   };
 
+  const fetchSubscribers = async () => {
+    const { data } = await supabase.from('subscribers').select('*').order('created_at', { ascending: false });
+    if (data) setSubscribers(data as Subscriber[]);
+  };
+
+  const deleteSubscriber = async (sub: Subscriber) => {
+    if (!confirm(`Remove subscriber ${sub.email}?`)) return;
+    await supabase.from('subscribers').delete().eq('id', sub.id);
+    fetchSubscribers();
+  };
+
+  const exportSubscribersCSV = () => {
+    const headers = ['email', 'subscribed_at'];
+    const rows = subscribers.map(s => [s.email, new Date(s.created_at).toISOString()]);
+    const csv = [headers.join(','), ...rows.map(r => r.map(v => `"${v}"`).join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `subscribers-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const pendingOrders = orders.filter(o => o.status === 'pending');
   const activeOrders = orders.filter(o => o.status === 'active');
   const totalRevenue = orders.filter(o => o.status === 'active').length; // Placeholder
@@ -322,6 +354,7 @@ const AdminPage = () => {
     { id: 'orders', label: 'Orders', icon: <Package className="w-4 h-4" /> },
     { id: 'tools', label: 'Tools', icon: <Edit2 className="w-4 h-4" /> },
     { id: 'plans', label: 'Plans', icon: <Layers className="w-4 h-4" /> },
+    { id: 'subscribers', label: 'Subscribers', icon: <Mail className="w-4 h-4" /> },
     { id: 'stats', label: 'Stats', icon: <BarChart3 className="w-4 h-4" /> },
   ];
 
@@ -644,6 +677,48 @@ const AdminPage = () => {
                       </div>
                     ));
                   })()}
+                </div>
+              )}
+
+              {/* SUBSCRIBERS TAB */}
+              {activeTab === 'subscribers' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-bold flex items-center gap-2">
+                      <Mail className="w-5 h-5 text-primary" />
+                      Newsletter Subscribers ({subscribers.length})
+                    </h2>
+                    <Button variant="outline" size="sm" onClick={exportSubscribersCSV} className="gap-2">
+                      <Download className="w-4 h-4" /> Export CSV
+                    </Button>
+                  </div>
+                  <div className="glass-strong rounded-2xl overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-border">
+                          <th className="text-left p-4 font-semibold">Email</th>
+                          <th className="text-left p-4 font-semibold">Subscribed</th>
+                          <th className="text-right p-4 font-semibold">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {subscribers.map(sub => (
+                          <tr key={sub.id} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                            <td className="p-4">{sub.email}</td>
+                            <td className="p-4 text-muted-foreground">{new Date(sub.created_at).toLocaleDateString()}</td>
+                            <td className="p-4 text-right">
+                              <Button variant="ghost" size="sm" onClick={() => deleteSubscriber(sub)} className="text-destructive hover:text-destructive">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    {subscribers.length === 0 && (
+                      <p className="text-center text-muted-foreground py-8">No subscribers yet</p>
+                    )}
+                  </div>
                 </div>
               )}
 
