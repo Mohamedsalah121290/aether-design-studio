@@ -80,6 +80,7 @@ const AdminPage = () => {
 
   // Subscriber search state
   const [subscriberSearch, setSubscriberSearch] = useState('');
+  const [toolStatusFilter, setToolStatusFilter] = useState<'all' | 'active' | 'coming_soon' | 'paused'>('all');
 
   // Import preview state
   const [importPreview, setImportPreview] = useState<{
@@ -461,9 +462,25 @@ const AdminPage = () => {
               {/* TOOLS TAB */}
               {activeTab === 'tools' && (
                 <div>
-                  <div className="flex justify-between items-center mb-6">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
                     <h2 className="text-xl font-bold">Tools Management</h2>
-                    <Button onClick={() => openToolForm()} size="sm"><Plus className="w-4 h-4 mr-2" /> Add Tool</Button>
+                    <div className="flex items-center gap-2">
+                      {/* Quick status filters */}
+                      {(['all', 'active', 'coming_soon', 'paused'] as const).map(f => (
+                        <button
+                          key={f}
+                          onClick={() => setToolStatusFilter(f)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                            toolStatusFilter === f
+                              ? 'bg-primary text-primary-foreground'
+                              : 'bg-muted/30 text-muted-foreground hover:bg-muted/50'
+                          }`}
+                        >
+                          {f === 'all' ? 'All' : f === 'active' ? 'Active' : f === 'coming_soon' ? 'Coming Soon' : 'Paused'}
+                        </button>
+                      ))}
+                      <Button onClick={() => openToolForm()} size="sm"><Plus className="w-4 h-4 mr-2" /> Add Tool</Button>
+                    </div>
                   </div>
 
                   {showToolForm && (
@@ -501,7 +518,7 @@ const AdminPage = () => {
                   )}
 
                   <div className="grid gap-3">
-                    {tools.map(tool => {
+                    {tools.filter(t => toolStatusFilter === 'all' || t.status === toolStatusFilter).map(tool => {
                       const statusColor = tool.status === 'coming_soon' ? 'bg-yellow-400' : tool.status === 'paused' ? 'bg-gray-400' : 'bg-green-400';
                       const statusLabel = tool.status === 'coming_soon' ? 'Coming Soon' : tool.status === 'paused' ? 'Paused' : 'Active';
                       return (
