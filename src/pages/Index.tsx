@@ -291,14 +291,14 @@ const Index = () => {
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
                 <Button variant="hero" size="xl" className="group min-w-[200px] shadow-2xl" asChild>
                   <a href="/store">
-                    Explore Tools
+                    Explore Store
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </a>
                 </Button>
                 <Button variant="heroOutline" size="xl" className="backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
-                  <a href="#how-it-works">
-                    How It Works
-                    <ChevronDown className="ml-2 w-5 h-5" />
+                  <a href="/academy">
+                    Enter Academy
+                    <GraduationCap className="ml-2 w-5 h-5" />
                   </a>
                 </Button>
               </motion.div>
