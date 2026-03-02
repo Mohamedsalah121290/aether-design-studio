@@ -51,6 +51,8 @@ const categoryThumbnails: Record<string, string> = {
 const Academy = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const toolIdParam = searchParams.get('tool_id');
   const [courses, setCourses] = useState<Course[]>([]);
   const [lessons, setLessons] = useState<Record<string, Lesson[]>>({});
   const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(new Set());
@@ -60,6 +62,7 @@ const Academy = () => {
   const [loading, setLoading] = useState(true);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [playingLesson, setPlayingLesson] = useState<Lesson | null>(null);
+  const courseRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
