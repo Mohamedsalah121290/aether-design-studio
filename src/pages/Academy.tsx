@@ -81,7 +81,20 @@ const Academy = () => {
         supabase.from('lessons').select('*').order('sort_order'),
       ]);
 
-      if (coursesRes.data) setCourses(coursesRes.data as Course[]);
+      const loadedCourses = (coursesRes.data || []) as Course[];
+      setCourses(loadedCourses);
+
+      // Deep link: auto-open course matching tool_id param
+      if (toolIdParam && loadedCourses.length > 0) {
+        const match = loadedCourses.find(c => c.tool_id === toolIdParam);
+        if (match) {
+          setSelectedCourse(match);
+          // Scroll to course card after render
+          setTimeout(() => {
+            courseRefs.current[match.id]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
+        }
+      }
       
       if (lessonsRes.data) {
         const grouped: Record<string, Lesson[]> = {};
