@@ -142,9 +142,18 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
           toolId: tool.id,
           planId: selectedPlan.plan_id,
           customerEmail: email || buyerEmail,
+          useWalletCredit: applyWalletCredit && walletBalance > 0,
         },
       });
       if (error) throw error;
+
+      // If fully paid by wallet, show success
+      if (data?.paidByWallet) {
+        setIsSuccess(true);
+        onSuccess?.();
+        return;
+      }
+
       if (!data?.url) throw new Error('No checkout URL returned');
       if (buyerEmail && !user) localStorage.setItem('buyer_email', buyerEmail);
       window.location.href = data.url;
