@@ -55,10 +55,12 @@ const Navbar = () => {
   const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
 
   const navLinks = [
-    { href: '/#store', label: t('nav.store') },
+    { href: '/', label: 'Home' },
+    { href: '/store', label: t('nav.store') },
     { href: '/academy', label: t('nav.academy') },
-    { href: '/content-hub', label: t('nav.contentHub') },
-    { href: '/resources', label: t('nav.tutorials') }
+    { href: '/blog', label: 'Blog' },
+    { href: '/about', label: t('nav.about') },
+    { href: '/contact', label: 'Contact' },
   ];
 
   return (

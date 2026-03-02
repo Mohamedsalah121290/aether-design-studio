@@ -7,11 +7,15 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
+import StorePage from "./pages/StorePage";
 import ResourcesPage from "./pages/ResourcesPage";
 import Dashboard from "./pages/Dashboard";
 import ContentHub from "./pages/ContentHub";
+import BlogPage from "./pages/BlogPage";
 import ArticlePage from "./pages/ArticlePage";
 import Academy from "./pages/Academy";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 import AdminPage from "./pages/AdminPage";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -45,10 +49,14 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Index />} />
-      <Route path="/resources" element={<ResourcesPage />} />
+      <Route path="/store" element={<StorePage />} />
+      <Route path="/resources" element={<Navigate to="/blog" replace />} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/content-hub" element={<ContentHub />} />
+      <Route path="/content-hub" element={<Navigate to="/blog" replace />} />
+      <Route path="/blog" element={<BlogPage />} />
       <Route path="/academy" element={<Academy />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/contact" element={<ContactPage />} />
       <Route path="/article/:articleId" element={<ArticlePage />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
