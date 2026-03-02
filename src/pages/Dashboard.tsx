@@ -106,8 +106,91 @@ interface DecryptedCredentials {
   password: string;
 }
 
+// Report Issue Modal
+const ReportIssueModal = ({ open, onClose, toolName }: { open: boolean; onClose: () => void; toolName: string }) => {
+  const [issueType, setIssueType] = useState('');
+  const [details, setDetails] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const issueTypes = [
+    { value: 'activation_delay', label: 'Activation delay' },
+    { value: 'login_issue', label: 'Login issue' },
+    { value: 'tool_outage', label: 'Tool outage / not working' },
+  ];
+
+  const handleSubmit = () => {
+    if (!issueType) return;
+    setSubmitting(true);
+    setTimeout(() => {
+      setSubmitting(false);
+      onClose();
+      setIssueType('');
+      setDetails('');
+      toast({ title: 'Issue reported', description: "We'll get back to you within 24 hours." });
+    }, 800);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={v => !v && onClose()}>
+      <DialogContent className="max-w-md border-white/10" style={{ background: 'linear-gradient(180deg, hsl(222 47% 12%) 0%, hsl(222 47% 8%) 100%)' }}>
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-white">
+            <AlertTriangle className="w-5 h-5 text-orange-400" />
+            Report an Issue — {toolName}
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground text-sm">
+            Select the type of issue and we'll resolve it within 24 hours.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 mt-2">
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">Issue type</p>
+            <div className="grid gap-2">
+              {issueTypes.map(type => (
+                <button
+                  key={type.value}
+                  onClick={() => setIssueType(type.value)}
+                  className={`px-4 py-3 rounded-xl text-sm text-left transition-all ${
+                    issueType === type.value
+                      ? 'bg-primary/20 border border-primary/40 text-foreground'
+                      : 'bg-white/5 border border-white/10 text-muted-foreground hover:bg-white/10'
+                  }`}
+                >
+                  {type.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">Additional details (optional)</p>
+            <textarea
+              value={details}
+              onChange={e => setDetails(e.target.value)}
+              placeholder="Describe what happened..."
+              rows={3}
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
+            />
+          </div>
+          <Button
+            onClick={handleSubmit}
+            disabled={!issueType || submitting}
+            className="w-full"
+            style={{ background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)' }}
+          >
+            {submitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <MessageCircle className="w-4 h-4 mr-2" />}
+            Submit Report
+          </Button>
+          <p className="text-xs text-muted-foreground text-center">
+            Typical response time: within 24 hours. <a href="/terms#refunds" className="text-primary hover:underline">View refund policy</a>
+          </p>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 // Subscription Card Component
-const SubscriptionCard = ({ order, index, onViewCredentials }: { order: Order; index: number; credentials?: OrderCredential; onViewCredentials: (order: Order) => void }) => {
+const SubscriptionCard = ({ order, index, onViewCredentials, onReportIssue }: { order: Order; index: number; onViewCredentials: (order: Order) => void; onReportIssue: (order: Order) => void }) => {
   const toolId = order.tool?.tool_id || '';
   const logoUrl = toolLogos[toolId];
   const colors = toolColors[toolId] || { primary: '#a855f7', glow: '270 85% 65%' };
@@ -198,34 +281,53 @@ const SubscriptionCard = ({ order, index, onViewCredentials }: { order: Order; i
           )}
 
           {isDelivered && order.activated_at && (
-            <div className="mb-4 flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="mb-3 flex items-center gap-2 text-xs text-muted-foreground">
               <CheckCircle className="w-3.5 h-3.5 text-green-400" />
               Activated: {new Date(order.activated_at).toLocaleDateString()}
             </div>
           )}
 
-          {/* Action button */}
-          {isDelivered ? (
-            <Button
-              className="w-full relative overflow-hidden group/btn"
-              style={{
-                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
-              }}
-              onClick={() => onViewCredentials(order)}
-            >
-              <span className="relative z-10 flex items-center gap-2 font-semibold text-white">
-                <Eye className="w-4 h-4" />
-                View Credentials
-              </span>
-            </Button>
-          ) : (
-            <div className="w-full py-3 rounded-xl bg-muted/50 border border-border text-center">
-              <span className="text-sm text-muted-foreground flex items-center justify-center gap-2">
-                <Lock className="w-3.5 h-3.5" />
-                Waiting for activation
-              </span>
-            </div>
+          {/* Policy link for delivered */}
+          {isDelivered && (
+            <a href="/terms#refunds" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mb-3">
+              <Shield className="w-3 h-3" />
+              Downtime & refund policy
+            </a>
           )}
+
+          {/* Action buttons */}
+          <div className="space-y-2">
+            {isDelivered ? (
+              <Button
+                className="w-full relative overflow-hidden group/btn"
+                style={{
+                  background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.primary}cc 100%)`,
+                }}
+                onClick={() => onViewCredentials(order)}
+              >
+                <span className="relative z-10 flex items-center gap-2 font-semibold text-white">
+                  <Eye className="w-4 h-4" />
+                  View Credentials
+                </span>
+              </Button>
+            ) : (
+              <div className="w-full py-3 rounded-xl bg-muted/50 border border-border text-center">
+                <span className="text-sm text-muted-foreground flex items-center justify-center gap-2">
+                  <Lock className="w-3.5 h-3.5" />
+                  Waiting for activation
+                </span>
+              </div>
+            )}
+
+            {/* Report Issue */}
+            <button
+              onClick={() => onReportIssue(order)}
+              className="w-full flex items-center justify-center gap-1.5 py-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <AlertTriangle className="w-3 h-3" />
+              Report an issue
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
