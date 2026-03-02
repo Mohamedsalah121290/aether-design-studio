@@ -11,7 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Clock, CheckCircle, Mail, Gift, Sparkles, Shield as ShieldIcon, Zap, ShieldCheck, UserCheck } from 'lucide-react';
+import { Loader2, Clock, CheckCircle, Mail, Gift, Sparkles, Shield as ShieldIcon, Zap, ShieldCheck, UserCheck, Wallet } from 'lucide-react';
 const Shield = ShieldIcon;
 import { Switch } from '@/components/ui/switch';
 import { z } from 'zod';
