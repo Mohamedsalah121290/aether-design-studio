@@ -215,27 +215,51 @@ const Index = () => {
                 <img src={logo} alt="AI DEALS" className="h-20 md:h-28 w-auto mx-auto drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]" />
               </motion.div>
 
+              {/* Tagline */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-lg sm:text-xl md:text-2xl font-display font-semibold tracking-[0.15em] uppercase mb-6"
+                style={{ 
+                  color: 'rgba(232,212,139,0.9)',
+                  textShadow: '0 0 30px rgba(232,212,139,0.3)',
+                  letterSpacing: '0.15em',
+                }}
+              >
+                Access. Learn. Scale.
+              </motion.p>
+
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-4xl sm:text-5xl md:text-7xl font-display font-black mb-5 md:mb-7 leading-[0.95] tracking-tight"
+                className="text-3xl sm:text-4xl md:text-6xl font-display font-black mb-5 md:mb-7 leading-[1.05] tracking-tight"
                 style={{ textShadow: '0 0 60px hsl(var(--primary) / 0.5), 0 4px 20px rgba(0,0,0,0.8)' }}
               >
-                <span className="text-white drop-shadow-2xl">Stop Watching AI.</span>
-                <br />
                 <span className="gradient-text" style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))' }}>
-                  Start Using It.
+                  Exclusive Access Pricing.
                 </span>
+                <br />
+                <span className="text-white drop-shadow-2xl">Every Month.</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-8 md:mb-10"
+                className="text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-3"
               >
-                Get instant access to powerful AI tools — without the chaos, confusion, or overpriced subscriptions.
+                Premium software access — at platform-level pricing you won't find elsewhere.
+              </motion.p>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="text-xs sm:text-sm text-white/40 max-w-lg mx-auto mb-8 md:mb-10 tracking-wide"
+              >
+                Member-based pricing. Structured access. Simplified.
               </motion.p>
 
               {/* CTAs */}
