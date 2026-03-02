@@ -196,6 +196,9 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const usePills = plans.length > 1 && plans.length <= 4;
   const useDropdown = plans.length > 4;
 
+  const walletDeduction = applyWalletCredit && displayPrice ? Math.min(walletBalance, displayPrice) : 0;
+  const effectivePrice = displayPrice ? Math.max(0, displayPrice - walletDeduction) : displayPrice;
+
   return (
     <>
     <Sheet open={open} onOpenChange={handleClose}>
