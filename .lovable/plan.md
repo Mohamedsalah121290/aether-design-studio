@@ -1,53 +1,65 @@
+# Simplify Checkout: Remove Password Field
 
+## What's Changing
 
-# Redesign Product Card (ToolCard)
+You mentioned that **you** (the admin) will provide the customer with email and password credentials -- the customer only needs to give their email so you can send them the activation details. This means we no longer need to collect a password from the customer during checkout.
 
-## What changes
-Simplify and modernize the ToolCard component to match a clean, dark card aesthetic with a vibrant blue "Buy Now" button.
+## Changes
 
-## Visual Changes
+### 1. Remove Password Field from Checkout Form
 
-### Card Container
-- Background: Solid dark (`#121212`) instead of complex layered gradients
-- Border: 1px subtle border (`rgba(255,255,255,0.08)`) with a faint inner glow via `inset` box-shadow
-- Corner radius: `14px` (between the requested 12-16px)
-- Padding: Uniform `24px`
-- Shadow: Subtle outer shadow (`0 4px 24px rgba(0,0,0,0.5)`)
-- Remove the bloom glow layer, gradient border wrapper, and inner highlight overlay -- simplify to a single card `div`
+- Remove the password input field from `CheckoutDialog.tsx`
+- Remove password-related validation logic and error state
+- The `subscribe_for_them` delivery type will now behave like `email_only` -- only asking for the customer's email
 
-### Hover Effect
-- Keep the subtle lift (`hover:-translate-y-1`) but remove `hover:scale-[1.02]` for a cleaner feel
-- Border brightens slightly on hover (`rgba(255,255,255,0.14)`)
+### 2. Update Checkout Edge Function
 
-### Logo
-- Keep the 56px logo capsule in the top-left, retain existing fallback logic
-- Simplify the capsule background to a flat `rgba(255,255,255,0.06)` with border
+- Remove `customerPassword` parameter handling from `create-checkout/index.ts`
+- Remove the credential encryption and storage logic during checkout (the admin will handle credentials manually)
 
-### Typography
-- Title: White (`#fff`), bold, `text-lg` -- keep as-is
-- Subtitle ("Monthly Access"): `text-xs`, muted grey (`#888`) -- simplify from HSL
-- Price: Bump to `text-xl font-bold text-white` for prominence
+### 3. Clean Up Validation
 
-### Buy Now Button
-- Solid vibrant blue background: `#007BFF`
-- White bold text, centered with Sparkles icon
-- Rounded corners: `rounded-xl` (matching card style)
-- Hover: Lighter blue (`#339DFF`) + subtle glow shadow (`0 0 16px rgba(0,123,255,0.4)`)
-- Remove the current transparent gradient background
+- Remove `passwordSchema` from `CheckoutDialog.tsx`
+- Remove password from `checkoutSchema` in `src/lib/validations.ts`
 
-### Tier Badge
-- Keep existing badge styling (already clean and fits the new design)
+### 4. Clean Up Store Credentials Function
+
+- Keep `store-credentials` edge function available for admin use if needed, but it will no longer be called during checkout
+
+---
 
 ## Technical Details
 
-### File: `src/components/ToolCard.tsx`
-- Flatten the card structure from 4 nested divs (outer wrapper > bloom > border wrapper > inner card) down to 2 (outer wrapper > card)
-- Remove the bloom glow div and the gradient border wrapper div
-- Remove the inner top highlight div
-- Replace inline `style` objects with Tailwind classes where possible, falling back to `style` only for the card background/shadow
-- Update the button from transparent gradient to solid `bg-[#007BFF] hover:bg-[#339DFF]` with a hover glow shadow
-- Update price text to `text-xl font-bold text-white`
-- Update subtitle color to `text-[#888]`
+**Files to modify:**
 
-No other files need changes.
+- `src/components/CheckoutDialog.tsx` -- Remove password state, password input field, password validation, and stop sending `customerPassword` to the edge function
+- `supabase/functions/create-checkout/index.ts` -- Remove `customerPassword` from request body parsing and remove the credential encryption/storage block
+- `src/lib/validations.ts` -- Remove `passwordSchema` export (optional cleanup)
 
+**No database changes needed** -- the `order_credentials` table stays for admin manual use.
+
+Yes this plan is correct. Please add these final requirements:
+
+1) UI/Copy
+
+- Rename the email input label to “Activation Email”
+
+- Helper text: “We’ll send activation + login details to this email.”
+
+- Add trust note: “Secure — we never ask for your passwords.”
+
+- Add badge: “Account Provided” + “Activation within 4 hours”
+
+2) Data
+
+- Ensure create-checkout still stores customerEmail in the order as customer_email (or activation_email)
+
+- Confirm order creation works end-to-end and returns order_id
+
+3) Messaging
+
+- Keep delivery type name internally, but display it to customers as:
+
+  “We Provide The Account For You” (not “email_only” wording)
+
+Deliver: updated CheckoutDialog, create-checkout function, validations, and a success screen message.
