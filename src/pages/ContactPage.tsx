@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Clock, MessageSquare, Send, HelpCircle } from 'lucide-react';
+import { Mail, Clock, MessageSquare, Send, HelpCircle, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,7 +21,6 @@ const ContactPage = () => {
       return;
     }
     setSending(true);
-    // Client-side mailto fallback
     const mailtoLink = `mailto:aideals.be@gmail.com?subject=${encodeURIComponent(form.subject || 'Contact from AI DEALS')}&body=${encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)}`;
     window.open(mailtoLink, '_blank');
     toast({ title: '✉️ Message Ready', description: 'Your email client has been opened with the message.' });
@@ -29,8 +28,9 @@ const ContactPage = () => {
   };
 
   const supportInfo = [
-    { icon: Mail, title: 'Email Us', value: 'aideals.be@gmail.com', description: 'We respond within 24 hours' },
-    { icon: Clock, title: 'Support Hours', value: '24/7 Available', description: 'We\'re always here to help' },
+    { icon: Mail, title: 'Email Us', value: 'aideals.be@gmail.com', description: 'Direct line to our team' },
+    { icon: Clock, title: 'Response Time', value: 'Within 24 Hours', description: 'We guarantee a reply within one business day' },
+    { icon: Shield, title: 'Privacy First', value: 'GDPR Compliant', description: 'Your data is never shared or sold' },
     { icon: HelpCircle, title: 'FAQ', value: 'Common Questions', description: 'Check our store FAQ section', href: '/store' },
   ];
 
@@ -55,7 +55,8 @@ const ContactPage = () => {
               Contact <span className="gradient-text">Us</span>
             </h1>
             <p className="text-muted-foreground text-lg">
-              Have a question, suggestion, or need help? We'd love to hear from you.
+              Have a question, suggestion, or need help? We'd love to hear from you. 
+              We respond to every message <span className="text-primary font-medium">within 24 hours</span>.
             </p>
           </motion.div>
         </section>
@@ -128,7 +129,7 @@ const ContactPage = () => {
               transition={{ delay: 0.3 }}
               className="md:col-span-2 space-y-4"
             >
-              {supportInfo.map((info, i) => {
+              {supportInfo.map((info) => {
                 const Icon = info.icon;
                 const Wrapper = info.href ? 'a' : 'div';
                 return (
