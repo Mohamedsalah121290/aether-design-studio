@@ -709,10 +709,10 @@ const Index = () => {
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-4xl font-display font-bold mb-3">
-                  Stay Ahead of AI — <span className="gradient-text">Responsibly</span>
+                  Weekly AI Tips <span className="gradient-text">for Students & Creators</span>
                 </h2>
                 <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-md mx-auto mb-8">
-                  Weekly insights for students and creators across Europe and beyond. Safe tools, study hacks, and responsible AI practices.
+                  Stay ahead with curated AI tips, study hacks, and creator workflows — delivered weekly.
                 </p>
                 <form
                   onSubmit={newsletter.subscribe}
