@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, DollarSign, Users, Layers, Trash2, Download, Upload, Mail } from 'lucide-react';
+import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, DollarSign, Users, Layers, Trash2, Download, Upload, Mail, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -76,6 +76,9 @@ const AdminPage = () => {
   const [showPlanForm, setShowPlanForm] = useState(false);
   const [planFilter, setPlanFilter] = useState('');
   const [planForm, setPlanForm] = useState({ tool_id: '', plan_id: '', plan_name: '', monthly_price: '' as string, delivery_type: 'provide_account', activation_time: 6, is_active: true });
+
+  // Subscriber search state
+  const [subscriberSearch, setSubscriberSearch] = useState('');
 
   // Import preview state
   const [importPreview, setImportPreview] = useState<{
@@ -683,42 +686,66 @@ const AdminPage = () => {
               {/* SUBSCRIBERS TAB */}
               {activeTab === 'subscribers' && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <h2 className="text-xl font-bold flex items-center gap-2">
                       <Mail className="w-5 h-5 text-primary" />
                       Newsletter Subscribers ({subscribers.length})
                     </h2>
-                    <Button variant="outline" size="sm" onClick={exportSubscribersCSV} className="gap-2">
-                      <Download className="w-4 h-4" /> Export CSV
-                    </Button>
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <div className="relative flex-1 sm:flex-initial">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <input
+                          type="text"
+                          value={subscriberSearch}
+                          onChange={e => setSubscriberSearch(e.target.value)}
+                          placeholder="Search emails…"
+                          className="w-full sm:w-56 pl-9 pr-8 py-2 rounded-lg bg-muted/30 border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+                        />
+                        {subscriberSearch && (
+                          <button onClick={() => setSubscriberSearch('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
+                      <Button variant="outline" size="sm" onClick={exportSubscribersCSV} className="gap-2 shrink-0">
+                        <Download className="w-4 h-4" /> Export CSV
+                      </Button>
+                    </div>
                   </div>
-                  <div className="glass-strong rounded-2xl overflow-hidden">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-border">
-                          <th className="text-left p-4 font-semibold">Email</th>
-                          <th className="text-left p-4 font-semibold">Subscribed</th>
-                          <th className="text-right p-4 font-semibold">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {subscribers.map(sub => (
-                          <tr key={sub.id} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                            <td className="p-4">{sub.email}</td>
-                            <td className="p-4 text-muted-foreground">{new Date(sub.created_at).toLocaleDateString()}</td>
-                            <td className="p-4 text-right">
-                              <Button variant="ghost" size="sm" onClick={() => deleteSubscriber(sub)} className="text-destructive hover:text-destructive">
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    {subscribers.length === 0 && (
-                      <p className="text-center text-muted-foreground py-8">No subscribers yet</p>
-                    )}
-                  </div>
+                  {(() => {
+                    const filtered = subscribers.filter(s => s.email.toLowerCase().includes(subscriberSearch.toLowerCase()));
+                    return (
+                      <div className="glass-strong rounded-2xl overflow-hidden">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="border-b border-border">
+                              <th className="text-left p-4 font-semibold">Email</th>
+                              <th className="text-left p-4 font-semibold">Subscribed</th>
+                              <th className="text-right p-4 font-semibold">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filtered.map(sub => (
+                              <tr key={sub.id} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                                <td className="p-4">{sub.email}</td>
+                                <td className="p-4 text-muted-foreground">{new Date(sub.created_at).toLocaleDateString()}</td>
+                                <td className="p-4 text-right">
+                                  <Button variant="ghost" size="sm" onClick={() => deleteSubscriber(sub)} className="text-destructive hover:text-destructive">
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        {filtered.length === 0 && (
+                          <p className="text-center text-muted-foreground py-8">
+                            {subscriberSearch ? 'No matching subscribers' : 'No subscribers yet'}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 
