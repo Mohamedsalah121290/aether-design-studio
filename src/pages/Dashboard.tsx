@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { 
   ExternalLink, Search, X,
   Settings, Bell, User, Shield, Zap, Clock, Loader2,
-  CreditCard, RefreshCw, CalendarDays
+  CreditCard, RefreshCw, CalendarDays, CheckCircle, Sparkles, ArrowRight, ShieldCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
@@ -417,6 +417,8 @@ const Dashboard = () => {
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const [subsLoading, setSubsLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [showSuccessScreen, setShowSuccessScreen] = useState(false);
+  const [latestOrder, setLatestOrder] = useState<Order | null>(null);
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
@@ -425,11 +427,9 @@ const Dashboard = () => {
     // Handle checkout result query params
     const checkoutStatus = searchParams.get('checkout');
     if (checkoutStatus === 'success') {
-      toast({
-        title: t('checkout.successTitle', { defaultValue: '✅ Payment Successful!' }),
-        description: t('checkout.successMessage', { defaultValue: 'Your order is being processed. Activation will happen within the specified time.' }),
-      });
+      setShowSuccessScreen(true);
       searchParams.delete('checkout');
+      searchParams.delete('session_id');
       setSearchParams(searchParams, { replace: true });
     } else if (checkoutStatus === 'cancelled') {
       toast({
@@ -512,6 +512,10 @@ const Dashboard = () => {
       }));
       
       setOrders(mappedOrders);
+      // Set the latest order for the success screen
+      if (mappedOrders.length > 0 && showSuccessScreen) {
+        setLatestOrder(mappedOrders[0]);
+      }
     } catch (error) {
       console.error('Error fetching orders:', error);
     } finally {
@@ -568,6 +572,179 @@ const Dashboard = () => {
       <Navbar />
       
       <main className="pt-24 pb-12">
+        {/* Checkout Success Overlay */}
+        <AnimatePresence>
+          {showSuccessScreen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              style={{ background: 'radial-gradient(ellipse at center, hsl(222 47% 8% / 0.97) 0%, hsl(222 47% 4% / 0.99) 100%)' }}
+            >
+              <motion.div
+                initial={{ scale: 0.8, y: 40 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 20 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                className="relative w-full max-w-md rounded-3xl border border-white/10 overflow-hidden"
+                style={{
+                  background: 'linear-gradient(180deg, hsl(222 47% 14% / 0.95) 0%, hsl(222 47% 8% / 0.98) 100%)',
+                  boxShadow: '0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
+                }}
+              >
+                {/* Success glow */}
+                <div className="absolute top-0 left-0 right-0 h-40 pointer-events-none"
+                  style={{ background: 'radial-gradient(ellipse at top center, rgba(34,197,94,0.15) 0%, transparent 70%)' }}
+                />
+
+                <div className="relative p-8 text-center">
+                  {/* Animated check icon */}
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', delay: 0.2, damping: 15 }}
+                    className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(34,197,94,0.2) 0%, rgba(16,185,129,0.1) 100%)',
+                      boxShadow: '0 10px 40px rgba(34,197,94,0.3), inset 0 0 30px rgba(34,197,94,0.1)',
+                      border: '2px solid rgba(34,197,94,0.3)',
+                    }}
+                  >
+                    <CheckCircle className="w-10 h-10 text-green-400" />
+                  </motion.div>
+
+                  <motion.h2
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-2xl font-display font-bold text-white mb-2"
+                  >
+                    Payment Successful!
+                  </motion.h2>
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-muted-foreground mb-6"
+                  >
+                    Your order has been placed and is being processed.
+                  </motion.p>
+
+                  {/* Order details card */}
+                  {latestOrder && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="rounded-2xl p-4 mb-6 text-left border border-white/10"
+                      style={{ background: 'rgba(255,255,255,0.03)' }}
+                    >
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary/20">
+                          {toolLogos[latestOrder.tool?.tool_id || ''] ? (
+                            <img src={toolLogos[latestOrder.tool?.tool_id || '']} alt="" className="w-6 h-6 object-contain" />
+                          ) : (
+                            <Sparkles className="w-5 h-5 text-primary" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-white font-semibold text-sm">{latestOrder.tool?.name || 'AI Tool'}</p>
+                          <p className="text-xs text-muted-foreground">${latestOrder.tool?.price}/mo</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Status</span>
+                          <span className="text-orange-400 font-medium flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5" />
+                            Pending Activation
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Order ID</span>
+                          <span className="text-white font-mono text-xs">{latestOrder.id.slice(0, 8)}...</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Activation</span>
+                          <span className="text-green-400 font-medium">Within 4 hours</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Timeline */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6 }}
+                    className="rounded-2xl p-4 mb-6 text-left border border-white/10"
+                    style={{ background: 'rgba(255,255,255,0.03)' }}
+                  >
+                    <p className="text-xs font-semibold text-white mb-3 flex items-center gap-2">
+                      <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+                      What happens next
+                    </p>
+                    <div className="space-y-3">
+                      {[
+                        { label: 'Payment confirmed', done: true },
+                        { label: 'Account being set up', done: false, active: true },
+                        { label: 'Login details sent to your email', done: false },
+                        { label: 'Start using your tool', done: false },
+                      ].map((step, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
+                            step.done ? 'bg-green-500/20' : step.active ? 'bg-primary/20 ring-2 ring-primary/30' : 'bg-white/5'
+                          }`}>
+                            {step.done ? (
+                              <CheckCircle className="w-3 h-3 text-green-400" />
+                            ) : step.active ? (
+                              <motion.div
+                                animate={{ scale: [1, 1.3, 1] }}
+                                transition={{ duration: 1.5, repeat: Infinity }}
+                                className="w-2 h-2 rounded-full bg-primary"
+                              />
+                            ) : (
+                              <div className="w-2 h-2 rounded-full bg-white/20" />
+                            )}
+                          </div>
+                          <span className={`text-sm ${step.done ? 'text-green-400' : step.active ? 'text-white' : 'text-muted-foreground'}`}>
+                            {step.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* CTA */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                  >
+                    <Button
+                      onClick={() => setShowSuccessScreen(false)}
+                      className="w-full h-12 rounded-2xl font-semibold text-base"
+                      style={{
+                        background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)',
+                        boxShadow: '0 8px 30px hsl(var(--primary) / 0.3)',
+                      }}
+                    >
+                      <span className="flex items-center gap-2">
+                        Go to My Vault
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </Button>
+                    <p className="text-xs text-muted-foreground mt-3">
+                      We'll email you when your account is ready.
+                    </p>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         {/* Header */}
         <section className="relative py-8 overflow-hidden">
           <div className="absolute inset-0 mesh-gradient opacity-20" />
