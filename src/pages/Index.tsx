@@ -30,11 +30,10 @@ import logo from '@/assets/logo.png';
    ══════════════════════════════════════════════════════════════ */
 
 const trustBadges = [
-  { icon: Shield, label: 'GDPR-First Privacy' },
-  { icon: Lock, label: 'Secure Checkout' },
   { icon: UserCheck, label: 'No Password Sharing' },
-  { icon: Calendar, label: 'Monthly Flexible Access' },
-  { icon: Globe, label: 'Global Access' },
+  { icon: Lock, label: 'Secure Checkout' },
+  { icon: Calendar, label: 'Monthly Only' },
+  { icon: Shield, label: 'Privacy-First' },
 ];
 
 const audiences = [
