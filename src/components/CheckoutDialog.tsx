@@ -45,7 +45,11 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const [selectedPlan, setSelectedPlan] = useState<ToolPlan | null>(null);
   const [plansLoading, setPlansLoading] = useState(false);
 
+  // Guard: prevent checkout for non-active tools
+  const isNonActive = tool && tool.status && tool.status !== 'active';
+
   useEffect(() => {
+    if (isNonActive && open) { onOpenChange(false); return; }
     if (open && tool) fetchPlans(tool.tool_id);
   }, [open, tool]);
 

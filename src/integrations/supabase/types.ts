@@ -314,6 +314,7 @@ export type Database = {
           logo_url: string | null
           name: string
           price: number
+          status: string
           tool_id: string
           updated_at: string
         }
@@ -328,6 +329,7 @@ export type Database = {
           logo_url?: string | null
           name: string
           price: number
+          status?: string
           tool_id: string
           updated_at?: string
         }
@@ -342,6 +344,7 @@ export type Database = {
           logo_url?: string | null
           name?: string
           price?: number
+          status?: string
           tool_id?: string
           updated_at?: string
         }

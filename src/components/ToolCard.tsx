@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Zap, Crown, TrendingUp } from 'lucide-react';
+import { Sparkles, Zap, Crown, TrendingUp, Bell } from 'lucide-react';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 /* ── Category labels ──────────────────────────────────────────── */
 const CATEGORY_LABELS: Record<string, string> = {
@@ -35,6 +37,7 @@ export interface Tool {
   category: string;
   logo_url?: string | null;
   starting_price?: number | null;
+  status?: string;
 }
 
 export type CardTier = 'featured' | 'popular' | 'standard';
@@ -86,21 +89,46 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const [logoError, setLogoError] = useState(false);
   const [fallbackAttempted, setFallbackAttempted] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [notifyEmail, setNotifyEmail] = useState('');
+  const [showNotifyInput, setShowNotifyInput] = useState(false);
+  const [notifyLoading, setNotifyLoading] = useState(false);
 
   const logoUrl = logoError && !fallbackAttempted ? `/logos/${tool.tool_id}.svg` : tool.logo_url;
   const showLogo = logoUrl && !(logoError && fallbackAttempted);
   const price = tool.starting_price;
   const categoryLabel = CATEGORY_LABELS[tool.category] || tool.category;
+  const isComingSoon = tool.status === 'coming_soon';
+  const isPaused = tool.status === 'paused';
+
+  const handleNotifyMe = async () => {
+    const trimmed = notifyEmail.trim().toLowerCase();
+    if (!trimmed) { setShowNotifyInput(true); return; }
+    setNotifyLoading(true);
+    try {
+      const { error } = await supabase.from('subscribers' as any).insert({ email: trimmed } as any);
+      if (error) {
+        if (error.code === '23505') toast.info("You're already on the list!");
+        else toast.error('Something went wrong.');
+      } else {
+        toast.success(`We'll notify you when ${tool.name} is available!`);
+        setNotifyEmail('');
+        setShowNotifyInput(false);
+      }
+    } catch { toast.error('Something went wrong.'); }
+    finally { setNotifyLoading(false); }
+  };
 
   return (
     <>
       {/* Outer wrapper — overflow-visible for bloom */}
-      <div className="group relative overflow-visible transition-all duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.03]">
+      <div className={`group relative overflow-visible transition-all duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.03] ${isComingSoon ? 'opacity-75' : ''} ${isPaused ? 'opacity-50 pointer-events-none' : ''}`}>
         {/* Bloom glow behind card */}
         <div
           className="pointer-events-none absolute -inset-3 rounded-[22px] opacity-0 group-hover:opacity-100 transition-opacity duration-600 blur-2xl"
           style={{
-            background: 'radial-gradient(ellipse at center, hsl(210 100% 55% / 0.12), hsl(270 60% 50% / 0.08), transparent 70%)',
+            background: isComingSoon
+              ? 'radial-gradient(ellipse at center, hsl(45 100% 55% / 0.10), hsl(35 80% 50% / 0.06), transparent 70%)'
+              : 'radial-gradient(ellipse at center, hsl(210 100% 55% / 0.12), hsl(270 60% 50% / 0.08), transparent 70%)',
           }}
         />
 
@@ -117,7 +145,9 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             className="pointer-events-none absolute inset-0 rounded-[16px] opacity-40 group-hover:opacity-100 transition-opacity duration-500"
             style={{
               padding: '1px',
-              background: 'linear-gradient(160deg, hsl(210 100% 60% / 0.25), hsl(270 60% 55% / 0.18), hsl(210 80% 50% / 0.08))',
+              background: isComingSoon
+                ? 'linear-gradient(160deg, hsl(45 100% 60% / 0.25), hsl(35 80% 50% / 0.18), hsl(45 80% 50% / 0.08))'
+                : 'linear-gradient(160deg, hsl(210 100% 60% / 0.25), hsl(270 60% 55% / 0.18), hsl(210 80% 50% / 0.08))',
               mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
               WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
               maskComposite: 'exclude',
@@ -140,7 +170,6 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                 className="h-11 w-11 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative"
                 style={{ background: 'hsl(210 50% 50% / 0.06)' }}
               >
-                {/* Icon glow on hover */}
                 <div
                   className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ boxShadow: '0 0 16px hsl(210 100% 55% / 0.12)' }}
@@ -164,7 +193,19 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   </span>
                 )}
               </div>
-              <TierBadge tier={tier} />
+              <div className="flex items-center gap-1.5">
+                {isComingSoon && (
+                  <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-[4px] text-[10px] font-semibold uppercase tracking-wider bg-yellow-500/15 border border-yellow-500/30 text-yellow-300">
+                    Coming Soon
+                  </span>
+                )}
+                {isPaused && (
+                  <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-[4px] text-[10px] font-semibold uppercase tracking-wider bg-gray-500/15 border border-gray-500/30 text-gray-400">
+                    Unavailable
+                  </span>
+                )}
+                {!isComingSoon && !isPaused && <TierBadge tier={tier} />}
+              </div>
             </div>
 
             {/* Title + meta */}
@@ -177,39 +218,64 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               </p>
             </div>
 
-            {/* Price — bright cyan */}
+            {/* Price */}
             <div className="flex items-baseline">
               {price && price > 0 ? (
                 <>
                   <span className="text-lg sm:text-xl font-bold text-[hsl(185_80%_60%)]" style={{ textShadow: '0 0 14px hsl(185 80% 55% / 0.25)' }}>${price}</span>
-                  <span className="text-xs text-foreground/40 ml-1">
-                    /{t('store.perMonth')}
-                  </span>
+                  <span className="text-xs text-foreground/40 ml-1">/{t('store.perMonth')}</span>
                 </>
               ) : (
-                <span className="text-xs text-muted-foreground">
-                  {t('store.contactForPrice', 'Contact for pricing')}
-                </span>
+                <span className="text-xs text-muted-foreground">{t('store.contactForPrice', 'Contact for pricing')}</span>
               )}
             </div>
 
-            {/* CTA — gradient with neon glow */}
-            <button
-              className="mt-1 sm:mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(210_100%_55%/0.35)]"
-              style={{
-                background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
-                boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
-              }}
-              onClick={() => setCheckoutOpen(true)}
-            >
-              {t('store.buyNow')}
-              <Sparkles className="w-3.5 h-3.5" />
-            </button>
+            {/* CTA */}
+            {isComingSoon ? (
+              <div className="mt-1 sm:mt-2 space-y-2">
+                {showNotifyInput && (
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={notifyEmail}
+                    onChange={e => setNotifyEmail(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleNotifyMe()}
+                    className="w-full px-3 py-2 rounded-lg bg-white/5 border border-yellow-500/20 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-yellow-500/40"
+                  />
+                )}
+                <button
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(45_100%_55%/0.25)]"
+                  style={{
+                    background: 'linear-gradient(135deg, hsl(45 100% 50%), hsl(35 90% 45%))',
+                    boxShadow: '0 0 14px hsl(45 100% 50% / 0.15)',
+                  }}
+                  onClick={handleNotifyMe}
+                  disabled={notifyLoading}
+                >
+                  {notifyLoading ? 'Saving...' : 'Notify Me'}
+                  <Bell className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <button
+                className="mt-1 sm:mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(210_100%_55%/0.35)]"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
+                  boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
+                }}
+                onClick={() => setCheckoutOpen(true)}
+              >
+                {t('store.buyNow')}
+                <Sparkles className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      <CheckoutDialog tool={tool} open={checkoutOpen} onOpenChange={setCheckoutOpen} />
+      {!isComingSoon && !isPaused && (
+        <CheckoutDialog tool={tool} open={checkoutOpen} onOpenChange={setCheckoutOpen} />
+      )}
     </>
   );
 };
