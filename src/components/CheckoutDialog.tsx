@@ -48,6 +48,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const [plans, setPlans] = useState<ToolPlan[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<ToolPlan | null>(null);
   const [plansLoading, setPlansLoading] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [applyWalletCredit, setApplyWalletCredit] = useState(false);
 
   // Guard: prevent checkout for non-active tools
   const isNonActive = tool && tool.status && tool.status !== 'active';
