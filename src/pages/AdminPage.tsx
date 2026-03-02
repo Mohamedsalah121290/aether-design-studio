@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 import Navbar from '@/components/Navbar';
 
 interface OrderCredential {
@@ -254,22 +255,29 @@ const AdminPage = () => {
 
 
   const updateStatus = async (orderId: string, status: string) => {
-    await supabase.from('orders').update({ 
+    const { error } = await supabase.from('orders').update({ 
       status, activated_at: status === 'active' ? new Date().toISOString() : null 
     }).eq('id', orderId);
+
+    if (error) {
+      toast({ title: 'Error', description: 'Failed to update order status', variant: 'destructive' });
+      return;
+    }
 
     // Send activation email when admin activates an order
     if (status === 'active') {
       try {
-        const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-        await fetch(`https://${projectId}.supabase.co/functions/v1/order-notification`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'order_activated', orderId }),
+        const { error: notifError } = await supabase.functions.invoke('order-notification', {
+          body: { type: 'order_activated', orderId },
         });
+        if (notifError) throw notifError;
+        toast({ title: '✅ Order Activated', description: 'Activation email sent to the customer.' });
       } catch (err) {
         console.error('Failed to send activation email:', err);
+        toast({ title: '⚠️ Order Activated', description: 'Order activated but email failed to send.', variant: 'destructive' });
       }
+    } else {
+      toast({ title: 'Order Updated', description: `Status changed to ${status}` });
     }
 
     fetchOrders();
