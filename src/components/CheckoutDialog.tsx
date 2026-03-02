@@ -394,7 +394,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   </Button>
 
                   {/* Cancel anytime + activation time */}
-                  <div className="space-y-2 text-center">
+                  <div className="space-y-3 text-center">
                     <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                       <Clock className="w-4 h-4" />
                       <span>{t('checkout.activationTime', { hours: activationTime })}</span>
@@ -402,6 +402,17 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     <p className="text-xs text-muted-foreground flex items-center justify-center gap-1.5">
                       <Zap className="w-3 h-3" />
                       Cancel anytime. No commitment.
+                    </p>
+                    {/* Trust microcopy */}
+                    <p className="text-xs text-primary/80 flex items-center justify-center gap-1.5">
+                      <ShieldCheck className="w-3 h-3" />
+                      If a tool goes down, we fix it or extend — fair and simple.
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      By purchasing, you agree to our{' '}
+                      <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Terms</a>
+                      {' & '}
+                      <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Privacy Policy</a>.
                     </p>
                   </div>
                 </form>
