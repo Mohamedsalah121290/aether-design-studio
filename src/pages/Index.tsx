@@ -283,7 +283,7 @@ const Index = () => {
 
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="mb-8 md:mb-10">
                 <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed px-6 py-4 rounded-2xl backdrop-blur-md border border-white/10" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%)' }}>
-                  AI DEALS was built to give students and creators secure, affordable access to premium AI tools — without complexity, without risk, and without password sharing.
+                  Safe, affordable, guided access to premium AI tools — no complexity, no risk, no password sharing.
                 </p>
               </motion.div>
 
