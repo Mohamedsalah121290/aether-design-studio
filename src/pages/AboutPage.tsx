@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, Users, GraduationCap, Heart, Target, Sparkles, BookOpen, Lock, Globe, Award, Eye } from 'lucide-react';
+import { Shield, Users, GraduationCap, Heart, Target, Sparkles, Lock, Globe, Award, Eye, BookOpen, CheckCircle } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -7,44 +7,51 @@ import ScrollToTop from '@/components/ScrollToTop';
 const values = [
   {
     icon: Shield,
-    title: 'Safety First',
-    description: 'Every tool we offer is vetted for age-appropriateness and GDPR compliance. Your child\'s safety is non-negotiable.',
+    title: 'Privacy',
+    description: 'We follow GDPR principles and minimise data collection. Your data is never sold or shared.',
   },
   {
-    icon: Globe,
-    title: 'European Focus',
-    description: 'Built for the European market with EU data privacy standards, local support, and respect for regional regulations.',
-  },
-  {
-    icon: Lock,
-    title: 'No Password Sharing',
-    description: 'We handle all accounts internally. Students never need to share credit cards or personal credentials.',
+    icon: BookOpen,
+    title: 'Education',
+    description: 'We believe AI should be learned, not just used. Our Academy promotes responsible, effective usage.',
   },
   {
     icon: Heart,
-    title: 'Affordable Access',
+    title: 'Accessibility',
     description: 'Premium AI tools at student-friendly prices. No bundles, no commitments — pay only for what you need.',
   },
   {
     icon: Eye,
-    title: 'Full Transparency',
-    description: 'No hidden fees, no data selling. We believe trust is built through radical transparency.',
+    title: 'Transparency',
+    description: 'No hidden fees, no data selling, no overclaiming. We build trust through radical honesty.',
+  },
+  {
+    icon: Globe,
+    title: 'Global Reach',
+    description: 'Built in Europe with European standards — but designed to be accessible to anyone, anywhere in the world.',
   },
   {
     icon: Award,
-    title: 'Verified Tools Only',
+    title: 'Quality',
     description: 'Every tool in our catalog is manually reviewed for quality, safety, and educational value.',
   },
 ];
 
 const stats = [
   { value: '50+', label: 'Verified AI Tools' },
-  { value: '24/7', label: 'Support Available' },
-  { value: '100%', label: 'GDPR Compliant' },
+  { value: '24/7', label: 'Global Support' },
+  { value: '100%', label: 'GDPR Principled' },
   { value: '1-6h', label: 'Activation Time' },
 ];
 
 const AboutPage = () => {
+  const fadeUp = {
+    initial: { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.5 },
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -65,12 +72,12 @@ const AboutPage = () => {
             <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 leading-tight">
               Making AI{' '}
               <span className="gradient-text">Safe & Accessible</span>{' '}
-              for Europe
+              for Everyone
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              AI DEALS was born from a simple idea: European students and creators deserve access to the world's best AI tools 
+              AI DEALS was born from a simple idea: students and creators everywhere deserve access to the world's best AI tools 
               without the complexity, risk, or cost that usually comes with it. We're building the trust-first AI platform 
-              that Europe needs.
+              that Europe — and the world — needs.
             </p>
           </motion.div>
         </section>
@@ -114,26 +121,28 @@ const AboutPage = () => {
                 <div>
                   <p className="text-muted-foreground leading-relaxed mb-4">
                     As a student in Europe, I saw how powerful AI tools could be — but also how inaccessible they were. 
-                    Credit card requirements, complex setups, and privacy concerns kept most students locked out.
+                    Credit card requirements, complex setups, and privacy concerns kept most students locked out. 
+                    The tools existed, but the access didn't.
                   </p>
                   <p className="text-muted-foreground leading-relaxed">
                     I built AI DEALS to change that. A platform where anyone — students, creators, parents — 
                     can access verified AI tools with zero friction, full privacy, and transparent pricing. 
-                    No compromises on trust.
+                    Built in Europe, but designed for the world. No compromises on trust.
                   </p>
                 </div>
                 <div className="space-y-4">
                   {[
                     'Started as a student project in Brussels',
-                    'Focus on European privacy and trust',
+                    'Focus on European privacy and global accessibility',
                     'Manually curated, verified tool catalog',
                     'Community-driven with real user feedback',
+                    'No overclaiming — radical transparency',
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                        <div className="w-2 h-2 rounded-full bg-primary" />
+                        <CheckCircle className="w-3.5 h-3.5 text-primary" />
                       </div>
-                      <span className="text-foreground">{item}</span>
+                      <span className="text-foreground text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -156,14 +165,45 @@ const AboutPage = () => {
               </div>
               <div>
                 <h2 className="text-2xl md:text-3xl font-display font-bold mb-4">Our Mission</h2>
-                <p className="text-muted-foreground leading-relaxed text-lg">
-                  We exist to bridge the gap between premium AI technology and European accessibility. 
+                <p className="text-muted-foreground leading-relaxed text-lg mb-4">
+                  We exist to bridge the gap between premium AI technology and global accessibility. 
                   By handling accounts, security, and billing ourselves, we remove every barrier that 
-                  keeps students and creators from using tools like ChatGPT, Midjourney, Claude, and more. 
-                  Parents trust us because we prioritize safety. Students love us because we make it easy. 
-                  Creators choose us because we respect their privacy.
+                  keeps students and creators from using tools like ChatGPT, Midjourney, Claude, and more.
+                </p>
+                <p className="text-muted-foreground leading-relaxed text-lg">
+                  Parents trust us because we prioritise safety. Students love us because we make it easy. 
+                  Creators choose us because we respect their privacy. And everyone benefits from our 
+                  commitment to European standards — no matter where they are in the world.
                 </p>
               </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Why Europe Matters + Why Global Matters */}
+        <section className="container mx-auto px-4 mb-24">
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            <motion.div {...fadeUp} className="glass rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">🇪🇺</span>
+                <h3 className="text-xl font-display font-bold">Why Europe Matters</h3>
+              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Europe has set the global standard for digital privacy with GDPR. We built AI DEALS with 
+                these principles at the core — not as an afterthought, but as a foundation. 
+                Data minimisation, purpose limitation, and user control are baked into everything we do.
+              </p>
+            </motion.div>
+            <motion.div {...fadeUp} className="glass rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <Globe className="w-6 h-6 text-primary" />
+                <h3 className="text-xl font-display font-bold">Why Global Access Matters</h3>
+              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                AI shouldn't be limited by geography. While we hold ourselves to European privacy standards, 
+                our platform is open to students and creators worldwide. Premium AI access should be a 
+                right — not a privilege limited by location or budget.
+              </p>
             </motion.div>
           </div>
         </section>
@@ -171,16 +211,14 @@ const AboutPage = () => {
         {/* Trust Values */}
         <section className="container mx-auto px-4 mb-24">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            {...fadeUp}
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-              Our <span className="gradient-text">Trust Values</span>
+              Our <span className="gradient-text">Values</span>
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Built from the ground up with European standards, student safety, and parent peace of mind at the core.
+              Everything we build is guided by these principles.
             </p>
           </motion.div>
 
