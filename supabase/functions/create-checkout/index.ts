@@ -25,9 +25,9 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { toolId, customerEmail } = await req.json();
+    const { toolId, customerEmail, useWalletCredit } = await req.json();
     if (!toolId) throw new Error("toolId is required");
-    logStep("Request parsed", { toolId });
+    logStep("Request parsed", { toolId, useWalletCredit });
 
     // Get user if authenticated
     const authHeader = req.headers.get("Authorization");
@@ -110,6 +110,23 @@ serve(async (req) => {
       logStep("Price created", { priceId });
     }
 
+    // Handle wallet credit deduction
+    let walletDeduction = 0;
+    let currentWalletBalance = 0;
+    if (useWalletCredit && user?.id) {
+      const { data: walletData } = await supabaseAdmin
+        .from("wallets")
+        .select("balance")
+        .eq("user_id", user.id)
+        .single();
+
+      if (walletData && Number(walletData.balance) > 0) {
+        currentWalletBalance = Number(walletData.balance);
+        walletDeduction = Math.min(currentWalletBalance, tool.price);
+        logStep("Wallet credit available", { balance: currentWalletBalance, deduction: walletDeduction });
+      }
+    }
+
     const origin = req.headers.get("origin") || "https://id-preview--92b6864c-4966-485c-b321-32542f78bf88.lovable.app";
 
     // Store metadata for webhook/success handling
@@ -120,6 +137,50 @@ serve(async (req) => {
     };
     if (user?.id) metadata.user_id = user.id;
     if (customerEmail) metadata.customer_email = customerEmail;
+    if (walletDeduction > 0) metadata.wallet_deduction = walletDeduction.toString();
+
+    // If wallet covers full amount, create order directly without Stripe
+    if (walletDeduction >= tool.price && user?.id) {
+      logStep("Full payment by wallet credit", { deduction: walletDeduction });
+
+      // Deduct from wallet
+      await supabaseAdmin
+        .from("wallets")
+        .update({ balance: Number((currentWalletBalance - walletDeduction).toFixed(2)) })
+        .eq("user_id", user.id);
+
+      // Log wallet transaction
+      await supabaseAdmin.from("wallet_transactions").insert({
+        user_id: user.id,
+        amount: walletDeduction,
+        type: "debit",
+        reason: "checkout_deduction",
+      });
+
+      // Create order as paid
+      const orderData = {
+        tool_id: tool.id,
+        buyer_email: email,
+        user_id: user.id,
+        status: "pending_activation",
+        payment_status: "paid",
+        customer_data: customerEmail ? { email: customerEmail } : {},
+        activation_deadline: new Date(Date.now() + tool.activation_time * 3600000).toISOString(),
+      };
+
+      const { data: order } = await supabaseAdmin
+        .from("orders")
+        .insert(orderData)
+        .select("id")
+        .single();
+
+      logStep("Order created via wallet", { orderId: order?.id });
+
+      return new Response(JSON.stringify({ paidByWallet: true, orderId: order?.id }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
