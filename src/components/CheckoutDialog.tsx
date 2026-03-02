@@ -172,6 +172,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
       setAgreedToTerms(false);
       setSelectedPlan(null);
       setPlans([]);
+      setApplyWalletCredit(false);
+      setWalletBalance(0);
       onOpenChange(false);
     }
   };
