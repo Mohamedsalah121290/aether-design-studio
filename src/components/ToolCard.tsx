@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap, Shield } from 'lucide-react';
+import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap, Shield, Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -253,7 +254,19 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             <div className="space-y-0.5">
               {price && price > 0 ? (
                 <>
-                  <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#E8D48B' }}>Member Price</p>
+                  <div className="flex items-center gap-1">
+                    <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#E8D48B' }}>Member Price</p>
+                    <TooltipProvider delayDuration={200}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="w-3 h-3 cursor-help opacity-50 hover:opacity-100 transition-opacity" style={{ color: '#E8D48B' }} />
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="max-w-[220px] text-xs leading-relaxed bg-background border border-white/10 text-foreground">
+                          AI DEALS uses a managed access model — structured platform-level pricing exclusive to members.
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <div className="flex items-baseline">
                     <span className="text-lg sm:text-xl font-bold text-[hsl(185_80%_60%)]" style={{ textShadow: '0 0 14px hsl(185 80% 55% / 0.25)' }}>${price}</span>
                     <span className="text-xs text-foreground/40 ml-1">/{t('store.perMonth')}</span>
