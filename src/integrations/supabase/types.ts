@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      academy_subscriptions: {
+        Row: {
+          course_id: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          started_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_subscriptions_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courses: {
         Row: {
           category: string
@@ -26,6 +67,7 @@ export type Database = {
           price: number | null
           thumbnail_url: string | null
           title: string
+          tool_id: string | null
           updated_at: string
         }
         Insert: {
@@ -39,6 +81,7 @@ export type Database = {
           price?: number | null
           thumbnail_url?: string | null
           title: string
+          tool_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -52,6 +95,7 @@ export type Database = {
           price?: number | null
           thumbnail_url?: string | null
           title?: string
+          tool_id?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -64,6 +108,7 @@ export type Database = {
           created_at: string
           duration: string | null
           id: string
+          is_preview: boolean
           sort_order: number
           title: string
         }
@@ -74,6 +119,7 @@ export type Database = {
           created_at?: string
           duration?: string | null
           id?: string
+          is_preview?: boolean
           sort_order?: number
           title: string
         }
@@ -84,6 +130,7 @@ export type Database = {
           created_at?: string
           duration?: string | null
           id?: string
+          is_preview?: boolean
           sort_order?: number
           title?: string
         }
@@ -103,6 +150,7 @@ export type Database = {
           email: string
           encrypted_password: string
           id: string
+          notes: string | null
           order_id: string
         }
         Insert: {
@@ -110,6 +158,7 @@ export type Database = {
           email: string
           encrypted_password: string
           id?: string
+          notes?: string | null
           order_id: string
         }
         Update: {
@@ -117,6 +166,7 @@ export type Database = {
           email?: string
           encrypted_password?: string
           id?: string
+          notes?: string | null
           order_id?: string
         }
         Relationships: [

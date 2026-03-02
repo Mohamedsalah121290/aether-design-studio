@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Play, BookOpen, Clock, Star, CheckCircle, 
-  ChevronRight, Sparkles, GraduationCap, Filter, Loader2
+  Play, BookOpen, Clock, Star, CheckCircle, Lock,
+  ChevronRight, Sparkles, GraduationCap, Filter, Loader2, Eye
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,8 +11,10 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/compone
 import { Progress } from '@/components/ui/progress';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { AuthDialog } from '@/components/AuthDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from '@/hooks/use-toast';
 
 interface Course {
   id: string;
@@ -21,7 +23,9 @@ interface Course {
   category: string;
   difficulty: string;
   is_free: boolean;
+  price: number | null;
   thumbnail_url: string | null;
+  tool_id: string | null;
 }
 
 interface Lesson {
@@ -32,9 +36,9 @@ interface Lesson {
   content_type: string;
   content_url: string | null;
   duration: string | null;
+  is_preview: boolean;
 }
 
-// Category thumbnails
 const categoryThumbnails: Record<string, string> = {
   'ai-text': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop',
   'ai-image': 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&h=400&fit=crop',
@@ -49,9 +53,12 @@ const Academy = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [lessons, setLessons] = useState<Record<string, Lesson[]>>({});
   const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(new Set());
+  const [subscribedCourseIds, setSubscribedCourseIds] = useState<Set<string>>(new Set());
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [playingLesson, setPlayingLesson] = useState<Lesson | null>(null);
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
@@ -70,25 +77,27 @@ const Academy = () => {
         supabase.from('lessons').select('*').order('sort_order'),
       ]);
 
-      if (coursesRes.data) setCourses(coursesRes.data);
+      if (coursesRes.data) setCourses(coursesRes.data as Course[]);
       
       if (lessonsRes.data) {
         const grouped: Record<string, Lesson[]> = {};
-        lessonsRes.data.forEach((l) => {
+        (lessonsRes.data as Lesson[]).forEach((l) => {
           if (!grouped[l.course_id]) grouped[l.course_id] = [];
           grouped[l.course_id].push(l);
         });
         setLessons(grouped);
       }
 
-      // Fetch user progress if logged in
       if (user) {
-        const { data: progress } = await supabase
-          .from('user_progress')
-          .select('lesson_id')
-          .eq('completed', true);
-        if (progress) {
-          setCompletedLessonIds(new Set(progress.map((p) => p.lesson_id)));
+        const [progressRes, subsRes] = await Promise.all([
+          supabase.from('user_progress').select('lesson_id').eq('completed', true),
+          supabase.from('academy_subscriptions').select('course_id').eq('status', 'active'),
+        ]);
+        if (progressRes.data) {
+          setCompletedLessonIds(new Set(progressRes.data.map((p: any) => p.lesson_id)));
+        }
+        if (subsRes.data) {
+          setSubscribedCourseIds(new Set(subsRes.data.map((s: any) => s.course_id)));
         }
       }
     } catch (err) {
@@ -103,7 +112,6 @@ const Academy = () => {
     const isCompleted = completedLessonIds.has(lessonId);
 
     if (isCompleted) {
-      // Remove progress
       await supabase.from('user_progress').delete().eq('lesson_id', lessonId).eq('user_id', user.id);
       setCompletedLessonIds((prev) => {
         const next = new Set(prev);
@@ -111,7 +119,6 @@ const Academy = () => {
         return next;
       });
     } else {
-      // Add progress
       await supabase.from('user_progress').upsert({
         user_id: user.id,
         lesson_id: lessonId,
@@ -120,6 +127,47 @@ const Academy = () => {
       });
       setCompletedLessonIds((prev) => new Set(prev).add(lessonId));
     }
+  };
+
+  const handleSubscribeCourse = async (course: Course) => {
+    if (!user) {
+      setShowAuthDialog(true);
+      return;
+    }
+    
+    if (course.is_free) {
+      // Free course: auto-subscribe
+      const { error } = await supabase.from('academy_subscriptions').insert({
+        user_id: user.id,
+        course_id: course.id,
+        status: 'active',
+      });
+      if (!error) {
+        setSubscribedCourseIds(prev => new Set(prev).add(course.id));
+        toast({ title: 'Enrolled!', description: `You now have full access to ${course.title}.` });
+      }
+    } else {
+      // Paid course: for now show a toast (Stripe integration can be added later)
+      toast({ title: 'Coming Soon', description: 'Paid course checkout will be available soon.' });
+    }
+  };
+
+  const canAccessLesson = (course: Course, lesson: Lesson): boolean => {
+    if (lesson.is_preview) return true;
+    if (course.is_free && user) return true;
+    return subscribedCourseIds.has(course.id);
+  };
+
+  const handleLessonClick = (course: Course, lesson: Lesson) => {
+    if (!canAccessLesson(course, lesson)) {
+      if (!user) {
+        setShowAuthDialog(true);
+      } else {
+        handleSubscribeCourse(course);
+      }
+      return;
+    }
+    setPlayingLesson(lesson);
   };
 
   const allCategories = ['all', ...Array.from(new Set(courses.map((c) => c.category)))];
@@ -222,6 +270,8 @@ const Academy = () => {
                 const courseLessons = getCourseLessons(course.id);
                 const progress = getCourseProgress(course.id);
                 const thumbnail = course.thumbnail_url || categoryThumbnails[course.category] || categoryThumbnails['general'];
+                const isSubscribed = subscribedCourseIds.has(course.id);
+                const previewCount = courseLessons.filter(l => l.is_preview).length;
 
                 return (
                   <motion.div
@@ -237,21 +287,26 @@ const Academy = () => {
                         src={thumbnail}
                         alt={course.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
                       
-                      {course.is_free && (
+                      {course.is_free ? (
                         <div className="absolute top-3 start-3 px-2 py-1 rounded-lg bg-emerald-500/90 text-white text-xs font-bold">
                           FREE
                         </div>
-                      )}
+                      ) : course.price ? (
+                        <div className="absolute top-3 start-3 px-2 py-1 rounded-lg bg-primary/90 text-white text-xs font-bold">
+                          ${course.price}/mo
+                        </div>
+                      ) : null}
 
                       <div className="absolute top-3 end-3 px-2 py-1 rounded-lg bg-black/50 backdrop-blur-sm flex items-center gap-1">
                         <BookOpen className="w-3 h-3 text-white" />
                         <span className="text-xs text-white">{courseLessons.length} lessons</span>
                       </div>
 
-                      {progress === 100 && (
+                      {isSubscribed && progress === 100 && (
                         <div className="absolute bottom-3 end-3">
                           <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg">
                             <CheckCircle className="w-5 h-5 text-white" />
@@ -265,7 +320,9 @@ const Academy = () => {
                         <Badge className={`text-xs ${getDifficultyColor(course.difficulty)}`}>
                           {course.difficulty}
                         </Badge>
-                        <span className="text-xs text-muted-foreground capitalize">{course.category.replace('-', ' ')}</span>
+                        {isSubscribed && (
+                          <Badge className="text-xs bg-green-500/20 text-green-400 border-green-500/30">Enrolled</Badge>
+                        )}
                       </div>
                       
                       <h3 className="font-bold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
@@ -276,13 +333,19 @@ const Academy = () => {
                         {course.description}
                       </p>
 
-                      {user && progress > 0 && (
+                      {isSubscribed && progress > 0 && (
                         <div className="space-y-1">
                           <div className="flex justify-between text-xs text-muted-foreground">
                             <span>{progress}% complete</span>
                           </div>
                           <Progress value={progress} className="h-1.5" />
                         </div>
+                      )}
+
+                      {!isSubscribed && previewCount > 0 && (
+                        <p className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Eye className="w-3 h-3" /> {previewCount} preview lesson{previewCount > 1 ? 's' : ''}
+                        </p>
                       )}
                     </div>
                   </motion.div>
@@ -323,10 +386,31 @@ const Academy = () => {
                   {selectedCourse.is_free && (
                     <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Free</Badge>
                   )}
+                  {subscribedCourseIds.has(selectedCourse.id) && (
+                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Enrolled</Badge>
+                  )}
                 </div>
                 
                 <h2 className="text-2xl font-bold mb-2">{selectedCourse.title}</h2>
                 <p className="text-muted-foreground mb-6">{selectedCourse.description}</p>
+
+                {/* Subscribe CTA for non-subscribers */}
+                {!subscribedCourseIds.has(selectedCourse.id) && (
+                  <div className="mb-6 p-4 rounded-2xl border border-primary/20 bg-primary/5">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-semibold text-white">
+                          {selectedCourse.is_free ? 'Enroll for Free' : `Subscribe for $${selectedCourse.price}/mo`}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">Get full access to all lessons</p>
+                      </div>
+                      <Button onClick={() => handleSubscribeCourse(selectedCourse)} className="gap-2">
+                        <Sparkles className="w-4 h-4" />
+                        {selectedCourse.is_free ? 'Enroll' : 'Subscribe'}
+                      </Button>
+                    </div>
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <h3 className="font-semibold flex items-center gap-2 mb-3">
@@ -336,38 +420,62 @@ const Academy = () => {
                   
                   {getCourseLessons(selectedCourse.id).map((lesson, idx) => {
                     const isCompleted = completedLessonIds.has(lesson.id);
+                    const hasAccess = canAccessLesson(selectedCourse, lesson);
+                    const isLocked = !hasAccess;
+                    
                     return (
                       <div
                         key={lesson.id}
-                        className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 border border-border/50 hover:border-primary/30 transition-colors"
+                        className={`flex items-center gap-3 p-3 rounded-xl border transition-colors cursor-pointer ${
+                          isLocked 
+                            ? 'bg-muted/10 border-border/30 opacity-70' 
+                            : 'bg-muted/30 border-border/50 hover:border-primary/30'
+                        }`}
+                        onClick={() => handleLessonClick(selectedCourse, lesson)}
                       >
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                          isLocked ? 'bg-muted/50 text-muted-foreground' :
                           isCompleted ? 'bg-emerald-500 text-white' : 'bg-muted text-muted-foreground'
                         }`}>
-                          {isCompleted ? <CheckCircle className="w-4 h-4" /> : idx + 1}
+                          {isLocked ? <Lock className="w-3.5 h-3.5" /> : isCompleted ? <CheckCircle className="w-4 h-4" /> : idx + 1}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className={`font-medium text-sm ${isCompleted ? 'line-through text-muted-foreground' : ''}`}>
-                            {lesson.title}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className={`font-medium text-sm ${isCompleted ? 'line-through text-muted-foreground' : ''}`}>
+                              {lesson.title}
+                            </p>
+                            {lesson.is_preview && (
+                              <Badge className="text-[10px] bg-blue-500/20 text-blue-400 border-blue-500/30 px-1.5 py-0">Preview</Badge>
+                            )}
+                          </div>
                           {lesson.duration && (
                             <span className="text-xs text-muted-foreground flex items-center gap-1">
                               <Clock className="w-3 h-3" /> {lesson.duration}
                             </span>
                           )}
                         </div>
-                        {user && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleLessonComplete(lesson.id);
-                            }}
-                            className={isCompleted ? 'text-emerald-400' : 'text-muted-foreground'}
-                          >
-                            <CheckCircle className="w-4 h-4" />
-                          </Button>
+                        {hasAccess && (
+                          <div className="flex items-center gap-1">
+                            {lesson.content_url && (
+                              <Play className="w-4 h-4 text-primary" />
+                            )}
+                            {user && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleLessonComplete(lesson.id);
+                                }}
+                                className={isCompleted ? 'text-emerald-400' : 'text-muted-foreground'}
+                              >
+                                <CheckCircle className="w-4 h-4" />
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                        {isLocked && (
+                          <span className="text-xs text-muted-foreground">Subscribe to access</span>
                         )}
                       </div>
                     );
@@ -379,7 +487,40 @@ const Academy = () => {
         )}
       </AnimatePresence>
 
+      {/* Video Player Modal */}
+      {playingLesson && (
+        <Dialog open={!!playingLesson} onOpenChange={() => setPlayingLesson(null)}>
+          <DialogContent className="max-w-4xl p-0 overflow-hidden bg-card border-border">
+            <DialogTitle className="p-4 pb-0 font-bold">{playingLesson.title}</DialogTitle>
+            <DialogDescription className="px-4 text-xs text-muted-foreground">
+              {playingLesson.duration && `Duration: ${playingLesson.duration}`}
+            </DialogDescription>
+            {playingLesson.content_url ? (
+              <div className="aspect-video">
+                <iframe
+                  src={playingLesson.content_url}
+                  className="w-full h-full"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                  title={playingLesson.title}
+                />
+              </div>
+            ) : (
+              <div className="aspect-video flex items-center justify-center bg-muted/30">
+                <p className="text-muted-foreground">No video available for this lesson.</p>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      )}
+
       <Footer />
+
+      <AuthDialog
+        open={showAuthDialog}
+        onOpenChange={setShowAuthDialog}
+        defaultMode="login"
+      />
     </div>
   );
 };

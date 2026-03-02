@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, Users, Layers, Trash2, Download, Upload, Mail, Search, X, Send, Lock } from 'lucide-react';
+import { Shield, Clock, CheckCircle, XCircle, Eye, EyeOff, Loader2, Plus, Edit2, BarChart3, Package, Users, Layers, Trash2, Download, Upload, Mail, Search, X, Send, Lock, GraduationCap, Play, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -58,7 +58,7 @@ interface Subscriber {
   created_at: string;
 }
 
-type Tab = 'orders' | 'tools' | 'plans' | 'subscribers' | 'stats';
+type Tab = 'orders' | 'tools' | 'plans' | 'subscribers' | 'academy' | 'stats';
 
 // Delivery modal state
 interface DeliveryModalState {
@@ -102,6 +102,17 @@ const AdminPage = () => {
   const [subscriberSearch, setSubscriberSearch] = useState('');
   const [toolStatusFilter, setToolStatusFilter] = useState<'all' | 'active' | 'coming_soon' | 'paused'>('all');
 
+  // Academy state
+  const [academyCourses, setAcademyCourses] = useState<any[]>([]);
+  const [academyLessons, setAcademyLessons] = useState<any[]>([]);
+  const [showCourseForm, setShowCourseForm] = useState(false);
+  const [editingCourse, setEditingCourse] = useState<any>(null);
+  const [courseForm, setCourseForm] = useState({ title: '', description: '', category: 'general', difficulty: 'beginner', is_free: true, price: '', is_published: false, tool_id: '', thumbnail_url: '' });
+  const [showLessonForm, setShowLessonForm] = useState(false);
+  const [editingLesson, setEditingLesson] = useState<any>(null);
+  const [lessonForm, setLessonForm] = useState({ course_id: '', title: '', content_url: '', duration: '', is_preview: false, sort_order: 0 });
+  const [selectedAcademyCourse, setSelectedAcademyCourse] = useState<string>('');
+
   // Import preview state
   const [importPreview, setImportPreview] = useState<{
     show: boolean;
@@ -117,7 +128,74 @@ const AdminPage = () => {
     fetchTools();
     fetchPlans();
     fetchSubscribers();
+    fetchAcademyData();
   }, []);
+
+  const fetchAcademyData = async () => {
+    const [coursesRes, lessonsRes] = await Promise.all([
+      supabase.from('courses').select('*').order('created_at', { ascending: false }),
+      supabase.from('lessons').select('*').order('sort_order'),
+    ]);
+    if (coursesRes.data) setAcademyCourses(coursesRes.data);
+    if (lessonsRes.data) setAcademyLessons(lessonsRes.data);
+  };
+
+  const openCourseForm = (course?: any) => {
+    if (course) {
+      setEditingCourse(course);
+      setCourseForm({ title: course.title, description: course.description || '', category: course.category, difficulty: course.difficulty, is_free: course.is_free, price: course.price?.toString() || '', is_published: course.is_published, tool_id: course.tool_id || '', thumbnail_url: course.thumbnail_url || '' });
+    } else {
+      setEditingCourse(null);
+      setCourseForm({ title: '', description: '', category: 'general', difficulty: 'beginner', is_free: true, price: '', is_published: false, tool_id: '', thumbnail_url: '' });
+    }
+    setShowCourseForm(true);
+  };
+
+  const saveCourse = async () => {
+    const payload = { ...courseForm, price: courseForm.price ? Number(courseForm.price) : null, tool_id: courseForm.tool_id || null, thumbnail_url: courseForm.thumbnail_url || null };
+    if (editingCourse) {
+      await supabase.from('courses').update(payload).eq('id', editingCourse.id);
+    } else {
+      await supabase.from('courses').insert(payload);
+    }
+    setShowCourseForm(false);
+    fetchAcademyData();
+  };
+
+  const deleteCourse = async (id: string) => {
+    if (!confirm('Delete this course and all its lessons?')) return;
+    await supabase.from('courses').delete().eq('id', id);
+    fetchAcademyData();
+  };
+
+  const openLessonForm = (courseId: string, lesson?: any) => {
+    if (lesson) {
+      setEditingLesson(lesson);
+      setLessonForm({ course_id: lesson.course_id, title: lesson.title, content_url: lesson.content_url || '', duration: lesson.duration || '', is_preview: lesson.is_preview || false, sort_order: lesson.sort_order });
+    } else {
+      setEditingLesson(null);
+      const existingLessons = academyLessons.filter(l => l.course_id === courseId);
+      setLessonForm({ course_id: courseId, title: '', content_url: '', duration: '', is_preview: false, sort_order: existingLessons.length });
+    }
+    setShowLessonForm(true);
+  };
+
+  const saveLesson = async () => {
+    const payload = { ...lessonForm, content_url: lessonForm.content_url || null, duration: lessonForm.duration || null, sort_order: Number(lessonForm.sort_order) };
+    if (editingLesson) {
+      await supabase.from('lessons').update(payload).eq('id', editingLesson.id);
+    } else {
+      await supabase.from('lessons').insert(payload);
+    }
+    setShowLessonForm(false);
+    fetchAcademyData();
+  };
+
+  const deleteLesson = async (id: string) => {
+    if (!confirm('Delete this lesson?')) return;
+    await supabase.from('lessons').delete().eq('id', id);
+    fetchAcademyData();
+  };
 
   const fetchOrders = async () => {
     try {
@@ -418,6 +496,7 @@ const AdminPage = () => {
     { id: 'tools', label: 'Tools', icon: <Edit2 className="w-4 h-4" /> },
     { id: 'plans', label: 'Plans', icon: <Layers className="w-4 h-4" /> },
     { id: 'subscribers', label: 'Subscribers', icon: <Mail className="w-4 h-4" /> },
+    { id: 'academy', label: 'Academy', icon: <GraduationCap className="w-4 h-4" /> },
     { id: 'stats', label: 'Stats', icon: <BarChart3 className="w-4 h-4" /> },
   ];
 
@@ -822,6 +901,122 @@ const AdminPage = () => {
                     );
                   })()}
                 </div>
+              )}
+
+              {/* ACADEMY TAB */}
+              {activeTab === 'academy' && (
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-xl font-bold">Academy Courses</h2>
+                    <Button onClick={() => openCourseForm()} size="sm"><Plus className="w-4 h-4 mr-2" /> Add Course</Button>
+                  </div>
+
+                  {showCourseForm && (
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass-strong rounded-2xl p-6">
+                      <h3 className="font-bold mb-4">{editingCourse ? 'Edit Course' : 'Add New Course'}</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Input placeholder="Title" value={courseForm.title} onChange={e => setCourseForm(f => ({ ...f, title: e.target.value }))} className="bg-muted/50" />
+                        <select value={courseForm.category} onChange={e => setCourseForm(f => ({ ...f, category: e.target.value }))} className="px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none">
+                          <option value="general">General</option>
+                          <option value="ai-text">AI Text</option>
+                          <option value="ai-image">AI Image</option>
+                          <option value="ai-video">AI Video</option>
+                          <option value="ai-audio">AI Audio</option>
+                        </select>
+                        <select value={courseForm.difficulty} onChange={e => setCourseForm(f => ({ ...f, difficulty: e.target.value }))} className="px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none">
+                          <option value="beginner">Beginner</option>
+                          <option value="intermediate">Intermediate</option>
+                          <option value="advanced">Advanced</option>
+                        </select>
+                        <select value={courseForm.tool_id} onChange={e => setCourseForm(f => ({ ...f, tool_id: e.target.value }))} className="px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none">
+                          <option value="">No linked tool</option>
+                          {tools.map(t => <option key={t.tool_id} value={t.tool_id}>{t.name}</option>)}
+                        </select>
+                        <Input placeholder="Price (leave empty for free)" type="number" value={courseForm.price} onChange={e => setCourseForm(f => ({ ...f, price: e.target.value }))} className="bg-muted/50" />
+                        <Input placeholder="Thumbnail URL" value={courseForm.thumbnail_url} onChange={e => setCourseForm(f => ({ ...f, thumbnail_url: e.target.value }))} className="bg-muted/50" />
+                        <textarea placeholder="Description" value={courseForm.description} onChange={e => setCourseForm(f => ({ ...f, description: e.target.value }))} className="sm:col-span-2 px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none min-h-[60px]" />
+                        <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={courseForm.is_free} onChange={e => setCourseForm(f => ({ ...f, is_free: e.target.checked }))} /> Free</label>
+                        <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={courseForm.is_published} onChange={e => setCourseForm(f => ({ ...f, is_published: e.target.checked }))} /> Published</label>
+                      </div>
+                      <div className="flex gap-3 mt-4">
+                        <Button onClick={saveCourse}>{editingCourse ? 'Update' : 'Create'}</Button>
+                        <Button variant="ghost" onClick={() => setShowCourseForm(false)}>Cancel</Button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Courses list */}
+                  <div className="space-y-4">
+                    {academyCourses.map(course => {
+                      const courseLessons = academyLessons.filter(l => l.course_id === course.id);
+                      const isExpanded = selectedAcademyCourse === course.id;
+                      return (
+                        <div key={course.id} className="glass-strong rounded-2xl overflow-hidden">
+                          <div className="p-4 flex items-center justify-between cursor-pointer" onClick={() => setSelectedAcademyCourse(isExpanded ? '' : course.id)}>
+                            <div className="flex items-center gap-3">
+                              <div className={`w-3 h-3 rounded-full ${course.is_published ? 'bg-green-400' : 'bg-gray-400'}`} />
+                              <div>
+                                <p className="font-medium">{course.title}</p>
+                                <p className="text-xs text-muted-foreground">{course.category} • {course.difficulty} • {courseLessons.length} lessons {course.is_free ? '• Free' : `• $${course.price}`}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); openCourseForm(course); }}><Edit2 className="w-4 h-4" /></Button>
+                              <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); deleteCourse(course.id); }}><Trash2 className="w-4 h-4 text-red-400" /></Button>
+                            </div>
+                          </div>
+                          
+                          {isExpanded && (
+                            <div className="px-4 pb-4 border-t border-border/50 pt-3">
+                              <div className="flex items-center justify-between mb-3">
+                                <p className="text-sm font-semibold">Lessons</p>
+                                <Button size="sm" variant="outline" onClick={() => openLessonForm(course.id)}><Plus className="w-3 h-3 mr-1" /> Add Lesson</Button>
+                              </div>
+                              {courseLessons.length > 0 ? (
+                                <div className="space-y-2">
+                                  {courseLessons.map((lesson: any) => (
+                                    <div key={lesson.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/20">
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-xs text-muted-foreground w-6">{lesson.sort_order + 1}.</span>
+                                        <span className="text-sm">{lesson.title}</span>
+                                        {lesson.is_preview && <Badge className="text-[10px] bg-blue-500/20 text-blue-400 border-blue-500/30 px-1.5 py-0">Preview</Badge>}
+                                        {lesson.duration && <span className="text-xs text-muted-foreground">{lesson.duration}</span>}
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <Button variant="ghost" size="sm" onClick={() => openLessonForm(course.id, lesson)}><Edit2 className="w-3 h-3" /></Button>
+                                        <Button variant="ghost" size="sm" onClick={() => deleteLesson(lesson.id)}><Trash2 className="w-3 h-3 text-red-400" /></Button>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="text-sm text-muted-foreground text-center py-4">No lessons yet</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                    {academyCourses.length === 0 && <p className="text-center text-muted-foreground py-8">No courses yet. Create your first course above.</p>}
+                  </div>
+                </div>
+              )}
+
+              {/* Lesson Form Modal */}
+              {showLessonForm && (
+                <Dialog open={showLessonForm} onOpenChange={v => !v && setShowLessonForm(false)}>
+                  <DialogContent className="max-w-md border-white/10" style={{ background: 'linear-gradient(180deg, hsl(222 47% 12%) 0%, hsl(222 47% 8%) 100%)' }}>
+                    <DialogHeader><DialogTitle>{editingLesson ? 'Edit Lesson' : 'Add Lesson'}</DialogTitle></DialogHeader>
+                    <div className="space-y-4">
+                      <div><Label className="text-sm">Title</Label><Input value={lessonForm.title} onChange={e => setLessonForm(f => ({ ...f, title: e.target.value }))} className="bg-white/5 border-white/10 text-white" /></div>
+                      <div><Label className="text-sm">Video URL</Label><Input value={lessonForm.content_url} onChange={e => setLessonForm(f => ({ ...f, content_url: e.target.value }))} placeholder="https://..." className="bg-white/5 border-white/10 text-white" /></div>
+                      <div><Label className="text-sm">Duration</Label><Input value={lessonForm.duration} onChange={e => setLessonForm(f => ({ ...f, duration: e.target.value }))} placeholder="e.g. 5:30" className="bg-white/5 border-white/10 text-white" /></div>
+                      <div><Label className="text-sm">Sort Order</Label><Input type="number" value={lessonForm.sort_order} onChange={e => setLessonForm(f => ({ ...f, sort_order: Number(e.target.value) }))} className="bg-white/5 border-white/10 text-white" /></div>
+                      <label className="flex items-center gap-2 text-sm text-white"><input type="checkbox" checked={lessonForm.is_preview} onChange={e => setLessonForm(f => ({ ...f, is_preview: e.target.checked }))} /> Preview (free access)</label>
+                    </div>
+                    <DialogFooter><Button variant="ghost" onClick={() => setShowLessonForm(false)}>Cancel</Button><Button onClick={saveLesson}>{editingLesson ? 'Update' : 'Create'}</Button></DialogFooter>
+                  </DialogContent>
+                </Dialog>
               )}
 
               {/* STATS TAB */}

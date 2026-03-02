@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Loader2, Clock, CheckCircle, Mail, Gift, Sparkles, Shield, Zap, ShieldCheck, UserCheck } from 'lucide-react';
 import { z } from 'zod';
 import type { Tool, ToolPlan } from './ToolCard';
+import { AuthDialog } from './AuthDialog';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -40,6 +41,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<{ email?: string }>({});
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   const [plans, setPlans] = useState<ToolPlan[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<ToolPlan | null>(null);
@@ -50,8 +52,16 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
 
   useEffect(() => {
     if (isNonActive && open) { onOpenChange(false); return; }
-    if (open && tool) fetchPlans(tool.tool_id);
-  }, [open, tool]);
+    if (open && tool) {
+      // Auth gate: require login before checkout
+      if (!user) {
+        onOpenChange(false);
+        setShowAuthDialog(true);
+        return;
+      }
+      fetchPlans(tool.tool_id);
+    }
+  }, [open, tool, user]);
 
   const fetchPlans = async (toolId: string) => {
     setPlansLoading(true);
@@ -152,6 +162,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const useDropdown = plans.length > 4;
 
   return (
+    <>
     <Sheet open={open} onOpenChange={handleClose}>
       <SheetContent
         side="right"
@@ -400,6 +411,20 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
         )}
       </SheetContent>
     </Sheet>
+
+    {/* Auth gate dialog */}
+    <AuthDialog
+      open={showAuthDialog}
+      onOpenChange={(v) => {
+        setShowAuthDialog(v);
+        // After login, re-open checkout
+        if (!v && user && tool) {
+          setTimeout(() => onOpenChange(true), 300);
+        }
+      }}
+      defaultMode="login"
+    />
+    </>
   );
 };
 

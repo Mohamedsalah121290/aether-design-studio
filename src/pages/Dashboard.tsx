@@ -6,7 +6,7 @@ import {
   ExternalLink, Search, X,
   Settings, Bell, User, Shield, Clock, Loader2,
   CreditCard, RefreshCw, CalendarDays, CheckCircle, Sparkles, ArrowRight, ShieldCheck,
-  Eye, EyeOff, Lock, Package, Copy, Check
+  Eye, EyeOff, Lock, Package, Copy, Check, GraduationCap, Play
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -364,6 +364,9 @@ const Dashboard = () => {
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [latestOrder, setLatestOrder] = useState<Order | null>(null);
   const [credentialsModal, setCredentialsModal] = useState<{ open: boolean; order: Order | null }>({ open: false, order: null });
+  const [activeTab, setActiveTab] = useState<'tools' | 'academy'>('tools');
+  const [academySubs, setAcademySubs] = useState<any[]>([]);
+  const [academyLoading, setAcademyLoading] = useState(false);
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
@@ -386,7 +389,10 @@ const Dashboard = () => {
     }
 
     fetchOrders();
-    if (user) fetchSubscriptions();
+    if (user) {
+      fetchSubscriptions();
+      fetchAcademySubs();
+    }
 
     const channel = supabase
       .channel('orders-realtime')
@@ -395,6 +401,23 @@ const Dashboard = () => {
 
     return () => { supabase.removeChannel(channel); };
   }, [i18n.language, user]);
+
+  const fetchAcademySubs = async () => {
+    if (!user) return;
+    setAcademyLoading(true);
+    try {
+      const { data } = await supabase
+        .from('academy_subscriptions')
+        .select('*, course:courses(*)')
+        .eq('status', 'active')
+        .order('started_at', { ascending: false });
+      setAcademySubs(data || []);
+    } catch (err) {
+      console.error('Error fetching academy subs:', err);
+    } finally {
+      setAcademyLoading(false);
+    }
+  };
 
   const fetchOrders = async () => {
     const email = localStorage.getItem('buyer_email');
@@ -707,8 +730,39 @@ const Dashboard = () => {
           </div>
         </section>
 
+        {/* Tabs */}
+        <section className="py-2">
+          <div className="container mx-auto px-4">
+            <div className="flex gap-2">
+              <button
+                onClick={() => setActiveTab('tools')}
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
+                  activeTab === 'tools'
+                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
+                    : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'
+                }`}
+              >
+                <Package className="w-4 h-4" /> Tool Subscriptions
+              </button>
+              <button
+                onClick={() => setActiveTab('academy')}
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
+                  activeTab === 'academy'
+                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
+                    : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'
+                }`}
+              >
+                <GraduationCap className="w-4 h-4" /> Academy
+                {academySubs.length > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">{academySubs.length}</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Stripe Subscriptions */}
-        {user && (
+        {user && activeTab === 'tools' && (
           <section className="py-4">
             <div className="container mx-auto px-4">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
@@ -776,62 +830,145 @@ const Dashboard = () => {
           </section>
         )}
 
-        {/* Search */}
-        <section className="py-4">
-          <div className="container mx-auto px-4">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="max-w-md">
-              <div className="relative">
-                <Search className="absolute start-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search your subscriptions..."
-                  className="w-full ps-12 pe-10 py-3 rounded-xl bg-card/80 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                />
-                {searchQuery && (
-                  <button onClick={() => setSearchQuery('')} className="absolute end-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
-                    <X className="w-5 h-5" />
-                  </button>
+        {/* Tools Tab Content */}
+        {activeTab === 'tools' && (
+          <>
+            {/* Search */}
+            <section className="py-4">
+              <div className="container mx-auto px-4">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="max-w-md">
+                  <div className="relative">
+                    <Search className="absolute start-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search your subscriptions..."
+                      className="w-full ps-12 pe-10 py-3 rounded-xl bg-card/80 border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    />
+                    {searchQuery && (
+                      <button onClick={() => setSearchQuery('')} className="absolute end-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                        <X className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              </div>
+            </section>
+
+            {/* Subscriptions Grid */}
+            <section className="py-8">
+              <div className="container mx-auto px-4">
+                {loading ? (
+                  <div className="flex items-center justify-center py-16">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                  </div>
+                ) : filteredOrders.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {filteredOrders.map((order, index) => (
+                      <SubscriptionCard
+                        key={order.id}
+                        order={order}
+                        index={index}
+                        onViewCredentials={handleViewCredentials}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
+                    <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                      style={{ background: 'linear-gradient(135deg, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%)' }}>
+                      <Package className="w-10 h-10 text-muted-foreground" />
+                    </div>
+                    <h3 className="text-xl font-display font-bold mb-2">No subscriptions yet</h3>
+                    <p className="text-muted-foreground mb-6">Browse the store to get started</p>
+                    <Button variant="hero" asChild>
+                      <a href="/#store">Go to Store</a>
+                    </Button>
+                  </motion.div>
                 )}
               </div>
-            </motion.div>
-          </div>
-        </section>
+            </section>
+          </>
+        )}
 
-        {/* Subscriptions Grid */}
-        <section className="py-8">
-          <div className="container mx-auto px-4">
-            {loading ? (
-              <div className="flex items-center justify-center py-16">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            ) : filteredOrders.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredOrders.map((order, index) => (
-                  <SubscriptionCard
-                    key={order.id}
-                    order={order}
-                    index={index}
-                    onViewCredentials={handleViewCredentials}
-                  />
-                ))}
-              </div>
-            ) : (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
-                <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
-                  style={{ background: 'linear-gradient(135deg, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%)' }}>
-                  <Package className="w-10 h-10 text-muted-foreground" />
+        {/* Academy Tab Content */}
+        {activeTab === 'academy' && (
+          <section className="py-8">
+            <div className="container mx-auto px-4">
+              {academyLoading ? (
+                <div className="flex items-center justify-center py-16">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
                 </div>
-                <h3 className="text-xl font-display font-bold mb-2">No subscriptions yet</h3>
-                <p className="text-muted-foreground mb-6">Browse the store to get started</p>
-                <Button variant="hero" asChild>
-                  <a href="/#store">Go to Store</a>
-                </Button>
-              </motion.div>
-            )}
-          </div>
-        </section>
+              ) : academySubs.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {academySubs.map((sub: any, index: number) => {
+                    const course = sub.course;
+                    return (
+                      <motion.div
+                        key={sub.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: index * 0.08 }}
+                        className="relative group"
+                      >
+                        <div
+                          className="relative rounded-2xl overflow-hidden border border-white/10 backdrop-blur-xl"
+                          style={{
+                            background: 'linear-gradient(135deg, hsl(222 47% 11% / 0.95) 0%, hsl(222 47% 8% / 0.98) 100%)',
+                            boxShadow: '0 15px 40px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+                          }}
+                        >
+                          {/* Thumbnail */}
+                          {course?.thumbnail_url && (
+                            <div className="aspect-video relative overflow-hidden">
+                              <img src={course.thumbnail_url} alt={course.title} className="w-full h-full object-cover" loading="lazy" />
+                              <div className="absolute inset-0 bg-gradient-to-t from-[hsl(222_47%_8%)] via-transparent to-transparent" />
+                            </div>
+                          )}
+
+                          {/* Status badge */}
+                          <div className="absolute top-4 end-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                            <CheckCircle className="w-3.5 h-3.5" /> Enrolled
+                          </div>
+
+                          <div className="p-6">
+                            <div className="flex items-center gap-2 mb-2">
+                              <GraduationCap className="w-5 h-5 text-primary" />
+                              <span className="text-xs text-muted-foreground capitalize">{course?.category?.replace('-', ' ')}</span>
+                            </div>
+                            <h3 className="text-lg font-display font-bold mb-1 text-white">{course?.title || 'Course'}</h3>
+                            <p className="text-xs text-muted-foreground mb-4 line-clamp-2">{course?.description}</p>
+
+                            <Button
+                              className="w-full"
+                              variant="hero"
+                              onClick={() => window.location.href = '/academy'}
+                            >
+                              <Play className="w-4 h-4 mr-2" /> Continue Learning
+                            </Button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
+                  <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                    style={{ background: 'linear-gradient(135deg, hsl(var(--muted)) 0%, hsl(var(--muted)) 100%)' }}>
+                    <GraduationCap className="w-10 h-10 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-xl font-display font-bold mb-2">No academy courses yet</h3>
+                  <p className="text-muted-foreground mb-6">Explore the Academy to start learning</p>
+                  <Button variant="hero" asChild>
+                    <a href="/academy">Browse Academy</a>
+                  </Button>
+                </motion.div>
+              )}
+            </div>
+          </section>
+        )}
       </main>
 
       {/* View Credentials Modal */}
