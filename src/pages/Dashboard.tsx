@@ -725,6 +725,14 @@ const Dashboard = () => {
                 <span>Secure access</span>
               </div>
             </motion.div>
+
+            {pendingCount > 0 && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+                className="mt-3 p-3 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center gap-2">
+                <Clock className="w-4 h-4 text-orange-400 flex-shrink-0" />
+                <p className="text-sm text-orange-300">Activation in progress — you'll see login details here once ready.</p>
+              </motion.div>
+            )}
           </div>
         </section>
 

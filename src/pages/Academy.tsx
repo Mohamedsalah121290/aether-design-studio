@@ -293,10 +293,11 @@ const Academy = () => {
                 return (
                   <motion.div
                     key={course.id}
+                    ref={el => { courseRefs.current[course.id] = el; }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className="group relative bg-card rounded-2xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 cursor-pointer"
+                    className={`group relative bg-card rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 cursor-pointer ${toolIdParam && course.tool_id === toolIdParam ? 'border-primary/60 ring-2 ring-primary/20' : 'border-border/50 hover:border-primary/50'}`}
                     onClick={() => setSelectedCourse(course)}
                   >
                     <div className="aspect-video relative overflow-hidden">

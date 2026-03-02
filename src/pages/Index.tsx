@@ -728,7 +728,7 @@ const Index = () => {
                   />
                   <Button variant="hero" size="lg" type="submit" disabled={newsletter.loading} className="h-12 rounded-xl whitespace-nowrap">
                     <Mail className="w-4 h-4 mr-2" />
-                    {newsletter.loading ? 'Joining...' : 'Join 1,200+ Learners'}
+                    {newsletter.loading ? 'Joining...' : 'Join the List'}
                   </Button>
                 </form>
               </motion.div>
