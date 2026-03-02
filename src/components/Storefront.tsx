@@ -53,7 +53,7 @@ const Storefront = () => {
   const fetchTools = async () => {
     try {
       const { data: toolsData, error: toolsError } = await supabase
-        .from('tools').select('*').eq('is_active', true).order('name');
+        .from('tools').select('*').in('status', ['active', 'coming_soon']).order('name');
       if (toolsError) throw toolsError;
 
       const { data: plansData, error: plansError } = await supabase
@@ -77,6 +77,7 @@ const Storefront = () => {
         category: tool.category,
         logo_url: tool.logo_url || null,
         starting_price: minPriceMap[tool.tool_id] ?? null,
+        status: (tool as any).status || 'active',
       })));
     } catch (error) {
       console.error('Error fetching tools:', error);

@@ -31,6 +31,7 @@ interface Tool {
   category: string;
   price: number;
   is_active: boolean;
+  status: string;
   delivery_type: string;
   access_url: string | null;
   activation_time: number;
@@ -69,7 +70,7 @@ const AdminPage = () => {
   // Tool form state
   const [editingTool, setEditingTool] = useState<Tool | null>(null);
   const [showToolForm, setShowToolForm] = useState(false);
-  const [toolForm, setToolForm] = useState({ tool_id: '', name: '', category: 'ai-text', price: 0, delivery_type: 'provide_account', access_url: '', activation_time: 6, is_active: true });
+  const [toolForm, setToolForm] = useState({ tool_id: '', name: '', category: 'ai-text', price: 0, delivery_type: 'provide_account', access_url: '', activation_time: 6, is_active: true, status: 'active' });
 
   // Plan form state
   const [editingPlan, setEditingPlan] = useState<ToolPlan | null>(null);
@@ -301,10 +302,10 @@ const AdminPage = () => {
   const openToolForm = (tool?: Tool) => {
     if (tool) {
       setEditingTool(tool);
-      setToolForm({ tool_id: tool.tool_id, name: tool.name, category: tool.category, price: tool.price, delivery_type: tool.delivery_type, access_url: tool.access_url || '', activation_time: tool.activation_time, is_active: tool.is_active });
+      setToolForm({ tool_id: tool.tool_id, name: tool.name, category: tool.category, price: tool.price, delivery_type: tool.delivery_type, access_url: tool.access_url || '', activation_time: tool.activation_time, is_active: tool.is_active, status: tool.status || 'active' });
     } else {
       setEditingTool(null);
-      setToolForm({ tool_id: '', name: '', category: 'ai-text', price: 0, delivery_type: 'provide_account', access_url: '', activation_time: 6, is_active: true });
+      setToolForm({ tool_id: '', name: '', category: 'ai-text', price: 0, delivery_type: 'provide_account', access_url: '', activation_time: 6, is_active: true, status: 'active' });
     }
     setShowToolForm(true);
   };
@@ -486,6 +487,11 @@ const AdminPage = () => {
                           <option value="api_key">API Key</option>
                         </select>
                         <input placeholder="Access URL" value={toolForm.access_url} onChange={e => setToolForm(f => ({ ...f, access_url: e.target.value }))} className="px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none" />
+                        <select value={toolForm.status} onChange={e => setToolForm(f => ({ ...f, status: e.target.value }))} className="px-4 py-2 rounded-xl bg-muted/50 border border-border focus:border-primary focus:outline-none">
+                          <option value="active">Active</option>
+                          <option value="coming_soon">Coming Soon</option>
+                          <option value="paused">Paused</option>
+                        </select>
                       </div>
                       <div className="flex gap-3 mt-4">
                         <Button onClick={saveTool}>{editingTool ? 'Update' : 'Create'}</Button>
@@ -495,25 +501,41 @@ const AdminPage = () => {
                   )}
 
                   <div className="grid gap-3">
-                    {tools.map(tool => (
-                      <div key={tool.id} className="glass rounded-xl p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-3 h-3 rounded-full ${tool.is_active ? 'bg-green-400' : 'bg-red-400'}`} />
-                          <div>
-                            <p className="font-medium">{tool.name}</p>
-                            <p className="text-xs text-muted-foreground">{tool.tool_id} • ${tool.price}/mo • {tool.category}</p>
+                    {tools.map(tool => {
+                      const statusColor = tool.status === 'coming_soon' ? 'bg-yellow-400' : tool.status === 'paused' ? 'bg-gray-400' : 'bg-green-400';
+                      const statusLabel = tool.status === 'coming_soon' ? 'Coming Soon' : tool.status === 'paused' ? 'Paused' : 'Active';
+                      return (
+                        <div key={tool.id} className="glass rounded-xl p-4 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-3 h-3 rounded-full ${statusColor}`} />
+                            <div>
+                              <p className="font-medium">{tool.name}</p>
+                              <p className="text-xs text-muted-foreground">{tool.tool_id} • ${tool.price}/mo • {tool.category}</p>
+                            </div>
+                            <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${tool.status === 'coming_soon' ? 'bg-yellow-500/10 text-yellow-400' : tool.status === 'paused' ? 'bg-gray-500/10 text-gray-400' : 'bg-green-500/10 text-green-400'}`}>
+                              {statusLabel}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <select
+                              value={tool.status || 'active'}
+                              onChange={async (e) => {
+                                await supabase.from('tools').update({ status: e.target.value, is_active: e.target.value === 'active' } as any).eq('id', tool.id);
+                                fetchTools();
+                              }}
+                              className="px-2 py-1 rounded-lg bg-muted/50 border border-border text-xs focus:border-primary focus:outline-none"
+                            >
+                              <option value="active">Active</option>
+                              <option value="coming_soon">Coming Soon</option>
+                              <option value="paused">Paused</option>
+                            </select>
+                            <Button variant="ghost" size="sm" onClick={() => openToolForm(tool)}>
+                              <Edit2 className="w-4 h-4" />
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="sm" onClick={() => toggleToolActive(tool)}>
-                            {tool.is_active ? 'Deactivate' : 'Activate'}
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => openToolForm(tool)}>
-                            <Edit2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
