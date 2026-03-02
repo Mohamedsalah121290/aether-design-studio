@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, Users, GraduationCap, Heart, Target, Sparkles, Lock, Globe, Award, Eye, BookOpen, CheckCircle } from 'lucide-react';
+import { Shield, Users, Heart, Target, Sparkles, Globe, Award, Eye, BookOpen, CheckCircle } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -174,6 +174,34 @@ const AboutPage = () => {
                   Parents trust us because we prioritise safety. Students love us because we make it easy. 
                   Creators choose us because we respect their privacy. And everyone benefits from our 
                   commitment to European standards — no matter where they are in the world.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Our Pricing Model */}
+        <section className="container mx-auto px-4 mb-24">
+          <div className="max-w-4xl mx-auto glass rounded-3xl p-8 md:p-12">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="flex items-start gap-6"
+            >
+              <div className="hidden md:flex w-16 h-16 rounded-2xl items-center justify-center flex-shrink-0" style={{ background: 'rgba(232,212,139,0.1)' }}>
+                <Shield className="w-8 h-8" style={{ color: '#E8D48B' }} />
+              </div>
+              <div>
+                <h2 className="text-2xl md:text-3xl font-display font-bold mb-4">Our Pricing Model</h2>
+                <p className="text-muted-foreground leading-relaxed text-lg mb-4">
+                  AI DEALS provides managed access to software tools. Our pricing reflects our structured 
+                  access model — not traditional retail subscriptions.
+                </p>
+                <p className="text-muted-foreground leading-relaxed text-lg">
+                  By operating as a managed platform, we offer exclusive member pricing that makes premium 
+                  AI tools accessible to students, creators, and professionals worldwide. Every price you 
+                  see is our platform rate — transparent, consistent, and available to all members.
                 </p>
               </div>
             </motion.div>
