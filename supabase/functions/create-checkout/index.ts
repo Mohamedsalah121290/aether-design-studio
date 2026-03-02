@@ -112,16 +112,18 @@ serve(async (req) => {
 
     // Handle wallet credit deduction
     let walletDeduction = 0;
+    let currentWalletBalance = 0;
     if (useWalletCredit && user?.id) {
-      const { data: wallet } = await supabaseAdmin
+      const { data: walletData } = await supabaseAdmin
         .from("wallets")
         .select("balance")
         .eq("user_id", user.id)
         .single();
 
-      if (wallet && Number(wallet.balance) > 0) {
-        walletDeduction = Math.min(Number(wallet.balance), tool.price);
-        logStep("Wallet credit available", { balance: wallet.balance, deduction: walletDeduction });
+      if (walletData && Number(walletData.balance) > 0) {
+        currentWalletBalance = Number(walletData.balance);
+        walletDeduction = Math.min(currentWalletBalance, tool.price);
+        logStep("Wallet credit available", { balance: currentWalletBalance, deduction: walletDeduction });
       }
     }
 
