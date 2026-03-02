@@ -274,10 +274,10 @@ const Index = () => {
                 className="text-4xl sm:text-5xl md:text-7xl font-display font-black mb-4 md:mb-6 leading-[0.95] tracking-tight"
                 style={{ textShadow: '0 0 60px hsl(var(--primary) / 0.5), 0 4px 20px rgba(0,0,0,0.8)' }}
               >
-                <span className="text-white drop-shadow-2xl">Powerful AI.</span>
+  <span className="text-white drop-shadow-2xl">AI Tools Made Simple</span>
                 <br />
                 <span className="gradient-text" style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))' }}>
-                  Made Safe.
+                  For Students & Creators
                 </span>
               </motion.h1>
 
