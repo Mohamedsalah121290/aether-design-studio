@@ -1,5 +1,8 @@
 project_id = "pilskrumnpvnvtkadbez"
 
+[functions.get-credentials]
+verify_jwt = false
+
 [functions.store-credentials]
 verify_jwt = false
 

@@ -6,7 +6,7 @@ import {
   ExternalLink, Search, X,
   Settings, Bell, User, Shield, Clock, Loader2,
   CreditCard, RefreshCw, CalendarDays, CheckCircle, Sparkles, ArrowRight, ShieldCheck,
-  Eye, EyeOff, Lock, Package
+  Eye, EyeOff, Lock, Package, Copy, Check
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -97,7 +97,12 @@ interface Order {
 
 interface OrderCredential {
   email: string;
-  encrypted_password: string;
+  password: string;
+}
+
+interface DecryptedCredentials {
+  email: string;
+  password: string;
 }
 
 // Subscription Card Component
@@ -227,14 +232,47 @@ const SubscriptionCard = ({ order, index, onViewCredentials }: { order: Order; i
 };
 
 // View Credentials Modal
-const CredentialsModal = ({ open, onClose, order, credentials }: { open: boolean; onClose: () => void; order: Order | null; credentials: OrderCredential | null }) => {
+const CredentialsModal = ({ open, onClose, order }: { open: boolean; onClose: () => void; order: Order | null }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [credentials, setCredentials] = useState<DecryptedCredentials | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
   const toolId = order?.tool?.tool_id || '';
   const accessUrl = order?.tool?.access_url || toolAccessUrls[toolId] || '';
 
   useEffect(() => {
-    if (!open) setShowPassword(false);
-  }, [open]);
+    if (!open) {
+      setShowPassword(false);
+      setCredentials(null);
+      setCopiedField(null);
+      return;
+    }
+    if (order) fetchDecryptedCredentials(order.id);
+  }, [open, order]);
+
+  const fetchDecryptedCredentials = async (orderId: string) => {
+    setLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const { data, error } = await supabase.functions.invoke('get-credentials', {
+        body: { order_id: orderId },
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (error) throw error;
+      setCredentials(data as DecryptedCredentials);
+    } catch (err) {
+      console.error('Failed to fetch credentials:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyToClipboard = async (text: string, field: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
 
   return (
     <Dialog open={open} onOpenChange={v => !v && onClose()}>
@@ -247,22 +285,36 @@ const CredentialsModal = ({ open, onClose, order, credentials }: { open: boolean
         </DialogHeader>
 
         <div className="space-y-4 mt-2">
-          {credentials ? (
+          {loading ? (
+            <div className="flex justify-center py-8">
+              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+            </div>
+          ) : credentials ? (
             <>
               <div className="space-y-3">
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10">
-                  <p className="text-xs text-muted-foreground mb-1">Login Email</p>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-xs text-muted-foreground">Login Email</p>
+                    <button onClick={() => copyToClipboard(credentials.email, 'email')} className="text-muted-foreground hover:text-white transition-colors">
+                      {copiedField === 'email' ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
                   <p className="text-sm font-medium text-white font-mono">{credentials.email}</p>
                 </div>
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10">
                   <div className="flex items-center justify-between mb-1">
                     <p className="text-xs text-muted-foreground">Password</p>
-                    <button onClick={() => setShowPassword(!showPassword)} className="text-muted-foreground hover:text-white transition-colors">
-                      {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => copyToClipboard(credentials.password, 'password')} className="text-muted-foreground hover:text-white transition-colors">
+                        {copiedField === 'password' ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                      <button onClick={() => setShowPassword(!showPassword)} className="text-muted-foreground hover:text-white transition-colors">
+                        {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
                   </div>
                   <p className="text-sm font-medium text-white font-mono">
-                    {showPassword ? credentials.encrypted_password : '••••••••••••'}
+                    {showPassword ? credentials.password : '••••••••••••'}
                   </p>
                 </div>
               </div>
@@ -274,7 +326,7 @@ const CredentialsModal = ({ open, onClose, order, credentials }: { open: boolean
                   onClick={() => window.open(accessUrl, '_blank')}
                 >
                   <ExternalLink className="w-4 h-4 mr-2" />
-                  Go to {order?.tool?.name}
+                  Open {order?.tool?.name}
                 </Button>
               )}
 
@@ -305,7 +357,7 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [credentials, setCredentials] = useState<Record<string, OrderCredential>>({});
+  const [credentials, setCredentials] = useState<Record<string, boolean>>({});
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const [subsLoading, setSubsLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
@@ -383,7 +435,7 @@ const Dashboard = () => {
       setOrders(mappedOrders);
       if (mappedOrders.length > 0 && showSuccessScreen) setLatestOrder(mappedOrders[0]);
 
-      // Fetch credentials for delivered orders
+      // Track which orders have credentials (for badge display)
       if (user) {
         const deliveredIds = mappedOrders
           .filter(o => o.status === 'delivered' || o.status === 'active' || o.status === 'activated')
@@ -392,13 +444,13 @@ const Dashboard = () => {
         if (deliveredIds.length > 0) {
           const { data: credsData } = await supabase
             .from('order_credentials')
-            .select('order_id, email, encrypted_password')
+            .select('order_id')
             .in('order_id', deliveredIds);
           
           if (credsData) {
-            const credsMap: Record<string, OrderCredential> = {};
+            const credsMap: Record<string, boolean> = {};
             credsData.forEach((cred: any) => {
-              credsMap[cred.order_id] = { email: cred.email, encrypted_password: cred.encrypted_password };
+              credsMap[cred.order_id] = true;
             });
             setCredentials(credsMap);
           }
@@ -787,7 +839,6 @@ const Dashboard = () => {
         open={credentialsModal.open}
         onClose={() => setCredentialsModal({ open: false, order: null })}
         order={credentialsModal.order}
-        credentials={credentialsModal.order ? credentials[credentialsModal.order.id] || null : null}
       />
     </div>
   );
