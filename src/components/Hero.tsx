@@ -154,35 +154,30 @@ const Hero = () => {
             />
           </motion.div>
 
-          {/* Badge */}
-          <motion.div
+          {/* Tagline */}
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-lg sm:text-xl md:text-2xl font-display font-semibold tracking-[0.15em] uppercase mb-6"
+            style={{ 
+              color: 'rgba(232,212,139,0.9)',
+              textShadow: '0 0 30px rgba(232,212,139,0.3)',
+            }}
           >
-            <span 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 text-primary text-sm font-medium mb-6 backdrop-blur-md"
-              style={{
-                background: 'linear-gradient(135deg, rgba(168,85,247,0.2) 0%, rgba(168,85,247,0.05) 100%)',
-                boxShadow: '0 4px 24px rgba(168,85,247,0.2)',
-              }}
-            >
-              <Shield className="w-4 h-4" />
-              {t('hero.badge')}
-            </span>
-          </motion.div>
+            Access. Learn. Scale.
+          </motion.p>
 
-          {/* Main Title with Glow Effect */}
+          {/* Main Title */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-black mb-4 md:mb-6 leading-[0.95] tracking-tight"
+            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display font-black mb-5 md:mb-7 leading-[1.05] tracking-tight"
             style={{
               textShadow: '0 0 60px hsl(var(--primary) / 0.5), 0 0 120px hsl(var(--primary) / 0.3), 0 4px 20px rgba(0,0,0,0.8)',
             }}
           >
-            <span className="text-white drop-shadow-2xl">{t('hero.title')}</span>{' '}
             <span 
               className="gradient-text"
               style={{
@@ -190,27 +185,38 @@ const Hero = () => {
                 filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))',
               }}
             >
-              {t('hero.titleHighlight')}
+              Exclusive Access Pricing.
             </span>
+            <br />
+            <span className="text-white drop-shadow-2xl">Every Month.</span>
           </motion.h1>
 
-          {/* Subtitle with Glass Background */}
+          {/* Supporting text */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mb-8 md:mb-10"
+            className="mb-3"
           >
             <p 
-              className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-2xl mx-auto leading-relaxed px-6 py-4 rounded-2xl backdrop-blur-md border border-white/10"
+              className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed"
               style={{
-                background: 'linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%)',
                 textShadow: '0 2px 10px rgba(0,0,0,0.5)',
               }}
             >
-              {t('hero.description')}
+              Premium software access — at platform-level pricing you won't find elsewhere.
             </p>
           </motion.div>
+
+          {/* Subtle subtext */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="text-xs sm:text-sm text-white/40 max-w-lg mx-auto mb-8 md:mb-10 tracking-wide"
+          >
+            Member-based pricing. Structured access. Simplified.
+          </motion.p>
 
           {/* CTA Buttons */}
           <motion.div
