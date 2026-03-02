@@ -981,6 +981,7 @@ const Dashboard = () => {
                         order={order}
                         index={index}
                         onViewCredentials={handleViewCredentials}
+                        onReportIssue={(o) => setReportIssueModal({ open: true, toolName: o.tool?.name || 'Tool' })}
                       />
                     ))}
                   </div>
