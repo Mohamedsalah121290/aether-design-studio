@@ -1,54 +1,121 @@
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Shield, Lock, ChevronDown } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
+
+const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
+
+const Section = ({ title, number, children }: { title: string; number: string; children: React.ReactNode }) => {
+  const [open, setOpen] = useState(true);
+  return (
+    <section className="border-b border-border/50 last:border-0">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between py-5 text-left group">
+        <h2 className="text-xl font-display font-bold text-foreground flex items-center gap-3">
+          <span className="text-sm font-mono text-primary">{number}</span>
+          {title}
+        </h2>
+        <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="pb-6 text-muted-foreground space-y-4 text-[15px] leading-relaxed">
+          {children}
+        </div>
+      )}
+    </section>
+  );
+};
 
 const Privacy = () => {
-  const { t } = useTranslation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-3xl">
-          <h1 className="text-4xl font-display font-black mb-8">Privacy Policy</h1>
-          <div className="prose prose-invert max-w-none space-y-6 text-muted-foreground">
-            <p className="text-lg">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          {/* Trust icons */}
+          <motion.div variants={fadeUp} initial="hidden" animate="visible" className="flex flex-wrap gap-3 mb-8">
+            {[
+              { icon: <Shield className="w-4 h-4" />, label: 'Privacy-First' },
+              { icon: <Lock className="w-4 h-4" />, label: 'Encrypted Storage' },
+            ].map((badge) => (
+              <div key={badge.label} className="flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-foreground">
+                <span className="text-primary">{badge.icon}</span>
+                {badge.label}
+              </div>
+            ))}
+          </motion.div>
 
-            <section className="space-y-3">
-              <h2 className="text-2xl font-display font-bold text-foreground">1. Information We Collect</h2>
-              <p>We collect information you provide directly, including your email address when creating an account, payment information processed securely through Stripe, and any credentials you provide for tool subscription services.</p>
-            </section>
+          <motion.div variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.1 }}>
+            <h1 className="text-4xl md:text-5xl font-display font-black mb-3">Privacy Policy</h1>
+            <p className="text-muted-foreground mb-10">Last updated: March 2, 2026</p>
+          </motion.div>
 
-            <section className="space-y-3">
-              <h2 className="text-2xl font-display font-bold text-foreground">2. How We Use Your Information</h2>
-              <p>We use your information to process purchases and manage subscriptions, provide access to AI tool subscriptions, communicate order status and account updates, and improve our services.</p>
-            </section>
+          <motion.div variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.2 }} className="space-y-0">
+            <Section number="01" title="Information We Collect">
+              <p>We collect the minimum information necessary to operate our service:</p>
+              <ul className="list-disc list-inside space-y-2">
+                <li><strong className="text-foreground">Email address</strong> — used for account creation, activation, and communication.</li>
+                <li><strong className="text-foreground">Account information</strong> — your profile data and subscription preferences.</li>
+                <li><strong className="text-foreground">Order metadata</strong> — purchase history, tool selections, and activation status.</li>
+              </ul>
+            </Section>
 
-            <section className="space-y-3">
-              <h2 className="text-2xl font-display font-bold text-foreground">3. Data Security</h2>
-              <p>We implement industry-standard security measures to protect your data. Credentials are encrypted using AES-256-GCM encryption. Payment processing is handled securely by Stripe — we never store your card details.</p>
-            </section>
+            <Section number="02" title="Information We Do NOT Collect">
+              <div className="glass rounded-xl p-4 border border-primary/20">
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-foreground"><Lock className="w-4 h-4 text-primary shrink-0" /> We do <strong>not</strong> collect your passwords for third-party tools.</li>
+                  <li className="flex items-center gap-2 text-foreground"><Shield className="w-4 h-4 text-primary shrink-0" /> We do <strong>not</strong> store payment card data — all payments are processed securely by our payment provider (Stripe).</li>
+                </ul>
+              </div>
+            </Section>
 
-            <section className="space-y-3">
-              <h2 className="text-2xl font-display font-bold text-foreground">4. Third-Party Services</h2>
-              <p>We use Stripe for payment processing and various AI tool providers to fulfill subscriptions. Each third-party service has its own privacy policy governing data handling.</p>
-            </section>
+            <Section number="03" title="Credential Storage & Security">
+              <p>Login credentials provided to you after activation are stored using <strong className="text-foreground">AES-256-GCM encryption</strong>.</p>
+              <p>Only you can access your credentials through your personal dashboard after authentication. Admin access for credential delivery is logged and restricted.</p>
+            </Section>
 
-            <section className="space-y-3">
-              <h2 className="text-2xl font-display font-bold text-foreground">5. Your Rights</h2>
-              <p>You may request access to, correction, or deletion of your personal data at any time by contacting us. You can also manage your subscriptions through your dashboard.</p>
-            </section>
+            <Section number="04" title="How We Use Your Information">
+              <p>Your data is used exclusively for:</p>
+              <ul className="list-disc list-inside space-y-2">
+                <li>Processing and activating your tool subscriptions</li>
+                <li>Managing your account and delivering credentials</li>
+                <li>Communicating order updates and support responses</li>
+                <li>Improving our service quality</li>
+              </ul>
+              <p>We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
+            </Section>
 
-            <section className="space-y-3">
-              <h2 className="text-2xl font-display font-bold text-foreground">6. Contact Us</h2>
-              <p>For questions about this privacy policy, please contact us through the email listed on our website.</p>
-            </section>
-          </div>
+            <Section number="05" title="Third-Party Services">
+              <p>We use the following third-party services in our operations:</p>
+              <ul className="list-disc list-inside space-y-2">
+                <li><strong className="text-foreground">Stripe</strong> — for secure payment processing</li>
+                <li><strong className="text-foreground">AI tool providers</strong> — to fulfill your subscriptions</li>
+              </ul>
+              <p>Each third-party service operates under its own privacy policy. We encourage you to review their policies independently.</p>
+            </Section>
+
+            <Section number="06" title="Your Rights">
+              <p>You have the right to:</p>
+              <ul className="list-disc list-inside space-y-2">
+                <li>Access the personal data we hold about you</li>
+                <li>Request correction of inaccurate data</li>
+                <li>Request deletion of your data where applicable</li>
+                <li>Manage your subscriptions through your dashboard</li>
+              </ul>
+              <p>To exercise any of these rights, please contact us through our support channels.</p>
+            </Section>
+
+            <Section number="07" title="Data Protection Principles">
+              <p>Our data handling practices are aligned with European privacy principles, including data minimization, purpose limitation, and security by design.</p>
+              <p className="text-sm italic">Note: This does not constitute a formal certification or compliance claim.</p>
+            </Section>
+
+            <Section number="08" title="Contact">
+              <p>For questions about this privacy policy or your personal data, please contact us through the email listed on our website or via our contact page.</p>
+            </Section>
+          </motion.div>
         </div>
       </main>
       <Footer />
