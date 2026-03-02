@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Sparkles, Search, Loader2, PenTool, Palette, Film, Mic,
-  Code, Zap, Briefcase, ShieldCheck, Monitor, Users,
+  Code, Zap, Briefcase, ShieldCheck, Monitor, Users, Clock,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
 import TrustStrip from './TrustStrip';
@@ -113,9 +113,18 @@ const Storefront = () => {
     return result;
   }, [tools, searchQuery, activeFilter, sortBy]);
 
-  const sections = SECTION_ORDER.map(section => ({
+  /* Split into active vs coming_soon */
+  const activeTools = useMemo(() => processedTools.filter(t => t.status !== 'coming_soon'), [processedTools]);
+  const comingSoonTools = useMemo(() => processedTools.filter(t => t.status === 'coming_soon'), [processedTools]);
+
+  const activeSections = SECTION_ORDER.map(section => ({
     ...section,
-    tools: processedTools.filter(t => t.category === section.key),
+    tools: activeTools.filter(t => t.category === section.key),
+  })).filter(s => s.tools.length > 0);
+
+  const comingSoonSections = SECTION_ORDER.map(section => ({
+    ...section,
+    tools: comingSoonTools.filter(t => t.category === section.key),
   })).filter(s => s.tools.length > 0);
 
   return (
@@ -213,19 +222,16 @@ const Storefront = () => {
                   />
                 </div>
 
-                {/* Category sections */}
-                {sections.map((section) => {
+                {/* ═══ AVAILABLE NOW ═══ */}
+                {activeSections.map((section) => {
                   const Icon = section.icon;
                   return (
                     <section key={section.key} className="py-12">
                       <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 relative">
-                        {/* Faint radial highlight */}
                         <div
                           className="absolute -top-16 left-1/2 -translate-x-1/2 w-[600px] h-[250px] rounded-full blur-3xl pointer-events-none opacity-[0.03]"
                           style={{ background: 'rgba(139,92,246,1)' }}
                         />
-
-                        {/* Header */}
                         <div className="flex items-center gap-3 relative z-10">
                           <div className="h-9 w-9 rounded-lg grid place-items-center bg-white/5 border border-white/10">
                             <Icon className="w-4 h-4 text-white/40" />
@@ -238,11 +244,7 @@ const Storefront = () => {
                             {section.tools.length}
                           </span>
                         </div>
-
-                        {/* Divider */}
                         <div className="h-px mt-4 mb-6 bg-gradient-to-r from-white/10 via-white/5 to-transparent relative z-10" />
-
-                        {/* Grid */}
                         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 relative z-10">
                           {section.tools.map((tool, index) => (
                             <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
@@ -253,8 +255,38 @@ const Storefront = () => {
                   );
                 })}
 
+                {/* ═══ COMING SOON SECTION ═══ */}
+                {comingSoonTools.length > 0 && (
+                  <section className="py-16">
+                    <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+                      {/* Section header */}
+                      <div className="flex items-center gap-3 mb-2">
+                        <div
+                          className="h-9 w-9 rounded-lg grid place-items-center border border-amber-500/20"
+                          style={{ background: 'rgba(251,191,36,0.08)' }}
+                        >
+                          <Clock className="w-4 h-4 text-amber-400/60" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">Coming Soon</h2>
+                          <p className="text-white/50 text-sm">These tools are on their way — get early access</p>
+                        </div>
+                        <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400/60 border border-amber-500/15">
+                          {comingSoonTools.length}
+                        </span>
+                      </div>
+                      <div className="h-px mt-4 mb-6 bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent" />
+                      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
+                        {comingSoonTools.map((tool, index) => (
+                          <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
+                        ))}
+                      </div>
+                    </div>
+                  </section>
+                )}
+
                 {/* Empty state */}
-                {sections.length === 0 && (
+                {activeSections.length === 0 && comingSoonTools.length === 0 && (
                   <div className="text-center py-20">
                     <Search className="w-12 h-12 text-white/10 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-white/60 mb-2">{t('store.noResults')}</h3>

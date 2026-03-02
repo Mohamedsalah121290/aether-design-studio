@@ -406,6 +406,33 @@ export type Database = {
         }
         Relationships: []
       }
+      waitlist: {
+        Row: {
+          consent: boolean
+          created_at: string
+          email: string
+          id: string
+          source: string
+          tool_id: string
+        }
+        Insert: {
+          consent?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          source?: string
+          tool_id: string
+        }
+        Update: {
+          consent?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          source?: string
+          tool_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
