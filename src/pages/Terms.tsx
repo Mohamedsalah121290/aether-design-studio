@@ -125,12 +125,15 @@ const Terms = () => {
               <ul className="list-disc list-inside space-y-3">
                 <li>If credentials are <strong className="text-foreground">not delivered</strong>, you may request a full refund within 24 hours of purchase.</li>
                 <li>Once credentials are delivered, subscriptions are generally <strong className="text-foreground">non-refundable</strong>.</li>
+                <li>In case of activation failure or extended service interruption, AI DEALS may issue <strong className="text-foreground">account credit</strong>, subscription extension, or refund at its discretion.</li>
+                <li>Account credit (Wallet Credit) is the primary resolution method and is applied automatically at your next checkout.</li>
                 <li>Service interruptions caused by third-party providers do not automatically qualify for refunds.</li>
                 <li>Depending on the situation, resolutions may include:
                   <ul className="list-disc list-inside ml-4 mt-2 space-y-1 text-sm">
+                    <li>Wallet credit (applied at next checkout)</li>
                     <li>Subscription time extension</li>
-                    <li>Account credit toward future purchases</li>
                     <li>Replacement access (when available)</li>
+                    <li>Refund (in exceptional cases)</li>
                   </ul>
                 </li>
                 <li>All refund and credit requests are reviewed on a case-by-case basis.</li>

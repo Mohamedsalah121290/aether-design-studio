@@ -11,7 +11,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Clock, CheckCircle, Mail, Gift, Sparkles, Shield, Zap, ShieldCheck, UserCheck } from 'lucide-react';
+import { Loader2, Clock, CheckCircle, Mail, Gift, Sparkles, Shield as ShieldIcon, Zap, ShieldCheck, UserCheck } from 'lucide-react';
+const Shield = ShieldIcon;
 import { z } from 'zod';
 import type { Tool, ToolPlan } from './ToolCard';
 import { AuthDialog } from './AuthDialog';
@@ -403,7 +404,11 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       <Zap className="w-3 h-3" />
                       Cancel anytime. No commitment.
                     </p>
-                    {/* Trust microcopy */}
+                  {/* Trust microcopy */}
+                    <p className="text-xs flex items-center justify-center gap-1.5" style={{ color: '#E8D48B' }}>
+                      <Shield className="w-3 h-3" />
+                      Activation Guarantee — If activation fails, you're protected.
+                    </p>
                     <p className="text-xs text-primary/80 flex items-center justify-center gap-1.5">
                       <ShieldCheck className="w-3 h-3" />
                       If a tool goes down, we fix it or extend — fair and simple.

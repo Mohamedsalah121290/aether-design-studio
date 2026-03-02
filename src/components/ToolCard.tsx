@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap } from 'lucide-react';
+import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap, Shield } from 'lucide-react';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -260,6 +260,14 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                 <span className="text-xs text-muted-foreground">{t('store.contactForPrice', 'Contact for pricing')}</span>
               )}
             </div>
+
+            {/* Activation Guarantee badge */}
+            {!isComingSoon && !isPaused && (
+              <div className="flex items-center gap-1.5 mb-1" title="If activation fails within 24 hours, you're protected with credit or refund.">
+                <Shield className="w-3 h-3" style={{ color: '#E8D48B' }} />
+                <span className="text-[10px] font-semibold tracking-wide" style={{ color: '#E8D48B' }}>Activation Guarantee</span>
+              </div>
+            )}
 
             {/* CTA */}
             {isComingSoon ? (

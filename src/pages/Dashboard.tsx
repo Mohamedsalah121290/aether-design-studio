@@ -7,7 +7,7 @@ import {
   Settings, Bell, User, Shield, Clock, Loader2,
   CreditCard, RefreshCw, CalendarDays, CheckCircle, Sparkles, ArrowRight, ShieldCheck,
   Eye, EyeOff, Lock, Package, Copy, Check, GraduationCap, Play,
-  AlertTriangle, MessageCircle
+  AlertTriangle, MessageCircle, Wallet, History
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -106,6 +106,67 @@ interface DecryptedCredentials {
   password: string;
 }
 
+interface WalletData {
+  balance: number;
+}
+
+interface WalletTransaction {
+  id: string;
+  amount: number;
+  type: string;
+  reason: string;
+  related_order_id: string | null;
+  created_at: string;
+}
+
+const REASON_LABELS: Record<string, string> = {
+  activation_delay: 'Activation delay compensation',
+  goodwill: 'Goodwill credit',
+  extension_compensation: 'Extension compensation',
+  admin_manual: 'Manual adjustment',
+  checkout_deduction: 'Applied at checkout',
+};
+
+// Wallet Transactions Modal
+const WalletTransactionsModal = ({ open, onClose, transactions, loading }: { open: boolean; onClose: () => void; transactions: WalletTransaction[]; loading: boolean }) => (
+  <Dialog open={open} onOpenChange={v => !v && onClose()}>
+    <DialogContent className="max-w-md border-white/10" style={{ background: 'linear-gradient(180deg, hsl(222 47% 12%) 0%, hsl(222 47% 8%) 100%)' }}>
+      <DialogHeader>
+        <DialogTitle className="flex items-center gap-2 text-white">
+          <History className="w-5 h-5 text-primary" />
+          Wallet Transactions
+        </DialogTitle>
+        <DialogDescription className="text-muted-foreground text-sm">
+          Your credit and debit history.
+        </DialogDescription>
+      </DialogHeader>
+      <div className="mt-2 max-h-[400px] overflow-y-auto space-y-2">
+        {loading ? (
+          <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+        ) : transactions.length > 0 ? (
+          transactions.map(tx => (
+            <div key={tx.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+              <div>
+                <p className="text-sm text-foreground font-medium">{REASON_LABELS[tx.reason] || tx.reason}</p>
+                <p className="text-xs text-muted-foreground">{new Date(tx.created_at).toLocaleDateString()}</p>
+              </div>
+              <span className={`text-sm font-bold ${tx.type === 'credit' ? 'text-green-400' : 'text-red-400'}`}>
+                {tx.type === 'credit' ? '+' : '-'}€{Math.abs(tx.amount).toFixed(2)}
+              </span>
+            </div>
+          ))
+        ) : (
+          <div className="text-center py-8 text-muted-foreground text-sm">
+            <Wallet className="w-8 h-8 mx-auto mb-3 opacity-50" />
+            <p>No transactions yet.</p>
+            <p className="text-xs mt-1">Credits will appear here when issued.</p>
+          </div>
+        )}
+      </div>
+    </DialogContent>
+  </Dialog>
+);
+
 // Report Issue Modal
 const ReportIssueModal = ({ open, onClose, toolName }: { open: boolean; onClose: () => void; toolName: string }) => {
   const [issueType, setIssueType] = useState('');
@@ -198,9 +259,12 @@ const SubscriptionCard = ({ order, index, onViewCredentials, onReportIssue }: { 
   const [logoError, setLogoError] = useState(false);
 
   const isPendingActivation = order.status === 'pending' || order.status === 'pending_activation' || order.status === 'processing';
+  const isDelayed = order.status === 'activation_delayed';
   const isDelivered = order.status === 'delivered' || order.status === 'active' || order.status === 'activated';
 
-  const statusConfig = isPendingActivation
+  const statusConfig = isDelayed
+    ? { label: 'Activation Delayed', color: 'text-red-400', bg: 'bg-red-500/20', icon: <AlertTriangle className="w-3.5 h-3.5" /> }
+    : isPendingActivation
     ? { label: 'Pending Activation', color: 'text-orange-400', bg: 'bg-orange-500/20', icon: <Clock className="w-3.5 h-3.5" /> }
     : { label: 'Delivered', color: 'text-green-400', bg: 'bg-green-500/20', icon: <CheckCircle className="w-3.5 h-3.5" /> };
 
@@ -225,7 +289,7 @@ const SubscriptionCard = ({ order, index, onViewCredentials, onReportIssue }: { 
 
         {/* Status badge */}
         <div className={`absolute top-4 end-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${statusConfig.bg} ${statusConfig.color}`}>
-          {isPendingActivation ? (
+          {(isPendingActivation || isDelayed) ? (
             <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
               {statusConfig.icon}
             </motion.div>
@@ -267,7 +331,18 @@ const SubscriptionCard = ({ order, index, onViewCredentials, onReportIssue }: { 
             Purchased: {new Date(order.created_at).toLocaleDateString()}
           </p>
 
-          {/* Status-specific content */}
+          {/* Delayed alert */}
+          {isDelayed && (
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+              <div className="flex items-center gap-2 mb-1">
+                <AlertTriangle className="w-4 h-4 text-red-400" />
+                <p className="text-xs text-red-400 font-semibold">Activation delayed</p>
+              </div>
+              <p className="text-sm text-red-300">We're resolving this. You may be eligible for wallet credit.</p>
+            </div>
+          )}
+
+          {/* Pending */}
           {isPendingActivation && (
             <div className="mb-4 p-3 rounded-xl bg-orange-500/10 border border-orange-500/20">
               <div className="flex items-center gap-2 mb-1">
@@ -453,6 +528,84 @@ const CredentialsModal = ({ open, onClose, order }: { open: boolean; onClose: ()
   );
 };
 
+// Wallet Card Component
+const WalletCard = ({ wallet, onViewTransactions }: { wallet: WalletData | null; onViewTransactions: () => void }) => {
+  const balance = wallet?.balance ?? 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 }}
+      className="relative overflow-hidden rounded-2xl border border-white/10"
+      style={{
+        background: 'linear-gradient(135deg, hsl(222 47% 11% / 0.95) 0%, hsl(222 47% 8% / 0.98) 100%)',
+        boxShadow: balance > 0
+          ? '0 0 30px hsl(45 90% 50% / 0.08), 0 15px 40px -12px rgba(0,0,0,0.4)'
+          : '0 15px 40px -12px rgba(0,0,0,0.4)',
+      }}
+    >
+      {/* Subtle glow for non-zero balance */}
+      {balance > 0 && (
+        <div className="absolute top-0 left-0 right-0 h-20 pointer-events-none"
+          style={{ background: 'linear-gradient(180deg, hsl(45 90% 55% / 0.06) 0%, transparent 100%)' }}
+        />
+      )}
+
+      <div className="relative p-5">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2.5">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{
+                background: balance > 0
+                  ? 'linear-gradient(135deg, hsl(45 90% 50% / 0.2), hsl(35 85% 42% / 0.15))'
+                  : 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))',
+                border: balance > 0 ? '1px solid hsl(45 90% 50% / 0.2)' : '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <Wallet className={`w-5 h-5 ${balance > 0 ? 'text-amber-400' : 'text-muted-foreground'}`} />
+            </div>
+            <div>
+              <h3 className="text-sm font-display font-bold text-foreground">Your Wallet</h3>
+              <p className="text-[11px] text-muted-foreground">Credits applied at checkout</p>
+            </div>
+          </div>
+          {balance > 0 && (
+            <span
+              className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider"
+              style={{
+                background: 'linear-gradient(135deg, hsl(45 90% 50% / 0.15), hsl(35 85% 42% / 0.10))',
+                border: '1px solid hsl(45 90% 50% / 0.25)',
+                color: '#E8D48B',
+              }}
+            >
+              Credit Available
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-baseline gap-1 mb-4">
+          <span className={`text-3xl font-display font-black ${balance > 0 ? 'text-amber-300' : 'text-muted-foreground'}`}
+            style={balance > 0 ? { textShadow: '0 0 20px hsl(45 90% 55% / 0.2)' } : {}}>
+            €{balance.toFixed(2)}
+          </span>
+        </div>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onViewTransactions}
+          className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
+        >
+          <History className="w-3.5 h-3.5" />
+          View Transactions
+        </Button>
+      </div>
+    </motion.div>
+  );
+};
+
 const Dashboard = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
@@ -471,6 +624,12 @@ const Dashboard = () => {
   const [academySubs, setAcademySubs] = useState<any[]>([]);
   const [academyLoading, setAcademyLoading] = useState(false);
   const [reportIssueModal, setReportIssueModal] = useState<{ open: boolean; toolName: string }>({ open: false, toolName: '' });
+
+  // Wallet state
+  const [wallet, setWallet] = useState<WalletData | null>(null);
+  const [walletTransactions, setWalletTransactions] = useState<WalletTransaction[]>([]);
+  const [walletTxLoading, setWalletTxLoading] = useState(false);
+  const [showWalletTx, setShowWalletTx] = useState(false);
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
@@ -496,6 +655,7 @@ const Dashboard = () => {
     if (user) {
       fetchSubscriptions();
       fetchAcademySubs();
+      fetchWallet();
     }
 
     const channel = supabase
@@ -505,6 +665,46 @@ const Dashboard = () => {
 
     return () => { supabase.removeChannel(channel); };
   }, [i18n.language, user]);
+
+  const fetchWallet = async () => {
+    if (!user) return;
+    try {
+      // Ensure wallet exists via RPC
+      await supabase.rpc('ensure_wallet_exists');
+      const { data } = await supabase
+        .from('wallets')
+        .select('balance')
+        .eq('user_id', user.id)
+        .single();
+      if (data) setWallet({ balance: Number(data.balance) });
+    } catch (err) {
+      console.error('Error fetching wallet:', err);
+      setWallet({ balance: 0 });
+    }
+  };
+
+  const fetchWalletTransactions = async () => {
+    if (!user) return;
+    setWalletTxLoading(true);
+    try {
+      const { data } = await supabase
+        .from('wallet_transactions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      setWalletTransactions((data || []) as WalletTransaction[]);
+    } catch (err) {
+      console.error('Error fetching wallet transactions:', err);
+    } finally {
+      setWalletTxLoading(false);
+    }
+  };
+
+  const handleViewTransactions = () => {
+    setShowWalletTx(true);
+    fetchWalletTransactions();
+  };
 
   const fetchAcademySubs = async () => {
     if (!user) return;
@@ -562,7 +762,6 @@ const Dashboard = () => {
       setOrders(mappedOrders);
       if (mappedOrders.length > 0 && showSuccessScreen) setLatestOrder(mappedOrders[0]);
 
-      // Track which orders have credentials (for badge display)
       if (user) {
         const deliveredIds = mappedOrders
           .filter(o => o.status === 'delivered' || o.status === 'active' || o.status === 'activated')
@@ -636,6 +835,7 @@ const Dashboard = () => {
 
   const pendingCount = orders.filter(o => ['pending', 'pending_activation', 'processing'].includes(o.status)).length;
   const deliveredCount = orders.filter(o => ['delivered', 'active', 'activated'].includes(o.status)).length;
+  const delayedCount = orders.filter(o => o.status === 'activation_delayed').length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -788,6 +988,20 @@ const Dashboard = () => {
 
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
                 className="flex items-center gap-3">
+                {/* Wallet balance badge in header */}
+                {wallet && wallet.balance > 0 && (
+                  <div
+                    className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
+                    style={{
+                      background: 'linear-gradient(135deg, hsl(45 90% 50% / 0.12), hsl(35 85% 42% / 0.08))',
+                      border: '1px solid hsl(45 90% 50% / 0.25)',
+                      color: '#E8D48B',
+                    }}
+                  >
+                    <Wallet className="w-4 h-4" />
+                    €{wallet.balance.toFixed(2)}
+                  </div>
+                )}
                 <Button variant="ghost" size="icon" className="glass"><Bell className="w-5 h-5" /></Button>
                 <Button variant="ghost" size="icon" className="glass"><Settings className="w-5 h-5" /></Button>
                 <div className="h-8 w-px bg-border" />
@@ -802,39 +1016,61 @@ const Dashboard = () => {
           </div>
         </section>
 
-        {/* Status Bar */}
+        {/* Wallet + Status Bar */}
         <section className="py-4">
           <div className="container mx-auto px-4">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className="glass-strong rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-sm font-medium text-green-400">{deliveredCount} Active Tools</span>
-                </div>
-                {pendingCount > 0 && (
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-3 h-3 text-orange-400" />
-                    <span className="text-sm font-medium text-orange-400">{pendingCount} Pending</span>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+              {/* Wallet Card */}
+              <WalletCard wallet={wallet} onViewTransactions={handleViewTransactions} />
+
+              {/* Status Bar */}
+              <div className="lg:col-span-2">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                  className="glass-strong rounded-2xl p-5 h-full flex flex-col justify-center">
+                  <div className="flex items-center gap-4 flex-wrap mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
+                      <span className="text-sm font-medium text-green-400">{deliveredCount} Active Tools</span>
+                    </div>
+                    {pendingCount > 0 && (
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-3 h-3 text-orange-400" />
+                        <span className="text-sm font-medium text-orange-400">{pendingCount} Pending</span>
+                      </div>
+                    )}
+                    {delayedCount > 0 && (
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="w-3 h-3 text-red-400" />
+                        <span className="text-sm font-medium text-red-400">{delayedCount} Delayed</span>
+                      </div>
+                    )}
+                    <div className="h-4 w-px bg-border hidden sm:block" />
+                    <div className="flex items-center gap-2">
+                      <GraduationCap className="w-3.5 h-3.5 text-primary" />
+                      <span className="text-sm font-medium text-primary">{academySubs.length} Academy Courses</span>
+                    </div>
                   </div>
-                )}
-                <div className="h-4 w-px bg-border hidden sm:block" />
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-sm font-medium text-primary">{academySubs.length} Academy Courses</span>
-                </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Shield className="w-4 h-4" />
+                    <span>Activation Guarantee — protected within 24h</span>
+                  </div>
+                </motion.div>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Shield className="w-4 h-4" />
-                <span>Secure access</span>
-              </div>
-            </motion.div>
+            </div>
 
             {pendingCount > 0 && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-                className="mt-3 p-3 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center gap-2">
+                className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center gap-2">
                 <Clock className="w-4 h-4 text-orange-400 flex-shrink-0" />
                 <p className="text-sm text-orange-300">Activation in progress — you'll see login details here once ready.</p>
+              </motion.div>
+            )}
+
+            {delayedCount > 0 && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+                className="mt-3 p-3 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                <p className="text-sm text-red-300">Activation delayed — we're resolving this. You may be eligible for wallet credit.</p>
               </motion.div>
             )}
           </div>
@@ -1030,7 +1266,6 @@ const Dashboard = () => {
                             boxShadow: '0 15px 40px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05)',
                           }}
                         >
-                          {/* Thumbnail */}
                           {course?.thumbnail_url && (
                             <div className="aspect-video relative overflow-hidden">
                               <img src={course.thumbnail_url} alt={course.title} className="w-full h-full object-cover" loading="lazy" />
@@ -1038,7 +1273,6 @@ const Dashboard = () => {
                             </div>
                           )}
 
-                          {/* Status badge */}
                           <div className="absolute top-4 end-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
                             <CheckCircle className="w-3.5 h-3.5" /> Enrolled
                           </div>
@@ -1082,18 +1316,24 @@ const Dashboard = () => {
         )}
       </main>
 
-      {/* View Credentials Modal */}
+      {/* Modals */}
       <CredentialsModal
         open={credentialsModal.open}
         onClose={() => setCredentialsModal({ open: false, order: null })}
         order={credentialsModal.order}
       />
 
-      {/* Report Issue Modal */}
       <ReportIssueModal
         open={reportIssueModal.open}
         onClose={() => setReportIssueModal({ open: false, toolName: '' })}
         toolName={reportIssueModal.toolName}
+      />
+
+      <WalletTransactionsModal
+        open={showWalletTx}
+        onClose={() => setShowWalletTx(false)}
+        transactions={walletTransactions}
+        loading={walletTxLoading}
       />
     </div>
   );
