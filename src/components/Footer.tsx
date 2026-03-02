@@ -7,9 +7,20 @@ const Footer = () => {
     t
   } = useTranslation();
   const footerLinks = {
-    product: ['features', 'pricing', 'integrations', 'changelog', 'roadmap'],
-    company: ['about', 'blog', 'careers', 'press', 'partners'],
-    legal: ['privacy', 'terms', 'security', 'cookies']
+    product: [
+      { label: t('nav.store'), href: '/store' },
+      { label: t('nav.academy'), href: '/academy' },
+      { label: 'Blog', href: '/blog' },
+      { label: t('nav.dashboard'), href: '/dashboard' },
+    ],
+    company: [
+      { label: t('nav.about'), href: '/about' },
+      { label: 'Contact', href: '/contact' },
+    ],
+    legal: [
+      { label: t('footer.links.privacy'), href: '/privacy' },
+      { label: t('footer.links.terms'), href: '/terms' },
+    ],
   };
   const socialLinks = [{
     icon: Twitter,
@@ -86,11 +97,13 @@ const Footer = () => {
           <div>
             <h4 className="font-display font-bold mb-4">{t('footer.product')}</h4>
             <ul className="space-y-3">
-              {footerLinks.product.map(link => <li key={link}>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t(`footer.links.${link}`)}
+              {footerLinks.product.map(link => (
+                <li key={link.href}>
+                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {link.label}
                   </a>
-                </li>)}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -98,11 +111,13 @@ const Footer = () => {
           <div>
             <h4 className="font-display font-bold mb-4">{t('footer.company')}</h4>
             <ul className="space-y-3">
-              {footerLinks.company.map(link => <li key={link}>
-                  <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    {t(`footer.links.${link}`)}
+              {footerLinks.company.map(link => (
+                <li key={link.href}>
+                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {link.label}
                   </a>
-                </li>)}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -110,21 +125,13 @@ const Footer = () => {
           <div>
             <h4 className="font-display font-bold mb-4">{t('footer.legal')}</h4>
             <ul className="space-y-3">
-              {footerLinks.legal.map(link => {
-                const legalRoutes: Record<string, string> = {
-                  privacy: '/privacy',
-                  terms: '/terms',
-                  security: '/privacy#security',
-                  cookies: '/privacy#cookies',
-                };
-                return (
-                  <li key={link}>
-                    <a href={legalRoutes[link] || '#'} className="text-muted-foreground hover:text-foreground transition-colors">
-                      {t(`footer.links.${link}`)}
-                    </a>
-                  </li>
-                );
-              })}
+              {footerLinks.legal.map(link => (
+                <li key={link.href}>
+                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

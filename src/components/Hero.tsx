@@ -220,7 +220,7 @@ const Hero = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 md:mb-16"
           >
             <Button variant="hero" size="xl" className="group min-w-[200px] shadow-2xl" asChild>
-              <a href="#store">
+              <a href="/store">
                 {t('hero.cta')}
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
