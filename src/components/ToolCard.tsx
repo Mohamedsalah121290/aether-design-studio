@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock } from 'lucide-react';
+import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap } from 'lucide-react';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
