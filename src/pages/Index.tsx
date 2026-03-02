@@ -662,6 +662,56 @@ const Index = () => {
           </div>
         </section>
 
+        {/* ═══════════════ 8.5) WHY OUR PRICING WORKS ═══════════════ */}
+        <section className="py-24 relative">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <motion.div {...fadeUp} className="text-center mb-12">
+                <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                  Our Model
+                </span>
+                <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
+                  Why Our Pricing <span className="gradient-text">Works</span>
+                </h2>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="glass rounded-3xl p-8 md:p-12 space-y-6"
+              >
+                <p className="text-foreground text-base md:text-lg leading-relaxed">
+                  AI DEALS operates on a <span className="font-semibold text-white">managed access model</span>.
+                </p>
+                <p className="text-muted-foreground text-base leading-relaxed">
+                  Instead of traditional retail subscriptions, we provide structured platform-level access. 
+                  This allows us to offer exclusive pricing to our members — every month.
+                </p>
+                <div className="grid sm:grid-cols-3 gap-4 pt-4">
+                  {[
+                    { icon: Layers, title: 'Structured Access', desc: 'Platform-managed accounts with dedicated support.' },
+                    { icon: Shield, title: 'Member Pricing', desc: 'Exclusive rates available only through our platform.' },
+                    { icon: Zap, title: 'Monthly Flexibility', desc: 'No annual lock-ins. Scale up or down anytime.' },
+                  ].map((item, i) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={i} className="text-center p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                          <Icon className="w-5 h-5 text-primary" />
+                        </div>
+                        <h4 className="text-sm font-semibold text-foreground mb-1">{item.title}</h4>
+                        <p className="text-xs text-muted-foreground">{item.desc}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
         {/* ═══════════════ 9) FAQ ═══════════════ */}
         <section className="py-24 relative">
           <div className="container mx-auto px-4">

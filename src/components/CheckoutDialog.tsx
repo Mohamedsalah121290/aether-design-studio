@@ -486,7 +486,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   {/* Trust microcopy */}
                     <p className="text-xs flex items-center justify-center gap-1.5" style={{ color: '#E8D48B' }}>
                       <Shield className="w-3 h-3" />
-                      Activation Guarantee — If activation fails, you're protected.
+                      Exclusive member pricing. Structured access model.
                     </p>
                     <p className="text-xs text-primary/80 flex items-center justify-center gap-1.5">
                       <ShieldCheck className="w-3 h-3" />
