@@ -470,6 +470,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<'tools' | 'academy'>('tools');
   const [academySubs, setAcademySubs] = useState<any[]>([]);
   const [academyLoading, setAcademyLoading] = useState(false);
+  const [reportIssueModal, setReportIssueModal] = useState<{ open: boolean; toolName: string }>({ open: false, toolName: '' });
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' || i18n.language === 'ur' ? 'rtl' : 'ltr';
