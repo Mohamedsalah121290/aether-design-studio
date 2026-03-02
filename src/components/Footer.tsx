@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Github, Twitter, Linkedin, Mail, Shield, Lock, Globe, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import logo from '@/assets/logo.png';
 
 const Footer = () => {
   const { t } = useTranslation();
+  const newsletter = useNewsletterSubscribe();
 
   const footerLinks = {
     product: [
@@ -158,17 +160,20 @@ const Footer = () => {
             <h4 className="font-display font-bold mb-4">Stay Updated</h4>
             <p className="text-muted-foreground text-xs mb-3">Weekly AI tips for students & creators.</p>
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={newsletter.subscribe}
               className="flex flex-col gap-2"
             >
               <Input
                 type="email"
                 placeholder="your@email.com"
+                required
+                value={newsletter.email}
+                onChange={(e) => newsletter.setEmail(e.target.value)}
                 className="bg-muted/50 border-border h-9 rounded-lg text-xs"
               />
-              <Button variant="default" size="sm" type="submit" className="w-full h-9 rounded-lg text-xs">
+              <Button variant="default" size="sm" type="submit" disabled={newsletter.loading} className="w-full h-9 rounded-lg text-xs">
                 <Mail className="w-3 h-3 mr-1.5" />
-                Subscribe
+                {newsletter.loading ? 'Subscribing...' : 'Subscribe'}
               </Button>
             </form>
           </div>

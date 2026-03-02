@@ -16,6 +16,7 @@ import { ToolCard, Tool } from '@/components/ToolCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
+import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
 import chatgptLogo from '@/assets/chatgpt-logo.png';
@@ -200,6 +201,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
    ══════════════════════════════════════════════════════════════ */
 const Index = () => {
   const { i18n } = useTranslation();
+  const newsletter = useNewsletterSubscribe();
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
@@ -714,20 +716,20 @@ const Index = () => {
                   Weekly insights for students and creators across Europe and beyond. Safe tools, study hacks, and responsible AI practices.
                 </p>
                 <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                  }}
+                  onSubmit={newsletter.subscribe}
                   className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
                 >
                   <Input
                     type="email"
                     placeholder="your@email.com"
                     required
+                    value={newsletter.email}
+                    onChange={(e) => newsletter.setEmail(e.target.value)}
                     className="flex-1 bg-muted/50 border-border h-12 rounded-xl text-sm"
                   />
-                  <Button variant="hero" size="lg" type="submit" className="h-12 rounded-xl whitespace-nowrap">
+                  <Button variant="hero" size="lg" type="submit" disabled={newsletter.loading} className="h-12 rounded-xl whitespace-nowrap">
                     <Mail className="w-4 h-4 mr-2" />
-                    Join 1,200+ Learners
+                    {newsletter.loading ? 'Joining...' : 'Join 1,200+ Learners'}
                   </Button>
                 </form>
               </motion.div>
