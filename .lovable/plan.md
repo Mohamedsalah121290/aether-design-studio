@@ -1,124 +1,77 @@
 
-# Restructure AI DEALS into a Multi-Page Brand Platform
+# Tool Status Management System
 
 ## Overview
+Add a `status` column to the `tools` table with three values (`active`, `coming_soon`, `paused`), then update the storefront cards and admin panel to reflect each status visually and functionally.
 
-Transform AI DEALS from a single-page marketplace into a structured brand website targeting parents and students. The homepage will become a trust-focused landing page, and all tools will move to a dedicated `/store` page.
+---
 
-## Page Structure
+## 1. Database Migration
 
-### 1. Home (`/` - Index.tsx) -- Major Rewrite
+Add a `status` text column to the `tools` table:
+- Default value: `'active'`
+- NOT NULL
+- No existing data breaks (all current tools default to `active`)
 
-Replace the current marketplace homepage with a brand-focused landing page containing these sections:
-
-- **Hero**: Clear headline ("AI Tools Made Safe for Students"), a CTA ("Browse Store"), and trust badge. Reuse the existing cinematic video background and floating icons.
-- **Why AI for Students**: 3-column grid with icons explaining how AI helps with studying, creativity, and productivity.
-- **Why AI DEALS is Safe**: Trust-focused section highlighting parental controls, no password sharing, curated tools, and 24/7 support.
-- **Featured Tools**: Show max 6 featured tools from the database (reuse `FeaturedCarousel` or a static grid). Links to `/store`.
-- **For Parents**: Dedicated section with trust messaging -- "We handle accounts so your child doesn't need credit cards," "Curated, safe tools only," etc.
-- **Final CTA**: Reuse existing `CTA` component with updated copy pointing to `/store`.
-
-Remove: `Storefront`, `TrustStrip`, `FiltersBar`, `TrustAndFAQ` from homepage.
-
-### 2. Store (`/store` - new StorePage.tsx)
-
-Move the full marketplace experience here:
-- Reuse `Storefront` component as-is (it already has the hero, trust strip, filters, categories, FAQ)
-- Add `Navbar` and `Footer` wrapping
-- This becomes the only page listing all tools
-
-### 3. Academy (`/academy` - existing)
-
-Already exists with courses from the database. Keep as-is -- it already covers beginner guides, tutorials, and progress tracking.
-
-### 4. Blog (`/blog` - new BlogPage.tsx)
-
-Repurpose the existing `ContentHub` (`/content-hub`) into `/blog`:
-- Same component, new route
-- Update categories to: Students, Parents, AI Tools, Comparisons
-- Keep the existing article listing and search functionality
-- Remove the old `/content-hub` route (redirect to `/blog`)
-
-### 5. About Us (`/about` - new AboutPage.tsx)
-
-New page with:
-- Brand story section ("Founded to make AI accessible and safe for students")
-- Mission statement
-- Trust statements with icons
-- "Why We Focus on Students" section
-- Dark premium style matching the rest of the site
-
-### 6. Contact (`/contact` - new ContactPage.tsx)
-
-New page with:
-- Simple contact form (Name, Email, Subject, Message) -- client-side only, sends via mailto or stores in database
-- Support info (email, response time)
-- FAQ link
-- Dark premium style
-
-## Navigation Update
-
-Update `Navbar.tsx` nav links from:
-```
-Store | Academy | Content Hub | Tutorials
-```
-to:
-```
-Home | Store | Academy | Blog | About | Contact
+```sql
+ALTER TABLE public.tools ADD COLUMN status text NOT NULL DEFAULT 'active';
 ```
 
-Update mobile menu to match. Remove the old `/#store` anchor link -- Store is now its own page.
+## 2. Admin Panel Changes (`AdminPage.tsx`)
 
-## Footer Update
+**Tool interface**: Add `status: string` field.
 
-Replace placeholder links with real routes:
-- Product section: Store, Academy, Blog, Dashboard
-- Company section: About, Contact
-- Legal section: Privacy, Terms (already working)
-- Remove dead links (Careers, Press, Pricing, Changelog, etc.)
+**Tool form**: Add a status dropdown with options: Active, Coming Soon, Paused. Wire it into `toolForm` state, `openToolForm`, and `saveTool`.
 
-## Routing Changes in App.tsx
+**Tools list**: Replace the simple green/red dot with a color-coded status indicator:
+- `active` = green dot
+- `coming_soon` = yellow dot + "Coming Soon" label
+- `paused` = gray dot + "Paused" label
 
-```
-/              -> New Home (brand landing)
-/store         -> StorePage (full marketplace)
-/academy       -> Academy (unchanged)
-/blog          -> BlogPage (repurposed ContentHub)
-/about         -> AboutPage (new)
-/contact       -> ContactPage (new)
-/content-hub   -> Redirect to /blog
-/resources     -> Remove or redirect to /blog
-```
+Replace the current "Activate/Deactivate" toggle button with a status dropdown selector so admins can switch between the three states inline without opening the edit form.
 
-## Technical Details
+## 3. Storefront Changes (`Storefront.tsx`)
 
-**Files to create:**
-- `src/pages/StorePage.tsx` -- Wrapper around existing `Storefront` component
-- `src/pages/AboutPage.tsx` -- New brand story page
-- `src/pages/ContactPage.tsx` -- New contact form page
-- `src/pages/BlogPage.tsx` -- Wrapper/rename of ContentHub
+Update the `fetchTools` query to also fetch tools where `status = 'coming_soon'` (currently only fetches `is_active = true`). Paused tools remain hidden from the store.
 
-**Files to modify:**
-- `src/pages/Index.tsx` -- Complete rewrite as brand landing page
-- `src/components/Navbar.tsx` -- Update nav links
-- `src/components/Footer.tsx` -- Fix links to real routes
-- `src/App.tsx` -- Add new routes, redirect old ones
-- `src/components/Hero.tsx` -- Update copy for student/parent messaging
+Change the query from `.eq('is_active', true)` to filtering by status: fetch `active` and `coming_soon` tools.
 
-**Files unchanged:**
-- `src/components/Storefront.tsx` -- Reused as-is in StorePage
-- `src/components/CheckoutDialog.tsx` -- Checkout logic untouched
-- `src/pages/Academy.tsx` -- Already functional
-- All UI components, edge functions, database
+Pass the `status` field through to the `Tool` interface and into `ToolCard`.
 
-**No database changes needed.**
+## 4. ToolCard Changes (`ToolCard.tsx`)
 
-## Design Approach
+**Tool interface**: Add `status?: string` field.
 
-All new pages will follow the existing dark premium aesthetic:
-- Deep midnight background with aurora gradients
-- Glassmorphism cards with blur effects
-- Framer Motion animations
-- Inter font family
-- Purple/cyan/violet accent palette
-- Fully responsive with mobile-first approach
+**Coming Soon state** (`status === 'coming_soon'`):
+- Show a yellow "Coming Soon" badge (replacing or alongside the tier badge)
+- Add a subtle opacity reduction (`opacity-70`) and slight blur overlay on the card
+- Replace "Buy Now" button with a "Notify Me" button styled with a yellow/amber gradient
+- "Notify Me" button opens a small email input (inline or toast prompt) that inserts into the `subscribers` table with a note, or simply shows a toast confirming interest
+- Disable the CheckoutDialog from opening
+
+**Paused state** (`status === 'paused'`):
+- Tools with this status are filtered out in Storefront, so no card rendering needed
+- As a safety fallback, if rendered, show a gray "Unavailable" badge with full muted styling
+
+**Active state** (`status === 'active'` or undefined):
+- No changes, current behavior preserved
+
+## 5. CheckoutDialog Guard
+
+Add a guard at the top of `CheckoutDialog` -- if `tool?.status !== 'active'`, don't render / immediately close. This ensures no checkout can happen for non-active tools regardless of how the dialog is triggered.
+
+## 6. Files Changed
+
+| File | Change |
+|------|--------|
+| Database migration | Add `status` column |
+| `src/pages/AdminPage.tsx` | Status dropdown in tool form + inline status selector in tool list |
+| `src/components/Storefront.tsx` | Fetch `coming_soon` tools, pass status to cards |
+| `src/components/ToolCard.tsx` | Coming Soon badge, Notify Me button, conditional rendering |
+| `src/components/CheckoutDialog.tsx` | Guard against non-active tools |
+
+## 7. What Will NOT Change
+- Payment/checkout logic remains untouched
+- Stripe integration unaffected
+- Existing `is_active` field remains (status supersedes it for storefront display)
+- Premium glass dark design maintained -- Coming Soon uses amber/gold tones, Paused uses muted grays
