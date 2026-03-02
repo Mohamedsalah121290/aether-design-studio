@@ -64,8 +64,28 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
         return;
       }
       fetchPlans(tool.tool_id);
+      fetchWalletBalance();
     }
   }, [open, tool, user]);
+
+  const fetchWalletBalance = async () => {
+    if (!user) return;
+    try {
+      await supabase.rpc('ensure_wallet_exists');
+      const { data } = await supabase
+        .from('wallets')
+        .select('balance')
+        .eq('user_id', user.id)
+        .single();
+      if (data) {
+        const bal = Number(data.balance);
+        setWalletBalance(bal);
+        setApplyWalletCredit(bal > 0);
+      }
+    } catch (err) {
+      console.error('Error fetching wallet:', err);
+    }
+  };
 
   const fetchPlans = async (toolId: string) => {
     setPlansLoading(true);
