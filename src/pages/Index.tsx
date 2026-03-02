@@ -227,14 +227,26 @@ const Index = () => {
                 ))}
               </motion.div>
             </div>
-
-            {/* Scroll Indicator */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} className="absolute bottom-4 left-1/2 -translate-x-1/2">
-              <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity }} className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2 backdrop-blur-sm">
-                <motion.div animate={{ height: ['20%', '60%', '20%'] }} transition={{ duration: 2, repeat: Infinity }} className="w-1 rounded-full bg-primary" />
-              </motion.div>
-            </motion.div>
           </div>
+
+          {/* Scroll Indicator — pinned at very bottom of hero */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30"
+          >
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+              className="flex flex-col items-center gap-2"
+            >
+              <span className="text-[10px] uppercase tracking-widest text-white/30 font-medium">Scroll</span>
+              <div className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center p-1.5">
+                <motion.div animate={{ height: ['20%', '60%', '20%'] }} transition={{ duration: 2, repeat: Infinity }} className="w-0.5 rounded-full bg-primary/60" />
+              </div>
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* ═══════════════════ WHO IT'S FOR ═══════════════════ */}
