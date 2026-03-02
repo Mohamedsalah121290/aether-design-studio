@@ -146,7 +146,7 @@ serve(async (req) => {
       // Deduct from wallet
       await supabaseAdmin
         .from("wallets")
-        .update({ balance: Number((Number(wallet?.balance || 0) - walletDeduction).toFixed(2)) })
+        .update({ balance: Number((currentWalletBalance - walletDeduction).toFixed(2)) })
         .eq("user_id", user.id);
 
       // Log wallet transaction
