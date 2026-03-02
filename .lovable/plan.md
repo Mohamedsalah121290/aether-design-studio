@@ -1,65 +1,124 @@
-# Simplify Checkout: Remove Password Field
 
-## What's Changing
+# Restructure AI DEALS into a Multi-Page Brand Platform
 
-You mentioned that **you** (the admin) will provide the customer with email and password credentials -- the customer only needs to give their email so you can send them the activation details. This means we no longer need to collect a password from the customer during checkout.
+## Overview
 
-## Changes
+Transform AI DEALS from a single-page marketplace into a structured brand website targeting parents and students. The homepage will become a trust-focused landing page, and all tools will move to a dedicated `/store` page.
 
-### 1. Remove Password Field from Checkout Form
+## Page Structure
 
-- Remove the password input field from `CheckoutDialog.tsx`
-- Remove password-related validation logic and error state
-- The `subscribe_for_them` delivery type will now behave like `email_only` -- only asking for the customer's email
+### 1. Home (`/` - Index.tsx) -- Major Rewrite
 
-### 2. Update Checkout Edge Function
+Replace the current marketplace homepage with a brand-focused landing page containing these sections:
 
-- Remove `customerPassword` parameter handling from `create-checkout/index.ts`
-- Remove the credential encryption and storage logic during checkout (the admin will handle credentials manually)
+- **Hero**: Clear headline ("AI Tools Made Safe for Students"), a CTA ("Browse Store"), and trust badge. Reuse the existing cinematic video background and floating icons.
+- **Why AI for Students**: 3-column grid with icons explaining how AI helps with studying, creativity, and productivity.
+- **Why AI DEALS is Safe**: Trust-focused section highlighting parental controls, no password sharing, curated tools, and 24/7 support.
+- **Featured Tools**: Show max 6 featured tools from the database (reuse `FeaturedCarousel` or a static grid). Links to `/store`.
+- **For Parents**: Dedicated section with trust messaging -- "We handle accounts so your child doesn't need credit cards," "Curated, safe tools only," etc.
+- **Final CTA**: Reuse existing `CTA` component with updated copy pointing to `/store`.
 
-### 3. Clean Up Validation
+Remove: `Storefront`, `TrustStrip`, `FiltersBar`, `TrustAndFAQ` from homepage.
 
-- Remove `passwordSchema` from `CheckoutDialog.tsx`
-- Remove password from `checkoutSchema` in `src/lib/validations.ts`
+### 2. Store (`/store` - new StorePage.tsx)
 
-### 4. Clean Up Store Credentials Function
+Move the full marketplace experience here:
+- Reuse `Storefront` component as-is (it already has the hero, trust strip, filters, categories, FAQ)
+- Add `Navbar` and `Footer` wrapping
+- This becomes the only page listing all tools
 
-- Keep `store-credentials` edge function available for admin use if needed, but it will no longer be called during checkout
+### 3. Academy (`/academy` - existing)
 
----
+Already exists with courses from the database. Keep as-is -- it already covers beginner guides, tutorials, and progress tracking.
+
+### 4. Blog (`/blog` - new BlogPage.tsx)
+
+Repurpose the existing `ContentHub` (`/content-hub`) into `/blog`:
+- Same component, new route
+- Update categories to: Students, Parents, AI Tools, Comparisons
+- Keep the existing article listing and search functionality
+- Remove the old `/content-hub` route (redirect to `/blog`)
+
+### 5. About Us (`/about` - new AboutPage.tsx)
+
+New page with:
+- Brand story section ("Founded to make AI accessible and safe for students")
+- Mission statement
+- Trust statements with icons
+- "Why We Focus on Students" section
+- Dark premium style matching the rest of the site
+
+### 6. Contact (`/contact` - new ContactPage.tsx)
+
+New page with:
+- Simple contact form (Name, Email, Subject, Message) -- client-side only, sends via mailto or stores in database
+- Support info (email, response time)
+- FAQ link
+- Dark premium style
+
+## Navigation Update
+
+Update `Navbar.tsx` nav links from:
+```
+Store | Academy | Content Hub | Tutorials
+```
+to:
+```
+Home | Store | Academy | Blog | About | Contact
+```
+
+Update mobile menu to match. Remove the old `/#store` anchor link -- Store is now its own page.
+
+## Footer Update
+
+Replace placeholder links with real routes:
+- Product section: Store, Academy, Blog, Dashboard
+- Company section: About, Contact
+- Legal section: Privacy, Terms (already working)
+- Remove dead links (Careers, Press, Pricing, Changelog, etc.)
+
+## Routing Changes in App.tsx
+
+```
+/              -> New Home (brand landing)
+/store         -> StorePage (full marketplace)
+/academy       -> Academy (unchanged)
+/blog          -> BlogPage (repurposed ContentHub)
+/about         -> AboutPage (new)
+/contact       -> ContactPage (new)
+/content-hub   -> Redirect to /blog
+/resources     -> Remove or redirect to /blog
+```
 
 ## Technical Details
 
+**Files to create:**
+- `src/pages/StorePage.tsx` -- Wrapper around existing `Storefront` component
+- `src/pages/AboutPage.tsx` -- New brand story page
+- `src/pages/ContactPage.tsx` -- New contact form page
+- `src/pages/BlogPage.tsx` -- Wrapper/rename of ContentHub
+
 **Files to modify:**
+- `src/pages/Index.tsx` -- Complete rewrite as brand landing page
+- `src/components/Navbar.tsx` -- Update nav links
+- `src/components/Footer.tsx` -- Fix links to real routes
+- `src/App.tsx` -- Add new routes, redirect old ones
+- `src/components/Hero.tsx` -- Update copy for student/parent messaging
 
-- `src/components/CheckoutDialog.tsx` -- Remove password state, password input field, password validation, and stop sending `customerPassword` to the edge function
-- `supabase/functions/create-checkout/index.ts` -- Remove `customerPassword` from request body parsing and remove the credential encryption/storage block
-- `src/lib/validations.ts` -- Remove `passwordSchema` export (optional cleanup)
+**Files unchanged:**
+- `src/components/Storefront.tsx` -- Reused as-is in StorePage
+- `src/components/CheckoutDialog.tsx` -- Checkout logic untouched
+- `src/pages/Academy.tsx` -- Already functional
+- All UI components, edge functions, database
 
-**No database changes needed** -- the `order_credentials` table stays for admin manual use.
+**No database changes needed.**
 
-Yes this plan is correct. Please add these final requirements:
+## Design Approach
 
-1) UI/Copy
-
-- Rename the email input label to “Activation Email”
-
-- Helper text: “We’ll send activation + login details to this email.”
-
-- Add trust note: “Secure — we never ask for your passwords.”
-
-- Add badge: “Account Provided” + “Activation within 4 hours”
-
-2) Data
-
-- Ensure create-checkout still stores customerEmail in the order as customer_email (or activation_email)
-
-- Confirm order creation works end-to-end and returns order_id
-
-3) Messaging
-
-- Keep delivery type name internally, but display it to customers as:
-
-  “We Provide The Account For You” (not “email_only” wording)
-
-Deliver: updated CheckoutDialog, create-checkout function, validations, and a success screen message.
+All new pages will follow the existing dark premium aesthetic:
+- Deep midnight background with aurora gradients
+- Glassmorphism cards with blur effects
+- Framer Motion animations
+- Inter font family
+- Purple/cyan/violet accent palette
+- Fully responsive with mobile-first approach
