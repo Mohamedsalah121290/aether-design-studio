@@ -25,9 +25,9 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { toolId, customerEmail } = await req.json();
+    const { toolId, customerEmail, useWalletCredit } = await req.json();
     if (!toolId) throw new Error("toolId is required");
-    logStep("Request parsed", { toolId });
+    logStep("Request parsed", { toolId, useWalletCredit });
 
     // Get user if authenticated
     const authHeader = req.headers.get("Authorization");
