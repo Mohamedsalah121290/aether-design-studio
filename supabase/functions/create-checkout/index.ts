@@ -110,6 +110,21 @@ serve(async (req) => {
       logStep("Price created", { priceId });
     }
 
+    // Handle wallet credit deduction
+    let walletDeduction = 0;
+    if (useWalletCredit && user?.id) {
+      const { data: wallet } = await supabaseAdmin
+        .from("wallets")
+        .select("balance")
+        .eq("user_id", user.id)
+        .single();
+
+      if (wallet && Number(wallet.balance) > 0) {
+        walletDeduction = Math.min(Number(wallet.balance), tool.price);
+        logStep("Wallet credit available", { balance: wallet.balance, deduction: walletDeduction });
+      }
+    }
+
     const origin = req.headers.get("origin") || "https://id-preview--92b6864c-4966-485c-b321-32542f78bf88.lovable.app";
 
     // Store metadata for webhook/success handling
