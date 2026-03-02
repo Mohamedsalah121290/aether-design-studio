@@ -1088,6 +1088,13 @@ const Dashboard = () => {
         onClose={() => setCredentialsModal({ open: false, order: null })}
         order={credentialsModal.order}
       />
+
+      {/* Report Issue Modal */}
+      <ReportIssueModal
+        open={reportIssueModal.open}
+        onClose={() => setReportIssueModal({ open: false, toolName: '' })}
+        toolName={reportIssueModal.toolName}
+      />
     </div>
   );
 };
