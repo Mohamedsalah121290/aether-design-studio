@@ -36,7 +36,7 @@ const Footer = () => {
     { icon: Shield, label: 'GDPR-Friendly' },
     { icon: Lock, label: 'Secure Checkout' },
     { icon: Zap, label: 'Fast Activation' },
-    { icon: Globe, label: 'Made for Europe' },
+    { icon: Globe, label: 'Built in Europe · Global Access' },
   ];
 
   return (

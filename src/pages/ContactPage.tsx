@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Clock, MessageSquare, Send, HelpCircle, Shield } from 'lucide-react';
+import { Mail, Clock, MessageSquare, Send, Globe, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,8 +30,8 @@ const ContactPage = () => {
   const supportInfo = [
     { icon: Mail, title: 'Email Us', value: 'aideals.be@gmail.com', description: 'Direct line to our team' },
     { icon: Clock, title: 'Response Time', value: 'Within 24 Hours', description: 'We guarantee a reply within one business day' },
-    { icon: Shield, title: 'Privacy First', value: 'GDPR Compliant', description: 'Your data is never shared or sold' },
-    { icon: HelpCircle, title: 'FAQ', value: 'Common Questions', description: 'Check our store FAQ section', href: '/store' },
+    { icon: Shield, title: 'Privacy First', value: 'GDPR Principled', description: 'Your data is never shared or sold' },
+    { icon: Globe, title: 'Global Support', value: 'Worldwide Access', description: 'We serve students and creators globally' },
   ];
 
   return (
@@ -55,7 +55,7 @@ const ContactPage = () => {
               Contact <span className="gradient-text">Us</span>
             </h1>
             <p className="text-muted-foreground text-lg">
-              Have a question, suggestion, or need help? We'd love to hear from you. 
+              Have a question, suggestion, or need help? We'd love to hear from you — wherever you are in the world.
               We respond to every message <span className="text-primary font-medium">within 24 hours</span>.
             </p>
           </motion.div>
@@ -131,12 +131,10 @@ const ContactPage = () => {
             >
               {supportInfo.map((info) => {
                 const Icon = info.icon;
-                const Wrapper = info.href ? 'a' : 'div';
                 return (
-                  <Wrapper
+                  <div
                     key={info.title}
-                    {...(info.href ? { href: info.href } : {})}
-                    className="glass rounded-2xl p-5 flex items-start gap-4 hover:border-primary/30 transition-all duration-300 block"
+                    className="glass rounded-2xl p-5 flex items-start gap-4 hover:border-primary/30 transition-all duration-300"
                   >
                     <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <Icon className="w-5 h-5 text-primary" />
@@ -146,7 +144,7 @@ const ContactPage = () => {
                       <p className="text-foreground text-sm font-medium">{info.value}</p>
                       <p className="text-muted-foreground text-xs mt-1">{info.description}</p>
                     </div>
-                  </Wrapper>
+                  </div>
                 );
               })}
             </motion.div>

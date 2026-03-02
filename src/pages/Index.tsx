@@ -5,7 +5,8 @@ import {
   ArrowRight, GraduationCap, Briefcase, ShieldCheck, UserCheck, Lock,
   Zap, Calendar, Headphones, CheckCircle, Shield, ChevronDown, BookOpen,
   Play, Star, Globe, FileCheck, Video, Palette, Mail, Users,
-  ChevronRight, Plus, Minus, Award, CreditCard, Clock,
+  ChevronRight, Plus, Minus, Award, CreditCard, Clock, Heart, Eye,
+  MapPin, Flag,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,10 +29,11 @@ import logo from '@/assets/logo.png';
    ══════════════════════════════════════════════════════════════ */
 
 const trustBadges = [
-  { icon: Shield, label: 'GDPR-Friendly' },
+  { icon: Shield, label: 'GDPR-First Privacy' },
   { icon: Lock, label: 'Secure Checkout' },
   { icon: UserCheck, label: 'No Password Sharing' },
-  { icon: Calendar, label: 'Monthly Flexibility' },
+  { icon: Calendar, label: 'Monthly Flexible Access' },
+  { icon: Globe, label: 'Global Access' },
 ];
 
 const audiences = [
@@ -76,6 +78,13 @@ const whyUs = [
   { icon: BookOpen, title: 'Educational Guidance', desc: 'Academy lessons included — learn to use every tool effectively.' },
 ];
 
+const privacyPillars = [
+  { icon: Shield, title: 'GDPR Principles', desc: 'We follow European GDPR principles in everything we do — data minimisation, purpose limitation, and transparency.' },
+  { icon: Lock, title: 'No Passwords Required', desc: 'We never ask for your personal passwords. All tool accounts are managed internally by our team.' },
+  { icon: Eye, title: 'Minimal Data Collection', desc: 'We only collect what\'s necessary for service delivery — your email for activation, nothing more.' },
+  { icon: Shield, title: 'Secure Processing', desc: 'All data is encrypted in transit and at rest. We use industry-standard security protocols.' },
+];
+
 const academyTracks = [
   { icon: BookOpen, title: 'AI Basics', desc: 'Understand prompts, models, and how AI really works.', tag: 'Beginner' },
   { icon: GraduationCap, title: 'Study with AI', desc: 'Use ChatGPT & Claude to ace exams and research.', tag: 'Students' },
@@ -85,10 +94,10 @@ const academyTracks = [
 const testimonials = [
   {
     name: 'Lukas M.',
-    role: 'Student',
+    role: 'University Student',
     country: 'Germany',
     flag: '🇩🇪',
-    quote: 'I used ChatGPT through AI DEALS for my entire semester — essay outlines, research summaries, exam prep. Setup took 2 minutes.',
+    quote: 'I used ChatGPT through AI DEALS for my entire semester — essay outlines, research summaries, exam prep. Setup took 2 minutes and I never had to share any passwords.',
     rating: 5,
   },
   {
@@ -96,51 +105,53 @@ const testimonials = [
     role: 'Parent',
     country: 'Netherlands',
     flag: '🇳🇱',
-    quote: 'My daughter uses Midjourney for school projects. No passwords shared, no credit card needed. As a parent, that\'s exactly what I want.',
+    quote: 'My daughter uses Midjourney for school projects. No passwords shared, no credit card needed. As a parent, that privacy-first approach is exactly what I was looking for.',
     rating: 5,
   },
   {
     name: 'Carlos R.',
-    role: 'Freelance Creator',
+    role: 'Content Creator',
     country: 'Spain',
     flag: '🇪🇸',
-    quote: 'I run my entire content pipeline through AI DEALS — Claude for writing, Midjourney for visuals. Saved me hundreds per month.',
+    quote: 'I run my entire content pipeline through AI DEALS — Claude for writing, Midjourney for visuals. Saved me hundreds per month while keeping everything in one place.',
     rating: 5,
   },
 ];
 
 const faqSections = [
   {
-    title: 'Security & Privacy',
+    title: 'Privacy & Security',
     icon: Shield,
     items: [
-      { q: 'Do I need to share my passwords?', a: 'No. We create and manage a dedicated account for you. You never share personal credentials.' },
-      { q: 'Is AI DEALS GDPR-friendly?', a: 'Yes. We follow European data privacy standards. Your data is never sold or shared with third parties.' },
-      { q: 'How is my data handled?', a: 'We store only what\'s necessary for service delivery. All data is encrypted and handled per EU regulations.' },
+      { q: 'Is AI DEALS GDPR compliant?', a: 'We follow European GDPR principles in our data handling. We minimise data collection, never sell your data, and process everything with industry-standard encryption.' },
+      { q: 'Do I need to share my passwords?', a: 'Never. We create and manage dedicated accounts for you. You never share personal credentials with us.' },
+      { q: 'How is my data handled?', a: 'We store only what\'s necessary for service delivery — your email and order information. All data is encrypted and handled according to EU data protection standards.' },
     ],
   },
   {
-    title: 'For Students',
+    title: 'Academic Use',
     icon: GraduationCap,
     items: [
-      { q: 'Is this allowed for academic use?', a: 'AI tools are widely used in education. We recommend following your institution\'s guidelines on AI-assisted work.' },
-      { q: 'Can AI replace studying?', a: 'No — and it shouldn\'t. AI is a study companion that helps you research faster, write better, and learn more efficiently.' },
-    ],
-  },
-  {
-    title: 'For Parents',
-    icon: ShieldCheck,
-    items: [
+      { q: 'Is this allowed for academic use?', a: 'AI tools are widely used in education. We recommend following your institution\'s specific guidelines on AI-assisted work.' },
+      { q: 'Can AI replace studying?', a: 'No — and it shouldn\'t. AI is a study companion that helps you research faster, write better, and learn more efficiently. We promote responsible usage through our Academy.' },
       { q: 'Is this safe for teenagers?', a: 'Yes. Every tool is reviewed for age-appropriateness. We handle all accounts — no passwords or credit cards needed from your child.' },
-      { q: 'How do I monitor my child\'s usage?', a: 'You have full control over the subscription. Cancel anytime, and contact support for any concerns.' },
     ],
   },
   {
-    title: 'Payment & Activation',
+    title: 'Subscription & Billing',
     icon: CreditCard,
     items: [
-      { q: 'Is it monthly only?', a: 'Yes. No annual lock-ins. Pay month-to-month and cancel whenever you want.' },
+      { q: 'Is it monthly only?', a: 'Yes. No annual lock-ins. Pay month-to-month and cancel whenever you want — no questions asked.' },
       { q: 'How fast is activation?', a: 'Most tools are activated within 1–6 hours after payment confirmation.' },
+      { q: 'Can I cancel anytime?', a: 'Absolutely. Cancel your subscription anytime and retain access until the end of your billing period.' },
+    ],
+  },
+  {
+    title: 'Global Access',
+    icon: Globe,
+    items: [
+      { q: 'Is this available outside Europe?', a: 'Yes! While we\'re built with European privacy standards, AI DEALS is accessible worldwide. Anyone can use our platform.' },
+      { q: 'What payment methods do you accept?', a: 'We accept all major credit cards, debit cards, and select digital wallets through our secure Stripe checkout — globally.' },
       { q: 'What if I enter the wrong email?', a: 'Contact our support team immediately. We respond within 24 hours and can update your details.' },
     ],
   },
@@ -219,7 +230,7 @@ const Index = () => {
       <Navbar />
 
       <main>
-        {/* ═══════════════ A) HERO ═══════════════ */}
+        {/* ═══════════════ A) HERO — Story + Authority ═══════════════ */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 w-full h-full">
             <video autoPlay loop muted playsInline poster={heroImage} className="absolute inset-0 w-full h-full object-cover">
@@ -254,13 +265,6 @@ const Index = () => {
                 <img src={logo} alt="AI DEALS" className="h-24 md:h-32 w-auto mx-auto drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]" />
               </motion.div>
 
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 text-primary text-sm font-medium mb-6 backdrop-blur-md" style={{ background: 'linear-gradient(135deg, rgba(168,85,247,0.2) 0%, rgba(168,85,247,0.05) 100%)', boxShadow: '0 4px 24px rgba(168,85,247,0.2)' }}>
-                  <Shield className="w-4 h-4" />
-                  Curated AI Access + Learning Platform
-                </span>
-              </motion.div>
-
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -268,16 +272,16 @@ const Index = () => {
                 className="text-4xl sm:text-5xl md:text-7xl font-display font-black mb-4 md:mb-6 leading-[0.95] tracking-tight"
                 style={{ textShadow: '0 0 60px hsl(var(--primary) / 0.5), 0 4px 20px rgba(0,0,0,0.8)' }}
               >
-                <span className="text-white drop-shadow-2xl">AI Tools. Curated. Safe.</span>
+                <span className="text-white drop-shadow-2xl">Powerful AI.</span>
                 <br />
                 <span className="gradient-text" style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))' }}>
-                  For Europe's Next Generation.
+                  Made Safe.
                 </span>
               </motion.h1>
 
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="mb-8 md:mb-10">
-                <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-2xl mx-auto leading-relaxed px-6 py-4 rounded-2xl backdrop-blur-md border border-white/10" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%)' }}>
-                  Premium AI access for students & creators — with privacy, guidance, and flexibility.
+                <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed px-6 py-4 rounded-2xl backdrop-blur-md border border-white/10" style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%)' }}>
+                  AI DEALS was built to give students and creators secure, affordable access to premium AI tools — without complexity, without risk, and without password sharing.
                 </p>
               </motion.div>
 
@@ -290,9 +294,9 @@ const Index = () => {
                   </a>
                 </Button>
                 <Button variant="heroOutline" size="xl" className="backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
-                  <a href="/academy">
-                    Enter Academy
-                    <ChevronRight className="ml-2 w-5 h-5" />
+                  <a href="#how-it-works">
+                    How It Works
+                    <ChevronDown className="ml-2 w-5 h-5" />
                   </a>
                 </Button>
               </motion.div>
@@ -302,7 +306,7 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.7 }}
-                className="flex flex-wrap items-center justify-center gap-3 md:gap-5"
+                className="flex flex-wrap items-center justify-center gap-3 md:gap-4"
               >
                 {trustBadges.map(({ icon: Icon, label }) => (
                   <div key={label} className="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10" style={{ background: 'rgba(255,255,255,0.05)' }}>
@@ -335,8 +339,131 @@ const Index = () => {
           </motion.div>
         </section>
 
-        {/* ═══════════════ B) WHO IT'S FOR ═══════════════ */}
-        <section id="who-its-for" className="py-24 relative">
+        {/* ═══════════════ B) OUR STORY ═══════════════ */}
+        <section className="py-24 relative">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <motion.div {...fadeUp} className="text-center mb-12">
+                <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                  Our Story
+                </span>
+                <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
+                  Why We Built <span className="gradient-text">AI DEALS</span>
+                </h2>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="glass rounded-3xl p-8 md:p-12"
+              >
+                <div className="grid md:grid-cols-2 gap-10">
+                  <div className="space-y-5">
+                    <p className="text-foreground leading-relaxed text-base">
+                      We saw a problem that no one was solving.
+                    </p>
+                    <p className="text-muted-foreground leading-relaxed">
+                      Students were overwhelmed by AI tools — dozens of platforms, complex signups, credit card requirements. 
+                      Parents were concerned about privacy and safety. Creators were paying too much for multiple subscriptions 
+                      they barely used.
+                    </p>
+                    <p className="text-muted-foreground leading-relaxed">
+                      Access to powerful AI was fragmented, confusing, and often risky — especially in Europe, 
+                      where privacy expectations are higher.
+                    </p>
+                  </div>
+                  <div className="space-y-5">
+                    <p className="text-foreground leading-relaxed text-base">
+                      So we built the solution.
+                    </p>
+                    <p className="text-muted-foreground leading-relaxed">
+                      AI DEALS is a structured, curated, safe gateway to the world's best AI tools. 
+                      We handle the accounts, the billing, and the complexity — so you can focus on 
+                      what matters: learning, creating, and building.
+                    </p>
+                    <div className="space-y-3 pt-2">
+                      {[
+                        'No passwords shared — ever',
+                        'Curated tools, not a random marketplace',
+                        'Built with European privacy in mind',
+                        'Affordable, monthly, flexible',
+                      ].map((item, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-3.5 h-3.5 text-primary" />
+                          </div>
+                          <span className="text-foreground text-sm">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════ C) EUROPE-FIRST PRIVACY ═══════════════ */}
+        <section className="py-24 relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="max-w-5xl mx-auto">
+              <motion.div {...fadeUp} className="text-center mb-12">
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <span className="text-2xl">🇪🇺</span>
+                  <span className="inline-block text-primary font-semibold text-sm uppercase tracking-wider">
+                    Privacy by Design
+                  </span>
+                </div>
+                <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
+                  Built with <span className="gradient-text">European Privacy Standards</span> in Mind
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+                  We believe privacy is a right, not a feature. Every decision we make starts with data protection.
+                </p>
+              </motion.div>
+
+              <div className="grid sm:grid-cols-2 gap-6">
+                {privacyPillars.map((pillar, i) => {
+                  const Icon = pillar.icon;
+                  return (
+                    <motion.div
+                      key={pillar.title}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                      className="glass rounded-2xl p-6 hover:border-primary/30 transition-all duration-300"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Icon className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-display font-bold text-sm mb-1.5">{pillar.title}</h3>
+                          <p className="text-muted-foreground text-sm leading-relaxed">{pillar.desc}</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              <motion.p
+                {...fadeUp}
+                className="text-center text-xs text-muted-foreground mt-8 max-w-lg mx-auto"
+              >
+                AI DEALS follows GDPR principles in data handling. We do not claim official GDPR certification — 
+                we commit to the standards that protect our users.
+              </motion.p>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════ D) WHO IT'S FOR ═══════════════ */}
+        <section className="py-24 relative">
           <div className="container mx-auto px-4">
             <motion.div {...fadeUp} className="text-center mb-16">
               <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
@@ -383,13 +510,13 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ C) WHY AI DEALS ═══════════════ */}
-        <section className="py-24 relative">
+        {/* ═══════════════ E) WHY AI DEALS ═══════════════ */}
+        <section id="how-it-works" className="py-24 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
           <div className="container mx-auto px-4 relative z-10">
             <motion.div {...fadeUp} className="text-center mb-16">
               <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                Trust-First Architecture
+                How It Works
               </span>
               <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
                 Why Choose <span className="gradient-text">AI DEALS</span>?
@@ -423,7 +550,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ D) FEATURED TOOLS ═══════════════ */}
+        {/* ═══════════════ F) FEATURED TOOLS ═══════════════ */}
         {featuredTools.length > 0 && (
           <section className="py-24 relative">
             <div className="container mx-auto px-4">
@@ -435,7 +562,7 @@ const Index = () => {
                   Featured <span className="gradient-text">AI Tools</span>
                 </h2>
                 <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-                  Hand-picked, verified tools trusted by European students & creators.
+                  Hand-picked, verified tools trusted by students & creators worldwide.
                 </p>
               </motion.div>
 
@@ -457,19 +584,75 @@ const Index = () => {
           </section>
         )}
 
-        {/* ═══════════════ E) ACADEMY PREVIEW ═══════════════ */}
+        {/* ═══════════════ G) TESTIMONIALS ═══════════════ */}
         <section className="py-24 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
           <div className="container mx-auto px-4 relative z-10">
             <motion.div {...fadeUp} className="text-center mb-12">
               <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                Learn & Grow
+                Trusted Across Europe & Beyond
+              </span>
+              <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
+                What Our <span className="gradient-text">Community Says</span>
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto text-lg">
+                Real feedback from students, creators, and parents.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {testimonials.map((t, i) => (
+                <motion.div
+                  key={t.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.12 }}
+                  className="glass rounded-2xl p-6 hover:border-primary/30 transition-all duration-300 relative"
+                >
+                  <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center cursor-pointer hover:bg-primary/20 transition-colors">
+                    <Play className="w-3.5 h-3.5 text-primary fill-primary" />
+                  </div>
+
+                  <div className="flex gap-1 mb-4">
+                    {Array.from({ length: t.rating }).map((_, j) => (
+                      <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: 'hsl(45 93% 58%)' }} />
+                    ))}
+                  </div>
+
+                  <p className="text-foreground text-sm leading-relaxed mb-6 italic">"{t.quote}"</p>
+
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 flex items-center justify-center">
+                      <span className="text-sm font-bold text-primary">{t.name.charAt(0)}</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm font-display font-bold">{t.name}</div>
+                      <div className="text-xs text-muted-foreground">{t.role}</div>
+                    </div>
+                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-muted/50 border border-border/50">
+                      <span className="text-sm">{t.flag}</span>
+                      <span className="text-[10px] text-muted-foreground font-medium">{t.country}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════ H) ACADEMY PREVIEW ═══════════════ */}
+        <section className="py-24 relative">
+          <div className="container mx-auto px-4">
+            <motion.div {...fadeUp} className="text-center mb-12">
+              <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
+                Responsible AI Learning
               </span>
               <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
                 Learn AI <span className="gradient-text">The Right Way</span>
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-                Guided lessons for students and creators. From basics to advanced workflows.
+                A structured learning hub for students and creators. Use AI responsibly, effectively, and creatively.
               </p>
             </motion.div>
 
@@ -515,65 +698,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ F) TESTIMONIALS ═══════════════ */}
-        <section className="py-24 relative">
-          <div className="container mx-auto px-4">
-            <motion.div {...fadeUp} className="text-center mb-12">
-              <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                Trusted Across Europe
-              </span>
-              <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-                What Our <span className="gradient-text">Community Says</span>
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-                Real feedback from students, creators, and parents across the EU.
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {testimonials.map((t, i) => (
-                <motion.div
-                  key={t.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.12 }}
-                  className="glass rounded-2xl p-6 hover:border-primary/30 transition-all duration-300 relative"
-                >
-                  {/* Video play hint */}
-                  <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center cursor-pointer hover:bg-primary/20 transition-colors">
-                    <Play className="w-3.5 h-3.5 text-primary fill-primary" />
-                  </div>
-
-                  {/* Stars */}
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: t.rating }).map((_, j) => (
-                      <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: 'hsl(45 93% 58%)' }} />
-                    ))}
-                  </div>
-
-                  <p className="text-foreground text-sm leading-relaxed mb-6 italic">"{t.quote}"</p>
-
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 flex items-center justify-center">
-                      <span className="text-sm font-bold text-primary">{t.name.charAt(0)}</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm font-display font-bold">{t.name}</div>
-                      <div className="text-xs text-muted-foreground">{t.role}</div>
-                    </div>
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-muted/50 border border-border/50">
-                      <span className="text-sm">{t.flag}</span>
-                      <span className="text-[10px] text-muted-foreground font-medium">{t.country}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════════ G) NEWSLETTER ═══════════════ */}
+        {/* ═══════════════ I) NEWSLETTER ═══════════════ */}
         <section className="py-24 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
           <div className="container mx-auto px-4 relative z-10">
@@ -583,15 +708,14 @@ const Index = () => {
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-4xl font-display font-bold mb-3">
-                  Stay Ahead <span className="gradient-text">With AI</span>
+                  Stay Ahead of AI — <span className="gradient-text">Responsibly</span>
                 </h2>
                 <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-md mx-auto mb-8">
-                  Weekly tips for students and creators. Safe tools. Study hacks. Marketing shortcuts.
+                  Weekly insights for students and creators across Europe and beyond. Safe tools, study hacks, and responsible AI practices.
                 </p>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    // TODO: connect to newsletter backend
                   }}
                   className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
                 >
@@ -611,7 +735,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ H) FAQ ═══════════════ */}
+        {/* ═══════════════ J) FAQ ═══════════════ */}
         <section className="py-24 relative">
           <div className="container mx-auto px-4">
             <motion.div {...fadeUp} className="text-center mb-16">
@@ -656,7 +780,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ I) FINAL CTA ═══════════════ */}
+        {/* ═══════════════ K) FINAL CTA ═══════════════ */}
         <section className="py-24 relative overflow-hidden">
           <div className="container mx-auto px-4">
             <motion.div
@@ -687,7 +811,7 @@ const Index = () => {
                     Start Your AI Journey <span className="gradient-text">Today</span>
                   </h2>
                   <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
-                    Join thousands of European students and creators who trust AI DEALS for safe, affordable, guided AI access.
+                    Join students and creators worldwide who trust AI DEALS for safe, affordable, guided AI access.
                   </p>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Button variant="hero" size="xl" className="group" asChild>
