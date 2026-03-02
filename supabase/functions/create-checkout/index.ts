@@ -25,7 +25,7 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { toolId, customerEmail, customerPassword } = await req.json();
+    const { toolId, customerEmail } = await req.json();
     if (!toolId) throw new Error("toolId is required");
     logStep("Request parsed", { toolId });
 
@@ -146,7 +146,7 @@ serve(async (req) => {
       activation_deadline: new Date(Date.now() + tool.activation_time * 3600000).toISOString(),
     };
 
-    if (tool.delivery_type === "subscribe_for_them" && customerEmail) {
+    if (customerEmail) {
       orderData.customer_data = { email: customerEmail };
     }
 
@@ -160,37 +160,6 @@ serve(async (req) => {
       logStep("Order creation error", { error: orderError });
     } else {
       logStep("Order created", { orderId: order.id });
-
-      // Store credentials securely if needed
-      if (tool.delivery_type === "subscribe_for_them" && customerPassword && order.id) {
-        // Use the same encryption approach as store-credentials
-        const key = await crypto.subtle.generateKey(
-          { name: "AES-GCM", length: 256 },
-          true,
-          ["encrypt", "decrypt"]
-        );
-        const iv = crypto.getRandomValues(new Uint8Array(12));
-        const encoded = new TextEncoder().encode(customerPassword);
-        const encrypted = await crypto.subtle.encrypt(
-          { name: "AES-GCM", iv },
-          key,
-          encoded
-        );
-        const exportedKey = await crypto.subtle.exportKey("raw", key);
-        const combined = new Uint8Array([
-          ...iv,
-          ...new Uint8Array(exportedKey),
-          ...new Uint8Array(encrypted),
-        ]);
-        const encryptedBase64 = btoa(String.fromCharCode(...combined));
-
-        await supabaseAdmin.from("order_credentials").insert({
-          order_id: order.id,
-          email: customerEmail,
-          encrypted_password: encryptedBase64,
-        });
-        logStep("Credentials stored securely");
-      }
     }
 
     return new Response(JSON.stringify({ url: session.url }), {

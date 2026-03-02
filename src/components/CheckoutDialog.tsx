@@ -10,7 +10,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
-import { Loader2, Clock, CheckCircle, Mail, Lock, Gift, Sparkles, Shield, Zap, X as XIcon } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Clock, CheckCircle, Mail, Gift, Sparkles, Shield, Zap, ShieldCheck, UserCheck } from 'lucide-react';
 import { z } from 'zod';
 import type { Tool, ToolPlan } from './ToolCard';
 
@@ -22,7 +23,6 @@ interface CheckoutDialogProps {
 }
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
-const passwordSchema = z.string().min(1, 'Password is required').max(100);
 
 const WHAT_YOU_GET = [
   'Full premium access to all features',
@@ -36,11 +36,10 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const { user } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string }>({});
 
   const [plans, setPlans] = useState<ToolPlan[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<ToolPlan | null>(null);
@@ -81,15 +80,9 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   };
 
   const validateForm = (): boolean => {
-    const newErrors: { email?: string; password?: string } = {};
-    if (selectedPlan?.delivery_type !== 'provide_account' || !user) {
-      const emailResult = emailSchema.safeParse(email);
-      if (!emailResult.success) newErrors.email = emailResult.error.errors[0]?.message || 'Invalid email';
-    }
-    if (selectedPlan?.delivery_type === 'subscribe_for_them') {
-      const passwordResult = passwordSchema.safeParse(password);
-      if (!passwordResult.success) newErrors.password = passwordResult.error.errors[0]?.message || 'Password is required';
-    }
+    const newErrors: { email?: string } = {};
+    const emailResult = emailSchema.safeParse(email);
+    if (!emailResult.success) newErrors.email = emailResult.error.errors[0]?.message || 'Invalid email';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -110,8 +103,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
         body: {
           toolId: tool.id,
           planId: selectedPlan.plan_id,
-          customerEmail: selectedPlan.delivery_type === 'subscribe_for_them' || selectedPlan.delivery_type === 'email_only' ? email : buyerEmail,
-          customerPassword: selectedPlan.delivery_type === 'subscribe_for_them' ? password : undefined,
+          customerEmail: email || buyerEmail,
         },
       });
       if (error) throw error;
@@ -130,7 +122,6 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
     if (!isLoading) {
       setIsSuccess(false);
       setEmail('');
-      setPassword('');
       setAgreedToTerms(false);
       setSelectedPlan(null);
       setPlans([]);
@@ -141,9 +132,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const getDeliveryInfo = () => {
     switch (selectedPlan?.delivery_type) {
       case 'subscribe_for_them':
-        return { icon: <Lock className="w-5 h-5" />, title: t('checkout.subscribeForYou'), description: t('checkout.subscribeDescription') };
       case 'email_only':
-        return { icon: <Mail className="w-5 h-5" />, title: t('checkout.emailOnlyTitle'), description: t('checkout.emailOnlyDescription') };
+        return { icon: <UserCheck className="w-5 h-5" />, title: 'We Provide The Account For You', description: "We'll set up your premium account and send you the login details." };
       case 'provide_account':
         return { icon: <Gift className="w-5 h-5" />, title: t('checkout.provideAccountTitle'), description: t('checkout.provideAccountDescription') };
       default:
@@ -267,7 +257,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                 </div>
               )}
 
-              {/* Delivery info */}
+              {/* Delivery info + badges */}
               {deliveryInfo && !plansLoading && (
                 <div
                   className="p-4 rounded-2xl border border-white/10"
@@ -281,6 +271,16 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       <h4 className="font-semibold text-white text-sm">{deliveryInfo.title}</h4>
                       <p className="text-xs text-muted-foreground mt-1">{deliveryInfo.description}</p>
                     </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 text-xs">
+                      <UserCheck className="w-3 h-3 mr-1" />
+                      Account Provided
+                    </Badge>
+                    <Badge variant="secondary" className="bg-green-500/10 text-green-400 border-green-500/20 text-xs">
+                      <Clock className="w-3 h-3 mr-1" />
+                      Activation within 4 hours
+                    </Badge>
                   </div>
                 </div>
               )}
@@ -303,89 +303,35 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
               {!plansLoading && selectedPlan && (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <AnimatePresence mode="wait">
-                    {(selectedPlan.delivery_type === 'subscribe_for_them' || selectedPlan.delivery_type === 'email_only') && (
-                      <motion.div
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: 20, opacity: 0 }}
-                        className="space-y-2"
-                      >
-                        <Label htmlFor="email" className="text-sm font-medium text-white flex items-center gap-2">
-                          <Mail className="w-4 h-4 text-primary" />
-                          {t('checkout.yourEmail')}
-                        </Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="your@email.com"
-                          value={email}
-                          onChange={e => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: undefined })); }}
-                          required
-                          disabled={isLoading}
-                          className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${errors.email ? 'border-red-500' : ''}`}
-                        />
-                        {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
-                      </motion.div>
-                    )}
+                    <motion.div
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: 20, opacity: 0 }}
+                      className="space-y-2"
+                    >
+                      <Label htmlFor="email" className="text-sm font-medium text-white flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-primary" />
+                        Activation Email
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="your@email.com"
+                        value={email}
+                        onChange={e => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: undefined })); }}
+                        required
+                        disabled={isLoading}
+                        className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${errors.email ? 'border-red-500' : ''}`}
+                      />
+                      {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+                      <p className="text-xs text-muted-foreground">We'll send activation + login details to this email.</p>
+                    </motion.div>
 
-                    {selectedPlan.delivery_type === 'subscribe_for_them' && (
-                      <motion.div
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: 20, opacity: 0 }}
-                        transition={{ delay: 0.05 }}
-                        className="space-y-2"
-                      >
-                        <Label htmlFor="password" className="text-sm font-medium text-white flex items-center gap-2">
-                          <Lock className="w-4 h-4 text-primary" />
-                          {t('checkout.yourPassword')}
-                        </Label>
-                        <Input
-                          id="password"
-                          type="password"
-                          placeholder="********"
-                          value={password}
-                          onChange={e => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: undefined })); }}
-                          required
-                          disabled={isLoading}
-                          className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${errors.password ? 'border-red-500' : ''}`}
-                        />
-                        {errors.password && <p className="text-xs text-red-400 mt-1">{errors.password}</p>}
-                        <p className="text-xs text-muted-foreground">{t('checkout.passwordNote')}</p>
-                      </motion.div>
-                    )}
-
-                    {selectedPlan.delivery_type === 'provide_account' && (
-                      <motion.div
-                        initial={{ scale: 0.95, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className="p-5 rounded-2xl text-center"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(168,85,247,0.1) 0%, rgba(168,85,247,0.05) 100%)',
-                          border: '1px solid rgba(168,85,247,0.2)',
-                        }}
-                      >
-                        <Sparkles className="w-8 h-8 text-primary mx-auto mb-3" />
-                        <p className="text-white font-medium text-sm">{t('checkout.accountProvided')}</p>
-                        <p className="text-xs text-muted-foreground mt-2">{t('checkout.accountProvidedNote')}</p>
-
-                        <div className="mt-4 space-y-2 text-left">
-                          <Label htmlFor="notify-email" className="text-sm font-medium text-white">
-                            {t('checkout.notificationEmail')}
-                          </Label>
-                          <Input
-                            id="notify-email"
-                            type="email"
-                            placeholder="your@email.com"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            required
-                            disabled={isLoading}
-                            className="h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
-                          />
-                        </div>
-                      </motion.div>
-                    )}
+                    {/* Trust note */}
+                    <div className="flex items-center gap-2 text-xs text-green-400">
+                      <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                      <span>Secure — we never ask for your passwords.</span>
+                    </div>
                   </AnimatePresence>
 
                   {/* Terms */}
