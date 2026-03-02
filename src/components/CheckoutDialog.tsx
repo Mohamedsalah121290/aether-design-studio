@@ -13,6 +13,7 @@ import { toast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Clock, CheckCircle, Mail, Gift, Sparkles, Shield as ShieldIcon, Zap, ShieldCheck, UserCheck } from 'lucide-react';
 const Shield = ShieldIcon;
+import { Switch } from '@/components/ui/switch';
 import { z } from 'zod';
 import type { Tool, ToolPlan } from './ToolCard';
 import { AuthDialog } from './AuthDialog';
