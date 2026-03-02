@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, Users, GraduationCap, Heart, Target, Sparkles, Lock, Globe, Award, Eye, BookOpen, CheckCircle } from 'lucide-react';
+import { Shield, Users, Heart, Target, Sparkles, Globe, Award, Eye, BookOpen, CheckCircle } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
