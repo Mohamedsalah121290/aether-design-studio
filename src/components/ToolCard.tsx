@@ -261,6 +261,14 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               )}
             </div>
 
+            {/* Activation Guarantee badge */}
+            {!isComingSoon && !isPaused && (
+              <div className="flex items-center gap-1.5 mb-1" title="If activation fails within 24 hours, you're protected with credit or refund.">
+                <Shield className="w-3 h-3" style={{ color: '#E8D48B' }} />
+                <span className="text-[10px] font-semibold tracking-wide" style={{ color: '#E8D48B' }}>Activation Guarantee</span>
+              </div>
+            )}
+
             {/* CTA */}
             {isComingSoon ? (
               <div className="mt-1 sm:mt-2 space-y-2">
