@@ -235,7 +235,7 @@ const Index = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
             className="absolute left-1/2 -translate-x-1/2 z-30"
-            style={{ bottom: '17px' }}
+            style={{ bottom: '-23px' }}
           >
             <motion.div
               animate={{ y: [0, 8, 0] }}
