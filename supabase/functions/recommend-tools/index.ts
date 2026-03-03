@@ -16,11 +16,19 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    // Fetch active tools + plans from DB
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
+
+    // Check if user is authenticated (optional — recommendations work for anon too)
+    let userId: string | null = null;
+    const authHeader = req.headers.get("Authorization");
+    if (authHeader?.startsWith("Bearer ")) {
+      const token = authHeader.replace("Bearer ", "");
+      const { data: claimsData } = await supabase.auth.getUser(token);
+      if (claimsData?.user) userId = claimsData.user.id;
+    }
 
     const { data: tools, error: toolsErr } = await supabase
       .from("tools")
@@ -34,7 +42,6 @@ serve(async (req) => {
       .eq("is_active", true);
     if (plansErr) throw plansErr;
 
-    // Build catalog string for AI
     const catalog = (tools || []).map((t) => {
       const toolPlans = (plans || [])
         .filter((p) => p.tool_id === t.tool_id)
@@ -105,14 +112,12 @@ Recommend the best 4-6 tools for this user.`;
       const status = response.status;
       if (status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (status === 402) {
         return new Response(JSON.stringify({ error: "AI credits exhausted. Please try again later." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       const body = await response.text();
@@ -126,14 +131,22 @@ Recommend the best 4-6 tools for this user.`;
 
     const recommendations = JSON.parse(toolCall.function.arguments);
 
+    // Persist to recommendation_history if user is authenticated
+    if (userId) {
+      await supabase.from("recommendation_history").insert({
+        user_id: userId,
+        preferences: { useCases, budget, experience },
+        recommendations: recommendations.recommendations || [],
+      });
+    }
+
     return new Response(JSON.stringify(recommendations), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
     console.error("recommend-tools error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
