@@ -47,7 +47,7 @@ const RecommendationHistory = () => {
         .order('created_at', { ascending: false })
         .limit(5);
       if (error) throw error;
-      setHistory((data || []) as RecommendationEntry[]);
+      setHistory((data || []) as unknown as RecommendationEntry[]);
     } catch (err) {
       console.error('Error fetching recommendation history:', err);
     } finally {
