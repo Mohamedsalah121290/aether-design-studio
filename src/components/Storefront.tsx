@@ -61,8 +61,13 @@ const Storefront = () => {
     if (el) {
       setTimeout(() => {
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        (el as HTMLElement).classList.add('ring-2', 'ring-primary', 'rounded-[16px]', 'animate-[pulse_1.5s_ease-in-out_2]');
-        setTimeout(() => (el as HTMLElement).classList.remove('ring-2', 'ring-primary', 'rounded-[16px]', 'animate-[pulse_1.5s_ease-in-out_2]'), 3500);
+        const htmlEl = el as HTMLElement;
+        htmlEl.classList.add('ring-2', 'ring-primary', 'rounded-[16px]', 'animate-[pulse_1.5s_ease-in-out_2]');
+        htmlEl.style.boxShadow = '0 0 25px hsl(210 100% 55% / 0.4), 0 0 60px hsl(270 60% 50% / 0.2)';
+        setTimeout(() => {
+          htmlEl.classList.remove('ring-2', 'ring-primary', 'rounded-[16px]', 'animate-[pulse_1.5s_ease-in-out_2]');
+          htmlEl.style.boxShadow = '';
+        }, 3500);
       }, 300);
       setSearchParams({}, { replace: true });
     }
