@@ -142,7 +142,7 @@ const RecommendationHistory = () => {
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-xs font-semibold text-foreground">{rec.tool_id}</p>
                       <a
-                        href={`/store#${encodeURIComponent(rec.tool_id)}`}
+                        href={`/store?scrollTo=${encodeURIComponent(rec.tool_id)}`}
                         className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline shrink-0"
                       >
                         View in Store <ExternalLink className="w-2.5 h-2.5" />
