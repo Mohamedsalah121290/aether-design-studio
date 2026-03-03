@@ -1180,6 +1180,18 @@ const Dashboard = () => {
         {/* Tools Tab Content */}
         {activeTab === 'tools' && (
           <>
+            {/* AI Recommendation History */}
+            <section className="py-4">
+              <div className="container mx-auto px-4">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
+                  <h2 className="text-lg font-display font-bold flex items-center gap-2 mb-4">
+                    <Sparkles className="w-5 h-5 text-amber-400" /> AI Recommendations
+                  </h2>
+                  <RecommendationHistory />
+                </motion.div>
+              </div>
+            </section>
+
             {/* Search */}
             <section className="py-4">
               <div className="container mx-auto px-4">
