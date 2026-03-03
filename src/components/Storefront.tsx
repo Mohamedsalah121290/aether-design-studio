@@ -61,8 +61,8 @@ const Storefront = () => {
     if (el) {
       setTimeout(() => {
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        (el as HTMLElement).classList.add('ring-2', 'ring-primary', 'rounded-[16px]');
-        setTimeout(() => (el as HTMLElement).classList.remove('ring-2', 'ring-primary', 'rounded-[16px]'), 2500);
+        (el as HTMLElement).classList.add('ring-2', 'ring-primary', 'rounded-[16px]', 'animate-[pulse_1.5s_ease-in-out_2]');
+        setTimeout(() => (el as HTMLElement).classList.remove('ring-2', 'ring-primary', 'rounded-[16px]', 'animate-[pulse_1.5s_ease-in-out_2]'), 3500);
       }, 300);
       setSearchParams({}, { replace: true });
     }
