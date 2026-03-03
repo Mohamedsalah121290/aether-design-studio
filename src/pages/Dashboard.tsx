@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import RecommendationHistory from '@/components/RecommendationHistory';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
