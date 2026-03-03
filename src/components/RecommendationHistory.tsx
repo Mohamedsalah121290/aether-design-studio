@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Clock, ArrowRight, Loader2 } from 'lucide-react';
+import { Sparkles, Clock, ArrowRight, Loader2, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -138,8 +138,16 @@ const RecommendationHistory = () => {
               {entry.recommendations.map((rec, ri) => (
                 <div key={ri} className="flex items-start gap-2 p-2 rounded-lg bg-white/[0.02]">
                   <span className="text-[10px] font-bold text-amber-400/60 mt-0.5 shrink-0 w-4">#{ri + 1}</span>
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold text-foreground">{rec.tool_id}</p>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-xs font-semibold text-foreground">{rec.tool_id}</p>
+                      <a
+                        href={`/store#${encodeURIComponent(rec.tool_id)}`}
+                        className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline shrink-0"
+                      >
+                        View in Store <ExternalLink className="w-2.5 h-2.5" />
+                      </a>
+                    </div>
                     <p className="text-[11px] text-muted-foreground leading-relaxed">{rec.reason}</p>
                   </div>
                 </div>
