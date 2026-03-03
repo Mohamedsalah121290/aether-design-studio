@@ -9,6 +9,7 @@ import TrustStrip from './TrustStrip';
 import FeaturedCarousel from './FeaturedCarousel';
 import FiltersBar, { FilterChip, SortOption } from './FiltersBar';
 import TrustAndFAQ from './TrustAndFAQ';
+import AIRecommendations from './AIRecommendations';
 import { supabase } from '@/integrations/supabase/client';
 
 /* ── Section config ─────────────────────────────────────────────── */
@@ -209,6 +210,9 @@ const Storefront = () => {
               <>
                 {/* Featured carousel */}
                 <FeaturedCarousel tools={tools} />
+
+                {/* AI Recommendations */}
+                <AIRecommendations tools={tools} />
 
                 {/* Search + Filters */}
                 <div id="tools-grid">

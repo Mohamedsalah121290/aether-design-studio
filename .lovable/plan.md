@@ -1,57 +1,77 @@
 
+# Tool Status Management System
 
-## Personalized AI Tool Recommendations
+## Overview
+Add a `status` column to the `tools` table with three values (`active`, `coming_soon`, `paused`), then update the storefront cards and admin panel to reflect each status visually and functionally.
 
-### Overview
-Add an AI-powered recommendation widget to the Store page that asks users about their needs and returns personalized tool suggestions from the catalog. Uses Lovable AI (Gemini) via an edge function.
+---
 
-### Architecture
+## 1. Database Migration
 
-```text
-User clicks "Get Recommendations" → Preference quiz (3 quick questions)
-    ↓
-Frontend sends preferences to edge function
-    ↓
-Edge function: fetches tools from DB + calls Lovable AI Gateway
-    ↓
-AI returns ranked tool_ids with reasoning
-    ↓
-Frontend displays matched ToolCards with AI explanations
+Add a `status` text column to the `tools` table:
+- Default value: `'active'`
+- NOT NULL
+- No existing data breaks (all current tools default to `active`)
+
+```sql
+ALTER TABLE public.tools ADD COLUMN status text NOT NULL DEFAULT 'active';
 ```
 
-### Implementation
+## 2. Admin Panel Changes (`AdminPage.tsx`)
 
-**1. Edge function: `supabase/functions/recommend-tools/index.ts`**
-- Accepts user preferences (use case, budget range, experience level)
-- Fetches all active tools + plans from DB via service role client
-- Sends tool catalog + user preferences to Lovable AI Gateway (`google/gemini-3-flash-preview`)
-- Uses tool calling to extract structured output: array of `{ tool_id, reason }` (max 4-6 recommendations)
-- Returns recommendations to client
-- Handles 429/402 errors gracefully
+**Tool interface**: Add `status: string` field.
 
-**2. New component: `src/components/AIRecommendations.tsx`**
-- Renders a collapsible card in the Storefront, placed between the FeaturedCarousel and FiltersBar
-- Three-step mini quiz:
-  - "What do you need?" (Writing, Design, Video, Audio, Coding, Automation — multi-select)
-  - "Monthly budget?" (Under €10, €10-25, €25-50, No limit)
-  - "Experience level?" (Beginner, Intermediate, Advanced)
-- Submit button calls the edge function
-- Shows loading state with skeleton cards
-- Displays recommended ToolCards with AI-generated reasoning beneath each
-- Gold/premium styling consistent with "AI DEALS" brand
+**Tool form**: Add a status dropdown with options: Active, Coming Soon, Paused. Wire it into `toolForm` state, `openToolForm`, and `saveTool`.
 
-**3. Storefront integration (`src/components/Storefront.tsx`)**
-- Import and render `<AIRecommendations tools={tools} />` between FeaturedCarousel and FiltersBar
-- Pass the loaded tools array so matched tool_ids can resolve to full Tool objects client-side
+**Tools list**: Replace the simple green/red dot with a color-coded status indicator:
+- `active` = green dot
+- `coming_soon` = yellow dot + "Coming Soon" label
+- `paused` = gray dot + "Paused" label
 
-**4. Config update (`supabase/config.toml`)**
-- Add `[functions.recommend-tools]` with `verify_jwt = false`
+Replace the current "Activate/Deactivate" toggle button with a status dropdown selector so admins can switch between the three states inline without opening the edit form.
 
-### Technical Details
+## 3. Storefront Changes (`Storefront.tsx`)
 
-- **Model**: `google/gemini-3-flash-preview` (fast, cost-efficient for this use case)
-- **Structured output via tool calling**: Define a `recommend_tools` function schema returning `{ recommendations: [{ tool_id: string, reason: string }] }`
-- **System prompt**: Instructs AI to act as a software advisor for the AI DEALS platform, match user needs to available tools, and explain why each tool fits
-- **No persistence needed** — recommendations are ephemeral per session
-- **Rate limit handling**: Surface 429/402 errors as toast notifications
+Update the `fetchTools` query to also fetch tools where `status = 'coming_soon'` (currently only fetches `is_active = true`). Paused tools remain hidden from the store.
 
+Change the query from `.eq('is_active', true)` to filtering by status: fetch `active` and `coming_soon` tools.
+
+Pass the `status` field through to the `Tool` interface and into `ToolCard`.
+
+## 4. ToolCard Changes (`ToolCard.tsx`)
+
+**Tool interface**: Add `status?: string` field.
+
+**Coming Soon state** (`status === 'coming_soon'`):
+- Show a yellow "Coming Soon" badge (replacing or alongside the tier badge)
+- Add a subtle opacity reduction (`opacity-70`) and slight blur overlay on the card
+- Replace "Buy Now" button with a "Notify Me" button styled with a yellow/amber gradient
+- "Notify Me" button opens a small email input (inline or toast prompt) that inserts into the `subscribers` table with a note, or simply shows a toast confirming interest
+- Disable the CheckoutDialog from opening
+
+**Paused state** (`status === 'paused'`):
+- Tools with this status are filtered out in Storefront, so no card rendering needed
+- As a safety fallback, if rendered, show a gray "Unavailable" badge with full muted styling
+
+**Active state** (`status === 'active'` or undefined):
+- No changes, current behavior preserved
+
+## 5. CheckoutDialog Guard
+
+Add a guard at the top of `CheckoutDialog` -- if `tool?.status !== 'active'`, don't render / immediately close. This ensures no checkout can happen for non-active tools regardless of how the dialog is triggered.
+
+## 6. Files Changed
+
+| File | Change |
+|------|--------|
+| Database migration | Add `status` column |
+| `src/pages/AdminPage.tsx` | Status dropdown in tool form + inline status selector in tool list |
+| `src/components/Storefront.tsx` | Fetch `coming_soon` tools, pass status to cards |
+| `src/components/ToolCard.tsx` | Coming Soon badge, Notify Me button, conditional rendering |
+| `src/components/CheckoutDialog.tsx` | Guard against non-active tools |
+
+## 7. What Will NOT Change
+- Payment/checkout logic remains untouched
+- Stripe integration unaffected
+- Existing `is_active` field remains (status supersedes it for storefront display)
+- Premium glass dark design maintained -- Coming Soon uses amber/gold tones, Paused uses muted grays

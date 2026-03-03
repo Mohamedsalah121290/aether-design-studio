@@ -23,3 +23,6 @@ verify_jwt = false
 
 [functions.order-notification]
 verify_jwt = false
+
+[functions.recommend-tools]
+verify_jwt = false
