@@ -150,7 +150,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
   return (
     <>
-      <div className={`group relative overflow-visible transition-all duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.03] ${isPaused ? 'opacity-40 pointer-events-none' : ''}`}>
+      <div data-tool-id={tool.tool_id} className={`group relative overflow-visible transition-all duration-500 ease-out hover:-translate-y-1.5 hover:scale-[1.03] ${isPaused ? 'opacity-40 pointer-events-none' : ''}`}>
         {/* Bloom glow */}
         <div
           className="pointer-events-none absolute -inset-3 rounded-[22px] opacity-0 group-hover:opacity-100 transition-opacity duration-600 blur-2xl"

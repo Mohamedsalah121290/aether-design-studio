@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Sparkles, Search, Loader2, PenTool, Palette, Film, Mic,
@@ -43,6 +44,7 @@ const FILTER_CATEGORY_MAP: Record<string, string[]> = {
 /* ── Component ──────────────────────────────────────────────────── */
 const Storefront = () => {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [tools, setTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,6 +52,21 @@ const Storefront = () => {
   const [sortBy, setSortBy] = useState<SortOption>('popular');
 
   useEffect(() => { fetchTools(); }, []);
+
+  // Scroll to a specific tool card when arriving via ?scrollTo=toolId
+  useEffect(() => {
+    const scrollTo = searchParams.get('scrollTo');
+    if (!scrollTo || loading) return;
+    const el = document.querySelector(`[data-tool-id="${CSS.escape(scrollTo)}"]`);
+    if (el) {
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        (el as HTMLElement).classList.add('ring-2', 'ring-primary', 'rounded-[16px]');
+        setTimeout(() => (el as HTMLElement).classList.remove('ring-2', 'ring-primary', 'rounded-[16px]'), 2500);
+      }, 300);
+      setSearchParams({}, { replace: true });
+    }
+  }, [loading, searchParams]);
 
   const fetchTools = async () => {
     try {
