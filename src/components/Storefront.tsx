@@ -211,6 +211,9 @@ const Storefront = () => {
                 {/* Featured carousel */}
                 <FeaturedCarousel tools={tools} />
 
+                {/* AI Recommendations */}
+                <AIRecommendations tools={tools} />
+
                 {/* Search + Filters */}
                 <div id="tools-grid">
                   <FiltersBar
