@@ -38,7 +38,7 @@ const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   creators: ['image', 'video', 'audio'],
   marketers: ['text'],
   developers: ['coding', 'automation'],
-  security: ['security'],
+  security: ['security', 'os-licenses'],
 };
 
 /* ── Component ──────────────────────────────────────────────────── */
