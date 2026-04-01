@@ -14,7 +14,13 @@ serve(async (req) => {
     const { useCases, budget, experience } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!LOVABLE_API_KEY) {
+      console.error("[recommend-tools] Configuration error: Missing API key");
+      return new Response(
+        JSON.stringify({ error: "Service temporarily unavailable" }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -109,20 +115,12 @@ Recommend the best 4-6 tools for this user.`;
     });
 
     if (!response.ok) {
-      const status = response.status;
-      if (status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Please try again later." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
       const body = await response.text();
-      console.error("AI gateway error:", status, body);
-      throw new Error(`AI gateway error: ${status}`);
+      console.error("[recommend-tools] AI gateway error:", { status: response.status, body, timestamp: new Date().toISOString() });
+      return new Response(
+        JSON.stringify({ error: "Unable to generate recommendations. Please try again later." }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const aiData = await response.json();
@@ -144,8 +142,8 @@ Recommend the best 4-6 tools for this user.`;
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    console.error("recommend-tools error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
+    console.error("[recommend-tools] error:", e);
+    return new Response(JSON.stringify({ error: "Unable to generate recommendations. Please try again later." }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

@@ -20,7 +20,6 @@ async function encryptPassword(password: string, key: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
   
-  // Create a key from the encryption key
   const keyMaterial = await crypto.subtle.importKey(
     'raw',
     encoder.encode(key.padEnd(32, '0').slice(0, 32)),
@@ -29,34 +28,69 @@ async function encryptPassword(password: string, key: string): Promise<string> {
     ['encrypt']
   );
   
-  // Generate IV
   const iv = crypto.getRandomValues(new Uint8Array(12));
   
-  // Encrypt
   const encrypted = await crypto.subtle.encrypt(
     { name: 'AES-GCM', iv },
     keyMaterial,
     data
   );
   
-  // Combine IV and encrypted data
   const combined = new Uint8Array(iv.length + encrypted.byteLength);
   combined.set(iv);
   combined.set(new Uint8Array(encrypted), iv.length);
   
-  // Return as base64
   return btoa(String.fromCharCode(...combined));
 }
 
 Deno.serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
 
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Require authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Create admin client for role checks and data operations
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    );
+
+    // Verify the user's identity
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid authentication' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Verify admin role
+    const { data: roleData } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (!roleData) {
+      return new Response(
+        JSON.stringify({ error: 'Admin access required' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const { order_id, email, password } = await req.json();
 
     // Validate required fields
@@ -74,12 +108,6 @@ Deno.serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    // Create Supabase client with service role key for admin operations
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    );
 
     // Get dedicated encryption key from environment
     const encryptionKey = Deno.env.get('ENCRYPTION_KEY');
