@@ -23,7 +23,7 @@ const SECTION_ORDER: {
   { key: 'text',         label: 'Writing & SEO',       subtitle: 'AI-powered content creation & optimization',   icon: PenTool },
   { key: 'image',        label: 'Design & Images',     subtitle: 'Generate stunning visuals with AI',            icon: Palette },
   { key: 'video',        label: 'Video Creation',      subtitle: 'Professional AI video production tools',       icon: Film },
-  { key: 'audio',        label: 'Voice & Audio',       subtitle: 'Text-to-speech & voice cloning',               icon: Mic },
+  { key: 'audio',        label: 'Voice & Audio',       subtitle: 'Text-to-speech & voice cloning',               icon: Headphones },
   { key: 'coding',       label: 'Coding & Dev',        subtitle: 'AI coding assistants & developer tools',       icon: Code },
   { key: 'automation',   label: 'Automation & Bots',   subtitle: 'Streamline workflows with AI automation',      icon: Zap },
   { key: 'productivity', label: 'Productivity',        subtitle: 'Supercharge your daily output',                icon: Briefcase },
