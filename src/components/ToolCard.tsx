@@ -218,7 +218,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   <img
                     src={logoUrl!}
                     alt={`${tool.name} logo`}
-                    className={`h-6 w-6 sm:h-8 sm:w-8 object-contain drop-shadow-sm transition-opacity duration-300 relative z-10 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    className={`h-6 w-6 sm:h-8 sm:w-8 object-contain drop-shadow-sm transition-all duration-300 relative z-10 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
                     onError={() => {
                       if (!logoError) { setLogoError(true); setLogoLoaded(false); }
