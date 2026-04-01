@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Sparkles, Search, Loader2, PenTool, Palette, Film, Mic,
-  Code, Zap, Briefcase, ShieldCheck, Monitor, Users, Clock,
+  Code, Zap, Briefcase, ShieldCheck, Monitor, Users, Clock, Headphones,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
 import TrustStrip from './TrustStrip';
