@@ -92,7 +92,7 @@ const Footer = () => {
                   DEALS
                 </span>
               </div>
-            </motion.a>
+            </Link>
             <p className="text-muted-foreground mb-6 max-w-sm text-sm">
               {t('footer.description')}
             </p>
