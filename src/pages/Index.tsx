@@ -266,10 +266,10 @@ const Index = () => {
               {/* CTAs */}
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
                 <Button variant="hero" size="xl" className="group min-w-[200px] shadow-2xl" asChild>
-                  <a href="/store">
+                  <Link to="/store">
                     Explore Tools
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                 </Button>
                 <Button variant="heroOutline" size="xl" className="backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
                   <a href="#how-it-works">
