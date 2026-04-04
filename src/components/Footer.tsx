@@ -63,7 +63,7 @@ const Footer = () => {
         <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <motion.a href="/" className="flex items-center gap-3 mb-6 group" whileHover={{ scale: 1.02 }}>
+            <Link to="/" className="flex items-center gap-3 mb-6 group">
               <div className="relative">
                 <div className="absolute inset-0 blur-xl opacity-60">
                   <img src={logo} alt="" className="h-20 w-auto" aria-hidden="true" />
