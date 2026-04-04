@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, Globe, ChevronDown, Search, Shield, LogIn, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languages } from '@/lib/i18n';
@@ -78,52 +79,54 @@ const Navbar = () => {
       >
         <nav className="container mx-auto px-4 flex items-center justify-between">
           {/* Logo with Dual-tone Brand Name */}
-          <motion.a href="/" className="flex items-center gap-3 group" whileHover={{ scale: 1.02 }}>
-            <div className="relative">
-              <div className="absolute inset-0 blur-xl opacity-60">
-                <img src={logo} alt="" className="h-20 w-auto" aria-hidden="true" />
+          <Link to="/" className="flex items-center gap-3 group">
+            <motion.div whileHover={{ scale: 1.02 }} className="flex items-center gap-3">
+              <div className="relative">
+                <div className="absolute inset-0 blur-xl opacity-60">
+                  <img src={logo} alt="" className="h-20 w-auto" aria-hidden="true" />
+                </div>
+                <img 
+                  alt="AI DEALS" 
+                  src={logo} 
+                  className="h-20 w-auto relative z-10 drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(168,85,247,0.7)] rounded-md shadow-md" 
+                />
               </div>
-              <img 
-                alt="AI DEALS" 
-                src={logo} 
-                className="h-20 w-auto relative z-10 drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(168,85,247,0.7)] rounded-md shadow-md" 
-              />
-            </div>
-            
-            <div className="hidden sm:flex items-baseline">
-              <span 
-                className="text-2xl font-display font-black tracking-tight text-primary drop-shadow-[0_0_10px_rgba(168,85,247,0.6)]" 
-                style={{ textShadow: '0 0 20px hsl(var(--primary) / 0.5), 0 2px 4px rgba(0,0,0,0.3)' }}
-              >
-                AI
-              </span>
-              <span 
-                className="text-2xl font-display font-black tracking-tight text-foreground ml-1" 
-                style={{
-                  background: 'linear-gradient(180deg, hsl(var(--foreground)) 0%, hsl(var(--muted-foreground)) 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                  filter: 'drop-shadow(0 1px 1px rgba(255,255,255,0.1))'
-                }}
-              >
-                DEALS
-              </span>
-            </div>
-          </motion.a>
+              
+              <div className="hidden sm:flex items-baseline">
+                <span 
+                  className="text-2xl font-display font-black tracking-tight text-primary drop-shadow-[0_0_10px_rgba(168,85,247,0.6)]" 
+                  style={{ textShadow: '0 0 20px hsl(var(--primary) / 0.5), 0 2px 4px rgba(0,0,0,0.3)' }}
+                >
+                  AI
+                </span>
+                <span 
+                  className="text-2xl font-display font-black tracking-tight text-foreground ml-1" 
+                  style={{
+                    background: 'linear-gradient(180deg, hsl(var(--foreground)) 0%, hsl(var(--muted-foreground)) 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    textShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                    filter: 'drop-shadow(0 1px 1px rgba(255,255,255,0.1))'
+                  }}
+                >
+                  DEALS
+                </span>
+              </div>
+            </motion.div>
+          </Link>
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-8">
             {navLinks.map(link => (
-              <motion.a 
-                key={link.href} 
-                href={link.href} 
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative group" 
-                whileHover={{ y: -2 }}
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary group-hover:w-full transition-all duration-300" />
-              </motion.a>
+              <motion.div key={link.href} whileHover={{ y: -2 }}>
+                <Link 
+                  to={link.href} 
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 relative group"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary group-hover:w-full transition-all duration-300" />
+                </Link>
+              </motion.div>
             ))}
           </div>
 
@@ -215,16 +218,16 @@ const Navbar = () => {
             </div>
 
             <Button variant="heroOutline" size="sm" asChild>
-              <a href="/dashboard">{t('nav.dashboard')}</a>
+              <Link to="/dashboard">{t('nav.dashboard')}</Link>
             </Button>
 
             {/* Admin Link - Only show if admin */}
             {isAdmin && (
               <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
-                <a href="/admin" className="flex items-center gap-1.5">
+                <Link to="/admin" className="flex items-center gap-1.5">
                   <Shield className="w-4 h-4" />
                   Admin
-                </a>
+                </Link>
               </Button>
             )}
 
@@ -232,12 +235,12 @@ const Navbar = () => {
             {!loading && (
               user ? (
                 <div className="flex items-center gap-2">
-                  <a href="/profile" className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors">
+                  <Link to="/profile" className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors">
                     <User className="w-4 h-4 text-primary" />
                     <span className="text-sm text-primary truncate max-w-[120px]">
                       {user.email?.split('@')[0]}
                     </span>
-                  </a>
+                  </Link>
                   <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground">
                     <LogOut className="w-4 h-4" />
                   </Button>
@@ -268,14 +271,14 @@ const Navbar = () => {
             >
               <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
                 {navLinks.map(link => (
-                  <a 
+                  <Link 
                     key={link.href} 
-                    href={link.href} 
+                    to={link.href} 
                     className="text-lg text-muted-foreground hover:text-foreground transition-colors py-2" 
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
                 
                 <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
@@ -294,15 +297,15 @@ const Navbar = () => {
                 
                 <div className="flex flex-col gap-3 pt-4">
                   <Button variant="heroOutline" className="w-full" asChild>
-                    <a href="/dashboard">{t('nav.dashboard')}</a>
+                    <Link to="/dashboard">{t('nav.dashboard')}</Link>
                   </Button>
                   
                   {isAdmin && (
                     <Button variant="ghost" className="w-full text-muted-foreground" asChild>
-                      <a href="/admin" className="flex items-center justify-center gap-2">
+                      <Link to="/admin" className="flex items-center justify-center gap-2">
                         <Shield className="w-4 h-4" />
                         Admin Panel
-                      </a>
+                      </Link>
                     </Button>
                   )}
                   

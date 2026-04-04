@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Github, Twitter, Linkedin, Mail, Shield, Lock, Globe, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -62,7 +63,7 @@ const Footer = () => {
         <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <motion.a href="/" className="flex items-center gap-3 mb-6 group" whileHover={{ scale: 1.02 }}>
+            <Link to="/" className="flex items-center gap-3 mb-6 group">
               <div className="relative">
                 <div className="absolute inset-0 blur-xl opacity-60">
                   <img src={logo} alt="" className="h-20 w-auto" aria-hidden="true" />
@@ -91,7 +92,7 @@ const Footer = () => {
                   DEALS
                 </span>
               </div>
-            </motion.a>
+            </Link>
             <p className="text-muted-foreground mb-6 max-w-sm text-sm">
               {t('footer.description')}
             </p>
@@ -119,9 +120,9 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -133,9 +134,9 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -147,9 +148,9 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -185,13 +186,13 @@ const Footer = () => {
             © {new Date().getFullYear()} AI DEALS. {t('footer.rights')}
           </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <a href="/privacy" className="hover:text-foreground transition-colors">
+            <Link to="/privacy" className="hover:text-foreground transition-colors">
               Privacy
-            </a>
+            </Link>
             <span>•</span>
-            <a href="/terms" className="hover:text-foreground transition-colors">
+            <Link to="/terms" className="hover:text-foreground transition-colors">
               Terms
-            </a>
+            </Link>
           </div>
         </div>
       </div>

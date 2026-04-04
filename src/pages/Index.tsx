@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
   ArrowRight, GraduationCap, Briefcase, UserCheck, Lock,
   Zap, CheckCircle, Shield, BookOpen,
@@ -265,10 +266,10 @@ const Index = () => {
               {/* CTAs */}
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
                 <Button variant="hero" size="xl" className="group min-w-[200px] shadow-2xl" asChild>
-                  <a href="/store">
+                  <Link to="/store">
                     Explore Tools
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                 </Button>
                 <Button variant="heroOutline" size="xl" className="backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
                   <a href="#how-it-works">
@@ -494,10 +495,10 @@ const Index = () => {
 
               <div className="text-center">
                 <Button variant="heroOutline" size="lg" className="group" asChild>
-                  <a href="/store">
+                  <Link to="/store">
                     See All Tools
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -536,10 +537,10 @@ const Index = () => {
                   </div>
 
                   <Button variant="hero" size="lg" className="group" asChild>
-                    <a href="/academy">
+                    <Link to="/academy">
                       Enter Academy
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </a>
+                    </Link>
                   </Button>
                 </div>
 
@@ -767,16 +768,16 @@ const Index = () => {
                   </p>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Button variant="hero" size="xl" className="group" asChild>
-                      <a href="/store">
+                      <Link to="/store">
                         Explore Tools
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                      </a>
+                      </Link>
                     </Button>
                     <Button variant="heroOutline" size="xl" asChild>
-                      <a href="/academy">
+                      <Link to="/academy">
                         Start Learning
                         <ChevronRight className="w-5 h-5" />
-                      </a>
+                      </Link>
                     </Button>
                   </div>
                 </div>
