@@ -120,9 +120,9 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -134,9 +134,9 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -148,9 +148,9 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
