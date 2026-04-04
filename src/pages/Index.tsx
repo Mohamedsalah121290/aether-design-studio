@@ -495,10 +495,10 @@ const Index = () => {
 
               <div className="text-center">
                 <Button variant="heroOutline" size="lg" className="group" asChild>
-                  <a href="/store">
+                  <Link to="/store">
                     See All Tools
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                 </Button>
               </div>
             </div>
