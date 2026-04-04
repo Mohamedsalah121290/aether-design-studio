@@ -768,16 +768,16 @@ const Index = () => {
                   </p>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Button variant="hero" size="xl" className="group" asChild>
-                      <a href="/store">
+                      <Link to="/store">
                         Explore Tools
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                      </a>
+                      </Link>
                     </Button>
                     <Button variant="heroOutline" size="xl" asChild>
-                      <a href="/academy">
+                      <Link to="/academy">
                         Start Learning
                         <ChevronRight className="w-5 h-5" />
-                      </a>
+                      </Link>
                     </Button>
                   </div>
                 </div>

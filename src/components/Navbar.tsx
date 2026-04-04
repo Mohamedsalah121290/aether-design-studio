@@ -297,15 +297,15 @@ const Navbar = () => {
                 
                 <div className="flex flex-col gap-3 pt-4">
                   <Button variant="heroOutline" className="w-full" asChild>
-                    <a href="/dashboard">{t('nav.dashboard')}</a>
+                    <Link to="/dashboard">{t('nav.dashboard')}</Link>
                   </Button>
                   
                   {isAdmin && (
                     <Button variant="ghost" className="w-full text-muted-foreground" asChild>
-                      <a href="/admin" className="flex items-center justify-center gap-2">
+                      <Link to="/admin" className="flex items-center justify-center gap-2">
                         <Shield className="w-4 h-4" />
                         Admin Panel
-                      </a>
+                      </Link>
                     </Button>
                   )}
                   

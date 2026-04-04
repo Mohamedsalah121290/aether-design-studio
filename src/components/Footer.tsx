@@ -186,13 +186,13 @@ const Footer = () => {
             © {new Date().getFullYear()} AI DEALS. {t('footer.rights')}
           </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <a href="/privacy" className="hover:text-foreground transition-colors">
+            <Link to="/privacy" className="hover:text-foreground transition-colors">
               Privacy
-            </a>
+            </Link>
             <span>•</span>
-            <a href="/terms" className="hover:text-foreground transition-colors">
+            <Link to="/terms" className="hover:text-foreground transition-colors">
               Terms
-            </a>
+            </Link>
           </div>
         </div>
       </div>
