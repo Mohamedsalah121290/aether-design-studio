@@ -218,16 +218,16 @@ const Navbar = () => {
             </div>
 
             <Button variant="heroOutline" size="sm" asChild>
-              <a href="/dashboard">{t('nav.dashboard')}</a>
+              <Link to="/dashboard">{t('nav.dashboard')}</Link>
             </Button>
 
             {/* Admin Link - Only show if admin */}
             {isAdmin && (
               <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
-                <a href="/admin" className="flex items-center gap-1.5">
+                <Link to="/admin" className="flex items-center gap-1.5">
                   <Shield className="w-4 h-4" />
                   Admin
-                </a>
+                </Link>
               </Button>
             )}
 
@@ -235,12 +235,12 @@ const Navbar = () => {
             {!loading && (
               user ? (
                 <div className="flex items-center gap-2">
-                  <a href="/profile" className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors">
+                  <Link to="/profile" className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors">
                     <User className="w-4 h-4 text-primary" />
                     <span className="text-sm text-primary truncate max-w-[120px]">
                       {user.email?.split('@')[0]}
                     </span>
-                  </a>
+                  </Link>
                   <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground">
                     <LogOut className="w-4 h-4" />
                   </Button>
