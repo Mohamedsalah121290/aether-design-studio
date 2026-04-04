@@ -537,10 +537,10 @@ const Index = () => {
                   </div>
 
                   <Button variant="hero" size="lg" className="group" asChild>
-                    <a href="/academy">
+                    <Link to="/academy">
                       Enter Academy
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </a>
+                    </Link>
                   </Button>
                 </div>
 
