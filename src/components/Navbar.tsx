@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, Globe, ChevronDown, Search, Shield, LogIn, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languages } from '@/lib/i18n';
