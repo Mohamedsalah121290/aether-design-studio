@@ -339,13 +339,13 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   {t('store.buyNow')}
                   <Sparkles className="w-3.5 h-3.5" />
                 </button>
-                <a
-                  href={`/academy?tool_id=${tool.tool_id}`}
+                <Link
+                  to={`/academy?tool_id=${tool.tool_id}`}
                   className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors"
                 >
                   <GraduationCap className="w-3 h-3" />
                   Learn This Tool
-                </a>
+                </Link>
               </div>
             )}
           </div>
