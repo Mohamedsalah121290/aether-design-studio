@@ -271,14 +271,14 @@ const Navbar = () => {
             >
               <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
                 {navLinks.map(link => (
-                  <a 
+                  <Link 
                     key={link.href} 
-                    href={link.href} 
+                    to={link.href} 
                     className="text-lg text-muted-foreground hover:text-foreground transition-colors py-2" 
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
                 
                 <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
