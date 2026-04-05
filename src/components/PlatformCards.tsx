@@ -29,41 +29,25 @@ const PlatformCard = ({ platform, index }: { platform: Platform; index: number }
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.4, delay: index * 0.08 }}
-    className="group/card relative rounded-2xl overflow-hidden backdrop-blur-md transition-shadow duration-300 hover:shadow-[0_8px_40px_hsl(210_100%_55%/0.10)]"
-    style={{
-      background: 'rgba(20, 20, 35, 0.45)',
-      border: '1px solid rgba(255,255,255,0.06)',
-    }}
+    className="flex flex-col items-center gap-2"
   >
-    {/* Image — only clickable part */}
-    <div className="flex items-center justify-center p-6 pb-2">
-      <a
-        href={platform.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Visit ${platform.name}`}
-        className="relative block w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_24px_hsl(210_100%_60%/0.25)]"
-      >
-        <img
-          src={platform.image}
-          alt={`${platform.name} logo`}
-          className="w-full h-full object-contain transition-[filter] duration-300 hover:brightness-110"
-          loading="lazy"
-          width={96}
-          height={96}
-        />
-      </a>
-    </div>
-
-    {/* Text — not clickable */}
-    <div className="p-4 pt-2 text-center">
-      <h3 className="text-base sm:text-lg font-bold text-foreground font-display tracking-tight">
-        {platform.name}
-      </h3>
-      <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-        {platform.description}
-      </p>
-    </div>
+    <a
+      href={platform.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Visit ${platform.name}`}
+      className="h-11 w-11 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative cursor-pointer transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_24px_hsl(210_100%_60%/0.25)]"
+    >
+      <img
+        src={platform.image}
+        alt={`${platform.name} logo`}
+        className="w-7 h-7 sm:w-9 sm:h-9 object-contain rounded-lg"
+        loading="lazy"
+        width={36}
+        height={36}
+      />
+    </a>
+    <span className="text-xs text-muted-foreground font-medium">{platform.name}</span>
   </motion.div>
 );
 
