@@ -23,12 +23,12 @@ const platforms: Platform[] = [
   { name: 'Perplexity', description: 'AI-powered search & research engine', url: 'https://www.perplexity.ai', image: perplexityImg },
 ];
 
-const PlatformCard = ({ platform }: { platform: Platform }) => (
+const PlatformCard = ({ platform, index }: { platform: Platform; index: number }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
-    transition={{ duration: 0.4 }}
+    transition={{ duration: 0.4, delay: index * 0.08 }}
     className="group/card relative rounded-2xl overflow-hidden backdrop-blur-md transition-shadow duration-300 hover:shadow-[0_8px_40px_hsl(210_100%_55%/0.10)]"
     style={{
       background: 'rgba(20, 20, 35, 0.45)',
@@ -68,32 +68,11 @@ const PlatformCard = ({ platform }: { platform: Platform }) => (
 );
 
 const PlatformCards = () => (
-  <section className="py-20 relative">
-    <div className="container mx-auto px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="text-center mb-12"
-      >
-        <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-          Top Platforms
-        </span>
-        <h2 className="text-3xl md:text-5xl font-display font-bold">
-          Explore Leading <span className="gradient-text">AI Platforms</span>
-        </h2>
-        <p className="text-muted-foreground mt-4 max-w-xl mx-auto text-sm md:text-base">
-          Click any logo to visit the platform directly.
-        </p>
-      </motion.div>
-
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 max-w-5xl mx-auto">
-        {platforms.map((p) => (
-          <PlatformCard key={p.name} platform={p} />
-        ))}
-      </div>
-    </div>
-  </section>
+  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 max-w-5xl mx-auto">
+    {platforms.map((p, i) => (
+      <PlatformCard key={p.name} platform={p} index={i} />
+    ))}
+  </div>
 );
 
 export default PlatformCards;
