@@ -52,7 +52,7 @@ const PlatformCard = ({ platform, index }: { platform: Platform; index: number }
 );
 
 const PlatformCards = () => (
-  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 max-w-5xl mx-auto">
+  <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8 max-w-3xl mx-auto">
     {platforms.map((p, i) => (
       <PlatformCard key={p.name} platform={p} index={i} />
     ))}
