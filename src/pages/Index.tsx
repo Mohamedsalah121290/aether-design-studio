@@ -16,7 +16,12 @@ import { ToolCard, Tool } from '@/components/ToolCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
-import PlatformCards from '@/components/PlatformCards';
+import midjourneyPlatform from '@/assets/platforms/midjourney.jpg';
+import chatgptPlatform from '@/assets/platforms/chatgpt.jpg';
+import claudePlatform from '@/assets/platforms/claude.jpg';
+import geminiPlatform from '@/assets/platforms/gemini.jpg';
+import canvaPlatform from '@/assets/platforms/canva.jpg';
+import perplexityPlatform from '@/assets/platforms/perplexity.png';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
@@ -494,6 +499,32 @@ const Index = () => {
                 ))}
               </div>
 
+              {/* Platform quick links */}
+              <motion.div {...fadeUp} className="mb-10">
+                <p className="text-center text-xs text-muted-foreground uppercase tracking-wider mb-6">Click any logo to visit the platform directly</p>
+                <div className="flex flex-wrap items-center justify-center gap-5 md:gap-8">
+                  {[
+                    { name: 'ChatGPT', image: chatgptPlatform, url: 'https://chatgpt.com' },
+                    { name: 'Midjourney', image: midjourneyPlatform, url: 'https://www.midjourney.com' },
+                    { name: 'Claude', image: claudePlatform, url: 'https://claude.ai' },
+                    { name: 'Gemini', image: geminiPlatform, url: 'https://gemini.google.com' },
+                    { name: 'Canva', image: canvaPlatform, url: 'https://www.canva.com' },
+                    { name: 'Perplexity', image: perplexityPlatform, url: 'https://www.perplexity.ai' },
+                  ].map((p) => (
+                    <a
+                      key={p.name}
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Visit ${p.name}`}
+                      className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
+                    >
+                      <img src={p.image} alt={`${p.name} logo`} className="w-full h-full object-contain" loading="lazy" />
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
+
               <div className="text-center">
                 <Button variant="heroOutline" size="lg" className="group" asChild>
                   <Link to="/store">
@@ -714,8 +745,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ PLATFORM CARDS ═══════════════ */}
-        <PlatformCards />
 
         {/* ═══════════════ 9) FAQ ═══════════════ */}
         <section className="py-24 relative">
