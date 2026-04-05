@@ -16,6 +16,7 @@ import { ToolCard, Tool } from '@/components/ToolCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
+import PlatformCards from '@/components/PlatformCards';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
