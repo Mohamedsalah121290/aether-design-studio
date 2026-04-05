@@ -719,8 +719,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ PLATFORM CARDS ═══════════════ */}
-        <PlatformCards />
 
         {/* ═══════════════ 9) FAQ ═══════════════ */}
         <section className="py-24 relative">
