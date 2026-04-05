@@ -29,25 +29,26 @@ const PlatformCard = ({ platform, index }: { platform: Platform; index: number }
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.4, delay: index * 0.08 }}
-    className="flex flex-col items-center gap-2"
+    className="flex flex-col items-center gap-3"
   >
     <a
       href={platform.url}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Visit ${platform.name}`}
-      className="h-11 w-11 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative cursor-pointer transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_24px_hsl(210_100%_60%/0.25)]"
+      className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.08)] bg-[hsl(240_10%_10%/0.5)] backdrop-blur-md relative cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-[0_0_28px_hsl(210_100%_60%/0.3)] hover:border-[hsl(210_100%_60%/0.3)]"
     >
+      <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_center,hsl(210_100%_60%/0.06)_0%,transparent_70%)]" />
       <img
         src={platform.image}
         alt={`${platform.name} logo`}
-        className="w-7 h-7 sm:w-9 sm:h-9 object-contain rounded-lg"
+        className="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-lg relative z-10 drop-shadow-[0_0_6px_rgba(255,255,255,0.1)]"
         loading="lazy"
-        width={36}
-        height={36}
+        width={48}
+        height={48}
       />
     </a>
-    <span className="text-xs text-muted-foreground font-medium">{platform.name}</span>
+    <span className="text-xs sm:text-sm text-muted-foreground font-medium">{platform.name}</span>
   </motion.div>
 );
 
