@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import chatgptImg from '@/assets/platforms/chatgpt.png';
 import midjourneyImg from '@/assets/platforms/midjourney.png';
 import claudeImg from '@/assets/platforms/claude.png';
-import geminiImg from '@/assets/platforms/gemini.png';
+import geminiImg from '@/assets/platforms/gemini-official.jpg';
 import canvaImg from '@/assets/platforms/canva.png';
 import perplexityImg from '@/assets/platforms/perplexity.png';
 
