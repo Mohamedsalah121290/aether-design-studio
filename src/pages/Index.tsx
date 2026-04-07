@@ -16,7 +16,7 @@ import { ToolCard, Tool } from '@/components/ToolCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
-import PlatformCards from '@/components/PlatformCards';
+
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
@@ -494,10 +494,6 @@ const Index = () => {
                 ))}
               </div>
 
-              {/* Platform Cards */}
-              <PlatformCards />
-
-              <p className="text-center text-xs text-muted-foreground mt-6 mb-10">Click any logo to visit the platform directly</p>
 
               <div className="text-center">
                 <Button variant="heroOutline" size="lg" className="group" asChild>

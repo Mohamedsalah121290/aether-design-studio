@@ -1,0 +1,3 @@
+UPDATE tools SET logo_url = 'https://pilskrumnpvnvtkadbez.supabase.co/storage/v1/object/public/email-assets/logos/claude.png' WHERE tool_id = 'claude';
+UPDATE tools SET logo_url = 'https://pilskrumnpvnvtkadbez.supabase.co/storage/v1/object/public/email-assets/logos/gemini.png' WHERE tool_id = 'gemini';
+UPDATE tools SET logo_url = 'https://pilskrumnpvnvtkadbez.supabase.co/storage/v1/object/public/email-assets/logos/perplexity.png' WHERE tool_id = 'perplexity';
