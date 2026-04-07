@@ -494,10 +494,6 @@ const Index = () => {
                 ))}
               </div>
 
-              {/* Platform Cards */}
-              <PlatformCards />
-
-              <p className="text-center text-xs text-muted-foreground mt-6 mb-10">Click any logo to visit the platform directly</p>
 
               <div className="text-center">
                 <Button variant="heroOutline" size="lg" className="group" asChild>
