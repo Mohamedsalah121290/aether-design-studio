@@ -208,7 +208,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             {/* Logo + badge */}
             <div className="flex items-start justify-between">
               <div
-                className="h-11 w-11 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative"
+                className="h-14 w-14 sm:h-[4.5rem] sm:w-[4.5rem] rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative overflow-hidden"
                 style={{ background: 'hsl(210 50% 50% / 0.06)' }}
               >
                 <div
@@ -219,7 +219,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   <img
                     src={logoUrl!}
                     alt={`${tool.name} logo`}
-                    className={`h-6 w-6 sm:h-8 sm:w-8 object-contain drop-shadow-sm transition-all duration-300 relative z-10 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    className={`h-9 w-9 sm:h-12 sm:w-12 object-contain drop-shadow-sm transition-all duration-300 relative z-10 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
                     onError={() => {
                       if (!logoError) { setLogoError(true); setLogoLoaded(false); }
