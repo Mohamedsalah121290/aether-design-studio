@@ -21,6 +21,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   'os-licenses': 'Licenses',
 };
 
+/* Platform official URLs */
 const PLATFORM_URLS: Record<string, string> = {
   chatgpt: 'https://chatgpt.com',
   claude: 'https://claude.ai',
