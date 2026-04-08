@@ -207,9 +207,14 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
           <div className="relative z-[2] p-4 sm:p-6 flex flex-col gap-3 sm:gap-4">
             {/* Logo + badge */}
             <div className="flex items-start justify-between">
-              <div
-                className="h-14 w-14 sm:h-[4.5rem] sm:w-[4.5rem] rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative overflow-hidden"
+              <a
+                href={PLATFORM_URLS[tool.tool_id] || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit ${tool.name}`}
+                className="h-14 w-14 sm:h-[4.5rem] sm:w-[4.5rem] rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-110"
                 style={{ background: 'hsl(210 50% 50% / 0.06)' }}
+                onClick={(e) => e.stopPropagation()}
               >
                 <div
                   className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -233,7 +238,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                     {tool.name.charAt(0)}
                   </span>
                 )}
-              </div>
+              </a>
               {isComingSoon ? <ComingSoonBadge /> : isPaused ? (
                 <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-[4px] text-[10px] font-semibold uppercase tracking-wider bg-gray-500/15 border border-gray-500/30 text-gray-400">
                   Unavailable
