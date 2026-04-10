@@ -124,11 +124,7 @@ const Storefront = () => {
       t.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    if (activeFilter === 'trending') {
-      result = result.filter(t => FEATURED_TOOL_IDS.includes(t.tool_id) || POPULAR_TOOL_IDS.includes(t.tool_id));
-    } else if (activeFilter === 'new') {
-      result = [...result].reverse();
-    } else if (activeFilter !== 'all' && FILTER_CATEGORY_MAP[activeFilter]) {
+    if (activeFilter !== 'all' && FILTER_CATEGORY_MAP[activeFilter]) {
       result = result.filter(t => FILTER_CATEGORY_MAP[activeFilter].includes(t.category));
     }
 
