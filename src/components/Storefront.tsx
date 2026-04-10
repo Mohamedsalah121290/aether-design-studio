@@ -35,10 +35,15 @@ const FEATURED_TOOL_IDS = ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva',
 const POPULAR_TOOL_IDS  = ['jasper', 'leonardo', 'runway', 'elevenlabs', 'adobe', 'capcut', 'murf'];
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
-  creators: ['image', 'video', 'audio'],
-  marketers: ['text'],
-  developers: ['coding', 'automation'],
-  security: ['security', 'os-licenses'],
+  'os-servers': ['os-licenses'],
+  'office-productivity': ['productivity'],
+  'design-video': ['image', 'video'],
+  'stock-media': ['image'],
+  'ai-text-code': ['text', 'coding'],
+  'ai-media': ['image', 'video', 'audio'],
+  'security-vpn': ['security'],
+  'education': ['productivity'],
+  'communication': ['automation'],
 };
 
 /* ── Component ──────────────────────────────────────────────────── */

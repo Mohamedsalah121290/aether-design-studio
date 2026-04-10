@@ -3,12 +3,15 @@ import { useTranslation } from 'react-i18next';
 
 const FILTER_CHIPS = [
   { id: 'all', label: 'All' },
-  { id: 'trending', label: 'Trending' },
-  { id: 'new', label: 'New' },
-  { id: 'creators', label: 'Creators' },
-  { id: 'marketers', label: 'Marketers' },
-  { id: 'developers', label: 'Developers' },
-  { id: 'security', label: 'Security' },
+  { id: 'os-servers', label: '💻 Operating Systems & Servers' },
+  { id: 'office-productivity', label: '👨‍💻 Office & Productivity' },
+  { id: 'design-video', label: '🎨 Design & Video Editing' },
+  { id: 'stock-media', label: '🖼 Stock Media Platforms' },
+  { id: 'ai-text-code', label: '🤖 AI Models (Text & Code)' },
+  { id: 'ai-media', label: '🎬 AI Tools (Media & Design)' },
+  { id: 'security-vpn', label: '🛡 Security & VPNs' },
+  { id: 'education', label: '🎓 Education & Career' },
+  { id: 'communication', label: '🛰 Communication & Networking' },
 ] as const;
 
 const SORT_OPTIONS = [
