@@ -20,15 +20,15 @@ const SECTION_ORDER: {
   subtitle: string;
   icon: React.ElementType;
 }[] = [
-  { key: 'text',         label: 'Writing & SEO',       subtitle: 'AI-powered content creation & optimization',   icon: PenTool },
-  { key: 'image',        label: 'Design & Images',     subtitle: 'Generate stunning visuals with AI',            icon: Palette },
-  { key: 'video',        label: 'Video Creation',      subtitle: 'Professional AI video production tools',       icon: Film },
-  { key: 'audio',        label: 'Voice & Audio',       subtitle: 'Text-to-speech & voice cloning',               icon: Headphones },
-  { key: 'coding',       label: 'Coding & Dev',        subtitle: 'AI coding assistants & developer tools',       icon: Code },
-  { key: 'automation',   label: 'Automation & Bots',   subtitle: 'Streamline workflows with AI automation',      icon: Zap },
-  { key: 'productivity', label: 'Productivity',        subtitle: 'Supercharge your daily output',                icon: Briefcase },
-  { key: 'security',     label: 'Security & Privacy',  subtitle: 'AI-driven protection & compliance',            icon: ShieldCheck },
-  { key: 'os-licenses',  label: 'OS & Licenses',       subtitle: 'Software licenses at premium rates',           icon: Monitor },
+  { key: 'os-licenses',    label: '💻 Operating Systems & Servers',           subtitle: 'Windows, VPS & server licenses',                icon: Monitor },
+  { key: 'productivity',   label: '👨‍💻 Office & Productivity Software',       subtitle: 'Office suites & workspace tools',               icon: Briefcase },
+  { key: 'design',         label: '🎨 Design & Video Editing',                subtitle: 'Creative design & video editing tools',         icon: Palette },
+  { key: 'stock-media',    label: '🖼 Stock Media Platforms',                  subtitle: 'Premium stock photos, videos & assets',         icon: Palette },
+  { key: 'ai-text',        label: '🤖 AI Models (Text & Programming)',        subtitle: 'Advanced AI for text & code generation',        icon: Code },
+  { key: 'ai-media',       label: '🎬 AI Tools (Media & Design Generation)',  subtitle: 'AI-powered video & media creation',             icon: Film },
+  { key: 'security',       label: '🛡 Security & VPNs',                       subtitle: 'Antivirus, VPN & online protection',            icon: ShieldCheck },
+  { key: 'education',      label: '🎓 Education & Career',                    subtitle: 'Learning platforms & career growth',            icon: Briefcase },
+  { key: 'communication',  label: '🛰 Communication & Networking',            subtitle: 'Video conferencing & connectivity',             icon: Users },
 ];
 
 const FEATURED_TOOL_IDS = ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva', 'perplexity'];
@@ -37,13 +37,13 @@ const POPULAR_TOOL_IDS  = ['jasper', 'leonardo', 'runway', 'elevenlabs', 'adobe'
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   'os-servers': ['os-licenses'],
   'office-productivity': ['productivity'],
-  'design-video': ['image', 'video'],
-  'stock-media': ['image'],
-  'ai-text-code': ['text', 'coding'],
-  'ai-media': ['image', 'video', 'audio'],
+  'design-video': ['design'],
+  'stock-media': ['stock-media'],
+  'ai-text-code': ['ai-text'],
+  'ai-media': ['ai-media'],
   'security-vpn': ['security'],
-  'education': ['productivity'],
-  'communication': ['automation'],
+  'education': ['education'],
+  'communication': ['communication'],
 };
 
 /* ── Component ──────────────────────────────────────────────────── */
