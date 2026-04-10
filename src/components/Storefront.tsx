@@ -35,10 +35,15 @@ const FEATURED_TOOL_IDS = ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva',
 const POPULAR_TOOL_IDS  = ['jasper', 'leonardo', 'runway', 'elevenlabs', 'adobe', 'capcut', 'murf'];
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
-  creators: ['image', 'video', 'audio'],
-  marketers: ['text'],
-  developers: ['coding', 'automation'],
-  security: ['security', 'os-licenses'],
+  'os-servers': ['os-licenses'],
+  'office-productivity': ['productivity'],
+  'design-video': ['image', 'video'],
+  'stock-media': ['image'],
+  'ai-text-code': ['text', 'coding'],
+  'ai-media': ['image', 'video', 'audio'],
+  'security-vpn': ['security'],
+  'education': ['productivity'],
+  'communication': ['automation'],
 };
 
 /* ── Component ──────────────────────────────────────────────────── */
@@ -119,11 +124,7 @@ const Storefront = () => {
       t.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    if (activeFilter === 'trending') {
-      result = result.filter(t => FEATURED_TOOL_IDS.includes(t.tool_id) || POPULAR_TOOL_IDS.includes(t.tool_id));
-    } else if (activeFilter === 'new') {
-      result = [...result].reverse();
-    } else if (activeFilter !== 'all' && FILTER_CATEGORY_MAP[activeFilter]) {
+    if (activeFilter !== 'all' && FILTER_CATEGORY_MAP[activeFilter]) {
       result = result.filter(t => FILTER_CATEGORY_MAP[activeFilter].includes(t.category));
     }
 
