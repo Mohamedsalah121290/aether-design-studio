@@ -29,6 +29,18 @@ serve(async (req) => {
     if (!toolId) throw new Error("toolId is required");
     logStep("Request parsed", { toolId, useWalletCredit, billingInterval, paymentMethodTypes });
 
+    // Determine currency and payment methods early
+    const requestedPmTypes = Array.isArray(paymentMethodTypes) && paymentMethodTypes.length > 0
+      ? paymentMethodTypes
+      : ['card'];
+    const euMethods = ['ideal', 'bancontact', 'sofort', 'giropay', 'eps', 'p24', 'sepa_debit'];
+    const hasEuMethods = requestedPmTypes.some((pm: string) => euMethods.includes(pm));
+    const currency = hasEuMethods ? 'eur' : 'usd';
+    const pmTypes = hasEuMethods 
+      ? ['card', ...requestedPmTypes.filter((pm: string) => pm !== 'card')]
+      : requestedPmTypes.includes('card') ? requestedPmTypes : ['card', ...requestedPmTypes];
+    logStep("Payment config", { pmTypes, currency });
+
     // Get user if authenticated
     const authHeader = req.headers.get("Authorization");
     let user = null;
