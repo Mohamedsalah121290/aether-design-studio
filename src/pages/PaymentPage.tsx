@@ -43,9 +43,9 @@ const PAYMENT_METHODS = [
   {
     id: 'eu-methods',
     label: 'European Payment Methods',
-    description: 'iDEAL, Bancontact, EPS, P24, SEPA',
+    description: 'SEPA Direct Debit, iDEAL, Bancontact',
     icon: Globe,
-    stripeTypes: ['card', 'ideal', 'bancontact', 'eps', 'p24', 'sepa_debit'],
+    stripeTypes: ['card', 'sepa_debit', 'ideal', 'bancontact'],
   },
 ] as const;
 
