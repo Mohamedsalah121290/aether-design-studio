@@ -33,7 +33,7 @@ serve(async (req) => {
     const requestedPmTypes = Array.isArray(paymentMethodTypes) && paymentMethodTypes.length > 0
       ? paymentMethodTypes
       : ['card'];
-    const euMethods = ['ideal', 'bancontact', 'eps', 'p24', 'sepa_debit'];
+    const euMethods = ['ideal', 'bancontact', 'sepa_debit'];
     const hasEuMethods = requestedPmTypes.some((pm: string) => euMethods.includes(pm));
     const currency = hasEuMethods ? 'eur' : 'usd';
     const pmTypes = hasEuMethods 
