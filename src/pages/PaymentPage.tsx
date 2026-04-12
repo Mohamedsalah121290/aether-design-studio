@@ -83,8 +83,10 @@ const PaymentPage = () => {
   useEffect(() => {
     if (!user) {
       setShowAuthDialog(true);
+      setPageLoading(false);
       return;
     }
+    setShowAuthDialog(false);
     if (toolId) {
       fetchToolAndPlans(toolId);
       fetchWalletBalance();
