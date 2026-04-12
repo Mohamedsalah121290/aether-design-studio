@@ -189,10 +189,6 @@ const PaymentPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!tool || !selectedPlan) return;
-    if (!user) {
-      setShowAuthDialog(true);
-      return;
-    }
     if (!validateForm()) return;
     if (!agreedToTerms) {
       toast({ title: 'Error', description: 'You must agree to the terms', variant: 'destructive' });
