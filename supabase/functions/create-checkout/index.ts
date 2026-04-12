@@ -114,7 +114,7 @@ serve(async (req) => {
     // Look for matching price with correct interval
     if (prices.data.length > 0) {
       const matchingPrice = prices.data.find(
-        p => p.unit_amount === priceInCents && p.recurring?.interval === interval
+        p => p.unit_amount === priceInCents && p.recurring?.interval === interval && p.currency === currency
       );
       if (matchingPrice) {
         priceId = matchingPrice.id;
