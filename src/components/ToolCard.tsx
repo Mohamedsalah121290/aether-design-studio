@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap, Shield, Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
@@ -116,6 +116,7 @@ const ComingSoonBadge = () => (
 /* ── Component ─────────────────────────────────────────────────── */
 export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [logoLoaded, setLogoLoaded] = useState(false);
   const [logoError, setLogoError] = useState(false);
   const [fallbackAttempted, setFallbackAttempted] = useState(false);
@@ -350,7 +351,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                     background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
                     boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
                   }}
-                  onClick={() => setCheckoutOpen(true)}
+                  onClick={() => navigate(`/payment/${tool.tool_id}`)}
                 >
                   {t('store.buyNow')}
                   <Sparkles className="w-3.5 h-3.5" />
