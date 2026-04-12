@@ -25,9 +25,9 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { toolId, customerEmail, useWalletCredit } = await req.json();
+    const { toolId, customerEmail, useWalletCredit, billingInterval, paymentMethodTypes } = await req.json();
     if (!toolId) throw new Error("toolId is required");
-    logStep("Request parsed", { toolId, useWalletCredit });
+    logStep("Request parsed", { toolId, useWalletCredit, billingInterval, paymentMethodTypes });
 
     // Get user if authenticated
     const authHeader = req.headers.get("Authorization");
@@ -94,20 +94,31 @@ serve(async (req) => {
     });
 
     let priceId;
-    const priceInCents = Math.round(tool.price * 100);
+    const interval = billingInterval === 'annual' ? 'year' : 'month';
+    const priceInCents = interval === 'year'
+      ? Math.round(tool.price * 12 * 0.8 * 100)  // 20% annual discount
+      : Math.round(tool.price * 100);
 
-    if (prices.data.length > 0 && prices.data[0].unit_amount === priceInCents) {
-      priceId = prices.data[0].id;
-      logStep("Existing price found", { priceId });
-    } else {
+    // Look for matching price with correct interval
+    if (prices.data.length > 0) {
+      const matchingPrice = prices.data.find(
+        p => p.unit_amount === priceInCents && p.recurring?.interval === interval
+      );
+      if (matchingPrice) {
+        priceId = matchingPrice.id;
+        logStep("Existing price found", { priceId, interval });
+      }
+    }
+
+    if (!priceId) {
       const newPrice = await stripe.prices.create({
         product: product.id,
         unit_amount: priceInCents,
         currency: "usd",
-        recurring: { interval: "month" },
+        recurring: { interval },
       });
       priceId = newPrice.id;
-      logStep("Price created", { priceId });
+      logStep("Price created", { priceId, interval });
     }
 
     // Handle wallet credit deduction
@@ -182,11 +193,18 @@ serve(async (req) => {
       });
     }
 
+    // Determine payment method types
+    const pmTypes = Array.isArray(paymentMethodTypes) && paymentMethodTypes.length > 0
+      ? paymentMethodTypes
+      : ['card'];
+    logStep("Payment method types", { pmTypes });
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : email,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: "subscription",
+      payment_method_types: pmTypes,
       success_url: `${origin}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/?checkout=cancelled`,
       metadata,
