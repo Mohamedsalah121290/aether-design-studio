@@ -65,6 +65,8 @@ const AppRoutes = () => {
       <Route path="/terms" element={<Terms />} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/payment/:toolId" element={<PaymentPage />} />
+      <Route path="/payment/success" element={<PaymentSuccess />} />
+      <Route path="/payment/cancelled" element={<PaymentCancelled />} />
       <Route
         path="/admin"
         element={
