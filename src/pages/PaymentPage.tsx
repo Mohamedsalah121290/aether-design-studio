@@ -178,6 +178,17 @@ const PaymentPage = () => {
   const effectivePrice = displayPrice ? Math.max(0, displayPrice - walletDeduction) : displayPrice;
   const activationTime = selectedPlan?.activation_time || 6;
 
+  // EUR conversion for EU payment methods
+  const USD_TO_EUR = 0.92;
+  const isEuMethod = ['sepa', 'eu-methods'].includes(selectedPaymentMethod);
+  const toEur = (usd: number) => Number((usd * USD_TO_EUR).toFixed(2));
+  const formatPrice = (usd: number | null) => {
+    if (usd == null) return 'N/A';
+    if (usd === 0) return 'Free';
+    if (isEuMethod) return `$${usd.toFixed(2)} (€${toEur(usd).toFixed(2)})`;
+    return `$${usd.toFixed(2)}`;
+  };
+
   const validateForm = (): boolean => {
     const newErrors: { email?: string } = {};
     const emailResult = emailSchema.safeParse(email);
@@ -456,7 +467,7 @@ const PaymentPage = () => {
                     <div className="mt-3 pt-3 border-t border-white/10 space-y-1">
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Original price</span>
-                        <span>${displayPrice?.toFixed(2)}</span>
+                        <span>{formatPrice(displayPrice)}</span>
                       </div>
                       <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
                         <span>Wallet credit</span>
@@ -464,7 +475,7 @@ const PaymentPage = () => {
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-white">
                         <span>You pay</span>
-                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `$${effectivePrice?.toFixed(2)}`}</span>
+                        <span>{formatPrice(effectivePrice)}</span>
                       </div>
                     </div>
                   )}
@@ -498,13 +509,13 @@ const PaymentPage = () => {
                       {billingInterval === 'annual' ? 'Annual subscription' : 'Monthly subscription'}
                     </span>
                     <span className="text-white font-semibold">
-                      {displayPrice != null ? `$${displayPrice.toFixed(2)}` : 'N/A'}
+                      {formatPrice(displayPrice)}
                     </span>
                   </div>
                   {billingInterval === 'annual' && monthlyEquivalent && (
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Monthly equivalent</span>
-                      <span className="text-green-400">${monthlyEquivalent.toFixed(2)}/mo</span>
+                      <span className="text-green-400">{isEuMethod ? `$${monthlyEquivalent.toFixed(2)} (€${toEur(monthlyEquivalent).toFixed(2)})` : `$${monthlyEquivalent.toFixed(2)}`}/mo</span>
                     </div>
                   )}
                   {walletDeduction > 0 && (
@@ -516,7 +527,7 @@ const PaymentPage = () => {
                   <div className="pt-2 border-t border-white/10 flex justify-between text-base font-bold">
                     <span className="text-white">Total</span>
                     <span className="text-primary">
-                      {effectivePrice != null ? (effectivePrice === 0 ? 'Free' : `$${effectivePrice.toFixed(2)}`) : 'N/A'}
+                      {formatPrice(effectivePrice)}
                     </span>
                   </div>
                 </div>
@@ -606,7 +617,7 @@ const PaymentPage = () => {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
-                        {effectivePrice === 0 ? 'Confirm (Wallet Credit)' : `Pay $${effectivePrice?.toFixed(2) || '0.00'}`}
+                        {effectivePrice === 0 ? 'Confirm (Wallet Credit)' : `Pay ${formatPrice(effectivePrice)}`}
                       </span>
                     )}
                   </Button>
