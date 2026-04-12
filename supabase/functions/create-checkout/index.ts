@@ -29,6 +29,18 @@ serve(async (req) => {
     if (!toolId) throw new Error("toolId is required");
     logStep("Request parsed", { toolId, useWalletCredit, billingInterval, paymentMethodTypes });
 
+    // Determine currency and payment methods early
+    const requestedPmTypes = Array.isArray(paymentMethodTypes) && paymentMethodTypes.length > 0
+      ? paymentMethodTypes
+      : ['card'];
+    const euMethods = ['ideal', 'bancontact', 'eps', 'p24', 'sepa_debit'];
+    const hasEuMethods = requestedPmTypes.some((pm: string) => euMethods.includes(pm));
+    const currency = hasEuMethods ? 'eur' : 'usd';
+    const pmTypes = hasEuMethods 
+      ? ['card', ...requestedPmTypes.filter((pm: string) => pm !== 'card')]
+      : requestedPmTypes.includes('card') ? requestedPmTypes : ['card', ...requestedPmTypes];
+    logStep("Payment config", { pmTypes, currency });
+
     // Get user if authenticated
     const authHeader = req.headers.get("Authorization");
     let user = null;
@@ -102,7 +114,7 @@ serve(async (req) => {
     // Look for matching price with correct interval
     if (prices.data.length > 0) {
       const matchingPrice = prices.data.find(
-        p => p.unit_amount === priceInCents && p.recurring?.interval === interval
+        p => p.unit_amount === priceInCents && p.recurring?.interval === interval && p.currency === currency
       );
       if (matchingPrice) {
         priceId = matchingPrice.id;
@@ -114,7 +126,7 @@ serve(async (req) => {
       const newPrice = await stripe.prices.create({
         product: product.id,
         unit_amount: priceInCents,
-        currency: "usd",
+        currency,
         recurring: { interval },
       });
       priceId = newPrice.id;
@@ -193,11 +205,7 @@ serve(async (req) => {
       });
     }
 
-    // Determine payment method types
-    const pmTypes = Array.isArray(paymentMethodTypes) && paymentMethodTypes.length > 0
-      ? paymentMethodTypes
-      : ['card'];
-    logStep("Payment method types", { pmTypes });
+    logStep("Final payment config", { pmTypes, currency });
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
