@@ -126,7 +126,7 @@ serve(async (req) => {
       const newPrice = await stripe.prices.create({
         product: product.id,
         unit_amount: priceInCents,
-        currency: "usd",
+        currency,
         recurring: { interval },
       });
       priceId = newPrice.id;
@@ -205,22 +205,7 @@ serve(async (req) => {
       });
     }
 
-    // Determine payment method types
-    // Always ensure 'card' is included, and determine currency based on payment methods
-    const requestedPmTypes = Array.isArray(paymentMethodTypes) && paymentMethodTypes.length > 0
-      ? paymentMethodTypes
-      : ['card'];
-    
-    const euMethods = ['ideal', 'bancontact', 'sofort', 'giropay', 'eps', 'p24', 'sepa_debit'];
-    const hasEuMethods = requestedPmTypes.some(pm => euMethods.includes(pm));
-    
-    // If EU methods are requested, use EUR and always include card
-    const currency = hasEuMethods ? 'eur' : 'usd';
-    const pmTypes = hasEuMethods 
-      ? ['card', ...requestedPmTypes.filter(pm => pm !== 'card')]
-      : requestedPmTypes.includes('card') ? requestedPmTypes : ['card', ...requestedPmTypes];
-    
-    logStep("Payment method types", { pmTypes, currency });
+    logStep("Final payment config", { pmTypes, currency });
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
