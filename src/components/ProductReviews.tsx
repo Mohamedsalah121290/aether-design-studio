@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Star, ShieldCheck } from 'lucide-react';
-import { getAverageRating, getProductReviews, type ProductReview } from '@/lib/productReviews';
+import { getAverageRating, getBeforeAfterCopy, getProductReviews, type ProductReview } from '@/lib/productReviews';
 
 const Stars = ({ rating, className = 'w-3 h-3' }: { rating: 4 | 5; className?: string }) => (
   <span className="inline-flex items-center gap-0.5" aria-label={`${rating} star rating`}>
@@ -94,7 +94,21 @@ export const ProductReviewsCarousel = ({ toolId, productName }: { toolId?: strin
                 <span className="inline-flex items-center gap-1 text-muted-foreground"><ShieldCheck className="w-3 h-3" /> Verified</span>
               </div>
               <Stars rating={review.rating} />
-              <p className="text-xs leading-relaxed text-muted-foreground">“{review.quote}”</p>
+              {(() => {
+                const story = getBeforeAfterCopy(review, productName);
+                return (
+                  <div className="space-y-2 pt-1">
+                    <div className="space-y-0.5">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">Before</p>
+                      <p className="text-[11px] leading-relaxed text-muted-foreground">{story.before}</p>
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">After</p>
+                      <p className="text-xs leading-relaxed text-muted-foreground">“{story.after}”</p>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         ))}

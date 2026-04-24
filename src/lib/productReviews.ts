@@ -4,6 +4,8 @@ export type ProductReview = {
   flag: string;
   rating: 4 | 5;
   quote: string;
+  before?: string;
+  after?: string;
 };
 
 const COUNTRY_POOL: ProductReview['country'][] = ['Belgium', 'Germany', 'France', 'Netherlands', 'Italy', 'Spain'];
@@ -120,4 +122,23 @@ export const getProductReviews = (toolId?: string, productName = 'this product')
 export const getAverageRating = (toolId?: string, productName?: string) => {
   const reviews = getProductReviews(toolId, productName);
   return reviews.reduce((sum, item) => sum + item.rating, 0) / reviews.length;
+};
+
+export const getBeforeAfterCopy = (review: ProductReview, productName: string) => {
+  if (review.before && review.after) return { before: review.before, after: review.after };
+
+  const quote = review.quote.toLowerCase();
+  const product = productName || 'this product';
+  const before = quote.includes('expensive') || quote.includes('cheapest')
+    ? `I was unsure if ${product} was worth the EUR price.`
+    : quote.includes('device') || quote.includes('laptop') || quote.includes('pc')
+    ? `I was worried ${product} might not work smoothly on my devices.`
+    : quote.includes('activation') || quote.includes('activated') || quote.includes('key')
+    ? `I was not sure how fast ${product} activation would be.`
+    : `I needed ${product}, but wanted a simple setup without surprises.`;
+
+  return {
+    before,
+    after: review.quote,
+  };
 };
