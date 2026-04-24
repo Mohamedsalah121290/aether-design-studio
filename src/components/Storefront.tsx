@@ -139,12 +139,12 @@ const Storefront = () => {
 
   const activeSections = SECTION_ORDER.map(section => ({
     ...section,
-    tools: activeTools.filter(t => t.category === section.key),
+    tools: activeTools.filter(t => section.categories.includes(t.category)),
   })).filter(s => s.tools.length > 0);
 
   const comingSoonSections = SECTION_ORDER.map(section => ({
     ...section,
-    tools: comingSoonTools.filter(t => t.category === section.key),
+    tools: comingSoonTools.filter(t => section.categories.includes(t.category)),
   })).filter(s => s.tools.length > 0);
 
   return (
