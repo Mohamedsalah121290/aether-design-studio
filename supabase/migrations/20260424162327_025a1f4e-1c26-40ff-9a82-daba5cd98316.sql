@@ -1,0 +1,1 @@
+UPDATE public.tool_plans SET plan_name = 'Canva Team (Admin) — 1 Year', monthly_price = 70 WHERE tool_id = 'canva' AND plan_id = 'team_admin';
