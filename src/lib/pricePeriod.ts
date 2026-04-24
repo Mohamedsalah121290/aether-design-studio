@@ -53,7 +53,7 @@ const PERIOD_STYLES: Record<PricePeriod, PeriodStyle> = {
 export function inferPeriodFromPlan(planName?: string | null): PricePeriod {
   const s = (planName || '').toLowerCase();
 
-  // One-time markers
+  // One-time markers (warranty plans = one-time purchase, year count = coverage)
   if (
     s.includes('lifetime') ||
     s.includes(' key') ||
@@ -62,7 +62,9 @@ export function inferPeriodFromPlan(planName?: string | null): PricePeriod {
     s.includes('retail online') ||
     s.includes('one time') ||
     s.includes('one-time') ||
-    s.includes('perpetual')
+    s.includes('perpetual') ||
+    /\d+\s*yr\s*warranty/.test(s) ||
+    /\d+\s*year\s*warranty/.test(s)
   ) {
     return 'one-time';
   }

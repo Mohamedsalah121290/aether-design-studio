@@ -12,6 +12,83 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CREATE-CHECKOUT] ${step}${detailsStr}`);
 };
 
+/* ────────────────────────────────────────────────────────────────────
+   PERIOD DETECTION
+   Mirrors src/lib/pricePeriod.ts so the SAME labels the user sees
+   on the storefront translate into the SAME Stripe mode / interval.
+
+   Rules:
+     - "lifetime" / "key" / "MAK" / "retail online" / "perpetual"
+         → one-time payment        (mode: "payment", no recurring)
+     - "year" / "1y" / "annual" / "/yr"
+         → recurring yearly        (mode: "subscription", interval: "year")
+     - contains "3 month" / "3m" / "90 day"
+         → recurring every 3 months
+                                   (mode: "subscription", interval: "month", interval_count: 3)
+     - "month" / "monthly" / "28 days" / "days"
+         → recurring monthly       (mode: "subscription", interval: "month")
+     - default → recurring monthly (safe default for subscription catalog)
+   ──────────────────────────────────────────────────────────────────── */
+type BillingMode =
+  | { mode: "payment" }
+  | { mode: "subscription"; interval: "month" | "year"; interval_count: number };
+
+function detectBillingMode(planName: string | null | undefined): BillingMode {
+  const s = (planName || "").toLowerCase();
+
+  // One-time markers
+  // NOTE: "warranty" plans (e.g. "2yr Warranty", "Lifetime Warranty") are
+  // one-time purchases — the year count describes coverage, not billing.
+  // Office 365 "1 Year Warranty" is intentionally NOT one-time because it
+  // says "Year" in the name — caller-side rule: yearly recurring.
+  if (
+    s.includes("lifetime") ||
+    s.includes(" key") ||
+    s.endsWith("key") ||
+    s.includes("mak") ||
+    s.includes("retail online") ||
+    s.includes("one time") ||
+    s.includes("one-time") ||
+    s.includes("perpetual") ||
+    /\d+\s*yr\s*warranty/.test(s) ||      // "2yr Warranty"
+    /\d+\s*year\s*warranty/.test(s)        // "2 Year Warranty"
+  ) {
+    return { mode: "payment" };
+  }
+
+  // Yearly
+  if (
+    s.includes("year") ||
+    s.includes("/yr") ||
+    s.includes("/ yr") ||
+    s.includes("annual") ||
+    /\b\d+\s*y\b/.test(s)
+  ) {
+    return { mode: "subscription", interval: "year", interval_count: 1 };
+  }
+
+  // 3-month plans (Stripe supports interval_count up to 12 for monthly)
+  if (
+    /\b3\s*months?\b/.test(s) ||
+    /\b3m\b/.test(s) ||
+    /\b90\s*days?\b/.test(s)
+  ) {
+    return { mode: "subscription", interval: "month", interval_count: 3 };
+  }
+
+  // Monthly / 28 days / day-based → monthly per business spec
+  if (
+    s.includes("month") ||
+    s.includes("/mo") ||
+    s.includes("day")
+  ) {
+    return { mode: "subscription", interval: "month", interval_count: 1 };
+  }
+
+  // Sensible default
+  return { mode: "subscription", interval: "month", interval_count: 1 };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -31,9 +108,9 @@ serve(async (req) => {
     logStep("Function started");
 
     const body = await req.json();
-    const { toolId, planId, customerEmail, useWalletCredit, billingInterval, paymentMethodTypes } = body;
+    const { toolId, planId, customerEmail, useWalletCredit, paymentMethodTypes } = body;
     if (!toolId) throw new Error("toolId is required");
-    logStep("Request parsed", { toolId, planId, useWalletCredit, billingInterval });
+    logStep("Request parsed", { toolId, planId, useWalletCredit });
 
     // --- Payment method & currency config ---
     const requestedPmTypes = Array.isArray(paymentMethodTypes) && paymentMethodTypes.length > 0
@@ -65,9 +142,10 @@ serve(async (req) => {
     if (toolError || !tool) throw new Error("Tool not found");
     logStep("Tool found", { name: tool.name, basePrice: tool.price });
 
-    // --- Fetch selected plan (if planId provided) ---
-    let planPrice = tool.price;
+    // --- Fetch selected plan ---
+    let planPrice = Number(tool.price);
     let planName = tool.name;
+    let planNameForBilling: string | null = null;
     let activationTime = tool.activation_time;
 
     if (planId) {
@@ -81,10 +159,15 @@ serve(async (req) => {
       if (plan && plan.monthly_price != null) {
         planPrice = Number(plan.monthly_price);
         planName = `${tool.name} — ${plan.plan_name}`;
+        planNameForBilling = plan.plan_name;
         activationTime = plan.activation_time || tool.activation_time;
         logStep("Plan found", { planName: plan.plan_name, planPrice });
       }
     }
+
+    // --- Determine billing mode from plan_name ---
+    const billing = detectBillingMode(planNameForBilling);
+    logStep("Billing mode detected", billing);
 
     // --- Stripe init ---
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -112,41 +195,58 @@ serve(async (req) => {
     } else {
       product = await stripe.products.create({
         name: planName,
-        metadata: { tool_id: productSearchKey, db_id: tool.id },
+        metadata: {
+          tool_id: productSearchKey,
+          db_id: tool.id,
+          plan_id: planId || "default",
+          billing_mode: billing.mode,
+        },
       });
       logStep("Product created", { productId: product.id });
     }
 
     // --- Find/create Stripe price ---
-    const interval = billingInterval === 'annual' ? 'year' : 'month';
-    const priceInCents = interval === 'year'
-      ? Math.round(planPrice * 12 * 0.8 * 100) // 20% annual discount
-      : Math.round(planPrice * 100);
+    // Price is ALWAYS the exact plan price in EUR (no annual ×0.8 multiplier).
+    const priceInCents = Math.round(planPrice * 100);
 
     const prices = await stripe.prices.list({
       product: product.id,
       active: true,
-      limit: 10,
+      limit: 100,
     });
 
     let priceId: string | undefined;
-    const matchingPrice = prices.data.find(
-      p => p.unit_amount === priceInCents && p.recurring?.interval === interval && p.currency === currency
-    );
+    const matchingPrice = prices.data.find(p => {
+      if (p.unit_amount !== priceInCents || p.currency !== currency) return false;
+      if (billing.mode === "payment") {
+        return p.type === "one_time";
+      }
+      return (
+        p.type === "recurring" &&
+        p.recurring?.interval === billing.interval &&
+        (p.recurring?.interval_count || 1) === billing.interval_count
+      );
+    });
     if (matchingPrice) {
       priceId = matchingPrice.id;
-      logStep("Existing price found", { priceId, interval });
+      logStep("Existing price found", { priceId });
     }
 
     if (!priceId) {
-      const newPrice = await stripe.prices.create({
+      const priceParams: Stripe.PriceCreateParams = {
         product: product.id,
         unit_amount: priceInCents,
         currency,
-        recurring: { interval },
-      });
+      };
+      if (billing.mode === "subscription") {
+        priceParams.recurring = {
+          interval: billing.interval,
+          interval_count: billing.interval_count,
+        };
+      }
+      const newPrice = await stripe.prices.create(priceParams);
       priceId = newPrice.id;
-      logStep("Price created", { priceId, interval, priceInCents });
+      logStep("Price created", { priceId, mode: billing.mode, priceInCents });
     }
 
     // --- Wallet credit handling ---
@@ -173,7 +273,12 @@ serve(async (req) => {
       tool_id: tool.id,
       tool_name: planName,
       delivery_type: tool.delivery_type,
+      billing_mode: billing.mode,
     };
+    if (billing.mode === "subscription") {
+      metadata.billing_interval = billing.interval;
+      metadata.billing_interval_count = String(billing.interval_count);
+    }
     if (user?.id) metadata.user_id = user.id;
     if (customerEmail) metadata.customer_email = customerEmail;
     if (walletDeduction > 0) metadata.wallet_deduction = walletDeduction.toString();
@@ -217,19 +322,29 @@ serve(async (req) => {
     }
 
     // --- Create Stripe Checkout Session ---
-    const session = await stripe.checkout.sessions.create({
+    const sessionParams: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
       customer_email: customerId ? undefined : email,
       line_items: [{ price: priceId, quantity: 1 }],
-      mode: "subscription",
-      payment_method_types: pmTypes,
+      mode: billing.mode, // "payment" or "subscription"
+      payment_method_types: pmTypes as Stripe.Checkout.SessionCreateParams.PaymentMethodType[],
       success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/payment/cancelled`,
       metadata,
-      subscription_data: { metadata },
-    });
+    };
+    if (billing.mode === "subscription") {
+      sessionParams.subscription_data = { metadata };
+    } else {
+      sessionParams.payment_intent_data = { metadata };
+    }
 
-    logStep("Checkout session created", { sessionId: session.id, url: session.url });
+    const session = await stripe.checkout.sessions.create(sessionParams);
+
+    logStep("Checkout session created", {
+      sessionId: session.id,
+      mode: billing.mode,
+      url: session.url,
+    });
 
     // --- Create pending order ---
     const { data: order, error: orderError } = await supabaseAdmin
