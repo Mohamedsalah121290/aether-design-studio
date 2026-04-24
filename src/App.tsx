@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { CurrencyProvider } from "@/hooks/useCurrency";
 import SeoAudit from "./pages/SeoAudit";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
@@ -107,16 +108,18 @@ const App = () => {
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <TooltipProvider>
-              <SplashScreen isLoading={isLoading} />
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <ErrorBoundary>
-                  <AppRoutes />
-                </ErrorBoundary>
-              </BrowserRouter>
-            </TooltipProvider>
+            <CurrencyProvider>
+              <TooltipProvider>
+                <SplashScreen isLoading={isLoading} />
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <ErrorBoundary>
+                    <AppRoutes />
+                  </ErrorBoundary>
+                </BrowserRouter>
+              </TooltipProvider>
+            </CurrencyProvider>
           </AuthProvider>
         </QueryClientProvider>
       </HelmetProvider>
