@@ -19,7 +19,7 @@ const resources = {
         badge: 'Premium AI Tools — Up to 90% Cheaper',
         title: 'Premium AI Tools.',
         titleHighlight: 'Up to 90% Cheaper.',
-        description: 'Get premium AI tools and subscriptions up to 90% cheaper, delivered safely and instantly. ChatGPT, Midjourney, Claude, Gemini & 50+ more.',
+        description: 'Get premium AI tools and subscriptions up to 90% cheaper, delivered safely and instantly. ChatGPT, Canva, Perplexity, Grok & 50+ more.',
         cta: 'Browse Deals',
         ctaSecondary: 'Get Access Now',
         stats: {
@@ -266,7 +266,7 @@ const resources = {
           },
           aiContentCreation: {
             title: 'AI Content Creation Masterclass',
-            description: 'Create stunning visuals and videos using Midjourney and Runway.',
+            description: 'Create stunning visuals and videos using Canva and CapCut.',
           },
           languageLearning: {
             title: 'Learn Any Language with AI',
@@ -276,8 +276,8 @@ const resources = {
             title: 'Automate Your Business with AI',
             description: 'Build AI-powered workflows that save hours every week.',
           },
-          midjourneyArt: {
-            title: 'Midjourney Art & Design',
+          canvaArt: {
+            title: 'Canva Art & Design',
             description: 'Master prompt engineering for stunning AI-generated artwork.',
           },
           promptEngineering: {
@@ -286,7 +286,7 @@ const resources = {
           },
           videoGeneration: {
             title: 'AI Video Generation Guide',
-            description: 'Create professional videos with Runway and ElevenLabs.',
+            description: 'Create professional videos with CapCut and ElevenLabs.',
           },
           aiTranslation: {
             title: 'AI Translation & Localization',
@@ -312,7 +312,7 @@ const resources = {
         badge: '高端 AI 工具 — 最高便宜 90%',
         title: '高端 AI 工具。',
         titleHighlight: '最高便宜 90%。',
-        description: '安全极速获取高端 AI 工具和订阅,最高便宜 90%。ChatGPT、Midjourney、Claude、Gemini 等 50+ 工具。',
+        description: '安全极速获取高端 AI 工具和订阅,最高便宜 90%。ChatGPT、Canva、Perplexity、Grok 等 50+ 工具。',
         cta: '浏览优惠',
         ctaSecondary: '立即获取',
         stats: {
@@ -559,7 +559,7 @@ const resources = {
           },
           aiContentCreation: {
             title: 'AI内容创作大师班',
-            description: '使用 Midjourney 和 Runway 创作惊艳的图像与视频。',
+            description: '使用 Canva 和 CapCut 创作惊艳的图像与视频。',
           },
           languageLearning: {
             title: '用AI学习任何语言',
@@ -569,8 +569,8 @@ const resources = {
             title: '用AI自动化您的业务',
             description: '构建每周节省数小时的AI驱动工作流。',
           },
-          midjourneyArt: {
-            title: 'Midjourney 艺术与设计',
+          canvaArt: {
+            title: 'Canva 艺术与设计',
             description: '掌握提示工程以创建令人惊叹的AI生成艺术作品。',
           },
           promptEngineering: {
@@ -579,7 +579,7 @@ const resources = {
           },
           videoGeneration: {
             title: 'AI视频生成指南',
-            description: '使用 Runway 和 ElevenLabs 制作专业级视频。',
+            description: '使用 CapCut 和 ElevenLabs 制作专业级视频。',
           },
           aiTranslation: {
             title: 'AI翻译与本地化',
@@ -605,7 +605,7 @@ const resources = {
         badge: 'प्रीमियम AI टूल्स — 90% तक सस्ते',
         title: 'प्रीमियम AI टूल्स।',
         titleHighlight: '90% तक सस्ते।',
-        description: 'प्रीमियम AI टूल्स और सब्सक्रिप्शन 90% तक सस्ते, सुरक्षित और तुरंत डिलीवर। ChatGPT, Midjourney, Claude, Gemini और 50+ अन्य।',
+        description: 'प्रीमियम AI टूल्स और सब्सक्रिप्शन 90% तक सस्ते, सुरक्षित और तुरंत डिलीवर। ChatGPT, Canva, Perplexity, Grok और 50+ अन्य।',
         cta: 'डील्स देखें',
         ctaSecondary: 'अभी एक्सेस लें',
         stats: {
@@ -852,7 +852,7 @@ const resources = {
           },
           aiContentCreation: {
             title: 'AI कंटेंट क्रिएशन मास्टरक्लास',
-            description: 'Midjourney और Runway का उपयोग करके शानदार विजुअल और वीडियो बनाएं।',
+            description: 'Canva और CapCut का उपयोग करके शानदार विजुअल और वीडियो बनाएं।',
           },
           languageLearning: {
             title: 'AI के साथ कोई भी भाषा सीखें',
@@ -862,8 +862,8 @@ const resources = {
             title: 'AI के साथ अपना व्यवसाय स्वचालित करें',
             description: 'AI-संचालित वर्कफ़्लो बनाएँ जो हर हफ़्ते कई घंटे बचाते हैं।',
           },
-          midjourneyArt: {
-            title: 'Midjourney कला और डिज़ाइन',
+          canvaArt: {
+            title: 'Canva कला और डिज़ाइन',
             description: 'शानदार AI-जनित कलाकृति के लिए प्रॉम्प्ट इंजीनियरिंग में महारत हासिल करें।',
           },
           promptEngineering: {
@@ -872,7 +872,7 @@ const resources = {
           },
           videoGeneration: {
             title: 'AI वीडियो जनरेशन गाइड',
-            description: 'Runway और ElevenLabs के साथ पेशेवर वीडियो बनाएं।',
+            description: 'CapCut और ElevenLabs के साथ पेशेवर वीडियो बनाएं।',
           },
           aiTranslation: {
             title: 'AI अनुवाद और स्थानीयकरण',
@@ -898,7 +898,7 @@ const resources = {
         badge: 'Herramientas IA Premium — Hasta 90% Más Baratas',
         title: 'Herramientas IA Premium.',
         titleHighlight: 'Hasta 90% Más Baratas.',
-        description: 'Consigue herramientas IA y suscripciones premium hasta un 90% más baratas, entregadas de forma segura e instantánea. ChatGPT, Midjourney, Claude, Gemini y +50.',
+        description: 'Consigue herramientas IA y suscripciones premium hasta un 90% más baratas, entregadas de forma segura e instantánea. ChatGPT, Canva, Perplexity, Grok y +50.',
         cta: 'Ver Ofertas',
         ctaSecondary: 'Acceder Ahora',
         stats: {
@@ -1145,7 +1145,7 @@ const resources = {
           },
           aiContentCreation: {
             title: 'Masterclass de Creación de Contenido IA',
-            description: 'Crea visuales y videos impresionantes usando Midjourney y Runway.',
+            description: 'Crea visuales y videos impresionantes usando Canva y CapCut.',
           },
           languageLearning: {
             title: 'Aprende Cualquier Idioma con IA',
@@ -1155,8 +1155,8 @@ const resources = {
             title: 'Automatiza Tu Negocio con IA',
             description: 'Construye flujos de trabajo impulsados por IA que ahorran horas cada semana.',
           },
-          midjourneyArt: {
-            title: 'Arte y Diseño con Midjourney',
+          canvaArt: {
+            title: 'Arte y Diseño con Canva',
             description: 'Domina la ingeniería de prompts para crear obras de arte IA impresionantes.',
           },
           promptEngineering: {
@@ -1165,7 +1165,7 @@ const resources = {
           },
           videoGeneration: {
             title: 'Guía de Generación de Video IA',
-            description: 'Crea videos profesionales con Runway y ElevenLabs.',
+            description: 'Crea videos profesionales con CapCut y ElevenLabs.',
           },
           aiTranslation: {
             title: 'Traducción y Localización con IA',
@@ -1191,7 +1191,7 @@ const resources = {
         badge: 'Outils IA Premium — Jusqu’à 90% Moins Cher',
         title: 'Outils IA Premium.',
         titleHighlight: 'Jusqu’à 90% Moins Cher.',
-        description: 'Obtenez des outils IA et abonnements premium jusqu\'à 90% moins chers, livrés en toute sécurité et instantanément. ChatGPT, Midjourney, Claude, Gemini et 50+ autres.',
+        description: 'Obtenez des outils IA et abonnements premium jusqu\'à 90% moins chers, livrés en toute sécurité et instantanément. ChatGPT, Canva, Perplexity, Grok et 50+ autres.',
         cta: 'Voir les Offres',
         ctaSecondary: 'Accéder Maintenant',
         stats: {
@@ -1438,7 +1438,7 @@ const resources = {
           },
           aiContentCreation: {
             title: 'Masterclass Création de Contenu IA',
-            description: 'Créez des visuels et vidéos époustouflants avec Midjourney et Runway.',
+            description: 'Créez des visuels et vidéos époustouflants avec Canva et CapCut.',
           },
           languageLearning: {
             title: 'Apprenez N\'importe Quelle Langue avec l\'IA',
@@ -1448,8 +1448,8 @@ const resources = {
             title: 'Automatisez Votre Entreprise avec l\'IA',
             description: 'Créez des workflows alimentés par l\'IA qui économisent des heures chaque semaine.',
           },
-          midjourneyArt: {
-            title: 'Art et Design Midjourney',
+          canvaArt: {
+            title: 'Art et Design Canva',
             description: 'Maîtrisez l\'ingénierie de prompts pour des œuvres d\'art IA époustouflantes.',
           },
           promptEngineering: {
@@ -1458,7 +1458,7 @@ const resources = {
           },
           videoGeneration: {
             title: 'Guide de Génération Vidéo IA',
-            description: 'Créez des vidéos professionnelles avec Runway et ElevenLabs.',
+            description: 'Créez des vidéos professionnelles avec CapCut et ElevenLabs.',
           },
           aiTranslation: {
             title: 'Traduction et Localisation IA',
@@ -1484,7 +1484,7 @@ const resources = {
         badge: 'أدوات ذكاء اصطناعي بسعر أرخص حتى 90٪',
         title: 'أدوات ذكاء اصطناعي متميزة.',
         titleHighlight: 'أرخص حتى 90٪.',
-        description: 'احصل على أدوات الذكاء الاصطناعي والاشتراكات المميزة بسعر أرخص حتى 90٪، تُسلَّم بأمان وفوراً. ChatGPT و Midjourney و Claude و Gemini وأكثر من 50.',
+        description: 'احصل على أدوات الذكاء الاصطناعي والاشتراكات المميزة بسعر أرخص حتى 90٪، تُسلَّم بأمان وفوراً. ChatGPT و Canva و Perplexity و Grok وأكثر من 50.',
         cta: 'تصفح العروض',
         ctaSecondary: 'احصل على الوصول الآن',
         stats: {
@@ -1731,7 +1731,7 @@ const resources = {
           },
           aiContentCreation: {
             title: 'ماستركلاس إنشاء المحتوى بالـ AI',
-            description: 'أنشئ مرئيات وفيديوهات مذهلة باستخدام Midjourney و Runway.',
+            description: 'أنشئ مرئيات وفيديوهات مذهلة باستخدام Canva و CapCut.',
           },
           languageLearning: {
             title: 'تعلم أي لغة مع AI',
@@ -1741,8 +1741,8 @@ const resources = {
             title: 'أتمتة عملك مع AI',
             description: 'بناء سير عمل مدعوم بـ AI يوفر ساعات كل أسبوع.',
           },
-          midjourneyArt: {
-            title: 'فن وتصميم Midjourney',
+          canvaArt: {
+            title: 'فن وتصميم Canva',
             description: 'أتقن هندسة الأوامر لإنشاء أعمال فنية AI مذهلة.',
           },
           promptEngineering: {
@@ -1751,7 +1751,7 @@ const resources = {
           },
           videoGeneration: {
             title: 'دليل إنشاء الفيديو بـ AI',
-            description: 'أنشئ فيديوهات احترافية مع Runway و ElevenLabs.',
+            description: 'أنشئ فيديوهات احترافية مع CapCut و ElevenLabs.',
           },
           aiTranslation: {
             title: 'الترجمة والتوطين بـ AI',
@@ -1777,7 +1777,7 @@ const resources = {
         badge: 'প্রিমিয়াম AI টুলস — ৯০% পর্যন্ত সস্তা',
         title: 'প্রিমিয়াম AI টুলস।',
         titleHighlight: '৯০% পর্যন্ত সস্তা।',
-        description: 'প্রিমিয়াম AI টুলস ও সাবস্ক্রিপশন ৯০% পর্যন্ত সস্তায়, নিরাপদ ও তাৎক্ষণিক ডেলিভারি। ChatGPT, Midjourney, Claude, Gemini ও ৫০+ আরও।',
+        description: 'প্রিমিয়াম AI টুলস ও সাবস্ক্রিপশন ৯০% পর্যন্ত সস্তায়, নিরাপদ ও তাৎক্ষণিক ডেলিভারি। ChatGPT, Canva, Perplexity, Grok ও ৫০+ আরও।',
         cta: 'ডিল দেখুন',
         ctaSecondary: 'এখনই অ্যাক্সেস নিন',
         stats: {
@@ -2012,7 +2012,7 @@ const resources = {
         featured: 'এই মাসের ফিচারড',
         lessons: {
           aiContentCreation: {
-            description: 'Midjourney এবং Runway ব্যবহার করে দারুণ ভিজ্যুয়াল এবং ভিডিও তৈরি করুন।',
+            description: 'Canva এবং CapCut ব্যবহার করে দারুণ ভিজ্যুয়াল এবং ভিডিও তৈরি করুন।',
             title: 'AI কনটেন্ট তৈরি মাস্টারক্লাস',
           },
           aiTranslation: {
@@ -2031,16 +2031,16 @@ const resources = {
             description: 'নতুন ভাষা দ্রুত আয়ত্ত করতে ChatGPT এবং ElevenLabs ব্যবহার করুন।',
             title: 'AI দিয়ে যেকোনো ভাষা শিখুন',
           },
-          midjourneyArt: {
+          canvaArt: {
             description: 'দারুণ AI-জেনারেটেড আর্টওয়ার্কের জন্য প্রম্পট ইঞ্জিনিয়ারিং আয়ত্ত করুন।',
-            title: 'Midjourney আর্ট ও ডিজাইন',
+            title: 'Canva আর্ট ও ডিজাইন',
           },
           promptEngineering: {
             description: 'নিখুঁত ফলাফল পেতে প্রম্পট তৈরির চূড়ান্ত গাইড।',
             title: 'অ্যাডভান্সড প্রম্পট ইঞ্জিনিয়ারিং',
           },
           videoGeneration: {
-            description: 'Runway এবং ElevenLabs দিয়ে পেশাদার ভিডিও তৈরি করুন।',
+            description: 'CapCut এবং ElevenLabs দিয়ে পেশাদার ভিডিও তৈরি করুন।',
             title: 'AI ভিডিও জেনারেশন গাইড',
           },
         },
@@ -2070,7 +2070,7 @@ const resources = {
         badge: 'Ferramentas IA Premium — Até 90% Mais Baratas',
         title: 'Ferramentas IA Premium.',
         titleHighlight: 'Até 90% Mais Baratas.',
-        description: 'Obtenha ferramentas IA e subscrições premium até 90% mais baratas, entregues em segurança e ao instante. ChatGPT, Midjourney, Claude, Gemini e +50.',
+        description: 'Obtenha ferramentas IA e subscrições premium até 90% mais baratas, entregues em segurança e ao instante. ChatGPT, Canva, Perplexity, Grok e +50.',
         cta: 'Ver Ofertas',
         ctaSecondary: 'Aceder Agora',
         stats: {
@@ -2305,7 +2305,7 @@ const resources = {
         featured: 'Destaques do Mês',
         lessons: {
           aiContentCreation: {
-            description: 'Crie visuais e vídeos incríveis usando Midjourney e Runway.',
+            description: 'Crie visuais e vídeos incríveis usando Canva e CapCut.',
             title: 'Masterclass de Criação de Conteúdo com IA',
           },
           aiTranslation: {
@@ -2324,16 +2324,16 @@ const resources = {
             description: 'Use o ChatGPT e a ElevenLabs para dominar novos idiomas mais rápido.',
             title: 'Aprenda Qualquer Idioma com IA',
           },
-          midjourneyArt: {
+          canvaArt: {
             description: 'Domine a engenharia de prompts para criar arte espetacular gerada por IA.',
-            title: 'Arte e Design com Midjourney',
+            title: 'Arte e Design com Canva',
           },
           promptEngineering: {
             description: 'O guia definitivo para criar prompts que geram resultados perfeitos.',
             title: 'Engenharia de Prompts Avançada',
           },
           videoGeneration: {
-            description: 'Crie vídeos profissionais com Runway e ElevenLabs.',
+            description: 'Crie vídeos profissionais com CapCut e ElevenLabs.',
             title: 'Guia de Geração de Vídeo com IA',
           },
         },
@@ -2363,7 +2363,7 @@ const resources = {
         badge: 'Премиум AI-инструменты — дешевле до 90%',
         title: 'Премиум AI-инструменты.',
         titleHighlight: 'Дешевле до 90%.',
-        description: 'Получите премиум AI-инструменты и подписки дешевле до 90%, безопасно и мгновенно. ChatGPT, Midjourney, Claude, Gemini и 50+ других.',
+        description: 'Получите премиум AI-инструменты и подписки дешевле до 90%, безопасно и мгновенно. ChatGPT, Canva, Perplexity, Grok и 50+ других.',
         cta: 'Смотреть предложения',
         ctaSecondary: 'Получить доступ',
         stats: {
@@ -2598,7 +2598,7 @@ const resources = {
         featured: 'Рекомендуем в этом месяце',
         lessons: {
           aiContentCreation: {
-            description: 'Создавайте потрясающие изображения и видео с помощью Midjourney и Runway.',
+            description: 'Создавайте потрясающие изображения и видео с помощью Canva и CapCut.',
             title: 'Мастер-класс по созданию контента с ИИ',
           },
           aiTranslation: {
@@ -2617,16 +2617,16 @@ const resources = {
             description: 'Изучайте новые языки быстрее с помощью ChatGPT и ElevenLabs.',
             title: 'Изучайте любой язык с ИИ',
           },
-          midjourneyArt: {
+          canvaArt: {
             description: 'Освойте промпт-инжиниринг для создания потрясающих произведений искусства с ИИ.',
-            title: 'Искусство и дизайн в Midjourney',
+            title: 'Искусство и дизайн в Canva',
           },
           promptEngineering: {
             description: 'Полное руководство по созданию промптов для идеальных результатов.',
             title: 'Продвинутый промпт-инжиниринг',
           },
           videoGeneration: {
-            description: 'Создавайте профессиональные видео с Runway и ElevenLabs.',
+            description: 'Создавайте профессиональные видео с CapCut и ElevenLabs.',
             title: 'Руководство по созданию видео с ИИ',
           },
         },
@@ -2656,7 +2656,7 @@ const resources = {
         badge: 'پریمیم AI ٹولز — 90٪ تک سستے',
         title: 'پریمیم AI ٹولز۔',
         titleHighlight: '90٪ تک سستے۔',
-        description: 'پریمیم AI ٹولز اور سبسکرپشنز 90٪ تک سستے، محفوظ اور فوری ڈیلیوری۔ ChatGPT، Midjourney، Claude، Gemini اور 50+ مزید۔',
+        description: 'پریمیم AI ٹولز اور سبسکرپشنز 90٪ تک سستے، محفوظ اور فوری ڈیلیوری۔ ChatGPT، Canva، Perplexity، Grok اور 50+ مزید۔',
         cta: 'ڈیلز دیکھیں',
         ctaSecondary: 'ابھی رسائی حاصل کریں',
         stats: {
@@ -2891,7 +2891,7 @@ const resources = {
         featured: 'اس مہینے نمایاں',
         lessons: {
           aiContentCreation: {
-            description: 'Midjourney اور Runway کا استعمال کرتے ہوئے شاندار ویژولز اور ویڈیوز بنائیں۔',
+            description: 'Canva اور CapCut کا استعمال کرتے ہوئے شاندار ویژولز اور ویڈیوز بنائیں۔',
             title: 'AI مواد کی تخلیق ماسٹرکلاس',
           },
           aiTranslation: {
@@ -2910,16 +2910,16 @@ const resources = {
             description: 'نئی زبانوں پر تیزی سے مہارت حاصل کرنے کے لیے ChatGPT اور ElevenLabs کا استعمال کریں۔',
             title: 'AI کے ساتھ کوئی بھی زبان سیکھیں',
           },
-          midjourneyArt: {
+          canvaArt: {
             description: 'شاندار AI سے تیار کردہ آرٹ ورک کے لیے پرامپٹ انجینئرنگ میں مہارت حاصل کریں۔',
-            title: 'Midjourney آرٹ اور ڈیزائن',
+            title: 'Canva آرٹ اور ڈیزائن',
           },
           promptEngineering: {
             description: 'بہترین نتائج دینے والے پرامپٹس بنانے کے لیے حتمی گائیڈ۔',
             title: 'اعلیٰ پرامپٹ انجینئرنگ',
           },
           videoGeneration: {
-            description: 'Runway اور ElevenLabs کے ساتھ پروفیشنل ویڈیوز بنائیں۔',
+            description: 'CapCut اور ElevenLabs کے ساتھ پروفیشنل ویڈیوز بنائیں۔',
             title: 'AI ویڈیو جنریشن گائیڈ',
           },
         },
@@ -2949,7 +2949,7 @@ const resources = {
         badge: 'Premium-KI-Tools — bis zu 90 % günstiger',
         title: 'Premium-KI-Tools.',
         titleHighlight: 'Bis zu 90 % günstiger.',
-        description: 'Holen Sie sich Premium-KI-Tools und Abos bis zu 90 % günstiger, sicher und sofort geliefert. ChatGPT, Midjourney, Claude, Gemini & 50+ weitere.',
+        description: 'Holen Sie sich Premium-KI-Tools und Abos bis zu 90 % günstiger, sicher und sofort geliefert. ChatGPT, Canva, Perplexity, Grok & 50+ weitere.',
         cta: 'Angebote ansehen',
         ctaSecondary: 'Jetzt Zugang holen',
         stats: {
@@ -3184,7 +3184,7 @@ const resources = {
         featured: 'Highlights des Monats',
         lessons: {
           aiContentCreation: {
-            description: 'Erstelle beeindruckende Bilder und Videos mit Midjourney und Runway.',
+            description: 'Erstelle beeindruckende Bilder und Videos mit Canva und CapCut.',
             title: 'Meisterkurs KI-Content-Erstellung',
           },
           aiTranslation: {
@@ -3203,16 +3203,16 @@ const resources = {
             description: 'Nutze ChatGPT und ElevenLabs, um neue Sprachen schneller zu meistern.',
             title: 'Jede Sprache lernen mit KI',
           },
-          midjourneyArt: {
+          canvaArt: {
             description: 'Meistere Prompt-Engineering für beeindruckende KI-generierte Kunstwerke.',
-            title: 'Midjourney Kunst & Design',
+            title: 'Canva Kunst & Design',
           },
           promptEngineering: {
             description: 'Der ultimative Leitfaden für Prompts, die perfekte Ergebnisse liefern.',
             title: 'Fortgeschrittenes Prompt-Engineering',
           },
           videoGeneration: {
-            description: 'Erstelle professionelle Videos mit Runway und ElevenLabs.',
+            description: 'Erstelle professionelle Videos mit CapCut und ElevenLabs.',
             title: 'Leitfaden zur KI-Videogenerierung',
           },
         },
@@ -3242,7 +3242,7 @@ const resources = {
         badge: 'Strumenti IA Premium — Fino al 90% in Meno',
         title: 'Strumenti IA Premium.',
         titleHighlight: 'Fino al 90% in Meno.',
-        description: 'Ottieni strumenti IA e abbonamenti premium fino al 90% in meno, consegnati in sicurezza e all’istante. ChatGPT, Midjourney, Claude, Gemini e 50+ altri.',
+        description: 'Ottieni strumenti IA e abbonamenti premium fino al 90% in meno, consegnati in sicurezza e all’istante. ChatGPT, Canva, Perplexity, Grok e 50+ altri.',
         cta: 'Vedi le Offerte',
         ctaSecondary: 'Ottieni Accesso Ora',
         stats: {
@@ -3477,7 +3477,7 @@ const resources = {
         featured: 'In primo piano questo mese',
         lessons: {
           aiContentCreation: {
-            description: 'Crea immagini e video spettacolari con Midjourney e Runway.',
+            description: 'Crea immagini e video spettacolari con Canva e CapCut.',
             title: 'Masterclass: Creazione Contenuti con l\'AI',
           },
           aiTranslation: {
@@ -3496,16 +3496,16 @@ const resources = {
             description: 'Usa ChatGPT e ElevenLabs per padroneggiare nuove lingue più velocemente.',
             title: 'Impara Qualsiasi Lingua con l\'AI',
           },
-          midjourneyArt: {
+          canvaArt: {
             description: 'Padroneggia il prompt engineering per opere d\'arte spettacolari generate con l\'AI.',
-            title: 'Midjourney Arte & Design',
+            title: 'Canva Arte & Design',
           },
           promptEngineering: {
             description: 'La guida definitiva per creare prompt che ottengono risultati perfetti.',
             title: 'Prompt Engineering Avanzato',
           },
           videoGeneration: {
-            description: 'Crea video professionali con Runway e ElevenLabs.',
+            description: 'Crea video professionali con CapCut e ElevenLabs.',
             title: 'Guida alla Generazione Video con l\'AI',
           },
         },
@@ -3535,7 +3535,7 @@ const resources = {
         badge: 'Premium AI-tools — Tot 90% Goedkoper',
         title: 'Premium AI-tools.',
         titleHighlight: 'Tot 90% Goedkoper.',
-        description: 'Krijg premium AI-tools en abonnementen tot 90% goedkoper, veilig en direct geleverd. ChatGPT, Midjourney, Claude, Gemini & 50+ andere.',
+        description: 'Krijg premium AI-tools en abonnementen tot 90% goedkoper, veilig en direct geleverd. ChatGPT, Canva, Perplexity, Grok & 50+ andere.',
         cta: 'Bekijk Deals',
         ctaSecondary: 'Krijg Nu Toegang',
         stats: {
@@ -3770,7 +3770,7 @@ const resources = {
         featured: 'Uitgelicht deze maand',
         lessons: {
           aiContentCreation: {
-            description: 'Maak verbluffende visuals en video\'s met Midjourney en Runway.',
+            description: 'Maak verbluffende visuals en video\'s met Canva en CapCut.',
             title: 'Masterclass AI-contentcreatie',
           },
           aiTranslation: {
@@ -3789,16 +3789,16 @@ const resources = {
             description: 'Gebruik ChatGPT en ElevenLabs om sneller nieuwe talen te leren.',
             title: 'Leer elke taal met AI',
           },
-          midjourneyArt: {
+          canvaArt: {
             description: 'Beheers prompt engineering voor verbluffende, door AI gegenereerde kunst.',
-            title: 'Midjourney Art & Design',
+            title: 'Canva Art & Design',
           },
           promptEngineering: {
             description: 'De ultieme gids voor het schrijven van prompts die perfecte resultaten opleveren.',
             title: 'Geavanceerde prompt engineering',
           },
           videoGeneration: {
-            description: 'Maak professionele video\'s met Runway en ElevenLabs.',
+            description: 'Maak professionele video\'s met CapCut en ElevenLabs.',
             title: 'Gids voor AI-videogeneratie',
           },
         },

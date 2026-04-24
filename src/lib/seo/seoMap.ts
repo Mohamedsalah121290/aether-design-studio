@@ -30,9 +30,9 @@ export type SeoPageKey =
   | 'terms'
   | 'dashboard'
   | 'chatgpt-plus-belgium'
-  | 'midjourney-subscription-eu'
+  | 'canva-subscription-eu'
   | 'office-365-belgium'
-  | 'adobe-creative-cloud-eu'
+  | 'canva-creative-cloud-eu'
   | 'ai-tool-finder';
 
 export const PAGE_PATHS: Record<SeoPageKey, string> = {
@@ -46,9 +46,9 @@ export const PAGE_PATHS: Record<SeoPageKey, string> = {
   terms: '/terms',
   dashboard: '/dashboard',
   'chatgpt-plus-belgium': '/store?tool=chatgpt-plus',
-  'midjourney-subscription-eu': '/store?tool=midjourney',
+  'canva-subscription-eu': '/store?tool=canva',
   'office-365-belgium': '/store?tool=office-365',
-  'adobe-creative-cloud-eu': '/store?tool=adobe-creative-cloud',
+  'canva-creative-cloud-eu': '/store?tool=canva-creative-cloud',
   'ai-tool-finder': '/store#ai-tool-finder',
 };
 
@@ -57,117 +57,117 @@ export const SEO_MAP: Record<SeoPageKey, Record<SeoLang, SeoEntry>> = {
   home: {
     en: {
       title: 'AI DEALS — Premium AI Tools at Member Pricing | Europe',
-      description: 'Instant access to ChatGPT, Midjourney, Claude & 50+ premium AI tools at member pricing. GDPR-principled. 24h activation. Cancel anytime.',
+      description: 'Instant access to ChatGPT, Canva, Perplexity & 50+ premium AI tools at member pricing. GDPR-principled. 24h activation. Cancel anytime.',
       h1: 'Premium AI Tools at Member Pricing',
       primaryKeyword: 'premium AI tools subscription',
-      secondaryKeywords: ['ChatGPT subscription Europe', 'Midjourney access', 'Claude AI Europe', 'managed AI access'],
-      longTail: ['cheapest ChatGPT Plus alternative Europe', 'how to access Midjourney without credit card'],
+      secondaryKeywords: ['ChatGPT subscription Europe', 'Canva access', 'Perplexity AI Europe', 'managed AI access'],
+      longTail: ['cheapest ChatGPT Plus alternative Europe', 'how to access Canva without credit card'],
     },
     fr: {
       title: 'AI DEALS — Outils IA Premium au Tarif Membre | Europe',
-      description: 'Accès instantané à ChatGPT, Midjourney, Claude et 50+ outils IA premium au tarif membre. RGPD. Activation 24h. Sans engagement.',
+      description: 'Accès instantané à ChatGPT, Canva, Perplexity et 50+ outils IA premium au tarif membre. RGPD. Activation 24h. Sans engagement.',
       h1: 'Outils IA Premium au Tarif Membre',
       primaryKeyword: 'abonnement outils IA premium',
-      secondaryKeywords: ['ChatGPT abonnement Belgique', 'Midjourney accès', 'Claude IA Europe', 'accès IA géré'],
-      longTail: ['alternative pas chère à ChatGPT Plus', 'accès Midjourney sans carte bancaire'],
+      secondaryKeywords: ['ChatGPT abonnement Belgique', 'Canva accès', 'Perplexity IA Europe', 'accès IA géré'],
+      longTail: ['alternative pas chère à ChatGPT Plus', 'accès Canva sans carte bancaire'],
     },
     nl: {
       title: 'AI DEALS — Premium AI-tools tegen Ledenprijs | Europa',
-      description: 'Directe toegang tot ChatGPT, Midjourney, Claude en 50+ premium AI-tools tegen ledenprijs. AVG-principes. 24u activatie. Maandelijks opzegbaar.',
+      description: 'Directe toegang tot ChatGPT, Canva, Perplexity en 50+ premium AI-tools tegen ledenprijs. AVG-principes. 24u activatie. Maandelijks opzegbaar.',
       h1: 'Premium AI-tools tegen Ledenprijs',
       primaryKeyword: 'premium AI tools abonnement',
-      secondaryKeywords: ['ChatGPT abonnement België', 'Midjourney toegang', 'Claude AI Europa', 'beheerde AI toegang'],
-      longTail: ['goedkoopste ChatGPT Plus alternatief', 'Midjourney zonder creditcard'],
+      secondaryKeywords: ['ChatGPT abonnement België', 'Canva toegang', 'Perplexity AI Europa', 'beheerde AI toegang'],
+      longTail: ['goedkoopste ChatGPT Plus alternatief', 'Canva zonder creditcard'],
     },
     de: {
       title: 'AI DEALS — Premium-KI-Tools zum Mitgliederpreis | Europa',
-      description: 'Sofortzugriff auf ChatGPT, Midjourney, Claude und 50+ Premium-KI-Tools zum Mitgliederpreis. DSGVO-konform. 24h Aktivierung. Monatlich kündbar.',
+      description: 'Sofortzugriff auf ChatGPT, Canva, Perplexity und 50+ Premium-KI-Tools zum Mitgliederpreis. DSGVO-konform. 24h Aktivierung. Monatlich kündbar.',
       h1: 'Premium-KI-Tools zum Mitgliederpreis',
       primaryKeyword: 'KI-Tools Abo Europa',
-      secondaryKeywords: ['ChatGPT Abo Deutschland', 'Midjourney Zugang', 'Claude KI Europa', 'verwalteter KI-Zugang'],
-      longTail: ['günstigste ChatGPT Plus Alternative', 'Midjourney ohne Kreditkarte'],
+      secondaryKeywords: ['ChatGPT Abo Deutschland', 'Canva Zugang', 'Perplexity KI Europa', 'verwalteter KI-Zugang'],
+      longTail: ['günstigste ChatGPT Plus Alternative', 'Canva ohne Kreditkarte'],
     },
     es: {
       title: 'AI DEALS — Herramientas IA Premium a Precio Miembro | Europa',
-      description: 'Acceso instantáneo a ChatGPT, Midjourney, Claude y 50+ herramientas IA premium a precio miembro. RGPD. Activación 24h. Cancela cuando quieras.',
+      description: 'Acceso instantáneo a ChatGPT, Canva, Perplexity y 50+ herramientas IA premium a precio miembro. RGPD. Activación 24h. Cancela cuando quieras.',
       h1: 'Herramientas IA Premium a Precio Miembro',
       primaryKeyword: 'suscripción herramientas IA premium',
-      secondaryKeywords: ['ChatGPT suscripción Europa', 'acceso Midjourney', 'Claude IA Europa', 'acceso IA gestionado'],
-      longTail: ['alternativa barata a ChatGPT Plus', 'Midjourney sin tarjeta de crédito'],
+      secondaryKeywords: ['ChatGPT suscripción Europa', 'acceso Canva', 'Perplexity IA Europa', 'acceso IA gestionado'],
+      longTail: ['alternativa barata a ChatGPT Plus', 'Canva sin tarjeta de crédito'],
     },
     pt: {
       title: 'AI DEALS — Ferramentas IA Premium a Preço Membro | Europa',
-      description: 'Acesso instantâneo a ChatGPT, Midjourney, Claude e 50+ ferramentas IA premium a preço membro. RGPD. Ativação em 24h. Cancele quando quiser.',
+      description: 'Acesso instantâneo a ChatGPT, Canva, Perplexity e 50+ ferramentas IA premium a preço membro. RGPD. Ativação em 24h. Cancele quando quiser.',
       h1: 'Ferramentas IA Premium a Preço Membro',
       primaryKeyword: 'subscrição ferramentas IA premium',
-      secondaryKeywords: ['ChatGPT subscrição Europa', 'acesso Midjourney', 'Claude IA Europa', 'acesso IA gerido'],
-      longTail: ['alternativa barata ao ChatGPT Plus', 'Midjourney sem cartão de crédito'],
+      secondaryKeywords: ['ChatGPT subscrição Europa', 'acesso Canva', 'Perplexity IA Europa', 'acesso IA gerido'],
+      longTail: ['alternativa barata ao ChatGPT Plus', 'Canva sem cartão de crédito'],
     },
     ar: {
       title: 'AI DEALS — أدوات ذكاء اصطناعي بسعر الأعضاء | أوروبا',
-      description: 'وصول فوري إلى ChatGPT و Midjourney و Claude وأكثر من 50 أداة ذكاء اصطناعي بسعر الأعضاء. متوافق مع GDPR. تفعيل خلال 24 ساعة. إلغاء في أي وقت.',
+      description: 'وصول فوري إلى ChatGPT و Canva و Perplexity وأكثر من 50 أداة ذكاء اصطناعي بسعر الأعضاء. متوافق مع GDPR. تفعيل خلال 24 ساعة. إلغاء في أي وقت.',
       h1: 'أدوات الذكاء الاصطناعي المتميزة بسعر الأعضاء',
       primaryKeyword: 'اشتراك أدوات الذكاء الاصطناعي',
-      secondaryKeywords: ['اشتراك ChatGPT أوروبا', 'الوصول إلى Midjourney', 'Claude للذكاء الاصطناعي', 'وصول مُدار للذكاء الاصطناعي'],
-      longTail: ['أرخص بديل لـ ChatGPT Plus', 'Midjourney بدون بطاقة ائتمان'],
+      secondaryKeywords: ['اشتراك ChatGPT أوروبا', 'الوصول إلى Canva', 'Perplexity للذكاء الاصطناعي', 'وصول مُدار للذكاء الاصطناعي'],
+      longTail: ['أرخص بديل لـ ChatGPT Plus', 'Canva بدون بطاقة ائتمان'],
     },
   },
 
   store: {
     en: {
-      title: 'AI Tools Store — ChatGPT, Midjourney, Claude & More',
+      title: 'AI Tools Store — ChatGPT, Canva, Perplexity & More',
       description: 'Browse 50+ verified AI tools at member pricing. Instant activation, encrypted vault, monthly billing. Find the right AI tool in under a minute.',
       h1: 'The Complete AI Tools Store',
       primaryKeyword: 'AI tools store Europe',
-      secondaryKeywords: ['buy ChatGPT access', 'Midjourney subscription', 'Claude Pro Europe', 'AI software shop'],
+      secondaryKeywords: ['buy ChatGPT access', 'Canva subscription', 'Perplexity Pro Europe', 'AI software shop'],
       longTail: ['best place to buy ChatGPT subscription Europe', 'compare AI tool subscriptions'],
     },
     fr: {
-      title: 'Boutique d\'Outils IA — ChatGPT, Midjourney, Claude',
+      title: 'Boutique d\'Outils IA — ChatGPT, Canva, Perplexity',
       description: 'Parcourez 50+ outils IA vérifiés au tarif membre. Activation immédiate, coffre chiffré, facturation mensuelle. Trouvez l\'outil IA en moins d\'une minute.',
       h1: 'La Boutique Complète d\'Outils IA',
       primaryKeyword: 'boutique outils IA Europe',
-      secondaryKeywords: ['acheter accès ChatGPT', 'abonnement Midjourney', 'Claude Pro Europe', 'magasin logiciels IA'],
+      secondaryKeywords: ['acheter accès ChatGPT', 'abonnement Canva', 'Perplexity Pro Europe', 'magasin logiciels IA'],
       longTail: ['où acheter abonnement ChatGPT en Belgique', 'comparer abonnements IA'],
     },
     nl: {
-      title: 'AI-tools Winkel — ChatGPT, Midjourney, Claude en meer',
+      title: 'AI-tools Winkel — ChatGPT, Canva, Perplexity en meer',
       description: 'Bekijk 50+ geverifieerde AI-tools tegen ledenprijs. Directe activatie, versleutelde kluis, maandelijkse facturatie. Vind de juiste AI-tool in een minuut.',
       h1: 'De Complete AI-tools Winkel',
       primaryKeyword: 'AI tools winkel Europa',
-      secondaryKeywords: ['ChatGPT toegang kopen', 'Midjourney abonnement', 'Claude Pro Europa', 'AI software winkel'],
+      secondaryKeywords: ['ChatGPT toegang kopen', 'Canva abonnement', 'Perplexity Pro Europa', 'AI software winkel'],
       longTail: ['waar ChatGPT abonnement kopen België', 'AI abonnementen vergelijken'],
     },
     de: {
-      title: 'KI-Tools Shop — ChatGPT, Midjourney, Claude & mehr',
+      title: 'KI-Tools Shop — ChatGPT, Canva, Perplexity & mehr',
       description: '50+ verifizierte KI-Tools zum Mitgliederpreis. Sofortige Aktivierung, verschlüsselter Tresor, monatliche Abrechnung. KI-Tool in unter einer Minute finden.',
       h1: 'Der Komplette KI-Tools Shop',
       primaryKeyword: 'KI-Tools Shop Europa',
-      secondaryKeywords: ['ChatGPT Zugang kaufen', 'Midjourney Abo', 'Claude Pro Europa', 'KI-Software Shop'],
+      secondaryKeywords: ['ChatGPT Zugang kaufen', 'Canva Abo', 'Perplexity Pro Europa', 'KI-Software Shop'],
       longTail: ['wo ChatGPT Abo kaufen Deutschland', 'KI-Abos vergleichen'],
     },
     es: {
-      title: 'Tienda de Herramientas IA — ChatGPT, Midjourney, Claude',
+      title: 'Tienda de Herramientas IA — ChatGPT, Canva, Perplexity',
       description: '50+ herramientas IA verificadas a precio miembro. Activación inmediata, bóveda cifrada, facturación mensual. Encuentra la herramienta IA en un minuto.',
       h1: 'La Tienda Completa de Herramientas IA',
       primaryKeyword: 'tienda herramientas IA Europa',
-      secondaryKeywords: ['comprar acceso ChatGPT', 'suscripción Midjourney', 'Claude Pro Europa', 'tienda software IA'],
+      secondaryKeywords: ['comprar acceso ChatGPT', 'suscripción Canva', 'Perplexity Pro Europa', 'tienda software IA'],
       longTail: ['dónde comprar suscripción ChatGPT Europa', 'comparar suscripciones IA'],
     },
     pt: {
-      title: 'Loja de Ferramentas IA — ChatGPT, Midjourney, Claude',
+      title: 'Loja de Ferramentas IA — ChatGPT, Canva, Perplexity',
       description: '50+ ferramentas IA verificadas a preço membro. Ativação imediata, cofre encriptado, faturação mensal. Encontre a ferramenta IA em menos de um minuto.',
       h1: 'A Loja Completa de Ferramentas IA',
       primaryKeyword: 'loja ferramentas IA Europa',
-      secondaryKeywords: ['comprar acesso ChatGPT', 'subscrição Midjourney', 'Claude Pro Europa', 'loja software IA'],
+      secondaryKeywords: ['comprar acesso ChatGPT', 'subscrição Canva', 'Perplexity Pro Europa', 'loja software IA'],
       longTail: ['onde comprar subscrição ChatGPT Europa', 'comparar subscrições IA'],
     },
     ar: {
-      title: 'متجر أدوات الذكاء الاصطناعي — ChatGPT و Midjourney',
+      title: 'متجر أدوات الذكاء الاصطناعي — ChatGPT و Canva',
       description: 'تصفح أكثر من 50 أداة ذكاء اصطناعي موثقة بسعر الأعضاء. تفعيل فوري، خزنة مشفرة، فوترة شهرية. اعثر على الأداة المناسبة خلال دقيقة.',
       h1: 'متجر أدوات الذكاء الاصطناعي الكامل',
       primaryKeyword: 'متجر أدوات الذكاء الاصطناعي',
-      secondaryKeywords: ['شراء وصول ChatGPT', 'اشتراك Midjourney', 'Claude Pro أوروبا', 'متجر برامج الذكاء الاصطناعي'],
+      secondaryKeywords: ['شراء وصول ChatGPT', 'اشتراك Canva', 'Perplexity Pro أوروبا', 'متجر برامج الذكاء الاصطناعي'],
       longTail: ['أين أشتري اشتراك ChatGPT في أوروبا', 'مقارنة اشتراكات الذكاء الاصطناعي'],
     },
   },
@@ -193,13 +193,13 @@ export const SEO_MAP: Record<SeoPageKey, Record<SeoLang, SeoEntry>> = {
   },
 
   blog: {
-    en: { title: 'AI DEALS Blog — Tutorials, Guides & AI News', description: 'Practical tutorials and deep dives on ChatGPT, Midjourney, Claude, automation and AI workflows. New articles every week.', h1: 'AI Tutorials, Guides & News', primaryKeyword: 'AI tutorials blog', secondaryKeywords: ['ChatGPT tutorials', 'Midjourney guide', 'AI workflow tips'] },
-    fr: { title: 'Blog AI DEALS — Tutoriels, Guides & Actu IA', description: 'Tutoriels pratiques et analyses approfondies sur ChatGPT, Midjourney, Claude, automatisation et workflows IA. Nouveaux articles chaque semaine.', h1: 'Tutoriels, Guides & Actu IA', primaryKeyword: 'blog tutoriels IA', secondaryKeywords: ['tutoriels ChatGPT', 'guide Midjourney', 'astuces workflow IA'] },
-    nl: { title: 'AI DEALS Blog — Tutorials, Gidsen & AI-nieuws', description: 'Praktische tutorials en diepgaande analyses over ChatGPT, Midjourney, Claude, automatisering en AI-workflows. Elke week nieuwe artikelen.', h1: 'AI Tutorials, Gidsen & Nieuws', primaryKeyword: 'AI tutorials blog', secondaryKeywords: ['ChatGPT tutorials', 'Midjourney gids', 'AI workflow tips'] },
-    de: { title: 'AI DEALS Blog — Tutorials, Guides & KI-News', description: 'Praktische Tutorials und Deep Dives zu ChatGPT, Midjourney, Claude, Automatisierung und KI-Workflows. Jede Woche neue Artikel.', h1: 'KI-Tutorials, Guides & News', primaryKeyword: 'KI Tutorials Blog', secondaryKeywords: ['ChatGPT Tutorials', 'Midjourney Guide', 'KI Workflow Tipps'] },
-    es: { title: 'Blog AI DEALS — Tutoriales, Guías y Noticias IA', description: 'Tutoriales prácticos y análisis profundos sobre ChatGPT, Midjourney, Claude, automatización y flujos IA. Nuevos artículos cada semana.', h1: 'Tutoriales, Guías y Noticias IA', primaryKeyword: 'blog tutoriales IA', secondaryKeywords: ['tutoriales ChatGPT', 'guía Midjourney', 'consejos flujo IA'] },
-    pt: { title: 'Blog AI DEALS — Tutoriais, Guias e Notícias IA', description: 'Tutoriais práticos e análises aprofundadas sobre ChatGPT, Midjourney, Claude, automação e fluxos IA. Novos artigos todas as semanas.', h1: 'Tutoriais, Guias e Notícias IA', primaryKeyword: 'blog tutoriais IA', secondaryKeywords: ['tutoriais ChatGPT', 'guia Midjourney', 'dicas fluxo IA'] },
-    ar: { title: 'مدونة AI DEALS — دروس وأدلة وأخبار الذكاء الاصطناعي', description: 'دروس عملية وتحليلات معمقة حول ChatGPT و Midjourney و Claude والأتمتة وسير العمل بالذكاء الاصطناعي. مقالات جديدة كل أسبوع.', h1: 'دروس وأدلة وأخبار الذكاء الاصطناعي', primaryKeyword: 'مدونة دروس الذكاء الاصطناعي', secondaryKeywords: ['دروس ChatGPT', 'دليل Midjourney', 'نصائح سير عمل الذكاء الاصطناعي'] },
+    en: { title: 'AI DEALS Blog — Tutorials, Guides & AI News', description: 'Practical tutorials and deep dives on ChatGPT, Canva, Perplexity, automation and AI workflows. New articles every week.', h1: 'AI Tutorials, Guides & News', primaryKeyword: 'AI tutorials blog', secondaryKeywords: ['ChatGPT tutorials', 'Canva guide', 'AI workflow tips'] },
+    fr: { title: 'Blog AI DEALS — Tutoriels, Guides & Actu IA', description: 'Tutoriels pratiques et analyses approfondies sur ChatGPT, Canva, Perplexity, automatisation et workflows IA. Nouveaux articles chaque semaine.', h1: 'Tutoriels, Guides & Actu IA', primaryKeyword: 'blog tutoriels IA', secondaryKeywords: ['tutoriels ChatGPT', 'guide Canva', 'astuces workflow IA'] },
+    nl: { title: 'AI DEALS Blog — Tutorials, Gidsen & AI-nieuws', description: 'Praktische tutorials en diepgaande analyses over ChatGPT, Canva, Perplexity, automatisering en AI-workflows. Elke week nieuwe artikelen.', h1: 'AI Tutorials, Gidsen & Nieuws', primaryKeyword: 'AI tutorials blog', secondaryKeywords: ['ChatGPT tutorials', 'Canva gids', 'AI workflow tips'] },
+    de: { title: 'AI DEALS Blog — Tutorials, Guides & KI-News', description: 'Praktische Tutorials und Deep Dives zu ChatGPT, Canva, Perplexity, Automatisierung und KI-Workflows. Jede Woche neue Artikel.', h1: 'KI-Tutorials, Guides & News', primaryKeyword: 'KI Tutorials Blog', secondaryKeywords: ['ChatGPT Tutorials', 'Canva Guide', 'KI Workflow Tipps'] },
+    es: { title: 'Blog AI DEALS — Tutoriales, Guías y Noticias IA', description: 'Tutoriales prácticos y análisis profundos sobre ChatGPT, Canva, Perplexity, automatización y flujos IA. Nuevos artículos cada semana.', h1: 'Tutoriales, Guías y Noticias IA', primaryKeyword: 'blog tutoriales IA', secondaryKeywords: ['tutoriales ChatGPT', 'guía Canva', 'consejos flujo IA'] },
+    pt: { title: 'Blog AI DEALS — Tutoriais, Guias e Notícias IA', description: 'Tutoriais práticos e análises aprofundadas sobre ChatGPT, Canva, Perplexity, automação e fluxos IA. Novos artigos todas as semanas.', h1: 'Tutoriais, Guias e Notícias IA', primaryKeyword: 'blog tutoriais IA', secondaryKeywords: ['tutoriais ChatGPT', 'guia Canva', 'dicas fluxo IA'] },
+    ar: { title: 'مدونة AI DEALS — دروس وأدلة وأخبار الذكاء الاصطناعي', description: 'دروس عملية وتحليلات معمقة حول ChatGPT و Canva و Perplexity والأتمتة وسير العمل بالذكاء الاصطناعي. مقالات جديدة كل أسبوع.', h1: 'دروس وأدلة وأخبار الذكاء الاصطناعي', primaryKeyword: 'مدونة دروس الذكاء الاصطناعي', secondaryKeywords: ['دروس ChatGPT', 'دليل Canva', 'نصائح سير عمل الذكاء الاصطناعي'] },
   },
 
   academy: {
@@ -252,14 +252,14 @@ export const SEO_MAP: Record<SeoPageKey, Record<SeoLang, SeoEntry>> = {
     ar: { title: 'ChatGPT Plus بلجيكا — سعر الأعضاء | AI DEALS', description: 'احصل على ChatGPT Plus في بلجيكا بسعر الأعضاء. الدفع باليورو، بدون بطاقة أمريكية، تفعيل خلال 24 ساعة، إلغاء شهري.', h1: 'ChatGPT Plus في بلجيكا — سعر الأعضاء', primaryKeyword: 'ChatGPT Plus بلجيكا', secondaryKeywords: ['ChatGPT Plus باليورو', 'اشتراك ChatGPT بلجيكا', 'وصول GPT-4o', 'ChatGPT بدون بطاقة'] },
   },
 
-  'midjourney-subscription-eu': {
-    en: { title: 'Midjourney Subscription EU — Member Pricing | AI DEALS', description: 'Midjourney subscription for EU creators. EUR billing, instant access, monthly cancel. Skip the Discord setup hassle. Member pricing.', h1: 'Midjourney Subscription for EU Creators', primaryKeyword: 'Midjourney subscription EU', secondaryKeywords: ['Midjourney EUR', 'Midjourney access Europe', 'Midjourney without Discord', 'Midjourney monthly'] },
-    fr: { title: 'Abonnement Midjourney UE — Tarif Membre | AI DEALS', description: 'Abonnement Midjourney pour créateurs UE. Facturation EUR, accès immédiat, sans engagement. Évitez la config Discord. Tarif membre.', h1: 'Abonnement Midjourney pour Créateurs UE', primaryKeyword: 'abonnement Midjourney UE', secondaryKeywords: ['Midjourney EUR', 'Midjourney accès Europe', 'Midjourney sans Discord', 'Midjourney mensuel'] },
-    nl: { title: 'Midjourney Abonnement EU — Ledenprijs | AI DEALS', description: 'Midjourney abonnement voor EU-creatievelingen. EUR-facturatie, directe toegang, maandelijks opzegbaar. Geen Discord-gedoe. Ledenprijs.', h1: 'Midjourney Abonnement voor EU-creatievelingen', primaryKeyword: 'Midjourney abonnement EU', secondaryKeywords: ['Midjourney EUR', 'Midjourney toegang Europa', 'Midjourney zonder Discord', 'Midjourney maandelijks'] },
-    de: { title: 'Midjourney Abo EU — Mitgliederpreis | AI DEALS', description: 'Midjourney-Abo für EU-Kreative. EUR-Abrechnung, sofortiger Zugang, monatlich kündbar. Ohne Discord-Aufwand. Mitgliederpreis.', h1: 'Midjourney-Abo für EU-Kreative', primaryKeyword: 'Midjourney Abo EU', secondaryKeywords: ['Midjourney EUR', 'Midjourney Zugang Europa', 'Midjourney ohne Discord', 'Midjourney monatlich'] },
-    es: { title: 'Suscripción Midjourney UE — Precio Miembro | AI DEALS', description: 'Suscripción Midjourney para creadores UE. Facturación EUR, acceso instantáneo, cancela mensual. Sin lío de Discord. Precio miembro.', h1: 'Suscripción Midjourney para Creadores UE', primaryKeyword: 'suscripción Midjourney UE', secondaryKeywords: ['Midjourney EUR', 'Midjourney acceso Europa', 'Midjourney sin Discord', 'Midjourney mensual'] },
-    pt: { title: 'Subscrição Midjourney UE — Preço Membro | AI DEALS', description: 'Subscrição Midjourney para criadores UE. Faturação EUR, acesso instantâneo, cancele mensal. Sem complicação Discord. Preço membro.', h1: 'Subscrição Midjourney para Criadores UE', primaryKeyword: 'subscrição Midjourney UE', secondaryKeywords: ['Midjourney EUR', 'Midjourney acesso Europa', 'Midjourney sem Discord', 'Midjourney mensal'] },
-    ar: { title: 'اشتراك Midjourney أوروبا — سعر الأعضاء | AI DEALS', description: 'اشتراك Midjourney للمبدعين في أوروبا. فوترة باليورو، وصول فوري، إلغاء شهري. دون عناء Discord. بسعر الأعضاء.', h1: 'اشتراك Midjourney للمبدعين في أوروبا', primaryKeyword: 'اشتراك Midjourney أوروبا', secondaryKeywords: ['Midjourney باليورو', 'Midjourney أوروبا', 'Midjourney بدون Discord', 'Midjourney شهري'] },
+  'canva-subscription-eu': {
+    en: { title: 'Canva Subscription EU — Member Pricing | AI DEALS', description: 'Canva subscription for EU creators. EUR billing, instant access, monthly cancel. Skip the Discord setup hassle. Member pricing.', h1: 'Canva Subscription for EU Creators', primaryKeyword: 'Canva subscription EU', secondaryKeywords: ['Canva EUR', 'Canva access Europe', 'Canva without Discord', 'Canva monthly'] },
+    fr: { title: 'Abonnement Canva UE — Tarif Membre | AI DEALS', description: 'Abonnement Canva pour créateurs UE. Facturation EUR, accès immédiat, sans engagement. Évitez la config Discord. Tarif membre.', h1: 'Abonnement Canva pour Créateurs UE', primaryKeyword: 'abonnement Canva UE', secondaryKeywords: ['Canva EUR', 'Canva accès Europe', 'Canva sans Discord', 'Canva mensuel'] },
+    nl: { title: 'Canva Abonnement EU — Ledenprijs | AI DEALS', description: 'Canva abonnement voor EU-creatievelingen. EUR-facturatie, directe toegang, maandelijks opzegbaar. Geen Discord-gedoe. Ledenprijs.', h1: 'Canva Abonnement voor EU-creatievelingen', primaryKeyword: 'Canva abonnement EU', secondaryKeywords: ['Canva EUR', 'Canva toegang Europa', 'Canva zonder Discord', 'Canva maandelijks'] },
+    de: { title: 'Canva Abo EU — Mitgliederpreis | AI DEALS', description: 'Canva-Abo für EU-Kreative. EUR-Abrechnung, sofortiger Zugang, monatlich kündbar. Ohne Discord-Aufwand. Mitgliederpreis.', h1: 'Canva-Abo für EU-Kreative', primaryKeyword: 'Canva Abo EU', secondaryKeywords: ['Canva EUR', 'Canva Zugang Europa', 'Canva ohne Discord', 'Canva monatlich'] },
+    es: { title: 'Suscripción Canva UE — Precio Miembro | AI DEALS', description: 'Suscripción Canva para creadores UE. Facturación EUR, acceso instantáneo, cancela mensual. Sin lío de Discord. Precio miembro.', h1: 'Suscripción Canva para Creadores UE', primaryKeyword: 'suscripción Canva UE', secondaryKeywords: ['Canva EUR', 'Canva acceso Europa', 'Canva sin Discord', 'Canva mensual'] },
+    pt: { title: 'Subscrição Canva UE — Preço Membro | AI DEALS', description: 'Subscrição Canva para criadores UE. Faturação EUR, acesso instantâneo, cancele mensal. Sem complicação Discord. Preço membro.', h1: 'Subscrição Canva para Criadores UE', primaryKeyword: 'subscrição Canva UE', secondaryKeywords: ['Canva EUR', 'Canva acesso Europa', 'Canva sem Discord', 'Canva mensal'] },
+    ar: { title: 'اشتراك Canva أوروبا — سعر الأعضاء | AI DEALS', description: 'اشتراك Canva للمبدعين في أوروبا. فوترة باليورو، وصول فوري، إلغاء شهري. دون عناء Discord. بسعر الأعضاء.', h1: 'اشتراك Canva للمبدعين في أوروبا', primaryKeyword: 'اشتراك Canva أوروبا', secondaryKeywords: ['Canva باليورو', 'Canva أوروبا', 'Canva بدون Discord', 'Canva شهري'] },
   },
 
   'office-365-belgium': {
@@ -272,14 +272,14 @@ export const SEO_MAP: Record<SeoPageKey, Record<SeoLang, SeoEntry>> = {
     ar: { title: 'Office 365 بلجيكا — سعر الأعضاء | AI DEALS', description: 'Microsoft 365 في بلجيكا بسعر الأعضاء. Word و Excel و PowerPoint و OneDrive و Teams. تفعيل خلال ساعات. فوترة شهرية باليورو.', h1: 'Microsoft 365 في بلجيكا — سعر الأعضاء', primaryKeyword: 'Office 365 بلجيكا', secondaryKeywords: ['اشتراك Microsoft 365 بلجيكا', 'Office 365 باليورو', 'M365 بلجيكا', 'Office بلجيكا'] },
   },
 
-  'adobe-creative-cloud-eu': {
-    en: { title: 'Adobe Creative Cloud EU — Member Pricing | AI DEALS', description: 'Adobe Creative Cloud for EU creators. Photoshop, Illustrator, Premiere & more at member pricing. EUR billing, monthly cancel.', h1: 'Adobe Creative Cloud for EU Creators', primaryKeyword: 'Adobe Creative Cloud EU', secondaryKeywords: ['Adobe Creative Cloud EUR', 'Photoshop subscription Europe', 'Adobe abonnement', 'Creative Cloud cheaper'] },
-    fr: { title: 'Adobe Creative Cloud UE — Tarif Membre | AI DEALS', description: 'Adobe Creative Cloud pour créateurs UE. Photoshop, Illustrator, Premiere et plus, au tarif membre. Facturation EUR, sans engagement.', h1: 'Adobe Creative Cloud pour Créateurs UE', primaryKeyword: 'Adobe Creative Cloud UE', secondaryKeywords: ['Adobe Creative Cloud EUR', 'abonnement Photoshop Europe', 'Adobe abonnement', 'Creative Cloud moins cher'] },
-    nl: { title: 'Adobe Creative Cloud EU — Ledenprijs | AI DEALS', description: 'Adobe Creative Cloud voor EU-creatievelingen. Photoshop, Illustrator, Premiere en meer, tegen ledenprijs. EUR, maandelijks opzegbaar.', h1: 'Adobe Creative Cloud voor EU-creatievelingen', primaryKeyword: 'Adobe Creative Cloud EU', secondaryKeywords: ['Adobe Creative Cloud EUR', 'Photoshop abonnement Europa', 'Adobe abonnement', 'Creative Cloud goedkoper'] },
-    de: { title: 'Adobe Creative Cloud EU — Mitgliederpreis | AI DEALS', description: 'Adobe Creative Cloud für EU-Kreative. Photoshop, Illustrator, Premiere u.v.m. zum Mitgliederpreis. EUR-Abrechnung, monatlich kündbar.', h1: 'Adobe Creative Cloud für EU-Kreative', primaryKeyword: 'Adobe Creative Cloud EU', secondaryKeywords: ['Adobe Creative Cloud EUR', 'Photoshop Abo Europa', 'Adobe Abo', 'Creative Cloud günstiger'] },
-    es: { title: 'Adobe Creative Cloud UE — Precio Miembro | AI DEALS', description: 'Adobe Creative Cloud para creadores UE. Photoshop, Illustrator, Premiere y más a precio miembro. Facturación EUR, cancela mensual.', h1: 'Adobe Creative Cloud para Creadores UE', primaryKeyword: 'Adobe Creative Cloud UE', secondaryKeywords: ['Adobe Creative Cloud EUR', 'suscripción Photoshop Europa', 'Adobe suscripción', 'Creative Cloud barato'] },
-    pt: { title: 'Adobe Creative Cloud UE — Preço Membro | AI DEALS', description: 'Adobe Creative Cloud para criadores UE. Photoshop, Illustrator, Premiere e mais a preço membro. Faturação EUR, cancele mensal.', h1: 'Adobe Creative Cloud para Criadores UE', primaryKeyword: 'Adobe Creative Cloud UE', secondaryKeywords: ['Adobe Creative Cloud EUR', 'subscrição Photoshop Europa', 'Adobe subscrição', 'Creative Cloud barato'] },
-    ar: { title: 'Adobe Creative Cloud أوروبا — سعر الأعضاء | AI DEALS', description: 'Adobe Creative Cloud للمبدعين في أوروبا. Photoshop و Illustrator و Premiere والمزيد بسعر الأعضاء. فوترة باليورو، إلغاء شهري.', h1: 'Adobe Creative Cloud للمبدعين في أوروبا', primaryKeyword: 'Adobe Creative Cloud أوروبا', secondaryKeywords: ['Adobe Creative Cloud باليورو', 'اشتراك Photoshop أوروبا', 'اشتراك Adobe', 'Creative Cloud أرخص'] },
+  'canva-creative-cloud-eu': {
+    en: { title: 'Canva Pro EU — Member Pricing | AI DEALS', description: 'Canva Pro for EU creators. Photoshop, Illustrator, Premiere & more at member pricing. EUR billing, monthly cancel.', h1: 'Canva Pro for EU Creators', primaryKeyword: 'Canva Pro EU', secondaryKeywords: ['Canva Pro EUR', 'Photoshop subscription Europe', 'Canva abonnement', 'Creative Cloud cheaper'] },
+    fr: { title: 'Canva Pro UE — Tarif Membre | AI DEALS', description: 'Canva Pro pour créateurs UE. Photoshop, Illustrator, Premiere et plus, au tarif membre. Facturation EUR, sans engagement.', h1: 'Canva Pro pour Créateurs UE', primaryKeyword: 'Canva Pro UE', secondaryKeywords: ['Canva Pro EUR', 'abonnement Photoshop Europe', 'Canva abonnement', 'Creative Cloud moins cher'] },
+    nl: { title: 'Canva Pro EU — Ledenprijs | AI DEALS', description: 'Canva Pro voor EU-creatievelingen. Photoshop, Illustrator, Premiere en meer, tegen ledenprijs. EUR, maandelijks opzegbaar.', h1: 'Canva Pro voor EU-creatievelingen', primaryKeyword: 'Canva Pro EU', secondaryKeywords: ['Canva Pro EUR', 'Photoshop abonnement Europa', 'Canva abonnement', 'Creative Cloud goedkoper'] },
+    de: { title: 'Canva Pro EU — Mitgliederpreis | AI DEALS', description: 'Canva Pro für EU-Kreative. Photoshop, Illustrator, Premiere u.v.m. zum Mitgliederpreis. EUR-Abrechnung, monatlich kündbar.', h1: 'Canva Pro für EU-Kreative', primaryKeyword: 'Canva Pro EU', secondaryKeywords: ['Canva Pro EUR', 'Photoshop Abo Europa', 'Canva Abo', 'Creative Cloud günstiger'] },
+    es: { title: 'Canva Pro UE — Precio Miembro | AI DEALS', description: 'Canva Pro para creadores UE. Photoshop, Illustrator, Premiere y más a precio miembro. Facturación EUR, cancela mensual.', h1: 'Canva Pro para Creadores UE', primaryKeyword: 'Canva Pro UE', secondaryKeywords: ['Canva Pro EUR', 'suscripción Photoshop Europa', 'Canva suscripción', 'Creative Cloud barato'] },
+    pt: { title: 'Canva Pro UE — Preço Membro | AI DEALS', description: 'Canva Pro para criadores UE. Photoshop, Illustrator, Premiere e mais a preço membro. Faturação EUR, cancele mensal.', h1: 'Canva Pro para Criadores UE', primaryKeyword: 'Canva Pro UE', secondaryKeywords: ['Canva Pro EUR', 'subscrição Photoshop Europa', 'Canva subscrição', 'Creative Cloud barato'] },
+    ar: { title: 'Canva Pro أوروبا — سعر الأعضاء | AI DEALS', description: 'Canva Pro للمبدعين في أوروبا. Photoshop و Illustrator و Premiere والمزيد بسعر الأعضاء. فوترة باليورو، إلغاء شهري.', h1: 'Canva Pro للمبدعين في أوروبا', primaryKeyword: 'Canva Pro أوروبا', secondaryKeywords: ['Canva Pro باليورو', 'اشتراك Photoshop أوروبا', 'اشتراك Canva', 'Creative Cloud أرخص'] },
   },
 
   'ai-tool-finder': {

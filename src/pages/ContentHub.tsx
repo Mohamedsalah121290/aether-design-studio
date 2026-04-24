@@ -67,8 +67,8 @@ const ContentHub = () => {
     },
     {
       id: 'v2',
-      title: 'Midjourney V6: Complete Tutorial',
-      description: 'Everything new in the latest Midjourney release including enhanced realism, text rendering, and style controls.',
+      title: 'Canva V6: Complete Tutorial',
+      description: 'Everything new in the latest Canva release including enhanced realism, text rendering, and style controls.',
       thumbnail: 'https://images.unsplash.com/photo-1699839426298-dcb5c87df26b?w=800&q=80',
       duration: '32:15',
       views: '256K',
@@ -76,7 +76,7 @@ const ContentHub = () => {
     },
     {
       id: 'v3',
-      title: 'Claude AI Deep Dive',
+      title: 'Perplexity AI Deep Dive',
       description: 'Understanding Anthropic\'s latest model capabilities and how to maximize its potential for complex tasks.',
       thumbnail: 'https://images.unsplash.com/photo-1676299081847-c3b7c4c9cdb6?w=800&q=80',
       duration: '18:42',
@@ -94,7 +94,7 @@ const ContentHub = () => {
     },
     {
       id: 'v5',
-      title: 'DALL-E 3 Masterclass',
+      title: 'Canva Pro Masterclass',
       description: 'Advanced techniques for generating stunning AI art with precise control over composition and style.',
       thumbnail: 'https://images.unsplash.com/photo-1686191128892-3b37add1101e?w=800&q=80',
       duration: '22:10',
@@ -103,8 +103,8 @@ const ContentHub = () => {
     },
     {
       id: 'v6',
-      title: 'Gemini Pro Tips',
-      description: 'Unlock the full potential of Google\'s Gemini with these advanced prompting strategies.',
+      title: 'Grok Pro Tips',
+      description: 'Unlock the full potential of Google\'s Grok with these advanced prompting strategies.',
       thumbnail: 'https://images.unsplash.com/photo-1675271591211-126ad94e495d?w=800&q=80',
       duration: '19:45',
       views: '67K',
@@ -113,7 +113,7 @@ const ContentHub = () => {
     {
       id: 'v7',
       title: 'AI Coding Assistants Compared',
-      description: 'GitHub Copilot vs Cursor vs Claude: Which AI coding assistant is right for your workflow?',
+      description: 'Lovable AI Pro vs Cursor vs Perplexity: Which AI coding assistant is right for your workflow?',
       thumbnail: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80',
       duration: '35:20',
       views: '198K',
@@ -154,7 +154,7 @@ const ContentHub = () => {
     },
     {
       id: 'a4',
-      title: 'Midjourney vs DALL-E 3: Complete Comparison',
+      title: 'Canva vs Canva Pro: Complete Comparison',
       snippet: 'An in-depth analysis of the two leading AI image generators, including use cases, pricing, and output quality.',
       category: 'Tool Review',
       author: 'Emily Watson',
@@ -174,8 +174,8 @@ const ContentHub = () => {
     },
     {
       id: 'a6',
-      title: 'Getting Started with Claude for Research',
-      snippet: 'Learn how researchers are using Claude to analyze papers, synthesize findings, and accelerate discovery.',
+      title: 'Getting Started with Perplexity for Research',
+      snippet: 'Learn how researchers are using Perplexity to analyze papers, synthesize findings, and accelerate discovery.',
       category: 'Research',
       author: 'Dr. James Liu',
       readTime: '11 min',
