@@ -89,7 +89,7 @@ export const ChatbotPromoSection = () => (
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 items-center">
           <div>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 text-primary text-sm font-medium mb-6 glass">
-              <Bot className="w-4 h-4" />
+              <RobotAvatar className="w-5 h-5" />
               AI Chatbot
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-5 leading-tight">
@@ -157,12 +157,10 @@ export const ChatbotSalesFlow = () => {
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border/60">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-primary" />
-                </div>
+                <RobotAvatar />
                 <div>
                   <p className="text-sm font-semibold text-foreground">AI Deals Assistant</p>
-                  <p className="text-[11px] text-muted-foreground">Fast product guidance</p>
+                  <p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />Online</p>
                 </div>
               </div>
               <button onClick={() => setOpen(false)} className="w-9 h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label="Close chatbot">
@@ -229,7 +227,7 @@ export const ChatbotSalesFlow = () => {
           <TelegramIcon />
         </motion.a>
         <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.06, y: -2 }} whileTap={{ scale: 0.96 }} className="h-12 px-4 rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/25 flex items-center gap-2 text-sm font-semibold transition-all" aria-label="Open AI Deals chatbot">
-          {open ? <X className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+          {open ? <X className="w-4 h-4" /> : <RobotAvatar className="w-8 h-8" />}
           <span className="hidden sm:inline">Start Now</span>
         </motion.button>
       </div>
