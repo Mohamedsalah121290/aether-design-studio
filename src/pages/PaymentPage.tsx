@@ -25,6 +25,7 @@ import { inferPeriodFromPlan, getPeriodStyle, formatEuro } from '@/lib/pricePeri
 import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewsCarousel } from '@/components/ProductReviews';
+import TrustBadges from '@/components/TrustBadges';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -626,6 +627,7 @@ const PaymentPage = () => {
                     Within {activationTime}h
                   </Badge>
                 </div>
+                <TrustBadges compact />
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -692,6 +694,7 @@ const PaymentPage = () => {
                       </span>
                     )}
                   </Button>
+                  <p className="text-[11px] text-muted-foreground text-center">Secure checkout via Stripe. Final payment in EUR.</p>
 
                   {/* Trust microcopy */}
                   <div className="space-y-2 text-center">
