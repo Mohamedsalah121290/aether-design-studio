@@ -31,6 +31,7 @@ import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import ErrorBoundary from "./components/ErrorBoundary";
 import RecentActivityToast from "./components/RecentActivityToast";
+import { ChatbotSalesFlow } from "./components/ChatbotConversion";
 import "@/lib/i18n";
 
 const queryClient = new QueryClient();
@@ -119,6 +120,7 @@ const App = () => {
                     <AppRoutes />
                   </ErrorBoundary>
                   <RecentActivityToast />
+                  <ChatbotSalesFlow />
                 </BrowserRouter>
               </TooltipProvider>
             </CurrencyProvider>
