@@ -6,7 +6,7 @@ import {
   ArrowRight, GraduationCap, Briefcase, UserCheck, Lock,
   Zap, CheckCircle, Shield, BookOpen,
   Play, Plus, Minus, Mail,
-  ChevronRight, Eye, Rocket, Layers, Target,
+  ChevronRight, Eye, Rocket, Layers, Target, Star, CreditCard,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,6 +17,7 @@ import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
 import TrustBadges from '@/components/TrustBadges';
 import { ChatbotPromoSection } from '@/components/ChatbotConversion';
+import { socialProofReviews } from '@/lib/socialProof';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
@@ -32,6 +33,13 @@ const trustBadges = [
   { icon: Lock, label: 'Secure Checkout' },
   { icon: Layers, label: 'Monthly Only' },
   { icon: Zap, label: 'Fast Activation' },
+];
+
+const mobilePopularTools = [
+  { name: 'ChatGPT Plus', id: 'chatgpt', price: 'From €9.99', badge: '🔥 High demand' },
+  { name: 'Canva Pro', id: 'canva', price: 'From €7.99', badge: 'Popular' },
+  { name: 'Perplexity Pro', id: 'perplexity', price: 'From €9.99', badge: 'Research' },
+  { name: 'CapCut Pro', id: 'capcut', price: 'From €7.99', badge: 'Creators' },
 ];
 
 const audiences = [
