@@ -17,6 +17,7 @@ import { Switch } from '@/components/ui/switch';
 import { z } from 'zod';
 import type { Tool, ToolPlan } from './ToolCard';
 import { AuthDialog } from './AuthDialog';
+import { inferPeriodFromPlan, getPeriodStyle } from '@/lib/pricePeriod';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -240,13 +241,20 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                 </SheetTitle>
                 <SheetDescription className="text-base">
                   <span className="text-primary font-semibold">{tool?.name}</span>
-                  {displayPrice != null && displayPrice > 0 && (
-                    <>
-                      <span className="text-muted-foreground"> &mdash; </span>
-                      <span className="text-white font-bold">€{displayPrice}</span>
-                      <span className="text-muted-foreground">/{t('store.perMonth')}</span>
-                    </>
-                  )}
+                  {displayPrice != null && displayPrice > 0 && (() => {
+                    const period = inferPeriodFromPlan(selectedPlan?.plan_name);
+                    const style = getPeriodStyle(period);
+                    return (
+                      <>
+                        <span className="text-muted-foreground"> &mdash; </span>
+                        <span className={`font-bold ${style.textClass}`}>€{displayPrice}</span>
+                        <span className={`${style.textClass} opacity-80`}> {style.suffix}</span>
+                        <span className={`ml-1.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-[1px] rounded-md border ${style.textClass}`} style={{ borderColor: 'currentColor', opacity: 0.85 }}>
+                          {style.label}
+                        </span>
+                      </>
+                    );
+                  })()}
                 </SheetDescription>
               </SheetHeader>
             </div>
