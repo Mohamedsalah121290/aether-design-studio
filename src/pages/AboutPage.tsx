@@ -171,7 +171,7 @@ const AboutPage = () => {
                 <p className="text-muted-foreground leading-relaxed text-lg mb-4">
                   We exist to bridge the gap between premium AI technology and global accessibility. 
                   By handling accounts, security, and billing ourselves, we remove every barrier that 
-                  keeps students and creators from using tools like ChatGPT, Midjourney, Claude, and more.
+                  keeps students and creators from accessing the software they actually need.
                 </p>
                 <p className="text-muted-foreground leading-relaxed text-lg">
                   Parents trust us because we prioritise safety. Students love us because we make it easy. 

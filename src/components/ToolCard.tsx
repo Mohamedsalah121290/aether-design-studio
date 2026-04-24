@@ -28,11 +28,8 @@ const CATEGORY_LABELS: Record<string, string> = {
 /* Platform official URLs */
 const PLATFORM_URLS: Record<string, string> = {
   chatgpt: 'https://chatgpt.com',
-  claude: 'https://claude.ai',
-  gemini: 'https://gemini.google.com',
   perplexity: 'https://www.perplexity.ai',
   canva: 'https://www.canva.com',
-  midjourney: 'https://www.midjourney.com',
 };
 
 const emailSchema = z.string().trim().email().max(255);

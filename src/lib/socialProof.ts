@@ -28,7 +28,7 @@ export const socialProofReviews: SocialProofReview[] = [
   { name: 'Clara Hoffmann', country: 'Germany', flag: '🇩🇪', product: 'Canva Pro', rating: 4, quote: 'Not the cheapest, but activation was quick and Canva is useful for daily social content.' },
   { name: 'Nadia Lefèvre', country: 'France', flag: '🇫🇷', product: 'ChatGPT Plus', rating: 5, quote: 'ChatGPT Plus was active quickly. I use it daily now for planning and writing.' },
   { name: 'Milan de Vries', country: 'Netherlands', flag: '🇳🇱', product: 'Windows 11 Pro', rating: 5, quote: 'Activation key worked on first try. Clear EUR checkout and no extra steps.' },
-  { name: 'Alessia Conti', country: 'Italy', flag: '🇮🇹', product: 'Adobe Creative Cloud', rating: 4, quote: 'I expected setup to be complicated, but access was explained clearly. Price is higher, service is solid.' },
+  { name: 'Alessia Conti', country: 'Italy', flag: '🇮🇹', product: 'Lovable AI Pro', rating: 4, quote: 'I expected setup to be complicated, but access was explained clearly. Price is higher, service is solid.' },
   { name: 'Pablo García', country: 'Spain', flag: '🇪🇸', product: 'CapCut Pro', rating: 5, quote: 'Fast activation and editing features worked immediately. Good value for content work.' },
   { name: 'Marie Janssens', country: 'Belgium', flag: '🇧🇪', product: 'Perplexity Pro', rating: 4, quote: 'I was unsure at first, but research is faster now. Not the cheapest, still useful.' },
   { name: 'Klara Becker', country: 'Germany', flag: '🇩🇪', product: 'Zoom Pro', rating: 5, quote: 'Easy checkout and stable meetings. Support was available when I had a setup question.' },

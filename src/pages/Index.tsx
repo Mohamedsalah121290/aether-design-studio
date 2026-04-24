@@ -10,24 +10,16 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { ToolCard, Tool } from '@/components/ToolCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
-import SocialProofCarousel from '@/components/SocialProofCarousel';
 import TrustBadges from '@/components/TrustBadges';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
-import chatgptLogo from '@/assets/chatgpt-logo.png';
-import midjourneyLogo from '@/assets/midjourney-logo.png';
-import claudeLogo from '@/assets/claude-logo.png';
-import geminiLogo from '@/assets/gemini-logo.png';
 import logo from '@/assets/logo.png';
 
 /* ══════════════════════════════════════════════════════════════
@@ -85,12 +77,7 @@ const faqs = [
   { q: 'Is it monthly?', a: 'Yes. Flexible. Cancel anytime. No annual lock-ins, no questions asked.' },
 ];
 
-const floatingElements = [
-  { icon: chatgptLogo, name: 'ChatGPT', x: '5%', y: '25%', delay: 0, size: 56 },
-  { icon: midjourneyLogo, name: 'Midjourney', x: '88%', y: '20%', delay: 0.2, size: 48 },
-  { icon: claudeLogo, name: 'Claude', x: '3%', y: '65%', delay: 0.4, size: 44 },
-  { icon: geminiLogo, name: 'Gemini', x: '92%', y: '60%', delay: 0.6, size: 52 },
-];
+const floatingElements: { name: string; x: string; y: string; delay: number; size: number }[] = [];
 
 /* ══════════════════════════════════════════════════════════════
    FAQ ACCORDION ITEM
@@ -134,19 +121,6 @@ const Index = () => {
     document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
   }, [i18n.language]);
 
-  const { data: featuredTools = [] } = useQuery({
-    queryKey: ['featured-tools-home'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('tools')
-        .select('*')
-        .eq('is_active', true)
-        .in('tool_id', ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva', 'perplexity'])
-        .limit(6);
-      return (data || []) as Tool[];
-    },
-  });
-
   const fadeUp = {
     initial: { opacity: 0, y: 24 },
     whileInView: { opacity: 1, y: 0 },
@@ -169,25 +143,6 @@ const Index = () => {
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.7) 70%, hsl(var(--background)) 100%)' }} />
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)' }} />
           </div>
-
-          {/* Floating Icons */}
-          {floatingElements.map((el, i) => (
-            <motion.div
-              key={el.name}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.8 + el.delay, duration: 0.5 }}
-              className="absolute hidden lg:block z-20"
-              style={{ left: el.x, top: el.y }}
-            >
-              <motion.div animate={{ y: [0, -12, 0], rotate: [0, 3, -3, 0] }} transition={{ duration: 4 + i * 0.5, repeat: Infinity, ease: 'easeInOut' }}>
-                <div className="rounded-2xl p-3 backdrop-blur-xl border border-white/20 shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)' }}>
-                  <img src={el.icon} alt={el.name} style={{ width: el.size, height: el.size }} className="object-contain" />
-                </div>
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-4 rounded-full blur-xl opacity-60" style={{ background: 'hsl(var(--primary))' }} />
-              </motion.div>
-            </motion.div>
-          ))}
 
           <div className="container mx-auto px-4 relative z-10 pt-24">
             <div className="max-w-4xl mx-auto text-center">
@@ -297,16 +252,6 @@ const Index = () => {
               </div>
             </motion.div>
           </motion.div>
-        </section>
-
-        <section className="py-16 relative">
-          <div className="container mx-auto px-4">
-            <motion.div {...fadeUp} className="text-center mb-10">
-              <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">Customer Proof</span>
-              <h2 className="text-3xl md:text-5xl font-display font-bold">Recent buyer <span className="gradient-text">experiences</span></h2>
-            </motion.div>
-            <SocialProofCarousel />
-          </div>
         </section>
 
         {/* ═══════════════ 2) PROBLEM → SOLUTION ═══════════════ */}
@@ -464,41 +409,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ 5) FEATURED TOOLS ═══════════════ */}
-        {featuredTools.length > 0 && (
-          <section className="py-24 relative">
-            <div className="container mx-auto px-4">
-              <motion.div {...fadeUp} className="text-center mb-12">
-                <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                  Curated Selection
-                </span>
-                <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-                  Top AI Tools. <span className="gradient-text">Zero Noise.</span>
-                </h2>
-                <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-                  We only list tools that actually deliver value.
-                </p>
-              </motion.div>
-
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-10">
-                {featuredTools.map((tool, i) => (
-                  <ToolCard key={tool.id} tool={tool} index={i} />
-                ))}
-              </div>
-
-
-              <div className="text-center">
-                <Button variant="heroOutline" size="lg" className="group" asChild>
-                  <Link to="/store">
-                    See All Tools
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* ═══════════════ 6) ACADEMY TEASER ═══════════════ */}
         <section className="py-24 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
@@ -567,22 +477,6 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* ═══════════════ 7) SOCIAL PROOF ═══════════════ */}
-        <section className="py-24 relative">
-          <div className="container mx-auto px-4">
-            <motion.div {...fadeUp} className="text-center mb-12">
-              <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                Real Feedback
-              </span>
-              <h2 className="text-3xl md:text-5xl font-display font-bold">
-                Trusted by <span className="gradient-text">Thousands</span>
-              </h2>
-            </motion.div>
-
-            <SocialProofCarousel />
           </div>
         </section>
 

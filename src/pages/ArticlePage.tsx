@@ -168,26 +168,26 @@ The key is to start small, learn continuously, and scale what works.`,
   },
   {
     id: 'a4',
-    title: 'Midjourney vs DALL-E 3: Complete Comparison',
+    title: 'Canva vs Canva Pro: Complete Comparison',
     snippet: 'An in-depth analysis of the two leading AI image generators, including use cases, pricing, and output quality.',
     category: 'Tool Review',
     author: 'Emily Watson',
     readTime: '10 min',
     thumbnail: 'https://images.unsplash.com/photo-1699839426298-dcb5c87df26b?w=1200&q=80',
     date: 'Jan 2, 2026',
-    content: `Choosing between Midjourney and DALL-E 3 depends on your specific needs, workflow, and creative goals. Let's break down the key differences.
+    content: `Choosing between Canva and Canva Pro depends on your specific needs, workflow, and creative goals. Let's break down the key differences.
 
 ## Image Quality
 
-**Midjourney** excels at creating artistic, stylized images with a distinctive aesthetic. It's particularly strong with fantasy, concept art, and visually striking compositions.
+**Canva** excels at creating artistic, stylized images with a distinctive aesthetic. It's particularly strong with fantasy, concept art, and visually striking compositions.
 
-**DALL-E 3** produces more photorealistic results and handles text in images remarkably well. It's better for practical, commercial applications.
+**Canva Pro** produces more photorealistic results and handles text in images remarkably well. It's better for practical, commercial applications.
 
 ## Ease of Use
 
-**Midjourney** operates through Discord, which has a learning curve but offers a community-driven experience.
+**Canva** operates through Discord, which has a learning curve but offers a community-driven experience.
 
-**DALL-E 3** integrates with ChatGPT, making it incredibly intuitive for natural language prompting.
+**Canva Pro** integrates with ChatGPT, making it incredibly intuitive for natural language prompting.
 
 ## Pricing
 
@@ -195,12 +195,12 @@ Both offer different pricing tiers. Consider your volume needs and whether you r
 
 ## Best Use Cases
 
-**Choose Midjourney for:**
+**Choose Canva for:**
 - Artistic and creative projects
 - Concept art and illustrations
 - Unique, stylized aesthetics
 
-**Choose DALL-E 3 for:**
+**Choose Canva Pro for:**
 - Images with text
 - Photorealistic needs
 - Quick iterations with natural language
@@ -247,30 +247,30 @@ The best content combines AI efficiency with human creativity and judgment.`,
   },
   {
     id: 'a6',
-    title: 'Getting Started with Claude for Research',
-    snippet: 'Learn how researchers are using Claude to analyze papers, synthesize findings, and accelerate discovery.',
+    title: 'Getting Started with Perplexity for Research',
+    snippet: 'Learn how researchers are using Perplexity to analyze papers, synthesize findings, and accelerate discovery.',
     category: 'Research',
     author: 'Dr. James Liu',
     readTime: '11 min',
     thumbnail: 'https://images.unsplash.com/photo-1676299081847-c3b7c4c9cdb6?w=1200&q=80',
     date: 'Dec 31, 2025',
-    content: `Claude has become an invaluable tool for researchers across disciplines. Its ability to process and synthesize large amounts of information makes it perfect for academic work.
+    content: `Perplexity has become an invaluable tool for researchers across disciplines. Its ability to process and synthesize large amounts of information makes it perfect for academic work.
 
 ## Literature Review
 
-Claude can help summarize papers, identify key findings, and spot connections between different studies.
+Perplexity can help summarize papers, identify key findings, and spot connections between different studies.
 
 ## Data Analysis
 
-While Claude can't run statistical analyses directly, it can help interpret results, suggest methodologies, and identify patterns.
+While Perplexity can't run statistical analyses directly, it can help interpret results, suggest methodologies, and identify patterns.
 
 ## Writing Support
 
-From abstracts to discussion sections, Claude assists with academic writing while maintaining scholarly standards.
+From abstracts to discussion sections, Perplexity assists with academic writing while maintaining scholarly standards.
 
 ## Ethical Considerations
 
-Always disclose AI assistance in your research methodology. Use Claude as a tool to enhance, not replace, rigorous academic work.
+Always disclose AI assistance in your research methodology. Use Perplexity as a tool to enhance, not replace, rigorous academic work.
 
 ## Tips for Researchers
 
