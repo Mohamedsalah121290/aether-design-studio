@@ -2,13 +2,13 @@ import { useRef } from 'react';
 import { ChevronLeft, ChevronRight, Crown, TrendingUp, Star } from 'lucide-react';
 import { ToolCard, Tool } from './ToolCard';
 
-const FEATURED_TOOL_IDS = ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva', 'perplexity'];
+const FEATURED_TOOL_IDS = ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovable', 'canva'];
 
 const BADGES: Record<string, {label: string;icon: React.ElementType;}> = {
   chatgpt: { label: 'Most Popular', icon: Star },
-  claude: { label: 'Trending', icon: TrendingUp },
-  gemini: { label: 'Trending', icon: TrendingUp },
-  midjourney: { label: 'Most Popular', icon: Star },
+  grok: { label: 'Trending', icon: TrendingUp },
+  elevenlabs: { label: 'Trending', icon: TrendingUp },
+  lovable: { label: 'Trending', icon: TrendingUp },
   canva: { label: 'Trending', icon: TrendingUp },
   perplexity: { label: 'Trending', icon: TrendingUp }
 };
