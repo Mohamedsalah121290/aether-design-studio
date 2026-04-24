@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { languages } from '@/lib/i18n';
 import FlagIcon from '@/components/FlagIcon';
 import { useAuth } from '@/hooks/useAuth';
+import { BUILD_VERSION, SHORT_BUILD } from '@/lib/buildInfo';
 import AuthDialog from '@/components/AuthDialog';
 import logo from '@/assets/logo.png';
 
@@ -252,6 +253,20 @@ const Navbar = () => {
                 </Button>
               )
             )}
+
+            {/* Build version badge — clicking reloads with cache-bust query */}
+            <button
+              type="button"
+              onClick={() => {
+                const url = new URL(window.location.href);
+                url.searchParams.set('_v', `${SHORT_BUILD}-${Date.now()}`);
+                window.location.replace(url.toString());
+              }}
+              title={`Build ${BUILD_VERSION} — click to reload with cache-bust`}
+              className="hidden xl:inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono text-muted-foreground/60 hover:text-foreground hover:bg-white/5 border border-white/5 hover:border-white/10 transition-colors"
+            >
+              v{SHORT_BUILD}
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
