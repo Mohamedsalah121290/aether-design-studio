@@ -20,6 +20,7 @@ import { AuthDialog } from './AuthDialog';
 import { inferPeriodFromPlan, getPeriodStyle } from '@/lib/pricePeriod';
 import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
+import { ProductReviewsCarousel } from '@/components/ProductReviews';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -411,6 +412,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
               {/* Form */}
               {!plansLoading && selectedPlan && (
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {tool && <ProductReviewsCarousel toolId={tool.tool_id} productName={tool.name} />}
+
                   <AnimatePresence mode="wait">
                     <motion.div
                       initial={{ x: -20, opacity: 0 }}
