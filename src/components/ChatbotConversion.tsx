@@ -192,7 +192,7 @@ export const ChatbotSalesFlow = () => {
   if (!ready) return null;
 
   return (
-    <div className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom))] right-3 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3">
+    <div className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom))] right-2 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3">
       <AnimatePresence>
         {open && (
           <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1.5rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[72dvh] sm:max-h-none">
@@ -234,10 +234,10 @@ export const ChatbotSalesFlow = () => {
 
       <div className="flex items-end gap-4">
         <div className="flex flex-col gap-2 sm:gap-3">
-          <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-8 h-8 sm:w-9 sm:h-9" /></motion.a>
-          <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-8 h-8 sm:w-9 sm:h-9" /></motion.a>
+          <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
+          <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
         </div>
-        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label="Open AI Deals chatbot"><RobotAvatar className="w-[76px] h-[76px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
+        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label="Open AI Deals chatbot"><RobotAvatar className="w-[64px] h-[64px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
     </div>
   );
