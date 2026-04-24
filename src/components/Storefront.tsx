@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Sparkles, Search, Loader2, PenTool, Palette, Film, Mic,
@@ -164,7 +164,7 @@ const Storefront = () => {
 
       <section id="store" className="relative overflow-hidden">
         {/* ═══ HERO ═══ */}
-        <div className="relative py-16 lg:py-24 overflow-hidden">
+        <div className="relative py-12 lg:py-24 overflow-hidden">
           {/* Aurora gradient (low opacity) */}
           <div
             className="absolute inset-0 pointer-events-none"
@@ -204,16 +204,16 @@ const Storefront = () => {
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-wrap justify-center gap-4 mb-3">
+              <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-3">
                 <a
                   href="#tools-grid"
-                  className="px-8 py-3 rounded-xl font-medium text-sm text-white bg-white/10 border border-white/15 transition-all duration-300 hover:bg-white/15 hover:border-white/25"
+                  className="min-h-11 inline-flex items-center px-8 py-3 rounded-xl font-medium text-sm text-white bg-white/10 border border-white/15 transition-all duration-300 hover:bg-white/15 hover:border-white/25"
                 >
                   {t('store.ctaPrimary', 'Browse Deals')}
                 </a>
                 <a
                   href="#trust-faq"
-                  className="px-8 py-3 rounded-xl font-medium text-sm text-white/50 border border-white/5 transition-all duration-300 hover:text-white/70 hover:border-white/10"
+                  className="min-h-11 inline-flex items-center px-8 py-3 rounded-xl font-medium text-sm text-white/50 border border-white/5 transition-all duration-300 hover:text-white/70 hover:border-white/10"
                 >
                   {t('store.ctaSecondary', 'How It Works')}
                 </a>
@@ -228,6 +228,11 @@ const Storefront = () => {
               <div className="flex items-center justify-center gap-2 text-xs text-white/30">
                 <Users className="w-3.5 h-3.5" />
                 <span>{t('store.socialProof', '1,000+ active members already saving')}</span>
+              </div>
+              <div className="mt-5 md:hidden flex flex-wrap items-center justify-center gap-2 text-[11px]">
+                <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 font-semibold text-primary">🔥 High demand</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">23 people are viewing this now</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">Limited availability today</span>
               </div>
             </div>
           </div>
@@ -262,7 +267,7 @@ const Storefront = () => {
                 </div>
 
                 {/* ═══ AVAILABLE NOW ═══ */}
-                {activeSections.map((section) => {
+                {activeSections.map((section, sectionIndex) => {
                   const Icon = section.icon;
                   return (
                     <section key={section.key} className="py-12">
@@ -289,6 +294,11 @@ const Storefront = () => {
                             <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
                           ))}
                         </div>
+                        {sectionIndex < activeSections.length - 1 && section.tools[0] && (
+                          <Link to={`/store?scrollTo=${section.tools[0].tool_id}`} className="md:hidden mt-6 min-h-[52px] relative z-10 inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">
+                            Get Access
+                          </Link>
+                        )}
                         {section.key === 'microsoft' && (
                           <div className="mt-10 relative z-10">
                             <SocialProofCarousel />

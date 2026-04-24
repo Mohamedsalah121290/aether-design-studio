@@ -6,7 +6,7 @@ import {
   ArrowRight, GraduationCap, Briefcase, UserCheck, Lock,
   Zap, CheckCircle, Shield, BookOpen,
   Play, Plus, Minus, Mail,
-  ChevronRight, Eye, Rocket, Layers, Target,
+  ChevronRight, Eye, Rocket, Layers, Target, Star, CreditCard,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,10 +17,12 @@ import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
 import TrustBadges from '@/components/TrustBadges';
 import { ChatbotPromoSection } from '@/components/ChatbotConversion';
+import { socialProofReviews } from '@/lib/socialProof';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
+import heroImageMobile from '@/assets/hero-ai-models-mobile.webp';
 import logo from '@/assets/logo.png';
 
 /* ══════════════════════════════════════════════════════════════
@@ -32,6 +34,13 @@ const trustBadges = [
   { icon: Lock, label: 'Secure Checkout' },
   { icon: Layers, label: 'Monthly Only' },
   { icon: Zap, label: 'Fast Activation' },
+];
+
+const mobilePopularTools = [
+  { name: 'ChatGPT Plus', id: 'chatgpt', price: 'From €9.99', badge: '🔥 High demand' },
+  { name: 'Canva Pro', id: 'canva', price: 'From €7.99', badge: 'Popular' },
+  { name: 'Perplexity Pro', id: 'perplexity', price: 'From €9.99', badge: 'Research' },
+  { name: 'CapCut Pro', id: 'capcut', price: 'From €7.99', badge: 'Creators' },
 ];
 
 const audiences = [
@@ -136,18 +145,19 @@ const Index = () => {
 
       <main>
         {/* ═══════════════ 1) HERO ═══════════════ */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 w-full h-full">
-            <video autoPlay loop muted playsInline poster={heroImage} className="absolute inset-0 w-full h-full object-cover">
+            <img src={heroImageMobile} alt="AI DEALS premium AI tools" className="absolute inset-0 h-full w-full object-cover md:hidden" fetchPriority="high" />
+            <video autoPlay loop muted playsInline poster={heroImage} className="absolute inset-0 hidden w-full h-full object-cover md:block">
               <source src={heroVideo} type="video/mp4" />
             </video>
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.7) 70%, hsl(var(--background)) 100%)' }} />
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)' }} />
           </div>
 
-          <div className="container mx-auto px-4 relative z-10 pt-24">
+          <div className="container mx-auto px-4 relative z-10 pt-20 pb-24 md:pt-24 md:pb-0">
             <div className="max-w-4xl mx-auto text-center">
-              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="mb-6">
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="hidden md:block mb-6">
                 <img src={logo} alt="AI DEALS" className="h-20 md:h-28 w-auto mx-auto drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]" />
               </motion.div>
 
@@ -199,19 +209,22 @@ const Index = () => {
               </motion.p>
 
               {/* CTAs */}
-              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-                <Button variant="hero" size="xl" className="group min-w-[200px] shadow-2xl" asChild>
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 md:mb-10">
+                <Button variant="hero" size="xl" className="group min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] shadow-2xl" asChild>
                   <Link to="/store">
-                    Explore Tools
+                    <span className="sm:hidden">Get Access Now</span><span className="hidden sm:inline">Explore Tools</span>
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
-                <Button variant="heroOutline" size="xl" className="backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
+                <Button variant="heroOutline" size="xl" className="hidden sm:inline-flex backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
                   <a href="#how-it-works">
                     Learn How It Works
                   </a>
                 </Button>
               </motion.div>
+              <div className="md:hidden mb-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-medium text-white/75">
+                <span>✔ Instant access</span><span>✔ Works worldwide</span><span>✔ Secure payment</span>
+              </div>
               <p className="text-[11px] text-white/45 mb-5">Secure checkout via Stripe. Final payment in EUR.</p>
 
               {/* Trust badges */}
@@ -228,7 +241,7 @@ const Index = () => {
                   </div>
                 ))}
               </motion.div>
-              <div className="mt-4">
+              <div className="mt-4 hidden md:block">
                 <TrustBadges compact />
               </div>
             </div>
@@ -253,6 +266,31 @@ const Index = () => {
               </div>
             </motion.div>
           </motion.div>
+        </section>
+
+        <section className="md:hidden py-10 relative" aria-label="Mobile conversion shortcuts">
+          <div className="container mx-auto px-4 space-y-6">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold text-primary uppercase tracking-wider">Most Popular Tools</p>
+                <h2 className="text-2xl font-display font-bold">Buy faster on mobile</h2>
+              </div>
+              <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary">23 viewing now</span>
+            </div>
+            <div className="grid gap-3">
+              {mobilePopularTools.map((tool) => (
+                <Link key={tool.id} to={`/store?scrollTo=${tool.id}`} className="glass min-h-[104px] rounded-2xl p-4 flex items-center justify-between gap-4 active:scale-[0.99] transition-transform">
+                  <div className="min-w-0">
+                    <span className="inline-flex mb-2 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-muted-foreground">{tool.badge}</span>
+                    <h3 className="text-base font-display font-bold text-foreground truncate">{tool.name}</h3>
+                    <p className="text-sm font-semibold text-primary mt-1">{tool.price}</p>
+                  </div>
+                  <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Buy Now</span>
+                </Link>
+              ))}
+            </div>
+            <p className="text-center text-xs text-muted-foreground">Limited availability today · secure checkout · activation support</p>
+          </div>
         </section>
 
         {/* ═══════════════ 2) PROBLEM → SOLUTION ═══════════════ */}
@@ -407,6 +445,38 @@ const Index = () => {
               <Lock className="w-3.5 h-3.5 text-primary" />
               We never ask for your passwords.
             </motion.p>
+          </div>
+        </section>
+
+        <section className="md:hidden py-10 relative" aria-label="Mobile trust and reviews">
+          <div className="container mx-auto px-4 space-y-6">
+            <div className="glass rounded-2xl p-5 text-center">
+              <div className="flex items-center justify-center gap-1 mb-2" aria-label="4.8 out of 5 rating">
+                {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="h-4 w-4 fill-current text-primary" />)}
+              </div>
+              <h2 className="text-xl font-display font-bold">Trusted by 1000+ users</h2>
+              <p className="mt-2 text-sm text-muted-foreground">Secure payment, EUR checkout, and verified digital access.</p>
+              <div className="mt-4 flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1"><Shield className="h-3.5 w-3.5 text-primary" />Protected</span>
+                <span className="inline-flex items-center gap-1"><CreditCard className="h-3.5 w-3.5 text-primary" />Stripe</span>
+                <span className="inline-flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-primary" />Fast activation</span>
+              </div>
+            </div>
+            <div className="overflow-x-auto -mx-4 px-4 pb-1">
+              <div className="flex gap-3 min-w-max">
+                {socialProofReviews.slice(0, 8).map((review) => (
+                  <div key={`${review.name}-${review.product}`} className="glass w-64 rounded-2xl p-4">
+                    <div className="flex items-center justify-between gap-3 mb-3">
+                      <div className="min-w-0"><p className="text-sm font-bold truncate">{review.name}</p><p className="text-xs text-muted-foreground">{review.flag} {review.country}</p></div>
+                      <span className="text-xs text-primary">★★★★★</span>
+                    </div>
+                    <p className="text-[11px] font-semibold text-primary mb-2">{review.product}</p>
+                    <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">“{review.quote}”</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <Link to="/store" className="min-h-[52px] inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">See more reviews →</Link>
           </div>
         </section>
 
