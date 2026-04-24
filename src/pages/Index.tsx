@@ -716,10 +716,6 @@ const Index = () => {
 
       <Footer />
       <ScrollToTop />
-      <Link to="/store?scrollTo=chatgpt" className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 md:hidden min-h-[64px] rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold shadow-[0_0_28px_hsl(var(--primary)/0.35)] flex items-center justify-center gap-2 active:scale-[0.99] transition-transform" aria-label="Get access now">
-        Get Access Now
-        <ArrowRight className="h-5 w-5" />
-      </Link>
     </div>
   );
 };
