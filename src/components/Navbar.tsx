@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check, CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languages } from '@/lib/i18n';
+import { CURRENCIES, type CurrencyCode } from '@/lib/currency';
+import { useCurrency } from '@/hooks/useCurrency';
 import FlagIcon from '@/components/FlagIcon';
 import { useAuth } from '@/hooks/useAuth';
 import { BUILD_VERSION, SHORT_BUILD } from '@/lib/buildInfo';
@@ -13,13 +15,16 @@ import logo from '@/assets/logo.png';
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
+  const { currency, setCurrencyCode } = useCurrency();
   const { user, isAdmin, signOut, loading } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
   const [langSearch, setLangSearch] = useState('');
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const langMenuRef = useRef<HTMLDivElement>(null);
+  const currencyMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -27,6 +32,9 @@ const Navbar = () => {
       if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
         setIsLangMenuOpen(false);
         setLangSearch('');
+      }
+      if (currencyMenuRef.current && !currencyMenuRef.current.contains(e.target as Node)) {
+        setIsCurrencyMenuOpen(false);
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -49,6 +57,11 @@ const Navbar = () => {
   const handleSignOut = async () => {
     await signOut();
     setIsMobileMenuOpen(false);
+  };
+
+  const changeCurrency = (code: CurrencyCode) => {
+    setCurrencyCode(code);
+    setIsCurrencyMenuOpen(false);
   };
 
   const filteredLanguages = languages.filter(lang => 
