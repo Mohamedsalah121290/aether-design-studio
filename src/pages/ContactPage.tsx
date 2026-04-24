@@ -9,6 +9,8 @@ import { toast } from '@/hooks/use-toast';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
+import SEO from '@/components/SEO';
+import KeywordCluster from '@/components/KeywordCluster';
 
 const ContactPage = () => {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
