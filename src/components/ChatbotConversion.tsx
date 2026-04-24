@@ -169,9 +169,15 @@ export const ChatbotSalesFlow = () => {
             </div>
 
             <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
-              <div className="rounded-xl bg-white/[0.04] px-4 py-3 text-sm text-foreground">
-                What are you looking for?
+              <div className="flex items-start gap-2">
+                <RobotAvatar className="w-8 h-8 shrink-0" />
+                <div className="rounded-xl bg-white/[0.04] px-4 py-3 text-sm text-foreground">
+                  <p>Hi 👋</p>
+                  <p>I’m your AI assistant.</p>
+                  <p>Tell me what you need and I’ll help you choose the best tool.</p>
+                </div>
               </div>
+              <p className="text-sm font-medium text-foreground">What are you looking for?</p>
               <div className="grid grid-cols-2 gap-2">
                 {(Object.keys(flows) as FlowKey[]).map((key) => (
                   <button
@@ -186,7 +192,10 @@ export const ChatbotSalesFlow = () => {
 
               {selected && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-                  <p className="text-xs text-muted-foreground">{flows[selected].intro}</p>
+                  <div className="flex items-start gap-2">
+                    <RobotAvatar className="w-7 h-7 shrink-0" />
+                    <p className="rounded-xl bg-white/[0.04] px-3 py-2 text-xs text-muted-foreground">{flows[selected].intro}</p>
+                  </div>
                   {flows[selected].products.map((product) => (
                     <div key={product.id} className="rounded-xl border border-border bg-muted/20 p-3">
                       <div className="flex items-start justify-between gap-3 mb-2">
