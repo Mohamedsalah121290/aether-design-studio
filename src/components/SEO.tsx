@@ -21,6 +21,14 @@ interface SEOProps {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   /** Set noindex (e.g. for member-only routes) */
   noIndex?: boolean;
+  /** Override title (used for dynamic article pages) */
+  titleOverride?: string;
+  /** Override meta description (used for dynamic article pages) */
+  descriptionOverride?: string;
+  /** Override keyword list (joined into the meta keywords tag) */
+  keywordsOverride?: string[];
+  /** Override the page-level og:type (default 'website'; use 'article' for blog posts) */
+  ogType?: string;
 }
 
 const RTL_LANGS = new Set(['ar']);
