@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -49,34 +49,39 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const wrap = (name: string, node: ReactNode) => (
+  <ErrorBoundary name={name}>{node}</ErrorBoundary>
+);
+
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/store" element={<StorePage />} />
+      <Route path="/" element={wrap("Index", <Index />)} />
+      <Route path="/store" element={wrap("StorePage", <StorePage />)} />
       <Route path="/resources" element={<Navigate to="/blog" replace />} />
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/dashboard" element={wrap("Dashboard", <ProtectedRoute><Dashboard /></ProtectedRoute>)} />
       <Route path="/content-hub" element={<Navigate to="/blog" replace />} />
-      <Route path="/blog" element={<BlogPage />} />
-      <Route path="/academy" element={<Academy />} />
-      <Route path="/about" element={<AboutPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-      <Route path="/article/:articleId" element={<ArticlePage />} />
-      <Route path="/privacy" element={<Privacy />} />
-      <Route path="/terms" element={<Terms />} />
-      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/payment/success" element={<PaymentSuccess />} />
-      <Route path="/payment/cancelled" element={<PaymentCancelled />} />
-      <Route path="/payment/:toolId" element={<PaymentPage />} />
+      <Route path="/blog" element={wrap("BlogPage", <BlogPage />)} />
+      <Route path="/academy" element={wrap("Academy", <Academy />)} />
+      <Route path="/about" element={wrap("AboutPage", <AboutPage />)} />
+      <Route path="/contact" element={wrap("ContactPage", <ContactPage />)} />
+      <Route path="/article/:articleId" element={wrap("ArticlePage", <ArticlePage />)} />
+      <Route path="/privacy" element={wrap("Privacy", <Privacy />)} />
+      <Route path="/terms" element={wrap("Terms", <Terms />)} />
+      <Route path="/profile" element={wrap("Profile", <ProtectedRoute><Profile /></ProtectedRoute>)} />
+      <Route path="/payment/success" element={wrap("PaymentSuccess", <PaymentSuccess />)} />
+      <Route path="/payment/cancelled" element={wrap("PaymentCancelled", <PaymentCancelled />)} />
+      <Route path="/payment/:toolId" element={wrap("PaymentPage", <PaymentPage />)} />
       <Route
         path="/admin"
-        element={
+        element={wrap(
+          "AdminPage",
           <AdminRoute>
             <AdminPage />
           </AdminRoute>
-        }
+        )}
       />
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={wrap("NotFound", <NotFound />)} />
     </Routes>
   );
 };
