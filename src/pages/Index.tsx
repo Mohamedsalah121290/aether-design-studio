@@ -259,6 +259,7 @@ const Index = () => {
               <div className="md:hidden mb-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-medium text-white/75">
                 <span>✔ Instant access</span><span>✔ Works worldwide</span><span>✔ Secure payment</span>
               </div>
+              <SessionOfferTimer />
               <p className="text-[11px] text-white/45 mb-5">Secure checkout via Stripe. Final payment in EUR.</p>
 
               {/* Trust badges */}
