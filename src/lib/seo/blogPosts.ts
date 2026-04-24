@@ -193,7 +193,7 @@ type Topic = {
 };
 
 const TEMPLATE_SECTIONS = (lang: SeoLang, pitch: string) => {
-  const T: Record<SeoLang, [string, string, string, string][]> = {
+  const T: Record<SeoLang, [string, string][]> = {
     en: [
       ['Why this matters in Belgium', `Belgian buyers face EUR/USD swings, double VAT and slow EU support. ${pitch} AI DEALS fixes that with managed access in euros and 24h activation.`],
       ['What member pricing covers', 'Full feature parity with the official plan: same models, same limits, same updates. We absorb the FX and licensing complexity so you pay one transparent EUR price.'],
