@@ -39,7 +39,7 @@ async function loadSeoData() {
   const langs = [...langMatch[1].matchAll(/'([a-z]{2})'/g)].map((m) => m[1]);
 
   // Pages: capture top-level keys of SEO_MAP
-  const pageRegex = /^\s {2}'?([a-z0-9-]+)'?:\s*\{$/gm;
+  const pageRegex = /^ {2}'?([a-z0-9-]+)'?:\s*\{$/gm;
   const pages = [];
   let m;
   while ((m = pageRegex.exec(src))) pages.push(m[1]);
