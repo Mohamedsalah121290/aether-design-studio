@@ -37,11 +37,45 @@ const trustBadges = [
 ];
 
 const mobilePopularTools = [
-  { name: 'ChatGPT Plus', id: 'chatgpt', price: 'From €9.99', badge: '🔥 High demand' },
-  { name: 'Canva Pro', id: 'canva', price: 'From €7.99', badge: 'Popular' },
-  { name: 'Perplexity Pro', id: 'perplexity', price: 'From €9.99', badge: 'Research' },
-  { name: 'CapCut Pro', id: 'capcut', price: 'From €7.99', badge: 'Creators' },
+  { name: 'ChatGPT Plus', id: 'chatgpt', price: 'From €9.99', badge: 'Best choice' },
+  { name: 'Canva Pro', id: 'canva', price: 'From €7.99', badge: 'Most popular' },
+  { name: 'Perplexity Pro', id: 'perplexity', price: 'From €9.99', badge: 'Starter option' },
+  { name: 'CapCut Pro', id: 'capcut', price: 'From €7.99', badge: 'Popular choice' },
 ];
+
+const SESSION_OFFER_MS = 15 * 60 * 1000;
+
+const SessionOfferTimer = () => {
+  const [remaining, setRemaining] = useState(SESSION_OFFER_MS);
+
+  useEffect(() => {
+    const key = 'aiDealsSessionOfferStartedAt';
+    const now = Date.now();
+    const stored = Number(localStorage.getItem(key));
+    const startedAt = Number.isFinite(stored) && stored > 0 ? stored : now;
+    if (!stored) localStorage.setItem(key, String(startedAt));
+
+    const tick = () => setRemaining(Math.max(0, SESSION_OFFER_MS - (Date.now() - startedAt)));
+    tick();
+    const interval = window.setInterval(tick, 1000);
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const minutes = String(Math.floor(remaining / 60000)).padStart(2, '0');
+  const seconds = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0');
+
+  return (
+    <div className="mx-auto mt-3 max-w-sm rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 backdrop-blur-md">
+      <p className="mb-1 text-[11px] font-semibold text-white/70">🔥 17 people are viewing this now</p>
+      {remaining > 0 ? (
+        <p className="text-xs text-white/70">⏳ Limited-time access for this session <span className="ml-1 text-lg font-black tabular-nums" style={{ color: 'hsl(25 95% 58%)' }}>{minutes}:{seconds}</span></p>
+      ) : (
+        <p className="text-xs font-semibold" style={{ color: 'hsl(25 95% 58%)' }}>Offer expired — new deals available</p>
+      )}
+      <p className="mt-2 text-[11px] text-white/60">✔ Real-time demand&nbsp;&nbsp; ✔ Limited daily access&nbsp;&nbsp; ✔ Secure checkout</p>
+    </div>
+  );
+};
 
 const audiences = [
   {
