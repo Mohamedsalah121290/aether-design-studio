@@ -1,77 +1,98 @@
+## Goal
 
-# Tool Status Management System
+Ship 20 new SEO-ready `/blog/<slug>` stub articles in all 7 languages (en, fr, nl, de, es, pt, ar with RTL), make them indexable, ensure correct hreflang/canonical, and surface them in the Resources/Learn hub via localized CTAs.
 
-## Overview
-Add a `status` column to the `tools` table with three values (`active`, `coming_soon`, `paused`), then update the storefront cards and admin panel to reflect each status visually and functionally.
+This sits alongside the existing 12 `/article/:id` pages — those stay untouched. The new pages live at `/blog/<slug>` so they can rank as standalone editorial URLs.
 
----
+## Scope
 
-## 1. Database Migration
+### 1. New 20 blog slugs (Belgium-focused, AI/SaaS access angle)
 
-Add a `status` text column to the `tools` table:
-- Default value: `'active'`
-- NOT NULL
-- No existing data breaks (all current tools default to `active`)
-
-```sql
-ALTER TABLE public.tools ADD COLUMN status text NOT NULL DEFAULT 'active';
+```text
+chatgpt-plus-belgique-acces-membre
+midjourney-pro-belgie-toegang
+office-365-belgium-business-deal
+adobe-creative-cloud-belgium-discount
+windows-11-pro-license-belgium
+ai-tools-belgie-vergelijking-2026
+chatgpt-vs-claude-belgique
+best-ai-tools-small-business-belgium
+notion-ai-vs-chatgpt-belgique
+canva-pro-belgium-team-pricing
+gpt-5-features-belgium-business
+ai-stack-freelancer-belgique
+midjourney-vs-dalle-belgium-creators
+ai-deals-vs-resellers-belgium
+secure-ai-payment-bancontact
+gdpr-ai-tools-belgium-guide
+how-to-save-90-percent-on-ai-subscriptions
+ai-academy-belgium-learn-monetize
+ai-tools-vlaanderen-bedrijven
+ia-pour-pme-wallonie
 ```
 
-## 2. Admin Panel Changes (`AdminPage.tsx`)
+### 2. Per-page localized SEO (×7 languages)
 
-**Tool interface**: Add `status: string` field.
+For each slug: title, meta description, primary keyword, 3 secondary keywords, H1, intro, 4 short content sections (stub-quality, editorial — not direct translation), and a CTA. Stored in a new `src/lib/seo/blogPosts.ts` module so it cleanly extends the existing `articleSeo.ts` pattern.
 
-**Tool form**: Add a status dropdown with options: Active, Coming Soon, Paused. Wire it into `toolForm` state, `openToolForm`, and `saveTool`.
+### 3. Routing & rendering
 
-**Tools list**: Replace the simple green/red dot with a color-coded status indicator:
-- `active` = green dot
-- `coming_soon` = yellow dot + "Coming Soon" label
-- `paused` = gray dot + "Paused" label
+- Add route: `<Route path="/blog/:slug" element={<BlogArticlePage />}>` in `src/App.tsx`.
+- Create `src/pages/BlogArticlePage.tsx` reusing the visual structure of `ArticlePage.tsx` (Navbar, hero, body renderer, related, Footer) — no design changes.
+- Loads slug from `blogPosts.ts`, picks language via `i18n.language` → `resolveSeoLang`, falls back to English if a language entry is missing.
+- 404 stub for unknown slug (mirrors ArticlePage `notFound`).
 
-Replace the current "Activate/Deactivate" toggle button with a status dropdown selector so admins can switch between the three states inline without opening the edit form.
+### 4. SEO injection per blog page
 
-## 3. Storefront Changes (`Storefront.tsx`)
+Each `/blog/<slug>` page renders `<SEO>` with:
+- `page="blog"` + `pathOverride={`/blog/${slug}`}`
+- `titleOverride`, `descriptionOverride`, `keywordsOverride` from `blogPosts.ts`
+- `ogType="article"` + slug-specific OG image fallback (`/og/blog-${lang}.png` until per-slug images are generated)
+- JSON-LD: `Article` + `BreadcrumbList` (Home → Blog → Article) + `Organization` publisher
+- Canonical = `https://aideals.be/blog/<slug>?lang=<lang>`
+- hreflang alternates for all 7 languages + `x-default`
 
-Update the `fetchTools` query to also fetch tools where `status = 'coming_soon'` (currently only fetches `is_active = true`). Paused tools remain hidden from the store.
+### 5. Sitemap + robots
 
-Change the query from `.eq('is_active', true)` to filtering by status: fetch `active` and `coming_soon` tools.
+- Append 20 × 7 = 140 new `<url>` blocks to `public/sitemap.xml` (priority 0.7, changefreq weekly), each with full hreflang alternates including `x-default`.
+- Add a `Sitemap:` reference (already present) and explicitly `Allow: /blog/` in `public/robots.txt`. Keep existing `Disallow` rules untouched.
 
-Pass the `status` field through to the `Tool` interface and into `ToolCard`.
+### 6. Hreflang & canonical verification
 
-## 4. ToolCard Changes (`ToolCard.tsx`)
+Add a small dev-only check in `src/pages/SeoAudit.tsx`:
+- For every `/blog/<slug>` × language, assert canonical matches `SITE_URL + path + ?lang=<lang>` and the hreflang set contains all 7 langs + `x-default`.
+- Surface mismatches as red rows in the existing audit table; CSV export already covers this.
 
-**Tool interface**: Add `status?: string` field.
+### 7. Localized CTAs in Resources/Learn hub
 
-**Coming Soon state** (`status === 'coming_soon'`):
-- Show a yellow "Coming Soon" badge (replacing or alongside the tier badge)
-- Add a subtle opacity reduction (`opacity-70`) and slight blur overlay on the card
-- Replace "Buy Now" button with a "Notify Me" button styled with a yellow/amber gradient
-- "Notify Me" button opens a small email input (inline or toast prompt) that inserts into the `subscribers` table with a note, or simply shows a toast confirming interest
-- Disable the CheckoutDialog from opening
+In `src/pages/ContentHub.tsx` (the Resources/Learn hub rendered by `/blog`):
+- Add a new section "Latest Belgium AI Guides" / localized title (i18n keys: `hub.belgiumGuidesTitle`, `hub.belgiumGuidesSubtitle`, `hub.readGuide`, `hub.viewAllGuides`).
+- Render the first 6 of the 20 new posts as cards linking to `/blog/<slug>?lang=<current>`.
+- Add localized CTA strings to `src/lib/i18n.ts` for all 13 supported i18n locales (the 7 SEO languages plus the rest fall back to English copy).
+- Keeps current grid styling (`glass rounded-2xl`, same card structure) — no layout change.
 
-**Paused state** (`status === 'paused'`):
-- Tools with this status are filtered out in Storefront, so no card rendering needed
-- As a safety fallback, if rendered, show a gray "Unavailable" badge with full muted styling
+## Technical notes
 
-**Active state** (`status === 'active'` or undefined):
-- No changes, current behavior preserved
+- Falls back gracefully: if `blogPosts.ts` lacks a language entry for a slug, `<SEO>` and the renderer use the English entry but keep the active `lang` for hreflang/canonical.
+- No new dependencies. Reuses `react-helmet-async`, `react-i18next`, existing `<SEO>` component, and the existing OG generator (per-slug OG images can be added later via the existing `scripts/generate-og-images.mjs` by extending its page list — out of scope for this round, English fallback OG used).
+- ArticleStub content per slug is intentionally short (≈250–400 words editorial scaffold per language) — enough for indexing without thin-content penalty, designed to be expanded later.
+- All edits respect existing design system (8pt spacing, glass cards, Inter font, no layout changes).
 
-## 5. CheckoutDialog Guard
+## Files
 
-Add a guard at the top of `CheckoutDialog` -- if `tool?.status !== 'active'`, don't render / immediately close. This ensures no checkout can happen for non-active tools regardless of how the dialog is triggered.
+**New**
+- `src/lib/seo/blogPosts.ts` — slug → 7-language `{ title, description, primaryKeyword, secondaryKeywords, h1, intro, sections[], cta }`
+- `src/pages/BlogArticlePage.tsx` — renderer for `/blog/:slug`
 
-## 6. Files Changed
+**Modified**
+- `src/App.tsx` — add `/blog/:slug` route
+- `public/sitemap.xml` — append 140 URL blocks
+- `public/robots.txt` — explicit `Allow: /blog/`
+- `src/pages/ContentHub.tsx` — new "Belgium AI Guides" section with localized CTAs
+- `src/lib/i18n.ts` — add `hub.*` CTA strings for all locales
+- `src/pages/SeoAudit.tsx` — extend audit to cover the 20 new slugs × 7 langs
 
-| File | Change |
-|------|--------|
-| Database migration | Add `status` column |
-| `src/pages/AdminPage.tsx` | Status dropdown in tool form + inline status selector in tool list |
-| `src/components/Storefront.tsx` | Fetch `coming_soon` tools, pass status to cards |
-| `src/components/ToolCard.tsx` | Coming Soon badge, Notify Me button, conditional rendering |
-| `src/components/CheckoutDialog.tsx` | Guard against non-active tools |
+## Out of scope (call out before implementing)
 
-## 7. What Will NOT Change
-- Payment/checkout logic remains untouched
-- Stripe integration unaffected
-- Existing `is_active` field remains (status supersedes it for storefront display)
-- Premium glass dark design maintained -- Coming Soon uses amber/gold tones, Paused uses muted grays
+- Generating 140 per-slug OG images (`/og/blog-<slug>-<lang>.png`). English/blog fallback OG is used. Can be a follow-up using the existing `scripts/generate-og-images.mjs`.
+- Writing full long-form article bodies. Content is editorial-quality stubs ready to be expanded.

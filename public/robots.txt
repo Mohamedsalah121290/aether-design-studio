@@ -1,8 +1,10 @@
 User-agent: Googlebot
 Allow: /
+Allow: /blog/
 
 User-agent: Bingbot
 Allow: /
+Allow: /blog/
 
 User-agent: Twitterbot
 Allow: /
@@ -12,12 +14,14 @@ Allow: /
 
 User-agent: *
 Allow: /
+Allow: /blog/
 
 # Block admin and member-only areas from indexing
 Disallow: /admin
 Disallow: /dashboard
 Disallow: /profile
 Disallow: /payment/
+Disallow: /seo-audit
 
 # Sitemap
 Sitemap: https://aideals.be/sitemap.xml
