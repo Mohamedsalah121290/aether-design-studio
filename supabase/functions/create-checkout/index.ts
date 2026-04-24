@@ -37,6 +37,10 @@ function detectBillingMode(planName: string | null | undefined): BillingMode {
   const s = (planName || "").toLowerCase();
 
   // One-time markers
+  // NOTE: "warranty" plans (e.g. "2yr Warranty", "Lifetime Warranty") are
+  // one-time purchases — the year count describes coverage, not billing.
+  // Office 365 "1 Year Warranty" is intentionally NOT one-time because it
+  // says "Year" in the name — caller-side rule: yearly recurring.
   if (
     s.includes("lifetime") ||
     s.includes(" key") ||
@@ -45,7 +49,9 @@ function detectBillingMode(planName: string | null | undefined): BillingMode {
     s.includes("retail online") ||
     s.includes("one time") ||
     s.includes("one-time") ||
-    s.includes("perpetual")
+    s.includes("perpetual") ||
+    /\d+\s*yr\s*warranty/.test(s) ||      // "2yr Warranty"
+    /\d+\s*year\s*warranty/.test(s)        // "2 Year Warranty"
   ) {
     return { mode: "payment" };
   }
