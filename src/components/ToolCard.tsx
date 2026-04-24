@@ -313,7 +313,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                           {style.label}
                         </span>
                       </div>
-                      <p className="text-[9px] text-muted-foreground/60">Access-based pricing model</p>
+                      <p className="text-[9px] text-muted-foreground/60">Excl. VAT · Access-based pricing model</p>
                     </>
                   );
                 })()
