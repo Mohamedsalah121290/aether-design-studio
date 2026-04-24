@@ -38,6 +38,7 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO page="contact" />
       <Navbar />
 
       <main className="pt-32 pb-16">
