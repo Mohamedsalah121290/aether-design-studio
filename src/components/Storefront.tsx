@@ -129,6 +129,7 @@ const Storefront = () => {
 
   const processedTools = useMemo(() => {
     let result = tools.filter(t =>
+      ALLOWED_TOOL_IDS.has(t.tool_id) &&
       t.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -151,12 +152,12 @@ const Storefront = () => {
 
   const activeSections = SECTION_ORDER.map(section => ({
     ...section,
-    tools: activeTools.filter(t => section.categories.includes(t.category)),
+    tools: section.toolIds.map(toolId => activeTools.find(t => t.tool_id === toolId)).filter(Boolean) as Tool[],
   })).filter(s => s.tools.length > 0);
 
   const comingSoonSections = SECTION_ORDER.map(section => ({
     ...section,
-    tools: comingSoonTools.filter(t => section.categories.includes(t.category)),
+    tools: section.toolIds.map(toolId => comingSoonTools.find(t => t.tool_id === toolId)).filter(Boolean) as Tool[],
   })).filter(s => s.tools.length > 0);
 
   return (
