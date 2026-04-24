@@ -1,0 +1,2 @@
+UPDATE public.tools SET logo_url = 'https://pilskrumnpvnvtkadbez.supabase.co/storage/v1/object/public/email-assets/logos/web/' || tool_id || '.png'
+WHERE tool_id IN ('chatgpt','perplexity','grok','elevenlabs','notion','zoom','eset','linkedin','coursera','lovable','canva','capcut','microsoft_365','microsoft_office');
