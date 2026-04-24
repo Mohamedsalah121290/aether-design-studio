@@ -24,6 +24,7 @@ import type { ToolPlan } from '@/components/ToolCard';
 import { inferPeriodFromPlan, getPeriodStyle, formatEuro } from '@/lib/pricePeriod';
 import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
+import { ProductRatingInline, ProductReviewsCarousel } from '@/components/ProductReviews';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -321,6 +322,7 @@ const PaymentPage = () => {
                 <div>
                   <h1 className="text-2xl font-bold text-white">{tool?.name}</h1>
                   <p className="text-sm text-muted-foreground">Choose your plan and payment method</p>
+                  {tool && <ProductRatingInline toolId={tool.tool_id} productName={tool.name} />}
                 </div>
               </div>
 
@@ -627,6 +629,8 @@ const PaymentPage = () => {
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {tool && <ProductReviewsCarousel toolId={tool.tool_id} productName={tool.name} />}
+
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-xs font-medium text-white flex items-center gap-2">
                       <Mail className="w-3.5 h-3.5 text-primary" />

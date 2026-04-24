@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { getPeriodStyle, formatEuro, type PricePeriod } from '@/lib/pricePeriod';
 import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
+import { ProductRatingInline, ProductReviewPreview } from '@/components/ProductReviews';
 
 /* ── Category labels ──────────────────────────────────────────── */
 const CATEGORY_LABELS: Record<string, string> = {
@@ -277,6 +278,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   : 'Monthly Access'}{' '}
                 · {categoryLabel}
               </p>
+              <ProductRatingInline toolId={tool.tool_id} productName={tool.name} />
             </div>
 
             {/* Price */}
@@ -334,6 +336,10 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                 <Shield className="w-3 h-3" style={{ color: '#E8D48B' }} />
                 <span className="text-[10px] font-semibold tracking-wide" style={{ color: '#E8D48B' }}>Activation Guarantee</span>
               </div>
+            )}
+
+            {!isComingSoon && !isPaused && (
+              <ProductReviewPreview toolId={tool.tool_id} productName={tool.name} />
             )}
 
             {/* CTA */}
