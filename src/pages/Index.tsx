@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight, GraduationCap, Briefcase, UserCheck, Lock,
   Zap, CheckCircle, Shield, BookOpen,
-  Play, Star, Plus, Minus, Mail,
+  Play, Plus, Minus, Mail,
   ChevronRight, Eye, Rocket, Layers, Target,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -76,33 +76,6 @@ const academyPoints = [
   'How to use each tool effectively',
   'How to avoid common mistakes',
   'How to stay responsible and efficient',
-];
-
-const testimonials = [
-  {
-    name: 'Lukas M.',
-    role: 'University Student',
-    country: 'Germany',
-    flag: '🇩🇪',
-    quote: 'It saved me hours on my research project. Setup took two minutes.',
-    rating: 5,
-  },
-  {
-    name: 'Sara K.',
-    role: 'Content Creator',
-    country: 'Netherlands',
-    flag: '🇳🇱',
-    quote: 'Finally a simple way to manage multiple AI tools without juggling subscriptions.',
-    rating: 5,
-  },
-  {
-    name: 'Ingrid V.',
-    role: 'Parent',
-    country: 'Spain',
-    flag: '🇪🇸',
-    quote: 'I like that it\'s structured and controlled. My daughter uses it safely for school.',
-    rating: 5,
-  },
 ];
 
 const faqs = [
