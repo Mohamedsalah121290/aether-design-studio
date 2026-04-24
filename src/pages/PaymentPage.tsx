@@ -346,10 +346,13 @@ const PaymentPage = () => {
                     >
                       <p className="text-sm font-semibold text-white">Monthly</p>
                       {selectedPlan?.monthly_price != null && (
-                        <p className="text-lg font-bold text-sky-400 mt-1">
-                          €{selectedPlan.monthly_price}
-                          <span className="text-xs text-muted-foreground font-normal"> / month</span>
-                        </p>
+                        <>
+                          <p className="text-lg font-bold text-sky-400 mt-1">
+                            €{selectedPlan.monthly_price}
+                            <span className="text-xs text-muted-foreground font-normal"> / month</span>
+                          </p>
+                          {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-[10px] text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
+                        </>
                       )}
                       <p className="text-[10px] text-muted-foreground mt-1">Billed every month</p>
                     </button>
@@ -373,6 +376,7 @@ const PaymentPage = () => {
                             €{(selectedPlan.monthly_price * 12 * 0.8).toFixed(2)}
                             <span className="text-xs text-muted-foreground font-normal"> / year</span>
                           </p>
+                          {formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8) && <p className="text-[10px] text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8)}</p>}
                           <p className="text-[10px] text-muted-foreground mt-1">
                             €{(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · Billed annually
                           </p>
@@ -394,10 +398,13 @@ const PaymentPage = () => {
                   <div className={`p-4 rounded-xl border-2 border-primary bg-primary/10`}>
                     <p className="text-sm font-semibold text-white">{periodStyle.label}</p>
                     {selectedPlan?.monthly_price != null && (
-                      <p className={`text-lg font-bold mt-1 ${periodStyle.textClass}`}>
-                        €{selectedPlan.monthly_price}
-                        <span className="text-xs text-muted-foreground font-normal"> {periodStyle.suffix}</span>
-                      </p>
+                      <>
+                        <p className={`text-lg font-bold mt-1 ${periodStyle.textClass}`}>
+                          €{selectedPlan.monthly_price}
+                          <span className="text-xs text-muted-foreground font-normal"> {periodStyle.suffix}</span>
+                        </p>
+                        {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-[10px] text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
+                      </>
                     )}
                     <p className="text-[10px] text-muted-foreground mt-1">
                       {period === 'one-time'
