@@ -4,8 +4,6 @@ import chatgptImg from '@/assets/platforms/chatgpt.png';
 import canvaImg from '@/assets/platforms/canva.png';
 import perplexityImg from '@/assets/platforms/perplexity.png';
 import grokImg from '@/assets/platforms/grok-official.jpg';
-import canvaImg from '@/assets/platforms/canva.png';
-import perplexityImg from '@/assets/platforms/perplexity.png';
 
 interface Platform {
   name: string;
@@ -16,9 +14,9 @@ interface Platform {
 
 const platforms: Platform[] = [
   { name: 'ChatGPT', description: 'AI-powered conversations & content creation', url: 'https://chatgpt.com', image: chatgptImg },
-  { name: 'Canva', description: 'Generate stunning AI artwork from text', url: 'https://www.canva.com', image: canvaImg },
-  { name: 'Perplexity', description: 'Advanced AI assistant by Anthropic', url: 'https://perplexity.ai', image: perplexityImg },
-  { name: 'Grok', description: "Google's multimodal AI model", url: 'https://grok.google.com', image: grokImg },
+  { name: 'Canva', description: 'Design anything with AI-powered tools', url: 'https://www.canva.com', image: canvaImg },
+  { name: 'Perplexity', description: 'AI-powered search & research engine', url: 'https://www.perplexity.ai', image: perplexityImg },
+  { name: 'Grok', description: 'AI assistant for fast research and answers', url: 'https://grok.com', image: grokImg },
   { name: 'Canva', description: 'Design anything with AI-powered tools', url: 'https://www.canva.com', image: canvaImg },
   { name: 'Perplexity', description: 'AI-powered search & research engine', url: 'https://www.perplexity.ai', image: perplexityImg },
 ];
