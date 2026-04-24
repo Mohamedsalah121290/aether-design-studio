@@ -135,16 +135,16 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-4">
             {/* Language Selector */}
             <div className="relative" ref={langMenuRef}>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} 
-                className="flex items-center gap-2 text-muted-foreground"
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                aria-label={t('tooltips.languageSelector')}
+                className="flex items-center gap-2 h-9 px-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-foreground transition-all"
               >
-                <Globe className="w-4 h-4" />
-                <span>{currentLang.flag}</span>
-                <span className="hidden xl:inline text-xs">{currentLang.name}</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${isLangMenuOpen ? 'rotate-180' : ''}`} />
+                <FlagIcon country={currentLang.country} size={16} />
+                <span className="text-xs font-semibold tracking-wide uppercase">{currentLang.code}</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${isLangMenuOpen ? 'rotate-180' : ''}`} />
               </Button>
 
               <AnimatePresence>
@@ -191,19 +191,18 @@ const Navbar = () => {
                               : 'text-foreground hover:bg-white/5'
                           }`}
                         >
-                          <span className="text-xl">{lang.flag}</span>
-                          <span className="flex-1 font-medium">{lang.name}</span>
+                          <FlagIcon country={lang.country} size={20} />
+                          <span className="flex-1 font-medium text-sm flex items-baseline gap-2">
+                            <span className="uppercase tracking-wide text-[11px] text-muted-foreground font-semibold">{lang.code}</span>
+                            <span>{lang.name}</span>
+                          </span>
                           {lang.rtl && (
                             <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/20 text-primary font-medium">
                               RTL
                             </span>
                           )}
                           {i18n.language === lang.code && (
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              className="w-2 h-2 rounded-full bg-primary"
-                            />
+                            <Check className="w-4 h-4 text-primary" strokeWidth={2.5} />
                           )}
                         </motion.button>
                       ))}
@@ -284,14 +283,17 @@ const Navbar = () => {
                 
                 <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
                   {languages.map(lang => (
-                    <button 
-                      key={lang.code} 
-                      onClick={() => { changeLanguage(lang.code); setIsMobileMenuOpen(false); }} 
-                      className={`px-3 py-2 rounded-lg text-sm ${
-                        i18n.language === lang.code ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'
+                    <button
+                      key={lang.code}
+                      onClick={() => { changeLanguage(lang.code); setIsMobileMenuOpen(false); }}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors ${
+                        i18n.language === lang.code
+                          ? 'bg-primary/15 text-primary border-primary/40'
+                          : 'bg-white/5 text-muted-foreground border-white/10 hover:bg-white/10 hover:text-foreground'
                       }`}
                     >
-                      {lang.flag} {lang.name}
+                      <FlagIcon country={lang.country} size={14} />
+                      <span className="uppercase text-xs font-semibold">{lang.code}</span>
                     </button>
                   ))}
                 </div>
