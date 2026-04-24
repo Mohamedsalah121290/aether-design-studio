@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Bot, CheckCircle, ChevronRight, MessageCircle, Send, X } from 'lucide-react';
+import { CheckCircle, ChevronRight, MessageCircle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import robotAvatar from '@/assets/ai-deals-robot-avatar.png';
 
 export const WHATSAPP_URL = 'https://web.whatsapp.com/';
 export const TELEGRAM_URL = '#telegram-link-needed';
@@ -19,6 +20,17 @@ export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) 
     <circle cx="16" cy="16" r="13" fill="#229ED9" />
     <path fill="#ffffff" d="M22.74 9.78 20.5 22.04c-.17.87-.63 1.08-1.27.67l-3.5-2.58-1.69 1.63c-.19.19-.35.35-.72.35l.26-3.6 6.56-5.93c.28-.25-.06-.4-.44-.14l-8.1 5.1-3.49-1.09c-.76-.24-.77-.76.16-1.12l13.64-5.26c.63-.24 1.18.14.87 1.7Z" />
   </svg>
+);
+
+const RobotAvatar = ({ className = 'w-9 h-9' }: { className?: string }) => (
+  <img
+    src={robotAvatar}
+    alt="AI Deals Assistant robot avatar"
+    width={1024}
+    height={1024}
+    loading="lazy"
+    className={`${className} rounded-full object-cover border border-primary/30 shadow-[0_0_18px_hsl(var(--primary)/0.35)]`}
+  />
 );
 
 const bullets = ['Instant replies', 'Works in multiple languages', '24/7 availability', 'Works across all platforms', 'Increases conversions'];
