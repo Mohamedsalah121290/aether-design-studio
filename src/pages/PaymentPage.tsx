@@ -22,6 +22,8 @@ import {
 import { z } from 'zod';
 import type { ToolPlan } from '@/components/ToolCard';
 import { inferPeriodFromPlan, getPeriodStyle, formatEuro } from '@/lib/pricePeriod';
+import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
+import { useCurrency } from '@/hooks/useCurrency';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -63,6 +65,7 @@ const PaymentPage = () => {
   const { toolId } = useParams<{ toolId: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { currency } = useCurrency();
   const { user } = useAuth();
 
   const [tool, setTool] = useState<any>(null);
@@ -198,6 +201,8 @@ const PaymentPage = () => {
     if (eur === 0) return 'Free';
     return formatEuro(eur);
   };
+
+  const formatApproxPrice = (eur: number | null | undefined) => formatApproxCurrency(eur, currency.code);
 
   const validateForm = (): boolean => {
     const newErrors: { email?: string } = {};
@@ -341,10 +346,13 @@ const PaymentPage = () => {
                     >
                       <p className="text-sm font-semibold text-white">Monthly</p>
                       {selectedPlan?.monthly_price != null && (
-                        <p className="text-lg font-bold text-sky-400 mt-1">
-                          €{selectedPlan.monthly_price}
-                          <span className="text-xs text-muted-foreground font-normal"> / month</span>
-                        </p>
+                        <>
+                          <p className="text-lg font-bold text-sky-400 mt-1">
+                            €{selectedPlan.monthly_price}
+                            <span className="text-xs text-muted-foreground font-normal"> / month</span>
+                          </p>
+                          {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-[10px] text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
+                        </>
                       )}
                       <p className="text-[10px] text-muted-foreground mt-1">Billed every month</p>
                     </button>
@@ -368,6 +376,7 @@ const PaymentPage = () => {
                             €{(selectedPlan.monthly_price * 12 * 0.8).toFixed(2)}
                             <span className="text-xs text-muted-foreground font-normal"> / year</span>
                           </p>
+                          {formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8) && <p className="text-[10px] text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8)}</p>}
                           <p className="text-[10px] text-muted-foreground mt-1">
                             €{(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · Billed annually
                           </p>
@@ -389,10 +398,13 @@ const PaymentPage = () => {
                   <div className={`p-4 rounded-xl border-2 border-primary bg-primary/10`}>
                     <p className="text-sm font-semibold text-white">{periodStyle.label}</p>
                     {selectedPlan?.monthly_price != null && (
-                      <p className={`text-lg font-bold mt-1 ${periodStyle.textClass}`}>
-                        €{selectedPlan.monthly_price}
-                        <span className="text-xs text-muted-foreground font-normal"> {periodStyle.suffix}</span>
-                      </p>
+                      <>
+                        <p className={`text-lg font-bold mt-1 ${periodStyle.textClass}`}>
+                          €{selectedPlan.monthly_price}
+                          <span className="text-xs text-muted-foreground font-normal"> {periodStyle.suffix}</span>
+                        </p>
+                        {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-[10px] text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
+                      </>
                     )}
                     <p className="text-[10px] text-muted-foreground mt-1">
                       {period === 'one-time'
@@ -556,6 +568,11 @@ const PaymentPage = () => {
                       {formatPrice(displayPrice)}
                     </span>
                   </div>
+                  {formatApproxPrice(displayPrice) && (
+                    <div className="flex justify-end text-xs text-muted-foreground">
+                      <span>{formatApproxPrice(displayPrice)}</span>
+                    </div>
+                  )}
                   {showBillingToggle && billingInterval === 'annual' && monthlyEquivalent && (
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Monthly equivalent</span>
@@ -574,6 +591,12 @@ const PaymentPage = () => {
                       {formatPrice(effectivePrice)}
                     </span>
                   </div>
+                  {formatApproxPrice(effectivePrice) && (
+                    <div className="flex justify-end text-xs text-muted-foreground">
+                      <span>{formatApproxPrice(effectivePrice)}</span>
+                    </div>
+                  )}
+                  <p className="text-[10px] text-muted-foreground text-right">{FINAL_PAYMENT_EUR_NOTE}</p>
                 </div>
 
                 {/* What you get */}

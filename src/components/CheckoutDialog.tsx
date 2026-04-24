@@ -18,6 +18,8 @@ import { z } from 'zod';
 import type { Tool, ToolPlan } from './ToolCard';
 import { AuthDialog } from './AuthDialog';
 import { inferPeriodFromPlan, getPeriodStyle } from '@/lib/pricePeriod';
+import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
+import { useCurrency } from '@/hooks/useCurrency';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -37,6 +39,7 @@ const WHAT_YOU_GET = [
 
 export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: CheckoutDialogProps) => {
   const { t } = useTranslation();
+  const { currency } = useCurrency();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -193,6 +196,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
 
   const deliveryInfo = getDeliveryInfo();
   const displayPrice = selectedPlan?.monthly_price;
+  const approxDisplayPrice = formatApproxCurrency(displayPrice, currency.code);
   const activationTime = selectedPlan?.activation_time || 6;
   const usePills = plans.length > 1 && plans.length <= 4;
   const useDropdown = plans.length > 4;
@@ -252,10 +256,12 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                         <span className={`ml-1.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-[1px] rounded-md border ${style.textClass}`} style={{ borderColor: 'currentColor', opacity: 0.85 }}>
                           {style.label}
                         </span>
+                        {approxDisplayPrice && <span className="ms-1.5 text-xs text-muted-foreground">{approxDisplayPrice}</span>}
                       </>
                     );
                   })()}
                 </SheetDescription>
+                <p className="text-[10px] text-muted-foreground mt-1">{FINAL_PAYMENT_EUR_NOTE}</p>
               </SheetHeader>
             </div>
 

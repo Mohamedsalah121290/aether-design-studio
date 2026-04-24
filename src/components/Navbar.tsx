@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check, CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languages } from '@/lib/i18n';
+import { CURRENCIES, type CurrencyCode } from '@/lib/currency';
+import { useCurrency } from '@/hooks/useCurrency';
 import FlagIcon from '@/components/FlagIcon';
 import { useAuth } from '@/hooks/useAuth';
 import { BUILD_VERSION, SHORT_BUILD } from '@/lib/buildInfo';
@@ -13,13 +15,16 @@ import logo from '@/assets/logo.png';
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
+  const { currency, setCurrencyCode } = useCurrency();
   const { user, isAdmin, signOut, loading } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
   const [langSearch, setLangSearch] = useState('');
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const langMenuRef = useRef<HTMLDivElement>(null);
+  const currencyMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -27,6 +32,9 @@ const Navbar = () => {
       if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
         setIsLangMenuOpen(false);
         setLangSearch('');
+      }
+      if (currencyMenuRef.current && !currencyMenuRef.current.contains(e.target as Node)) {
+        setIsCurrencyMenuOpen(false);
       }
     };
     window.addEventListener('scroll', handleScroll);
@@ -49,6 +57,11 @@ const Navbar = () => {
   const handleSignOut = async () => {
     await signOut();
     setIsMobileMenuOpen(false);
+  };
+
+  const changeCurrency = (code: CurrencyCode) => {
+    setCurrencyCode(code);
+    setIsCurrencyMenuOpen(false);
   };
 
   const filteredLanguages = languages.filter(lang => 
@@ -218,6 +231,58 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
+            {/* Currency Selector */}
+            <div className="relative" ref={currencyMenuRef}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsCurrencyMenuOpen(!isCurrencyMenuOpen)}
+                aria-label="Currency selector"
+                className="flex items-center gap-2 h-9 px-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-foreground transition-all"
+              >
+                <CircleDollarSign className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs font-semibold tracking-wide uppercase">{currency.code}</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${isCurrencyMenuOpen ? 'rotate-180' : ''}`} />
+              </Button>
+
+              <AnimatePresence>
+                {isCurrencyMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ type: 'spring', damping: 25, stiffness: 400 }}
+                    className="absolute top-full end-0 mt-2 w-64 rounded-2xl overflow-hidden z-50"
+                    style={{
+                      background: 'linear-gradient(135deg, hsl(222 47% 12% / 0.98) 0%, hsl(222 47% 8% / 0.99) 100%)',
+                      backdropFilter: 'blur(40px)',
+                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 40px rgba(168, 85, 247, 0.1)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                    }}
+                  >
+                    <div className="max-h-72 overflow-y-auto py-2">
+                      {CURRENCIES.map((item, index) => (
+                        <motion.button
+                          key={item.code}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.01 }}
+                          onClick={() => changeCurrency(item.code)}
+                          className={`w-full px-4 py-3 text-start flex items-center gap-3 transition-all duration-200 ${
+                            currency.code === item.code ? 'text-primary bg-primary/10' : 'text-foreground hover:bg-white/5'
+                          }`}
+                        >
+                          <span className="w-8 text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">{item.code}</span>
+                          <span className="flex-1 font-medium text-sm">{item.name}</span>
+                          {currency.code === item.code && <Check className="w-4 h-4 text-primary" strokeWidth={2.5} />}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <Button variant="heroOutline" size="sm" asChild>
               <Link to="/dashboard">{t('nav.dashboard')}</Link>
             </Button>
@@ -309,6 +374,22 @@ const Navbar = () => {
                     >
                       <FlagIcon country={lang.country} size={14} />
                       <span className="uppercase text-xs font-semibold">{lang.code}</span>
+                    </button>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
+                  {CURRENCIES.map(item => (
+                    <button
+                      key={item.code}
+                      onClick={() => { changeCurrency(item.code); setIsMobileMenuOpen(false); }}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors ${
+                        currency.code === item.code
+                          ? 'bg-primary/15 text-primary border-primary/40'
+                          : 'bg-white/5 text-muted-foreground border-white/10 hover:bg-white/10 hover:text-foreground'
+                      }`}
+                    >
+                      <CircleDollarSign className="w-3.5 h-3.5" />
+                      <span className="uppercase text-xs font-semibold">{item.code}</span>
                     </button>
                   ))}
                 </div>
