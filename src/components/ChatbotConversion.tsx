@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import robotAvatar from '@/assets/ai-deals-robot-avatar.png';
+import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
 export const WHATSAPP_URL = 'https://web.whatsapp.com/';
 export const TELEGRAM_URL = '#telegram-link-needed';
@@ -88,7 +88,7 @@ const useLang = () => {
 const RobotAvatar = ({ className = 'w-9 h-9', lang = 'en', speaking = false, rounded = 'rounded-full' }: { className?: string; lang?: LangKey; speaking?: boolean; rounded?: string }) => (
   <span className={`relative inline-flex shrink-0 ${className}`} style={{ '--avatar-tint': langTint[lang] } as React.CSSProperties}>
     <span className={`chatbot-avatar-shell ${speaking ? 'chatbot-avatar-speaking' : ''} ${rounded}`}>
-      <img src={robotAvatar} alt="AI Deals Assistant robot avatar" width={512} height={512} loading="lazy" className={`h-full w-full object-cover ${rounded}`} />
+      <img src={robotAvatar} alt="AI Deals Assistant robot avatar" width={448} height={448} loading="lazy" className={`h-full w-full object-cover ${rounded}`} />
       <span className="chatbot-avatar-blink" />
     </span>
     <span className="absolute -bottom-1 -right-1 rounded-full border border-background bg-muted px-1 text-[8px] font-bold text-foreground shadow-sm">{copy[lang].flag}</span>
