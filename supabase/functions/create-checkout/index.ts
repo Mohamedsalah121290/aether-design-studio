@@ -41,7 +41,7 @@ serve(async (req) => {
       : ['card'];
     const euMethods = ['ideal', 'bancontact', 'sepa_debit'];
     const hasEuMethods = requestedPmTypes.some((pm: string) => euMethods.includes(pm));
-    const currency = hasEuMethods ? 'eur' : 'usd';
+    const currency = 'eur'; // كل الأسعار في DB باليورو
     const pmTypes = hasEuMethods
       ? ['card', ...requestedPmTypes.filter((pm: string) => pm !== 'card')]
       : requestedPmTypes.includes('card') ? requestedPmTypes : ['card', ...requestedPmTypes];
