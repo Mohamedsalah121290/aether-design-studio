@@ -29,8 +29,8 @@ const SECTION_ORDER: {
   { key: 'other',      label: '🧩 Other Software & Accounts',  subtitle: 'Security, learning & more',                icon: Briefcase,   categories: ['security', 'education', 'communication', 'stock-media'] },
 ];
 
-const FEATURED_TOOL_IDS = ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva', 'perplexity'];
-const POPULAR_TOOL_IDS  = ['jasper', 'leonardo', 'runway', 'elevenlabs', 'adobe', 'capcut', 'murf'];
+const FEATURED_TOOL_IDS = ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovable', 'canva'];
+const POPULAR_TOOL_IDS  = ['capcut', 'windows', 'windows_home', 'microsoft_365', 'microsoft_office', 'coursera'];
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   'os-servers': ['os-licenses'],
