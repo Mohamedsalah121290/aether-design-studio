@@ -3,6 +3,8 @@ import { Shield, Users, Heart, Target, Sparkles, Globe, Award, Eye, BookOpen, Ch
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
+import SEO from '@/components/SEO';
+import KeywordCluster from '@/components/KeywordCluster';
 
 const values = [
   {
@@ -54,6 +56,7 @@ const AboutPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO page="about" />
       <Navbar />
 
       <main className="pt-32 pb-16">
