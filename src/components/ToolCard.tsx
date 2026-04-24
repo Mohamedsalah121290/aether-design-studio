@@ -366,7 +366,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   </div>
                 )}
                 <button
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_20px_hsl(45_100%_55%/0.20)]"
+                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_20px_hsl(45_100%_55%/0.20)]"
                   style={{
                     background: 'linear-gradient(135deg, hsl(45 90% 48% / 0.85), hsl(35 85% 42% / 0.85))',
                     boxShadow: '0 0 12px hsl(45 100% 50% / 0.10)',
@@ -382,7 +382,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             ) : (
               <div className="mt-1 sm:mt-2 space-y-1">
                 <button
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(210_100%_55%/0.35)]"
+                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(210_100%_55%/0.35)]"
                   style={{
                     background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
                     boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
@@ -394,7 +394,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                 </button>
                 <Link
                   to={`/academy?tool_id=${tool.tool_id}`}
-                  className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors"
+                  className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg py-2 text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors"
                 >
                   <GraduationCap className="w-3 h-3" />
                   Learn This Tool
