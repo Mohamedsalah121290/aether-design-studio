@@ -39,7 +39,7 @@ type Product = { name: string; id: string; desc: string; benefits: string[] };
 const copy: Record<LangKey, {
   dir: 'ltr' | 'rtl'; flag: string; voice: string[]; greeting: string; question: string; input: string; access: string; price: string; labels: Record<FlowKey, string>; intros: Record<FlowKey, string>;
 }> = {
-  en: { dir: 'ltr', flag: 'EN', voice: ['en-GB', 'en-US'], greeting: 'Hi 👋 I’m your AI assistant. Tell me what you need and I’ll recommend the best tool.', question: 'What are you looking for?', input: 'Type your message...', access: 'Do you want the access link?', price: 'Price is shown in EUR before checkout. Focus on saved time and practical access.', labels: { ai: 'ChatGPT & AI', design: 'Design & Content', productivity: 'Productivity', security: 'Security', unsure: 'Not sure, help me' }, intros: { ai: 'Best AI picks for daily work.', design: 'Best tools for content creation.', productivity: 'Best tools to work faster.', security: 'Best picks for secure access.', unsure: 'Start with the most useful tools.' } },
+  en: { dir: 'ltr', flag: 'EN', voice: ['en-GB', 'en-US'], greeting: 'Hi 👋 Want me to find the best deal for you?', question: 'Choose what helps you most:', input: 'Type your message...', access: 'Get access', price: 'Price is shown in EUR before checkout. Focus on saved time and practical access.', labels: { ai: 'Best Deals', design: 'Compare Tools', productivity: 'Cheapest Option', security: 'Secure Access', unsure: 'Help me choose' }, intros: { ai: 'Best deals people choose most often.', design: 'Here are strong tools to compare side by side.', productivity: 'Lowest-friction options to start today.', security: 'Best picks for secure access.', unsure: 'Start with the most useful tools.' } },
   fr: { dir: 'ltr', flag: 'FR', voice: ['fr-FR', 'fr-BE'], greeting: 'Salut 👋 Je suis votre assistant IA. Dites-moi votre besoin.', question: 'Que recherchez-vous ?', input: 'Écrivez votre message...', access: 'Voulez-vous le lien d’accès ?', price: 'Le prix est affiché en EUR avant le paiement. Pensez gain de temps et accès utile.', labels: { ai: 'ChatGPT & IA', design: 'Design & contenu', productivity: 'Productivité', security: 'Sécurité', unsure: 'Pas sûr, aidez-moi' }, intros: { ai: 'Les meilleurs choix IA pour travailler.', design: 'Les meilleurs outils pour créer du contenu.', productivity: 'Les meilleurs outils pour gagner du temps.', security: 'Les meilleurs choix pour rester protégé.', unsure: 'Commencez avec les outils les plus utiles.' } },
   nl: { dir: 'ltr', flag: 'NL', voice: ['nl-BE', 'nl-NL'], greeting: 'Hoi 👋 Ik help je de juiste AI-tool kiezen.', question: 'Waar ben je naar op zoek?', input: 'Typ je bericht...', access: 'Wil je de toegangslink?', price: 'De prijs staat in EUR vóór checkout. Denk aan tijdwinst en praktische toegang.', labels: { ai: 'ChatGPT & AI', design: 'Design & content', productivity: 'Productiviteit', security: 'Security', unsure: 'Niet zeker, help mij' }, intros: { ai: 'Beste AI-keuzes voor dagelijks werk.', design: 'Beste tools voor contentcreatie.', productivity: 'Beste tools om sneller te werken.', security: 'Beste keuzes voor veilige toegang.', unsure: 'Start met de meest nuttige tools.' } },
   de: { dir: 'ltr', flag: 'DE', voice: ['de-DE'], greeting: 'Hi 👋 Ich helfe dir, das passende Tool zu finden.', question: 'Wonach suchst du?', input: 'Nachricht eingeben...', access: 'Möchtest du den Zugangslink?', price: 'Der Preis wird vor dem Checkout in EUR angezeigt. Es geht um Zeitersparnis und praktischen Zugang.', labels: { ai: 'ChatGPT & KI', design: 'Design & Content', productivity: 'Produktivität', security: 'Sicherheit', unsure: 'Nicht sicher, hilf mir' }, intros: { ai: 'Beste KI-Auswahl für den Alltag.', design: 'Beste Tools für Content-Erstellung.', productivity: 'Beste Tools für schnelleres Arbeiten.', security: 'Beste Optionen für sicheren Zugriff.', unsure: 'Starte mit den nützlichsten Tools.' } },
@@ -192,19 +192,19 @@ export const ChatbotSalesFlow = () => {
   if (!ready) return null;
 
   return (
-    <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-40 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+    <div className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom))] right-3 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3">
       <AnimatePresence>
         {open && (
-          <motion.div initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-2rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl">
+          <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1.5rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[72dvh] sm:max-h-none">
             <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border/60">
               <div className="flex items-center gap-3 min-w-0"><RobotAvatar lang={lang} rounded="rounded-xl" speaking={speakingId !== null} /><div><p className="text-sm font-semibold text-foreground">AI Deals Assistant</p><p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />Online</p></div></div>
               <div className="flex items-center gap-1">
-                <button onClick={() => setSoundOn((value) => !value)} className="w-9 h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}>{soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}</button>
-                <button onClick={() => setOpen(false)} className="w-9 h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label="Close chatbot"><X className="w-4 h-4" /></button>
+                <button onClick={() => setSoundOn((value) => !value)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}>{soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}</button>
+                <button onClick={() => setOpen(false)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label="Close chatbot"><X className="w-4 h-4" /></button>
               </div>
             </div>
 
-            <div className="p-4 space-y-4 max-h-[62vh] overflow-y-auto">
+            <div className="p-4 space-y-4 max-h-[48dvh] sm:max-h-[62vh] overflow-y-auto overscroll-contain">
               {messages.map((message) => (
                 <div key={message.id} className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {message.role === 'bot' && <RobotAvatar className="w-8 h-8" lang={lang} speaking={speakingId === message.id} />}
@@ -218,14 +218,14 @@ export const ChatbotSalesFlow = () => {
                 </div>
               ))}
               <p className="text-sm font-medium text-foreground">{text.question}</p>
-              <div className="flex flex-wrap gap-2">{(Object.keys(text.labels) as FlowKey[]).map((key) => <button key={key} onClick={() => addFlow(key)} className={`rounded-xl border px-3 py-2 text-sm transition-all ${selected === key ? 'border-primary/40 bg-primary/10 text-foreground' : 'border-border bg-muted/20 text-muted-foreground hover:text-foreground hover:border-primary/30'}`}>{text.labels[key]}</button>)}</div>
+              <div className="flex flex-wrap gap-2">{(Object.keys(text.labels) as FlowKey[]).map((key) => <button key={key} onClick={() => addFlow(key)} className={`min-h-11 rounded-xl border px-3 py-2 text-sm transition-all ${selected === key ? 'border-primary/40 bg-primary/10 text-foreground' : 'border-border bg-muted/20 text-muted-foreground hover:text-foreground hover:border-primary/30'}`}>{text.labels[key]}</button>)}</div>
             </div>
 
             <div className="p-3 border-t border-border/60">
               <div className="flex items-center gap-2 rounded-2xl border border-border bg-muted/30 px-3 py-2">
                 <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') sendMessage(); }} placeholder={text.input} className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" aria-label="Chat message" />
-                <button onClick={startListening} className={`w-9 h-9 rounded-xl grid place-items-center transition-colors ${listening ? 'bg-primary/20 text-primary' : 'hover:bg-muted/50 text-muted-foreground'}`} aria-label="Press to talk"><Mic className="w-4 h-4" /></button>
-                <button onClick={sendMessage} className="w-9 h-9 rounded-xl grid place-items-center bg-primary text-primary-foreground hover:scale-105 transition-transform" aria-label="Send message"><Send className="w-4 h-4" /></button>
+                <button onClick={startListening} className={`w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center transition-colors ${listening ? 'bg-primary/20 text-primary' : 'hover:bg-muted/50 text-muted-foreground'}`} aria-label="Press to talk"><Mic className="w-4 h-4" /></button>
+                <button onClick={sendMessage} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center bg-primary text-primary-foreground hover:scale-105 transition-transform" aria-label="Send message"><Send className="w-4 h-4" /></button>
               </div>
             </div>
           </motion.div>
@@ -233,9 +233,9 @@ export const ChatbotSalesFlow = () => {
       </AnimatePresence>
 
       <div className="flex items-end gap-4">
-        <div className="flex flex-col gap-3">
-          <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-9 h-9" /></motion.a>
-          <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-9 h-9" /></motion.a>
+        <div className="flex flex-col gap-2 sm:gap-3">
+          <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-8 h-8 sm:w-9 sm:h-9" /></motion.a>
+          <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-8 h-8 sm:w-9 sm:h-9" /></motion.a>
         </div>
         <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label="Open AI Deals chatbot"><RobotAvatar className="w-[76px] h-[76px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
