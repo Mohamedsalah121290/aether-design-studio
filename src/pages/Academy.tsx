@@ -213,6 +213,7 @@ const Academy = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO page="academy" />
       <Navbar />
       
       {/* Hero Section */}
