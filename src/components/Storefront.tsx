@@ -19,16 +19,12 @@ const SECTION_ORDER: {
   label: string;
   subtitle: string;
   icon: React.ElementType;
+  categories: string[];
 }[] = [
-  { key: 'os-licenses',    label: '💻 Operating Systems & Servers',           subtitle: 'Windows, VPS & server licenses',                icon: Monitor },
-  { key: 'productivity',   label: '👨‍💻 Office & Productivity Software',       subtitle: 'Office suites & workspace tools',               icon: Briefcase },
-  { key: 'design',         label: '🎨 Design & Video Editing',                subtitle: 'Creative design & video editing tools',         icon: Palette },
-  { key: 'stock-media',    label: '🖼 Stock Media Platforms',                  subtitle: 'Premium stock photos, videos & assets',         icon: Palette },
-  { key: 'ai-text',        label: '🤖 AI Models (Text & Programming)',        subtitle: 'Advanced AI for text & code generation',        icon: Code },
-  { key: 'ai-media',       label: '🎬 AI Tools (Media & Design Generation)',  subtitle: 'AI-powered video & media creation',             icon: Film },
-  { key: 'security',       label: '🛡 Security & VPNs',                       subtitle: 'Antivirus, VPN & online protection',            icon: ShieldCheck },
-  { key: 'education',      label: '🎓 Education & Career',                    subtitle: 'Learning platforms & career growth',            icon: Briefcase },
-  { key: 'communication',  label: '🛰 Communication & Networking',            subtitle: 'Video conferencing & connectivity',             icon: Users },
+  { key: 'microsoft',  label: '💻 Microsoft',                  subtitle: 'Windows, Office & Microsoft licenses',     icon: Monitor,     categories: ['os-licenses', 'productivity'] },
+  { key: 'design',     label: '🎨 Design',                     subtitle: 'Creative design & video editing tools',    icon: Palette,     categories: ['design'] },
+  { key: 'ai-tools',   label: '🤖 AI Tools',                   subtitle: 'Premium AI assistants & generators',       icon: Code,        categories: ['ai-text', 'ai-media', 'audio'] },
+  { key: 'other',      label: '🧩 Other Software & Accounts',  subtitle: 'Productivity, security, learning & more',  icon: Briefcase,   categories: ['security', 'education', 'communication', 'stock-media'] },
 ];
 
 const FEATURED_TOOL_IDS = ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva', 'perplexity'];
