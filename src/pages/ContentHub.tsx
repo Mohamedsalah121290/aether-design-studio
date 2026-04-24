@@ -494,6 +494,12 @@ const ContentHub = () => {
 
       <section className="pb-24">
         <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-10"
+          >
             <h2 className="text-2xl md:text-3xl font-display font-bold mb-2">
               {t('contentHub.articles')}
             </h2>
