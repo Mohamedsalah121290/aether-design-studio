@@ -25,9 +25,9 @@ import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
 import chatgptLogo from '@/assets/chatgpt-logo.png';
-import midjourneyLogo from '@/assets/midjourney-logo.png';
-import claudeLogo from '@/assets/claude-logo.png';
-import geminiLogo from '@/assets/gemini-logo.png';
+import canvaLogo from '@/assets/canva-logo.png';
+import perplexityLogo from '@/assets/perplexity-logo.png';
+import capcutLogo from '@/assets/capcut-logo.png';
 import logo from '@/assets/logo.png';
 
 /* ══════════════════════════════════════════════════════════════
@@ -87,9 +87,9 @@ const faqs = [
 
 const floatingElements = [
   { icon: chatgptLogo, name: 'ChatGPT', x: '5%', y: '25%', delay: 0, size: 56 },
-  { icon: midjourneyLogo, name: 'Midjourney', x: '88%', y: '20%', delay: 0.2, size: 48 },
-  { icon: claudeLogo, name: 'Claude', x: '3%', y: '65%', delay: 0.4, size: 44 },
-  { icon: geminiLogo, name: 'Gemini', x: '92%', y: '60%', delay: 0.6, size: 52 },
+  { icon: canvaLogo, name: 'Canva', x: '88%', y: '20%', delay: 0.2, size: 48 },
+  { icon: perplexityLogo, name: 'Perplexity', x: '3%', y: '65%', delay: 0.4, size: 44 },
+  { icon: capcutLogo, name: 'CapCut', x: '92%', y: '60%', delay: 0.6, size: 52 },
 ];
 
 /* ══════════════════════════════════════════════════════════════
@@ -141,7 +141,7 @@ const Index = () => {
         .from('tools')
         .select('*')
         .eq('is_active', true)
-        .in('tool_id', ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva', 'perplexity'])
+        .in('tool_id', ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovable', 'canva'])
         .limit(6);
       return (data || []) as Tool[];
     },
