@@ -769,19 +769,19 @@ const resources = {
 
 // Language configuration with flags, RTL support, and font families
 export const languages = [
-  { code: 'en', name: 'English', flag: '🇬🇧', rtl: false, font: 'Inter' },
-  { code: 'zh', name: '中文', flag: '🇨🇳', rtl: false, font: 'Noto Sans SC' },
-  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳', rtl: false, font: 'Noto Sans Devanagari' },
-  { code: 'es', name: 'Español', flag: '🇪🇸', rtl: false, font: 'Inter' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷', rtl: false, font: 'Inter' },
-  { code: 'ar', name: 'العربية', flag: '🇸🇦', rtl: true, font: 'Cairo' },
-  { code: 'bn', name: 'বাংলা', flag: '🇧🇩', rtl: false, font: 'Noto Sans Bengali' },
-  { code: 'pt', name: 'Português', flag: '🇧🇷', rtl: false, font: 'Inter' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺', rtl: false, font: 'Inter' },
-  { code: 'ur', name: 'اردو', flag: '🇵🇰', rtl: true, font: 'Noto Sans Arabic' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪', rtl: false, font: 'Inter' },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹', rtl: false, font: 'Inter' },
-  { code: 'nl', name: 'Nederlands', flag: '🇧🇪', rtl: false, font: 'Inter' },
+  { code: 'en', name: 'English', flag: '🇬🇧', country: 'gb', rtl: false, font: 'Inter' },
+  { code: 'zh', name: '中文', flag: '🇨🇳', country: 'cn', rtl: false, font: 'Noto Sans SC' },
+  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳', country: 'in', rtl: false, font: 'Noto Sans Devanagari' },
+  { code: 'es', name: 'Español', flag: '🇪🇸', country: 'es', rtl: false, font: 'Inter' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷', country: 'fr', rtl: false, font: 'Inter' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦', country: 'sa', rtl: true, font: 'Cairo' },
+  { code: 'bn', name: 'বাংলা', flag: '🇧🇩', country: 'bd', rtl: false, font: 'Noto Sans Bengali' },
+  { code: 'pt', name: 'Português', flag: '🇧🇷', country: 'br', rtl: false, font: 'Inter' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺', country: 'ru', rtl: false, font: 'Inter' },
+  { code: 'ur', name: 'اردو', flag: '🇵🇰', country: 'pk', rtl: true, font: 'Noto Sans Arabic' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪', country: 'de', rtl: false, font: 'Inter' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹', country: 'it', rtl: false, font: 'Inter' },
+  { code: 'nl', name: 'Nederlands', flag: '🇧🇪', country: 'be', rtl: false, font: 'Inter' },
 ];
 
 // Get stored language or detect from browser
