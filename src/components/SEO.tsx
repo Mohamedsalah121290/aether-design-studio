@@ -33,7 +33,17 @@ interface SEOProps {
 
 const RTL_LANGS = new Set(['ar']);
 
-const SEO = ({ page, pathOverride, image, jsonLd, noIndex }: SEOProps) => {
+const SEO = ({
+  page,
+  pathOverride,
+  image,
+  jsonLd,
+  noIndex,
+  titleOverride,
+  descriptionOverride,
+  keywordsOverride,
+  ogType,
+}: SEOProps) => {
   const { i18n } = useTranslation();
   const lang = resolveSeoLang(i18n.language);
   const entry = SEO_MAP[page]?.[lang] ?? SEO_MAP[page]?.en;
@@ -42,7 +52,14 @@ const SEO = ({ page, pathOverride, image, jsonLd, noIndex }: SEOProps) => {
 
   const path = pathOverride ?? PAGE_PATHS[page];
   const url = canonicalUrl(path);
-  const ogImage = image ?? DEFAULT_OG_IMAGE;
+  const title = titleOverride ?? entry.title;
+  const description = descriptionOverride ?? entry.description;
+  const keywords =
+    keywordsOverride ??
+    [entry.primaryKeyword, ...entry.secondaryKeywords];
+  // Per-language OG image (generated at build time) with sensible fallback.
+  const ogImage =
+    image ?? `${SITE_URL}/og/${page}-${lang}.png`;
   const dir = RTL_LANGS.has(lang) ? 'rtl' : 'ltr';
 
   // Build hreflang alternates for all 7 supported languages.
@@ -54,12 +71,9 @@ const SEO = ({ page, pathOverride, image, jsonLd, noIndex }: SEOProps) => {
   return (
     <Helmet>
       <html lang={lang} dir={dir} />
-      <title>{entry.title}</title>
-      <meta name="description" content={entry.description} />
-      <meta
-        name="keywords"
-        content={[entry.primaryKeyword, ...entry.secondaryKeywords].join(', ')}
-      />
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywords.join(', ')} />
       {noIndex ? (
         <meta name="robots" content="noindex, nofollow" />
       ) : (
@@ -76,19 +90,21 @@ const SEO = ({ page, pathOverride, image, jsonLd, noIndex }: SEOProps) => {
       <link rel="alternate" hrefLang="x-default" href={url} />
 
       {/* Open Graph */}
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content={ogType ?? 'website'} />
       <meta property="og:site_name" content="AI DEALS" />
       <meta property="og:url" content={url} />
-      <meta property="og:title" content={entry.ogTitle ?? entry.title} />
-      <meta property="og:description" content={entry.ogDescription ?? entry.description} />
+      <meta property="og:title" content={titleOverride ?? entry.ogTitle ?? entry.title} />
+      <meta property="og:description" content={descriptionOverride ?? entry.ogDescription ?? entry.description} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta property="og:locale" content={lang} />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:url" content={url} />
-      <meta name="twitter:title" content={entry.ogTitle ?? entry.title} />
-      <meta name="twitter:description" content={entry.ogDescription ?? entry.description} />
+      <meta name="twitter:title" content={titleOverride ?? entry.ogTitle ?? entry.title} />
+      <meta name="twitter:description" content={descriptionOverride ?? entry.ogDescription ?? entry.description} />
       <meta name="twitter:image" content={ogImage} />
 
       {jsonLd && (
