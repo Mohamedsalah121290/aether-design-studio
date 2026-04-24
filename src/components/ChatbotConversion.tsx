@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Bot, CheckCircle, ChevronRight, MessageCircle, Send, X } from 'lucide-react';
+import { CheckCircle, ChevronRight, MessageCircle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import robotAvatar from '@/assets/ai-deals-robot-avatar.png';
 
 export const WHATSAPP_URL = 'https://web.whatsapp.com/';
 export const TELEGRAM_URL = '#telegram-link-needed';
@@ -19,6 +20,17 @@ export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) 
     <circle cx="16" cy="16" r="13" fill="#229ED9" />
     <path fill="#ffffff" d="M22.74 9.78 20.5 22.04c-.17.87-.63 1.08-1.27.67l-3.5-2.58-1.69 1.63c-.19.19-.35.35-.72.35l.26-3.6 6.56-5.93c.28-.25-.06-.4-.44-.14l-8.1 5.1-3.49-1.09c-.76-.24-.77-.76.16-1.12l13.64-5.26c.63-.24 1.18.14.87 1.7Z" />
   </svg>
+);
+
+const RobotAvatar = ({ className = 'w-9 h-9' }: { className?: string }) => (
+  <img
+    src={robotAvatar}
+    alt="AI Deals Assistant robot avatar"
+    width={1024}
+    height={1024}
+    loading="lazy"
+    className={`${className} rounded-full object-cover border border-primary/30 shadow-[0_0_18px_hsl(var(--primary)/0.35)]`}
+  />
 );
 
 const bullets = ['Instant replies', 'Works in multiple languages', '24/7 availability', 'Works across all platforms', 'Increases conversions'];
@@ -77,7 +89,7 @@ export const ChatbotPromoSection = () => (
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 items-center">
           <div>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 text-primary text-sm font-medium mb-6 glass">
-              <Bot className="w-4 h-4" />
+              <RobotAvatar className="w-5 h-5" />
               AI Chatbot
             </span>
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-5 leading-tight">
@@ -145,12 +157,10 @@ export const ChatbotSalesFlow = () => {
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border/60">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-primary" />
-                </div>
+                <RobotAvatar />
                 <div>
                   <p className="text-sm font-semibold text-foreground">AI Deals Assistant</p>
-                  <p className="text-[11px] text-muted-foreground">Fast product guidance</p>
+                  <p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />Online</p>
                 </div>
               </div>
               <button onClick={() => setOpen(false)} className="w-9 h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label="Close chatbot">
@@ -159,9 +169,15 @@ export const ChatbotSalesFlow = () => {
             </div>
 
             <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
-              <div className="rounded-xl bg-white/[0.04] px-4 py-3 text-sm text-foreground">
-                What are you looking for?
+              <div className="flex items-start gap-2">
+                <RobotAvatar className="w-8 h-8 shrink-0" />
+                <div className="rounded-xl bg-white/[0.04] px-4 py-3 text-sm text-foreground">
+                  <p>Hi 👋</p>
+                  <p>I’m your AI assistant.</p>
+                  <p>Tell me what you need and I’ll help you choose the best tool.</p>
+                </div>
               </div>
+              <p className="text-sm font-medium text-foreground">What are you looking for?</p>
               <div className="grid grid-cols-2 gap-2">
                 {(Object.keys(flows) as FlowKey[]).map((key) => (
                   <button
@@ -176,7 +192,10 @@ export const ChatbotSalesFlow = () => {
 
               {selected && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-                  <p className="text-xs text-muted-foreground">{flows[selected].intro}</p>
+                  <div className="flex items-start gap-2">
+                    <RobotAvatar className="w-7 h-7 shrink-0" />
+                    <p className="rounded-xl bg-white/[0.04] px-3 py-2 text-xs text-muted-foreground">{flows[selected].intro}</p>
+                  </div>
                   {flows[selected].products.map((product) => (
                     <div key={product.id} className="rounded-xl border border-border bg-muted/20 p-3">
                       <div className="flex items-start justify-between gap-3 mb-2">
@@ -217,7 +236,7 @@ export const ChatbotSalesFlow = () => {
           <TelegramIcon />
         </motion.a>
         <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.06, y: -2 }} whileTap={{ scale: 0.96 }} className="h-12 px-4 rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/25 flex items-center gap-2 text-sm font-semibold transition-all" aria-label="Open AI Deals chatbot">
-          {open ? <X className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+          {open ? <X className="w-4 h-4" /> : <RobotAvatar className="w-8 h-8" />}
           <span className="hidden sm:inline">Start Now</span>
         </motion.button>
       </div>
