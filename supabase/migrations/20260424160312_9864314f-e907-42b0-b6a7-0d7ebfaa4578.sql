@@ -1,0 +1,4 @@
+UPDATE public.tools SET logo_url = 'https://pilskrumnpvnvtkadbez.supabase.co/storage/v1/object/public/email-assets/logos/notion.png' WHERE tool_id = 'notion';
+UPDATE public.tools SET logo_url = 'https://pilskrumnpvnvtkadbez.supabase.co/storage/v1/object/public/email-assets/logos/zoom.svg' WHERE tool_id = 'zoom';
+UPDATE public.tools SET logo_url = 'https://pilskrumnpvnvtkadbez.supabase.co/storage/v1/object/public/email-assets/logos/coursera.svg' WHERE tool_id = 'coursera';
+UPDATE public.tools SET logo_url = 'https://pilskrumnpvnvtkadbez.supabase.co/storage/v1/object/public/email-assets/logos/grok.svg' WHERE tool_id = 'grok';
