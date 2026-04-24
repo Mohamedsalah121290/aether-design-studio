@@ -326,9 +326,9 @@ const PaymentPage = () => {
                   >
                     <p className="text-sm font-semibold text-white">Monthly</p>
                     {selectedPlan?.monthly_price != null && (
-                      <p className="text-lg font-bold text-primary mt-1">
-                        ${selectedPlan.monthly_price}
-                        <span className="text-xs text-muted-foreground font-normal">/mo</span>
+                      <p className="text-lg font-bold text-sky-400 mt-1">
+                        €{selectedPlan.monthly_price}
+                        <span className="text-xs text-muted-foreground font-normal"> / month</span>
                       </p>
                     )}
                     <p className="text-[10px] text-muted-foreground mt-1">Billed every month</p>
@@ -350,12 +350,12 @@ const PaymentPage = () => {
                     <p className="text-sm font-semibold text-white">Annual</p>
                     {selectedPlan?.monthly_price != null && (
                       <>
-                        <p className="text-lg font-bold text-primary mt-1">
-                          ${(selectedPlan.monthly_price * 12 * 0.8).toFixed(2)}
-                          <span className="text-xs text-muted-foreground font-normal">/yr</span>
+                        <p className="text-lg font-bold text-orange-400 mt-1">
+                          €{(selectedPlan.monthly_price * 12 * 0.8).toFixed(2)}
+                          <span className="text-xs text-muted-foreground font-normal"> / year</span>
                         </p>
                         <p className="text-[10px] text-muted-foreground mt-1">
-                          ${(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · Billed annually
+                          €{(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · Billed annually
                         </p>
                       </>
                     )}
