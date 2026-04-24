@@ -2,8 +2,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  Sparkles, Search, Loader2, PenTool, Palette, Film, Mic,
-  Code, Zap, Briefcase, ShieldCheck, Monitor, Users, Clock, Headphones,
+  Sparkles, Search, Loader2, Palette,
+  Code, Briefcase, Monitor, Users,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
 import { inferPeriodFromPlan, type PricePeriod } from '@/lib/pricePeriod';
@@ -21,13 +21,15 @@ const SECTION_ORDER: {
   label: string;
   subtitle: string;
   icon: React.ElementType;
-  categories: string[];
+  toolIds: string[];
 }[] = [
-  { key: 'microsoft',  label: '💻 Microsoft',                  subtitle: 'Windows, Office & Microsoft licenses',     icon: Monitor,     categories: ['os-licenses'] },
-  { key: 'design',     label: '🎨 Design',                     subtitle: 'Creative design & video editing tools',    icon: Palette,     categories: ['design'] },
-  { key: 'ai-tools',   label: '🤖 AI Tools',                   subtitle: 'Premium AI assistants & generators',       icon: Code,        categories: ['ai-text', 'ai-media', 'audio', 'productivity'] },
-  { key: 'other',      label: '🧩 Other Software & Accounts',  subtitle: 'Security, learning & more',                icon: Briefcase,   categories: ['security', 'education', 'communication', 'stock-media'] },
+  { key: 'licenses-productivity', label: 'Licenses & Productivity 🪟', subtitle: 'Windows, Office & productivity access', icon: Monitor, toolIds: ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'] },
+  { key: 'design-video', label: 'Design & Video Editing 🎨', subtitle: 'Creative design and video editing tools', icon: Palette, toolIds: ['canva', 'capcut'] },
+  { key: 'premium-ai', label: 'Premium AI Tools 🤖', subtitle: 'Premium AI assistants and creation tools', icon: Code, toolIds: ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'] },
+  { key: 'education-security-business', label: 'Education, Security & Business 🧩', subtitle: 'Learning, security and business software', icon: Briefcase, toolIds: ['coursera', 'linkedin', 'notion', 'zoom', 'eset'] },
 ];
+
+const ALLOWED_TOOL_IDS = new Set(SECTION_ORDER.flatMap(section => section.toolIds));
 
 const FEATURED_TOOL_IDS = ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovable', 'canva'];
 const POPULAR_TOOL_IDS  = ['capcut', 'windows', 'windows_home', 'microsoft_365', 'microsoft_office', 'coursera'];
