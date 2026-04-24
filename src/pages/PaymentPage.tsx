@@ -568,6 +568,11 @@ const PaymentPage = () => {
                       {formatPrice(displayPrice)}
                     </span>
                   </div>
+                  {formatApproxPrice(displayPrice) && (
+                    <div className="flex justify-end text-xs text-muted-foreground">
+                      <span>{formatApproxPrice(displayPrice)}</span>
+                    </div>
+                  )}
                   {showBillingToggle && billingInterval === 'annual' && monthlyEquivalent && (
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Monthly equivalent</span>
@@ -586,6 +591,12 @@ const PaymentPage = () => {
                       {formatPrice(effectivePrice)}
                     </span>
                   </div>
+                  {formatApproxPrice(effectivePrice) && (
+                    <div className="flex justify-end text-xs text-muted-foreground">
+                      <span>{formatApproxPrice(effectivePrice)}</span>
+                    </div>
+                  )}
+                  <p className="text-[10px] text-muted-foreground text-right">{FINAL_PAYMENT_EUR_NOTE}</p>
                 </div>
 
                 {/* What you get */}
