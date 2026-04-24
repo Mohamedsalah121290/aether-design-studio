@@ -32,7 +32,7 @@ const resources = {
         badge: 'Premium AI Tools — Member Pricing',
         title: 'Every Premium AI Tool.',
         titleHighlight: 'One Storefront.',
-        description: 'Pick a tool. Pay monthly. Get access in minutes — backed by our 24-hour Activation Guarantee.
+        description: 'Pick a tool. Pay monthly. Get access in minutes — backed by our 24-hour Activation Guarantee.',
         searchPlaceholder: 'Search tools...',
         monthlyAccess: 'Monthly Access',
         perMonth: '/mo',
