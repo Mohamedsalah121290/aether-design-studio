@@ -12,3 +12,13 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Block admin and member-only areas from indexing
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /payment/
+
+# Sitemap
+Sitemap: https://aideals.be/sitemap.xml
+Host: https://aideals.be
