@@ -420,7 +420,7 @@ const Academy = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-semibold text-white">
-                          {selectedCourse.is_free ? 'Enroll for Free' : `Subscribe for $${selectedCourse.price}/mo`}
+                          {selectedCourse.is_free ? 'Enroll for Free' : `Subscribe for €${selectedCourse.price}/mo`}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">Get full access to all lessons</p>
                       </div>

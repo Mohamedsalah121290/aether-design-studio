@@ -818,7 +818,7 @@ const AdminPage = () => {
                                 <div>
                                   <p className="font-medium">{plan.plan_name}</p>
                                   <p className="text-xs text-muted-foreground">
-                                    {plan.plan_id} • {plan.monthly_price !== null ? `$${plan.monthly_price}/mo` : 'Contact'} • {plan.delivery_type} • {plan.activation_time}h
+                                    {plan.plan_id} • {plan.monthly_price !== null ? `€${plan.monthly_price}/mo` : 'Contact'} • {plan.delivery_type} • {plan.activation_time}h
                                   </p>
                                 </div>
                               </div>
@@ -957,7 +957,7 @@ const AdminPage = () => {
                               <div className={`w-3 h-3 rounded-full ${course.is_published ? 'bg-green-400' : 'bg-gray-400'}`} />
                               <div>
                                 <p className="font-medium">{course.title}</p>
-                                <p className="text-xs text-muted-foreground">{course.category} • {course.difficulty} • {courseLessons.length} lessons {course.is_free ? '• Free' : `• $${course.price}`}</p>
+                                <p className="text-xs text-muted-foreground">{course.category} • {course.difficulty} • {courseLessons.length} lessons {course.is_free ? '• Free' : `• €${course.price}`}</p>
                               </div>
                             </div>
                             <div className="flex items-center gap-2">

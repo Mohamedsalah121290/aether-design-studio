@@ -285,7 +285,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                     </TooltipProvider>
                   </div>
                   <div className="flex items-baseline">
-                    <span className="text-lg sm:text-xl font-bold text-[hsl(185_80%_60%)]" style={{ textShadow: '0 0 14px hsl(185 80% 55% / 0.25)' }}>${price}</span>
+                    <span className="text-lg sm:text-xl font-bold text-[hsl(185_80%_60%)]" style={{ textShadow: '0 0 14px hsl(185 80% 55% / 0.25)' }}>€{price}</span>
                     <span className="text-xs text-foreground/40 ml-1">/{t('store.perMonth')}</span>
                   </div>
                   <p className="text-[9px] text-muted-foreground/60">Access-based pricing model</p>
