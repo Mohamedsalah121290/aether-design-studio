@@ -22,6 +22,7 @@ import { socialProofReviews } from '@/lib/socialProof';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
+import heroImageMobile from '@/assets/hero-ai-models-mobile.webp';
 import logo from '@/assets/logo.png';
 
 /* ══════════════════════════════════════════════════════════════
@@ -146,7 +147,7 @@ const Index = () => {
         {/* ═══════════════ 1) HERO ═══════════════ */}
         <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 w-full h-full">
-            <img src={heroImage} alt="AI DEALS premium AI tools" className="absolute inset-0 h-full w-full object-cover md:hidden" fetchPriority="high" />
+            <img src={heroImageMobile} alt="AI DEALS premium AI tools" className="absolute inset-0 h-full w-full object-cover md:hidden" fetchPriority="high" />
             <video autoPlay loop muted playsInline poster={heroImage} className="absolute inset-0 hidden w-full h-full object-cover md:block">
               <source src={heroVideo} type="video/mp4" />
             </video>
