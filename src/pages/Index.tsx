@@ -18,6 +18,8 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
+import SocialProofCarousel from '@/components/SocialProofCarousel';
+import TrustBadges from '@/components/TrustBadges';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
@@ -281,6 +283,7 @@ const Index = () => {
                   </a>
                 </Button>
               </motion.div>
+              <p className="text-[11px] text-white/45 mb-5">Secure checkout via Stripe. Final payment in EUR.</p>
 
               {/* Trust badges */}
               <motion.div
@@ -296,6 +299,9 @@ const Index = () => {
                   </div>
                 ))}
               </motion.div>
+              <div className="mt-4">
+                <TrustBadges compact />
+              </div>
             </div>
           </div>
 
@@ -318,6 +324,16 @@ const Index = () => {
               </div>
             </motion.div>
           </motion.div>
+        </section>
+
+        <section className="py-16 relative">
+          <div className="container mx-auto px-4">
+            <motion.div {...fadeUp} className="text-center mb-10">
+              <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">Customer Proof</span>
+              <h2 className="text-3xl md:text-5xl font-display font-bold">Recent buyer <span className="gradient-text">experiences</span></h2>
+            </motion.div>
+            <SocialProofCarousel />
+          </div>
         </section>
 
         {/* ═══════════════ 2) PROBLEM → SOLUTION ═══════════════ */}
@@ -593,40 +609,7 @@ const Index = () => {
               </h2>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              {testimonials.map((t, i) => (
-                <motion.div
-                  key={t.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.12 }}
-                  className="glass rounded-2xl p-6 hover:border-primary/30 transition-all duration-300"
-                >
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: t.rating }).map((_, j) => (
-                      <Star key={j} className="w-3.5 h-3.5 fill-current" style={{ color: 'hsl(45 93% 58%)' }} />
-                    ))}
-                  </div>
-
-                  <p className="text-foreground text-sm leading-relaxed mb-6">"{t.quote}"</p>
-
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 flex items-center justify-center">
-                      <span className="text-sm font-bold text-primary">{t.name.charAt(0)}</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm font-display font-bold">{t.name}</div>
-                      <div className="text-xs text-muted-foreground">{t.role}</div>
-                    </div>
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-muted/50 border border-border/50">
-                      <span className="text-sm">{t.flag}</span>
-                      <span className="text-[10px] text-muted-foreground font-medium">{t.country}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            <SocialProofCarousel />
           </div>
         </section>
 
