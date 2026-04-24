@@ -232,12 +232,12 @@ export const ChatbotSalesFlow = () => {
         )}
       </AnimatePresence>
 
-      <div className="flex items-end gap-3">
-        <div className="flex flex-col gap-2">
-          <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-11 h-11" /></motion.a>
-          <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-11 h-11" /></motion.a>
+      <div className="flex items-end gap-4">
+        <div className="flex flex-col gap-3">
+          <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-9 h-9" /></motion.a>
+          <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-9 h-9" /></motion.a>
         </div>
-        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label="Open AI Deals chatbot"><RobotAvatar className="w-16 h-16 sm:w-[72px] sm:h-[72px]" lang={lang} speaking={speakingId !== null} /></motion.button>
+        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label="Open AI Deals chatbot"><RobotAvatar className="w-[76px] h-[76px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
     </div>
   );
