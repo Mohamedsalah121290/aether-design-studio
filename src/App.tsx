@@ -4,7 +4,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import SeoAudit from "./pages/SeoAudit";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import StorePage from "./pages/StorePage";
@@ -81,6 +83,7 @@ const AppRoutes = () => {
           </AdminRoute>
         )}
       />
+      <Route path="/seo-audit" element={wrap("SeoAudit", <AdminRoute><SeoAudit /></AdminRoute>)} />
       <Route path="*" element={wrap("NotFound", <NotFound />)} />
     </Routes>
   );
@@ -99,20 +102,22 @@ const App = () => {
 
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <TooltipProvider>
-            <SplashScreen isLoading={isLoading} />
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <ErrorBoundary>
-                <AppRoutes />
-              </ErrorBoundary>
-            </BrowserRouter>
-          </TooltipProvider>
-        </AuthProvider>
-      </QueryClientProvider>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <TooltipProvider>
+              <SplashScreen isLoading={isLoading} />
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <ErrorBoundary>
+                  <AppRoutes />
+                </ErrorBoundary>
+              </BrowserRouter>
+            </TooltipProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </HelmetProvider>
     </ErrorBoundary>
   );
 };

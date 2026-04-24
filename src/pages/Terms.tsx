@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Shield, ShieldCheck, Lock, Scale, ChevronDown } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
@@ -46,6 +47,7 @@ const Terms = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO page="terms" />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-3xl">

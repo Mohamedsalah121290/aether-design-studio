@@ -16,6 +16,8 @@ import { ToolCard, Tool } from '@/components/ToolCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
+import SEO from '@/components/SEO';
+import KeywordCluster from '@/components/KeywordCluster';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
@@ -179,6 +181,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO page="home" jsonLd={{ '@context': 'https://schema.org', '@type': 'Organization', name: 'AI DEALS', url: 'https://aideals.be' }} />
       <Navbar />
 
       <main>
