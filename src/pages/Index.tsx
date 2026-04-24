@@ -446,6 +446,38 @@ const Index = () => {
           </div>
         </section>
 
+        <section className="md:hidden py-10 relative" aria-label="Mobile trust and reviews">
+          <div className="container mx-auto px-4 space-y-6">
+            <div className="glass rounded-2xl p-5 text-center">
+              <div className="flex items-center justify-center gap-1 mb-2" aria-label="4.8 out of 5 rating">
+                {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="h-4 w-4 fill-current text-primary" />)}
+              </div>
+              <h2 className="text-xl font-display font-bold">Trusted by 1000+ users</h2>
+              <p className="mt-2 text-sm text-muted-foreground">Secure payment, EUR checkout, and verified digital access.</p>
+              <div className="mt-4 flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1"><Shield className="h-3.5 w-3.5 text-primary" />Protected</span>
+                <span className="inline-flex items-center gap-1"><CreditCard className="h-3.5 w-3.5 text-primary" />Stripe</span>
+                <span className="inline-flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-primary" />Fast activation</span>
+              </div>
+            </div>
+            <div className="overflow-x-auto -mx-4 px-4 pb-1">
+              <div className="flex gap-3 min-w-max">
+                {socialProofReviews.slice(0, 8).map((review) => (
+                  <div key={`${review.name}-${review.product}`} className="glass w-64 rounded-2xl p-4">
+                    <div className="flex items-center justify-between gap-3 mb-3">
+                      <div className="min-w-0"><p className="text-sm font-bold truncate">{review.name}</p><p className="text-xs text-muted-foreground">{review.flag} {review.country}</p></div>
+                      <span className="text-xs text-primary">★★★★★</span>
+                    </div>
+                    <p className="text-[11px] font-semibold text-primary mb-2">{review.product}</p>
+                    <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">“{review.quote}”</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <Link to="/store" className="min-h-[52px] inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">See more reviews →</Link>
+          </div>
+        </section>
+
         {/* ═══════════════ 6) ACADEMY TEASER ═══════════════ */}
         <section className="py-24 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
