@@ -511,13 +511,13 @@ const PaymentPage = () => {
                   {billingInterval === 'annual' && monthlyEquivalent && (
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Monthly equivalent</span>
-                      <span className="text-green-400">{isEuMethod ? `$${monthlyEquivalent.toFixed(2)} (€${toEur(monthlyEquivalent).toFixed(2)})` : `$${monthlyEquivalent.toFixed(2)}`}/mo</span>
+                      <span className="text-green-400">€{monthlyEquivalent.toFixed(2)}/mo</span>
                     </div>
                   )}
                   {walletDeduction > 0 && (
                     <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
                       <span>Wallet credit</span>
-                      <span>-${walletDeduction.toFixed(2)}</span>
+                      <span>-€{walletDeduction.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="pt-2 border-t border-white/10 flex justify-between text-base font-bold">
