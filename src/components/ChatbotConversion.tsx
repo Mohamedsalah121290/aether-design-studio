@@ -1,12 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { CheckCircle, ChevronRight, MessageCircle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.png';
 
 export const WHATSAPP_URL = 'https://web.whatsapp.com/';
 export const TELEGRAM_URL = '#telegram-link-needed';
+
+declare global {
+  interface Window {
+    SpeechRecognition?: any;
+    webkitSpeechRecognition?: any;
+  }
+}
 
 export const WhatsAppIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
@@ -22,113 +30,86 @@ export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) 
   </svg>
 );
 
-const RobotAvatar = ({ className = 'w-9 h-9' }: { className?: string }) => (
-  <img
-    src={robotAvatar}
-    alt="AI Deals Assistant robot avatar"
-    width={1024}
-    height={1024}
-    loading="lazy"
-    className={`${className} rounded-full object-cover border border-primary/30 shadow-[0_0_18px_hsl(var(--primary)/0.35)]`}
-  />
-);
+const supported = ['en', 'fr', 'nl', 'de', 'es', 'it', 'ar'] as const;
+type LangKey = typeof supported[number];
+type FlowKey = 'ai' | 'design' | 'productivity' | 'security' | 'unsure';
+type Message = { id: number; role: 'bot' | 'user'; text: string; products?: Product[] };
+type Product = { name: string; id: string; desc: string; benefits: string[] };
+
+const copy: Record<LangKey, {
+  dir: 'ltr' | 'rtl'; flag: string; voice: string[]; greeting: string; question: string; input: string; access: string; price: string; labels: Record<FlowKey, string>; intros: Record<FlowKey, string>;
+}> = {
+  en: { dir: 'ltr', flag: 'EN', voice: ['en-GB', 'en-US'], greeting: 'Hi 👋 I’m your AI assistant. Tell me what you need and I’ll recommend the best tool.', question: 'What are you looking for?', input: 'Type your message...', access: 'Do you want the access link?', price: 'Price is shown in EUR before checkout. Focus on saved time and practical access.', labels: { ai: 'ChatGPT & AI', design: 'Design & Content', productivity: 'Productivity', security: 'Security', unsure: 'Not sure, help me' }, intros: { ai: 'Best AI picks for daily work.', design: 'Best tools for content creation.', productivity: 'Best tools to work faster.', security: 'Best picks for secure access.', unsure: 'Start with the most useful tools.' } },
+  fr: { dir: 'ltr', flag: 'FR', voice: ['fr-FR', 'fr-BE'], greeting: 'Salut 👋 Je suis votre assistant IA. Dites-moi votre besoin.', question: 'Que recherchez-vous ?', input: 'Écrivez votre message...', access: 'Voulez-vous le lien d’accès ?', price: 'Le prix est affiché en EUR avant le paiement. Pensez gain de temps et accès utile.', labels: { ai: 'ChatGPT & IA', design: 'Design & contenu', productivity: 'Productivité', security: 'Sécurité', unsure: 'Pas sûr, aidez-moi' }, intros: { ai: 'Les meilleurs choix IA pour travailler.', design: 'Les meilleurs outils pour créer du contenu.', productivity: 'Les meilleurs outils pour gagner du temps.', security: 'Les meilleurs choix pour rester protégé.', unsure: 'Commencez avec les outils les plus utiles.' } },
+  nl: { dir: 'ltr', flag: 'NL', voice: ['nl-BE', 'nl-NL'], greeting: 'Hoi 👋 Ik help je de juiste AI-tool kiezen.', question: 'Waar ben je naar op zoek?', input: 'Typ je bericht...', access: 'Wil je de toegangslink?', price: 'De prijs staat in EUR vóór checkout. Denk aan tijdwinst en praktische toegang.', labels: { ai: 'ChatGPT & AI', design: 'Design & content', productivity: 'Productiviteit', security: 'Security', unsure: 'Niet zeker, help mij' }, intros: { ai: 'Beste AI-keuzes voor dagelijks werk.', design: 'Beste tools voor contentcreatie.', productivity: 'Beste tools om sneller te werken.', security: 'Beste keuzes voor veilige toegang.', unsure: 'Start met de meest nuttige tools.' } },
+  de: { dir: 'ltr', flag: 'DE', voice: ['de-DE'], greeting: 'Hi 👋 Ich helfe dir, das passende Tool zu finden.', question: 'Wonach suchst du?', input: 'Nachricht eingeben...', access: 'Möchtest du den Zugangslink?', price: 'Der Preis wird vor dem Checkout in EUR angezeigt. Es geht um Zeitersparnis und praktischen Zugang.', labels: { ai: 'ChatGPT & KI', design: 'Design & Content', productivity: 'Produktivität', security: 'Sicherheit', unsure: 'Nicht sicher, hilf mir' }, intros: { ai: 'Beste KI-Auswahl für den Alltag.', design: 'Beste Tools für Content-Erstellung.', productivity: 'Beste Tools für schnelleres Arbeiten.', security: 'Beste Optionen für sicheren Zugriff.', unsure: 'Starte mit den nützlichsten Tools.' } },
+  es: { dir: 'ltr', flag: 'ES', voice: ['es-ES'], greeting: 'Hola 👋 Te ayudo a elegir la mejor herramienta.', question: '¿Qué estás buscando?', input: 'Escribe tu mensaje...', access: '¿Quieres el enlace de acceso?', price: 'El precio se muestra en EUR antes del pago. Piensa en ahorro de tiempo y acceso práctico.', labels: { ai: 'ChatGPT e IA', design: 'Diseño y contenido', productivity: 'Productividad', security: 'Seguridad', unsure: 'No sé, ayúdame' }, intros: { ai: 'Mejores opciones de IA para el día a día.', design: 'Mejores herramientas para crear contenido.', productivity: 'Mejores herramientas para trabajar más rápido.', security: 'Mejores opciones para acceso seguro.', unsure: 'Empieza con las herramientas más útiles.' } },
+  it: { dir: 'ltr', flag: 'IT', voice: ['it-IT'], greeting: 'Ciao 👋 Ti aiuto a scegliere lo strumento giusto.', question: 'Cosa stai cercando?', input: 'Scrivi il tuo messaggio...', access: 'Vuoi il link di accesso?', price: 'Il prezzo è mostrato in EUR prima del checkout. Conta il tempo risparmiato e l’accesso pratico.', labels: { ai: 'ChatGPT e AI', design: 'Design e contenuti', productivity: 'Produttività', security: 'Sicurezza', unsure: 'Non so, aiutami' }, intros: { ai: 'Le migliori scelte AI per il lavoro quotidiano.', design: 'I migliori strumenti per creare contenuti.', productivity: 'I migliori strumenti per lavorare più veloce.', security: 'Le migliori opzioni per accesso sicuro.', unsure: 'Inizia dagli strumenti più utili.' } },
+  ar: { dir: 'rtl', flag: 'AR', voice: ['ar-SA', 'ar'], greeting: 'مرحباً 👋 أنا مساعدك الذكي، قل لي ماذا تريد وسأقترح لك أفضل أداة.', question: 'ماذا تبحث عنه؟', input: 'اكتب رسالتك...', access: 'هل تريد رابط الوصول؟', price: 'السعر يظهر باليورو قبل الدفع. ركّز على الوقت الذي ستوفره والقيمة العملية.', labels: { ai: 'ChatGPT والذكاء الاصطناعي', design: 'التصميم والمحتوى', productivity: 'الإنتاجية', security: 'الأمان', unsure: 'لست متأكداً، ساعدني' }, intros: { ai: 'أفضل أدوات AI للاستخدام اليومي.', design: 'أفضل أدوات صناعة المحتوى.', productivity: 'أفضل أدوات لتنجز أسرع.', security: 'أفضل اختيارات للوصول الآمن.', unsure: 'ابدأ بالأدوات الأكثر فائدة.' } },
+};
+
+const products: Record<FlowKey, Product[]> = {
+  ai: [
+    { name: 'ChatGPT Plus', id: 'chatgpt', desc: 'Everyday AI assistant.', benefits: ['Writing help', 'Research support', 'Workflow ideas'] },
+    { name: 'Perplexity Pro', id: 'perplexity', desc: 'Fast research with sources.', benefits: ['Clear sources', 'Quick answers', 'Good for decisions'] },
+    { name: 'ElevenLabs', id: 'elevenlabs', desc: 'Voice and audio creation.', benefits: ['Natural voices', 'Multiple languages', 'Content-ready audio'] },
+  ],
+  design: [
+    { name: 'Canva Pro', id: 'canva', desc: 'Design posts and assets faster.', benefits: ['Ready templates', 'Fast edits', 'Works on devices'] },
+    { name: 'CapCut Pro', id: 'capcut', desc: 'Short video editing.', benefits: ['Quick editing', 'Creator tools', 'Easy exports'] },
+    { name: 'ElevenLabs', id: 'elevenlabs', desc: 'AI voiceovers for content.', benefits: ['Realistic voice', 'Multilingual', 'Fast production'] },
+  ],
+  productivity: [
+    { name: 'Microsoft 365', id: 'microsoft_365', desc: 'Work documents and cloud tools.', benefits: ['Office apps', 'Cloud workflow', 'Business-ready'] },
+    { name: 'Notion', id: 'notion', desc: 'Plan, write, and organize.', benefits: ['Clear workspace', 'Better planning', 'Team-friendly'] },
+    { name: 'Zoom Pro', id: 'zoom', desc: 'Reliable meetings.', benefits: ['Stable calls', 'Meeting tools', 'Professional setup'] },
+  ],
+  security: [
+    { name: 'ESET', id: 'eset', desc: 'Security for your devices.', benefits: ['Device protection', 'Lightweight', 'Simple setup'] },
+    { name: 'Windows', id: 'windows', desc: 'Windows activation access.', benefits: ['Activation support', 'One-time setup', 'Works on PCs'] },
+    { name: 'Microsoft Office', id: 'microsoft_office', desc: 'Office access for productivity.', benefits: ['Core apps', 'Practical value', 'Fast activation'] },
+  ],
+  unsure: [
+    { name: 'ChatGPT Plus', id: 'chatgpt', desc: 'Best first AI tool.', benefits: ['Easy start', 'Many use cases', 'Daily value'] },
+    { name: 'Canva Pro', id: 'canva', desc: 'Best for visual content.', benefits: ['Simple design', 'Fast output', 'Business posts'] },
+    { name: 'Perplexity Pro', id: 'perplexity', desc: 'Best for research.', benefits: ['Source-based', 'Saves time', 'Less browsing'] },
+  ],
+};
 
 const bullets = ['Instant replies', 'Works in multiple languages', '24/7 availability', 'Works across all platforms', 'Increases conversions'];
+const langTint: Record<LangKey, string> = { en: 'hsl(var(--primary))', fr: 'hsl(var(--secondary))', nl: '#25D366', de: 'hsl(var(--accent))', es: '#F5C542', it: '#25D366', ar: 'hsl(var(--secondary))' };
 
-const flows = {
-  content: {
-    label: 'Content',
-    intro: 'For content, start with tools that reduce daily creation work.',
-    products: [
-      { name: 'ChatGPT Plus', id: 'chatgpt', desc: 'For writing, ideas, and customer replies.', benefits: ['Faster drafts', 'Better prompts', 'Useful for daily work'] },
-      { name: 'Canva Pro', id: 'canva', desc: 'For visuals, posts, and brand assets.', benefits: ['Ready templates', 'Fast edits', 'Works on multiple devices'] },
-      { name: 'CapCut Pro', id: 'capcut', desc: 'For short videos and social content.', benefits: ['Quicker editing', 'Creator-friendly', 'Practical export tools'] },
-    ],
-  },
-  work: {
-    label: 'Work',
-    intro: 'For work, focus on tools that save time every week.',
-    products: [
-      { name: 'Microsoft 365', id: 'microsoft_365', desc: 'For documents, email, and productivity.', benefits: ['Office apps', 'Cloud workflow', 'Business-ready'] },
-      { name: 'Notion', id: 'notion', desc: 'For planning, notes, and team organization.', benefits: ['Clear workspace', 'Better planning', 'Simple collaboration'] },
-      { name: 'LinkedIn Premium', id: 'linkedin', desc: 'For job search, networking, and insights.', benefits: ['More visibility', 'Career tools', 'Useful search filters'] },
-    ],
-  },
-  ai: {
-    label: 'AI tools',
-    intro: 'For AI tools, choose based on the result you want first.',
-    products: [
-      { name: 'ChatGPT Plus', id: 'chatgpt', desc: 'Best first AI assistant for everyday tasks.', benefits: ['Writing help', 'Research support', 'Automation ideas'] },
-      { name: 'Perplexity Pro', id: 'perplexity', desc: 'For research and fast answers with sources.', benefits: ['Clear sources', 'Fast research', 'Good for decisions'] },
-      { name: 'ElevenLabs', id: 'elevenlabs', desc: 'For realistic voice and audio projects.', benefits: ['Voice creation', 'Multiple languages', 'Content-ready audio'] },
-    ],
-  },
-  unsure: {
-    label: 'Not sure',
-    intro: 'If you are not sure, pick the tool that solves the most problems first.',
-    products: [
-      { name: 'ChatGPT Plus', id: 'chatgpt', desc: 'The safest starting point for most users.', benefits: ['Easy to start', 'Many use cases', 'Strong daily value'] },
-      { name: 'Canva Pro', id: 'canva', desc: 'Best if you create visual content.', benefits: ['Simple design', 'Fast output', 'Good for business posts'] },
-      { name: 'Perplexity Pro', id: 'perplexity', desc: 'Best if you research before buying or working.', benefits: ['Source-based answers', 'Saves time', 'Less browsing'] },
-    ],
-  },
-} as const;
+const useLang = () => {
+  const { i18n } = useTranslation();
+  const raw = (i18n.language || document.documentElement.lang || 'en').split('-')[0].toLowerCase();
+  return (supported.includes(raw as LangKey) ? raw : 'en') as LangKey;
+};
 
-type FlowKey = keyof typeof flows;
+const RobotAvatar = ({ className = 'w-9 h-9', lang = 'en', speaking = false, rounded = 'rounded-full' }: { className?: string; lang?: LangKey; speaking?: boolean; rounded?: string }) => (
+  <span className={`relative inline-flex shrink-0 ${className}`} style={{ '--avatar-tint': langTint[lang] } as React.CSSProperties}>
+    <span className={`chatbot-avatar-shell ${speaking ? 'chatbot-avatar-speaking' : ''} ${rounded}`}>
+      <img src={robotAvatar} alt="AI Deals Assistant robot avatar" width={512} height={512} loading="lazy" className={`h-full w-full object-cover ${rounded}`} />
+      <span className="chatbot-avatar-blink" />
+    </span>
+    <span className="absolute -bottom-1 -right-1 rounded-full border border-background bg-muted px-1 text-[8px] font-bold text-foreground shadow-sm">{copy[lang].flag}</span>
+  </span>
+);
 
 export const ChatbotPromoSection = () => (
   <section className="py-24 relative overflow-hidden" id="chatbot-promo">
     <div className="container mx-auto px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 28 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.55 }}
-        className="glass rounded-3xl p-8 md:p-12 max-w-5xl mx-auto"
-      >
+      <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="glass rounded-3xl p-8 md:p-12 max-w-5xl mx-auto">
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 items-center">
           <div>
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 text-primary text-sm font-medium mb-6 glass">
-              <RobotAvatar className="w-5 h-5" />
-              AI Chatbot
-            </span>
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-5 leading-tight">
-              Your AI Assistant That <span className="gradient-text">Never Sleeps</span>
-            </h2>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-7">
-              Reply to customers instantly, 24/7, on your website, WhatsApp, and Telegram.
-            </p>
-            <div className="grid sm:grid-cols-2 gap-3 mb-8">
-              {bullets.map((item) => (
-                <div key={item} className="flex items-center gap-3 text-sm text-foreground">
-                  <CheckCircle className="w-4 h-4 text-primary shrink-0" />
-                  {item}
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-              <Button variant="hero" size="lg" asChild>
-                <Link to="/store">Activate Chatbot</Link>
-              </Button>
-              <p className="text-xs text-muted-foreground">No missed messages. No lost customers.</p>
-            </div>
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 text-primary text-sm font-medium mb-6 glass"><RobotAvatar className="w-5 h-5" />AI Chatbot</span>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-5 leading-tight">Your AI Assistant That <span className="gradient-text">Never Sleeps</span></h2>
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-7">Reply to customers instantly, 24/7, on your website, WhatsApp, and Telegram.</p>
+            <div className="grid sm:grid-cols-2 gap-3 mb-8">{bullets.map((item) => <div key={item} className="flex items-center gap-3 text-sm text-foreground"><CheckCircle className="w-4 h-4 text-primary shrink-0" />{item}</div>)}</div>
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center"><Button variant="hero" size="lg" asChild><Link to="/store">Activate Chatbot</Link></Button><p className="text-xs text-muted-foreground">No missed messages. No lost customers.</p></div>
           </div>
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.15, duration: 0.5 }}
-            className="rounded-2xl border border-border bg-muted/20 p-5 space-y-3"
-          >
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <MessageCircle className="w-4 h-4 text-primary" />
-              Live sales flow preview
-            </div>
-            {['What are you looking for?', 'AI tools', 'Best start: ChatGPT Plus for daily writing, support, and workflows.', 'Do you want the access link?'].map((line, index) => (
-              <div key={line} className={`rounded-xl px-4 py-3 text-sm ${index % 2 ? 'bg-primary/10 text-foreground ms-8' : 'bg-white/[0.04] text-muted-foreground me-8'}`}>
-                {line}
-              </div>
-            ))}
+          <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15, duration: 0.5 }} className="rounded-2xl border border-border bg-muted/20 p-5 space-y-3">
+            <div className="flex items-center gap-2 text-sm font-semibold"><MessageCircle className="w-4 h-4 text-primary" />Live sales flow preview</div>
+            {['What are you looking for?', 'AI tools', 'Best start: ChatGPT Plus for daily writing and workflows.', 'Do you want the access link?'].map((line, index) => <div key={line} className={`rounded-xl px-4 py-3 text-sm ${index % 2 ? 'bg-primary/10 text-foreground ms-8' : 'bg-white/[0.04] text-muted-foreground me-8'}`}>{line}</div>)}
           </motion.div>
         </div>
       </motion.div>
@@ -137,108 +118,126 @@ export const ChatbotPromoSection = () => (
 );
 
 export const ChatbotSalesFlow = () => {
+  const lang = useLang();
+  const text = copy[lang];
+  const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<FlowKey | null>(null);
+  const [input, setInput] = useState('');
+  const [soundOn, setSoundOn] = useState(() => localStorage.getItem('aiDealsChatSound') !== 'off');
+  const [speakingId, setSpeakingId] = useState<number | null>(null);
+  const [listening, setListening] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const recognitionRef = useRef<any>(null);
 
-  const handleTelegramClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (TELEGRAM_URL.startsWith('#')) event.preventDefault();
+  const initialMessage = useMemo<Message>(() => ({ id: 1, role: 'bot', text: text.greeting }), [text.greeting]);
+  const [messages, setMessages] = useState<Message[]>([initialMessage]);
+
+  useEffect(() => { const timer = window.setTimeout(() => setReady(true), 2200); return () => window.clearTimeout(timer); }, []);
+  useEffect(() => { setMessages([initialMessage]); setSelected(null); }, [initialMessage]);
+  useEffect(() => { localStorage.setItem('aiDealsChatSound', soundOn ? 'on' : 'off'); }, [soundOn]);
+  useEffect(() => { if (open) window.setTimeout(() => inputRef.current?.focus(), 180); }, [open]);
+
+  const pickVoice = () => {
+    const voices = window.speechSynthesis?.getVoices?.() || [];
+    return text.voice.map((code) => voices.find((voice) => voice.lang.toLowerCase().startsWith(code.toLowerCase()))).find(Boolean) || voices.find((voice) => voice.lang.toLowerCase().startsWith(lang));
   };
 
+  const speak = (message: Message) => {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(message.text);
+    utterance.lang = text.voice[0];
+    utterance.voice = pickVoice() || null;
+    utterance.rate = lang === 'ar' ? 0.92 : 0.98;
+    utterance.onstart = () => setSpeakingId(message.id);
+    utterance.onend = () => setSpeakingId(null);
+    utterance.onerror = () => setSpeakingId(null);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const addFlow = (key: FlowKey) => {
+    setSelected(key);
+    const next: Message = { id: Date.now(), role: 'bot', text: text.intros[key], products: products[key] };
+    setMessages((current) => [...current.filter((m) => m.id !== next.id), next]);
+    if (soundOn) window.setTimeout(() => speak(next), 150);
+  };
+
+  const sendMessage = () => {
+    const value = input.trim();
+    if (!value) return;
+    setInput('');
+    const userMessage: Message = { id: Date.now(), role: 'user', text: value };
+    const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: text.intros.unsure, products: products.unsure };
+    setMessages((current) => [...current, userMessage, botMessage]);
+    if (soundOn) window.setTimeout(() => speak(botMessage), 150);
+  };
+
+  const startListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition || listening) return;
+    const recognition = new SpeechRecognition();
+    recognition.lang = text.voice[0];
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.onstart = () => setListening(true);
+    recognition.onend = () => setListening(false);
+    recognition.onerror = () => setListening(false);
+    recognition.onresult = (event: any) => setInput(event.results?.[0]?.[0]?.transcript || '');
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
+
+  const handleTelegramClick = (event: React.MouseEvent<HTMLAnchorElement>) => { if (TELEGRAM_URL.startsWith('#')) event.preventDefault(); };
+  if (!ready) return null;
+
   return (
-    <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+    <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-40 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ opacity: 0, y: 18, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 18, scale: 0.96 }}
-            transition={{ duration: 0.22 }}
-            className="w-[calc(100vw-2rem)] max-w-sm glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl"
-          >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border/60">
-              <div className="flex items-center gap-2">
-                <RobotAvatar />
-                <div>
-                  <p className="text-sm font-semibold text-foreground">AI Deals Assistant</p>
-                  <p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />Online</p>
-                </div>
+          <motion.div initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-2rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl">
+            <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border/60">
+              <div className="flex items-center gap-3 min-w-0"><RobotAvatar lang={lang} rounded="rounded-xl" speaking={speakingId !== null} /><div><p className="text-sm font-semibold text-foreground">AI Deals Assistant</p><p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />Online</p></div></div>
+              <div className="flex items-center gap-1">
+                <button onClick={() => setSoundOn((value) => !value)} className="w-9 h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}>{soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}</button>
+                <button onClick={() => setOpen(false)} className="w-9 h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label="Close chatbot"><X className="w-4 h-4" /></button>
               </div>
-              <button onClick={() => setOpen(false)} className="w-9 h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label="Close chatbot">
-                <X className="w-4 h-4" />
-              </button>
             </div>
 
-            <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
-              <div className="flex items-start gap-2">
-                <RobotAvatar className="w-8 h-8 shrink-0" />
-                <div className="rounded-xl bg-white/[0.04] px-4 py-3 text-sm text-foreground">
-                  <p>Hi 👋</p>
-                  <p>I’m your AI assistant.</p>
-                  <p>Tell me what you need and I’ll help you choose the best tool.</p>
-                </div>
-              </div>
-              <p className="text-sm font-medium text-foreground">What are you looking for?</p>
-              <div className="grid grid-cols-2 gap-2">
-                {(Object.keys(flows) as FlowKey[]).map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => setSelected(key)}
-                    className={`rounded-xl border px-3 py-2 text-sm transition-all text-start ${selected === key ? 'border-primary/40 bg-primary/10 text-foreground' : 'border-border bg-muted/20 text-muted-foreground hover:text-foreground hover:border-primary/30'}`}
-                  >
-                    {flows[key].label}
-                  </button>
-                ))}
-              </div>
-
-              {selected && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-                  <div className="flex items-start gap-2">
-                    <RobotAvatar className="w-7 h-7 shrink-0" />
-                    <p className="rounded-xl bg-white/[0.04] px-3 py-2 text-xs text-muted-foreground">{flows[selected].intro}</p>
-                  </div>
-                  {flows[selected].products.map((product) => (
-                    <div key={product.id} className="rounded-xl border border-border bg-muted/20 p-3">
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div>
-                          <h4 className="text-sm font-semibold text-foreground">{product.name}</h4>
-                          <p className="text-xs text-muted-foreground mt-1">{product.desc}</p>
-                        </div>
-                        <Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)} className="text-primary hover:text-foreground transition-colors" aria-label={`Open ${product.name}`}>
-                          <ChevronRight className="w-4 h-4" />
-                        </Link>
-                      </div>
-                      <ul className="space-y-1 mb-3">
-                        {product.benefits.map((benefit) => (
-                          <li key={benefit} className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                            <CheckCircle className="w-3 h-3 text-primary shrink-0" />
-                            {benefit}
-                          </li>
-                        ))}
-                      </ul>
-                      <p className="text-[11px] text-muted-foreground mb-3">Price is shown clearly in EUR before checkout — focus on saved time and practical access.</p>
-                      <Button variant="heroOutline" size="sm" asChild className="w-full">
-                        <Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)}>Do you want the access link?</Link>
-                      </Button>
+            <div className="p-4 space-y-4 max-h-[62vh] overflow-y-auto">
+              {messages.map((message) => (
+                <div key={message.id} className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  {message.role === 'bot' && <RobotAvatar className="w-8 h-8" lang={lang} speaking={speakingId === message.id} />}
+                  <div className={`max-w-[82%] ${message.role === 'user' ? 'bg-primary/20 text-foreground' : 'bg-white/[0.04] text-foreground'} rounded-xl px-4 py-3 text-sm leading-relaxed`}>
+                    <div className="flex items-start gap-2">
+                      <p className="flex-1">{message.text}</p>
+                      {message.role === 'bot' && <button onClick={() => speak(message)} className="shrink-0 text-muted-foreground hover:text-primary transition-colors" aria-label="Play message"><Volume2 className="w-3.5 h-3.5" /></button>}
                     </div>
-                  ))}
-                </motion.div>
-              )}
+                    {message.products && <div className="mt-3 space-y-2">{message.products.map((product) => <div key={product.id} className="rounded-xl border border-border bg-muted/20 p-3"><div className="flex items-start justify-between gap-3 mb-2"><div><h4 className="text-sm font-semibold text-foreground">{product.name}</h4><p className="text-xs text-muted-foreground mt-1">{product.desc}</p></div><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)} className="text-primary hover:text-foreground transition-colors" aria-label={`Open ${product.name}`}><ChevronRight className="w-4 h-4" /></Link></div><ul className="space-y-1 mb-3">{product.benefits.map((benefit) => <li key={benefit} className="flex items-center gap-2 text-[11px] text-muted-foreground"><CheckCircle className="w-3 h-3 text-primary shrink-0" />{benefit}</li>)}</ul><p className="text-[11px] text-muted-foreground mb-3">{text.price}</p><Button variant="heroOutline" size="sm" asChild className="w-full"><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)}>{text.access}</Link></Button></div>)}</div>}
+                  </div>
+                </div>
+              ))}
+              <p className="text-sm font-medium text-foreground">{text.question}</p>
+              <div className="flex flex-wrap gap-2">{(Object.keys(text.labels) as FlowKey[]).map((key) => <button key={key} onClick={() => addFlow(key)} className={`rounded-xl border px-3 py-2 text-sm transition-all ${selected === key ? 'border-primary/40 bg-primary/10 text-foreground' : 'border-border bg-muted/20 text-muted-foreground hover:text-foreground hover:border-primary/30'}`}>{text.labels[key]}</button>)}</div>
+            </div>
+
+            <div className="p-3 border-t border-border/60">
+              <div className="flex items-center gap-2 rounded-2xl border border-border bg-muted/30 px-3 py-2">
+                <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') sendMessage(); }} placeholder={text.input} className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" aria-label="Chat message" />
+                <button onClick={startListening} className={`w-9 h-9 rounded-xl grid place-items-center transition-colors ${listening ? 'bg-primary/20 text-primary' : 'hover:bg-muted/50 text-muted-foreground'}`} aria-label="Press to talk"><Mic className="w-4 h-4" /></button>
+                <button onClick={sendMessage} className="w-9 h-9 rounded-xl grid place-items-center bg-primary text-primary-foreground hover:scale-105 transition-transform" aria-label="Send message"><Send className="w-4 h-4" /></button>
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="flex items-center gap-2">
-        <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.08, y: -2 }} whileTap={{ scale: 0.96 }} className="w-11 h-11 rounded-xl glass flex items-center justify-center border border-border hover:border-primary/30 transition-colors" aria-label="Contact on WhatsApp">
-          <WhatsAppIcon />
-        </motion.a>
-        <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.08, y: -2 }} whileTap={{ scale: 0.96 }} className="w-11 h-11 rounded-xl glass flex items-center justify-center border border-border hover:border-primary/30 transition-colors" aria-label="Contact on Telegram">
-          <TelegramIcon />
-        </motion.a>
-        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.06, y: -2 }} whileTap={{ scale: 0.96 }} className="h-12 px-4 rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/25 flex items-center gap-2 text-sm font-semibold transition-all" aria-label="Open AI Deals chatbot">
-          {open ? <X className="w-4 h-4" /> : <RobotAvatar className="w-8 h-8" />}
-          <span className="hidden sm:inline">Start Now</span>
-        </motion.button>
+      <div className="flex items-end gap-3">
+        <div className="flex flex-col gap-2">
+          <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-11 h-11" /></motion.a>
+          <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-11 h-11" /></motion.a>
+        </div>
+        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label="Open AI Deals chatbot"><RobotAvatar className="w-16 h-16 sm:w-[72px] sm:h-[72px]" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
     </div>
   );
