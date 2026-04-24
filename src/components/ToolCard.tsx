@@ -266,33 +266,57 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                 {tool.name}
               </h3>
               <p className="text-xs text-muted-foreground">
-                Monthly Access · {categoryLabel}
+                {tool.starting_period === 'one-time'
+                  ? 'One-Time Purchase'
+                  : tool.starting_period === 'yearly'
+                  ? 'Yearly Access'
+                  : 'Monthly Access'}{' '}
+                · {categoryLabel}
               </p>
             </div>
 
             {/* Price */}
             <div className="space-y-0.5">
               {price && price > 0 ? (
-                <>
-                  <div className="flex items-center gap-1">
-                    <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#E8D48B' }}>Member Price</p>
-                    <TooltipProvider delayDuration={200}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Info className="w-3 h-3 cursor-help opacity-50 hover:opacity-100 transition-opacity" style={{ color: '#E8D48B' }} />
-                        </TooltipTrigger>
-                        <TooltipContent side="top" className="max-w-[220px] text-xs leading-relaxed bg-background border border-white/10 text-foreground">
-                          AI DEALS uses a managed access model — structured platform-level pricing exclusive to members.
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <div className="flex items-baseline">
-                    <span className="text-lg sm:text-xl font-bold text-[hsl(185_80%_60%)]" style={{ textShadow: '0 0 14px hsl(185 80% 55% / 0.25)' }}>€{price}</span>
-                    <span className="text-xs text-foreground/40 ml-1">/{t('store.perMonth')}</span>
-                  </div>
-                  <p className="text-[9px] text-muted-foreground/60">Access-based pricing model</p>
-                </>
+                (() => {
+                  const period = tool.starting_period ?? 'monthly';
+                  const style = getPeriodStyle(period);
+                  return (
+                    <>
+                      <div className="flex items-center gap-1">
+                        <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#E8D48B' }}>Member Price</p>
+                        <TooltipProvider delayDuration={200}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Info className="w-3 h-3 cursor-help opacity-50 hover:opacity-100 transition-opacity" style={{ color: '#E8D48B' }} />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-[220px] text-xs leading-relaxed bg-background border border-white/10 text-foreground">
+                              AI DEALS uses a managed access model — structured platform-level pricing exclusive to members.
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                      <div className="flex items-baseline flex-wrap gap-x-1.5 gap-y-0.5">
+                        <span
+                          className={`text-lg sm:text-xl font-bold ${style.textClass}`}
+                          style={{ textShadow: style.textShadow }}
+                        >
+                          {formatEuro(price)}
+                        </span>
+                        <span className={`text-xs font-medium ${style.textClass} opacity-80`}>
+                          {style.suffix}
+                        </span>
+                        <span
+                          className={`text-[9px] font-semibold uppercase tracking-wider px-1.5 py-[1px] rounded-md border ${style.textClass}`}
+                          style={{ borderColor: 'currentColor', opacity: 0.85 }}
+                        >
+                          {style.label}
+                        </span>
+                      </div>
+                      <p className="text-[9px] text-muted-foreground/60">Access-based pricing model</p>
+                    </>
+                  );
+                })()
               ) : (
                 <span className="text-xs text-muted-foreground">{t('store.contactForPrice', 'Contact for pricing')}</span>
               )}
