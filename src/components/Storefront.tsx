@@ -198,29 +198,35 @@ const Storefront = () => {
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <div className="flex flex-wrap justify-center gap-4 mb-3">
                 <a
                   href="#tools-grid"
                   className="px-8 py-3 rounded-xl font-medium text-sm text-white bg-white/10 border border-white/15 transition-all duration-300 hover:bg-white/15 hover:border-white/25"
                 >
-                  Browse Tools
+                  {t('store.ctaPrimary', 'Browse Deals')}
                 </a>
                 <a
                   href="#trust-faq"
                   className="px-8 py-3 rounded-xl font-medium text-sm text-white/50 border border-white/5 transition-all duration-300 hover:text-white/70 hover:border-white/10"
                 >
-                  How It Works
+                  {t('store.ctaSecondary', 'How It Works')}
                 </a>
               </div>
+
+              {/* Payment + delivery trust note (no design change, inline copy) */}
+              <p className="text-[11px] text-white/40 mb-6">
+                {t('store.paymentNote', 'Secure payment via Stripe & Bancontact')} · {t('store.monthlyAccess', 'Monthly Access')} · 24h
+              </p>
 
               {/* Social proof */}
               <div className="flex items-center justify-center gap-2 text-xs text-white/30">
                 <Users className="w-3.5 h-3.5" />
-                <span>1,000+ active members</span>
+                <span>{t('store.socialProof', '1,000+ active members already saving')}</span>
               </div>
             </div>
           </div>
         </div>
+
 
         {/* ═══ MAIN CONTENT ═══ */}
         <div className="relative pb-8">

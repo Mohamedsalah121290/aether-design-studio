@@ -23,14 +23,14 @@ const ContactPage = () => {
       return;
     }
     setSending(true);
-    const mailtoLink = `mailto:aideals.be@gmail.com?subject=${encodeURIComponent(form.subject || 'Contact from AI DEALS')}&body=${encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)}`;
+    const mailtoLink = `mailto:info@aideals.be?subject=${encodeURIComponent(form.subject || 'Contact from AI DEALS')}&body=${encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)}`;
     window.open(mailtoLink, '_blank');
     toast({ title: '✉️ Message Ready', description: 'Your email client has been opened with the message.' });
     setSending(false);
   };
 
   const supportInfo = [
-    { icon: Mail, title: 'Email Us', value: 'aideals.be@gmail.com', description: 'Direct line to our team' },
+    { icon: Mail, title: 'Email Us', value: 'info@aideals.be', description: 'Direct line to our team' },
     { icon: Clock, title: 'Response Time', value: 'Within 24 Hours', description: 'We guarantee a reply within one business day' },
     { icon: Shield, title: 'Privacy First', value: 'GDPR Principled', description: 'Your data is never shared or sold' },
     { icon: Globe, title: 'Global Support', value: 'Worldwide Access', description: 'We serve students and creators globally' },
