@@ -5,6 +5,7 @@ import { Github, Twitter, Linkedin, Mail, Shield, Lock, Globe, Zap } from 'lucid
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
+import { TelegramIcon, TELEGRAM_URL, WhatsAppIcon, WHATSAPP_URL } from '@/components/ChatbotConversion';
 import logo from '@/assets/logo.png';
 
 const Footer = () => {
@@ -97,6 +98,27 @@ const Footer = () => {
               {t('footer.description')}
             </p>
             <div className="flex gap-4">
+              <motion.a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1, y: -2 }}
+                className="w-10 h-10 rounded-xl glass flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
+                aria-label="WhatsApp"
+              >
+                <WhatsAppIcon />
+              </motion.a>
+              <motion.a
+                href={TELEGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(event) => { if (TELEGRAM_URL.startsWith('#')) event.preventDefault(); }}
+                whileHover={{ scale: 1.1, y: -2 }}
+                className="w-10 h-10 rounded-xl glass flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
+                aria-label="Telegram"
+              >
+                <TelegramIcon />
+              </motion.a>
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
