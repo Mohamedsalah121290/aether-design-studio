@@ -22,6 +22,8 @@ import {
 import { z } from 'zod';
 import type { ToolPlan } from '@/components/ToolCard';
 import { inferPeriodFromPlan, getPeriodStyle, formatEuro } from '@/lib/pricePeriod';
+import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
+import { useCurrency } from '@/hooks/useCurrency';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -63,6 +65,7 @@ const PaymentPage = () => {
   const { toolId } = useParams<{ toolId: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { currency } = useCurrency();
   const { user } = useAuth();
 
   const [tool, setTool] = useState<any>(null);
@@ -198,6 +201,8 @@ const PaymentPage = () => {
     if (eur === 0) return 'Free';
     return formatEuro(eur);
   };
+
+  const formatApproxPrice = (eur: number | null | undefined) => formatApproxCurrency(eur, currency.code);
 
   const validateForm = (): boolean => {
     const newErrors: { email?: string } = {};
