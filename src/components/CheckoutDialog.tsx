@@ -243,7 +243,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   {displayPrice != null && displayPrice > 0 && (
                     <>
                       <span className="text-muted-foreground"> &mdash; </span>
-                      <span className="text-white font-bold">${displayPrice}</span>
+                      <span className="text-white font-bold">€{displayPrice}</span>
                       <span className="text-muted-foreground">/{t('store.perMonth')}</span>
                     </>
                   )}
@@ -273,7 +273,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       >
                         {plan.plan_name}
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
-                          <span className="ml-1.5 opacity-80">${plan.monthly_price}</span>
+                          <span className="ml-1.5 opacity-80">€{plan.monthly_price}</span>
                         )}
                       </button>
                     ))}
@@ -297,7 +297,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   >
                     {plans.map(plan => (
                       <option key={plan.id} value={plan.id}>
-                        {plan.plan_name} {plan.monthly_price != null ? `- $${plan.monthly_price}/mo` : ''}
+                        {plan.plan_name} {plan.monthly_price != null ? `- €${plan.monthly_price}/mo` : ''}
                       </option>
                     ))}
                   </select>
@@ -366,7 +366,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       <div>
                         <h4 className="font-semibold text-white text-sm">Apply Wallet Credit</h4>
                         <p className="text-xs text-muted-foreground">
-                          Available: <span style={{ color: '#E8D48B' }} className="font-semibold">${walletBalance.toFixed(2)}</span>
+                          Available: <span style={{ color: '#E8D48B' }} className="font-semibold">€{walletBalance.toFixed(2)}</span>
                         </p>
                       </div>
                     </div>
@@ -379,15 +379,15 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     <div className="mt-3 pt-3 border-t border-white/10 space-y-1">
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Original price</span>
-                        <span>${displayPrice?.toFixed(2)}/mo</span>
+                        <span>€{displayPrice?.toFixed(2)}/mo</span>
                       </div>
                       <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
                         <span>Wallet credit</span>
-                        <span>-${walletDeduction.toFixed(2)}</span>
+                        <span>-€{walletDeduction.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-white">
                         <span>You pay</span>
-                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `$${effectivePrice?.toFixed(2)}/mo`}</span>
+                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `€${effectivePrice?.toFixed(2)}/mo`}</span>
                       </div>
                     </div>
                   )}

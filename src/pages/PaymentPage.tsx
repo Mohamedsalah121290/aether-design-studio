@@ -178,15 +178,11 @@ const PaymentPage = () => {
   const effectivePrice = displayPrice ? Math.max(0, displayPrice - walletDeduction) : displayPrice;
   const activationTime = selectedPlan?.activation_time || 6;
 
-  // EUR conversion for EU payment methods
-  const USD_TO_EUR = 0.92;
-  const isEuMethod = ['sepa', 'eu-methods'].includes(selectedPaymentMethod);
-  const toEur = (usd: number) => Number((usd * USD_TO_EUR).toFixed(2));
-  const formatPrice = (usd: number | null) => {
-    if (usd == null) return 'N/A';
-    if (usd === 0) return 'Free';
-    if (isEuMethod) return `$${usd.toFixed(2)} (€${toEur(usd).toFixed(2)})`;
-    return `$${usd.toFixed(2)}`;
+  // كل الأسعار باليورو € (no conversion)
+  const formatPrice = (eur: number | null) => {
+    if (eur == null) return 'N/A';
+    if (eur === 0) return 'Free';
+    return `€${eur.toFixed(2)}`;
   };
 
   const validateForm = (): boolean => {
