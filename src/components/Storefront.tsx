@@ -35,15 +35,10 @@ const FEATURED_TOOL_IDS = ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovab
 const POPULAR_TOOL_IDS  = ['capcut', 'windows', 'windows_home', 'microsoft_365', 'microsoft_office', 'coursera'];
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
-  'os-servers': ['os-licenses'],
-  'office-productivity': ['productivity'],
-  'design-video': ['design'],
-  'stock-media': ['stock-media'],
-  'ai-text-code': ['ai-text'],
-  'ai-media': ['ai-media'],
-  'security-vpn': ['security'],
-  'education': ['education'],
-  'communication': ['communication'],
+  'licenses-productivity': ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'],
+  'design-video': ['canva', 'capcut'],
+  'premium-ai': ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'],
+  'education-security-business': ['coursera', 'linkedin', 'notion', 'zoom', 'eset'],
 };
 
 /* ── Component ──────────────────────────────────────────────────── */
@@ -134,7 +129,7 @@ const Storefront = () => {
     );
 
     if (activeFilter !== 'all' && FILTER_CATEGORY_MAP[activeFilter]) {
-      result = result.filter(t => FILTER_CATEGORY_MAP[activeFilter].includes(t.category));
+      result = result.filter(t => FILTER_CATEGORY_MAP[activeFilter].includes(t.tool_id));
     }
 
     if (sortBy === 'price-asc') {
