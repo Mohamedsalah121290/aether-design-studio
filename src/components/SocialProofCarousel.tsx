@@ -1,0 +1,54 @@
+import { useEffect, useMemo, useState } from 'react';
+import { Star, ShieldCheck } from 'lucide-react';
+import { socialProofReviews } from '@/lib/socialProof';
+
+const Stars = ({ rating }: { rating: 4 | 5 }) => (
+  <span className="flex gap-1">
+    {Array.from({ length: 5 }).map((_, index) => (
+      <Star key={index} className={`w-3.5 h-3.5 ${index < rating ? 'fill-current' : ''}`} style={{ color: 'hsl(45 93% 58%)' }} />
+    ))}
+  </span>
+);
+
+const SocialProofCarousel = () => {
+  const [page, setPage] = useState(0);
+  const visibleCount = 6;
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setPage(current => (current + visibleCount) % socialProofReviews.length), 9000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const visible = useMemo(
+    () => Array.from({ length: visibleCount }, (_, index) => socialProofReviews[(page + index) % socialProofReviews.length]),
+    [page]
+  );
+
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 max-w-6xl mx-auto">
+      {visible.map((item) => (
+        <div key={`${item.name}-${item.product}`} className="glass rounded-2xl p-5 hover:border-primary/30 transition-all duration-300">
+          <div className="flex items-start justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 flex items-center justify-center shrink-0">
+                <span className="text-sm font-bold text-primary">{item.name.charAt(0)}</span>
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-display font-bold truncate">{item.name}</p>
+                <p className="text-xs text-muted-foreground truncate">{item.flag} {item.country}</p>
+              </div>
+            </div>
+            <Stars rating={item.rating} />
+          </div>
+          <p className="text-[11px] text-primary font-semibold mb-2">{item.product}</p>
+          <p className="text-sm leading-relaxed text-muted-foreground">“{item.quote}”</p>
+          <div className="mt-4 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <ShieldCheck className="w-3 h-3" /> Verified access
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default SocialProofCarousel;

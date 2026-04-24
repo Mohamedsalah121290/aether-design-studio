@@ -21,6 +21,7 @@ import { inferPeriodFromPlan, getPeriodStyle } from '@/lib/pricePeriod';
 import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductReviewsCarousel } from '@/components/ProductReviews';
+import TrustBadges from '@/components/TrustBadges';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -413,6 +414,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
               {!plansLoading && selectedPlan && (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {tool && <ProductReviewsCarousel toolId={tool.tool_id} productName={tool.name} />}
+                  <TrustBadges compact />
 
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -489,6 +491,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     </span>
                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Button>
+                  <p className="text-[11px] text-muted-foreground text-center">Secure checkout via Stripe. Final payment in EUR.</p>
 
                   {/* Cancel anytime + activation time */}
                   <div className="space-y-3 text-center">

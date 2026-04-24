@@ -13,6 +13,7 @@ import FiltersBar, { FilterChip, SortOption } from './FiltersBar';
 import TrustAndFAQ from './TrustAndFAQ';
 import AIRecommendations from './AIRecommendations';
 import { supabase } from '@/integrations/supabase/client';
+import SocialProofCarousel from './SocialProofCarousel';
 
 /* ── Section config ─────────────────────────────────────────────── */
 const SECTION_ORDER: {
@@ -288,6 +289,11 @@ const Storefront = () => {
                             <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
                           ))}
                         </div>
+                        {section.key === 'microsoft' && (
+                          <div className="mt-10 relative z-10">
+                            <SocialProofCarousel />
+                          </div>
+                        )}
                       </div>
                     </section>
                   );

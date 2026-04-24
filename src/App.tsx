@@ -30,6 +30,7 @@ import PaymentCancelled from "./pages/PaymentCancelled";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import ErrorBoundary from "./components/ErrorBoundary";
+import RecentActivityToast from "./components/RecentActivityToast";
 import "@/lib/i18n";
 
 const queryClient = new QueryClient();
@@ -117,6 +118,7 @@ const App = () => {
                   <ErrorBoundary>
                     <AppRoutes />
                   </ErrorBoundary>
+                  <RecentActivityToast />
                 </BrowserRouter>
               </TooltipProvider>
             </CurrencyProvider>
