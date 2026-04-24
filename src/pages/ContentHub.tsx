@@ -6,6 +6,8 @@ import { Play, Clock, Eye, ArrowRight, Search, X, ChevronLeft, ChevronRight } fr
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { BLOG_POSTS, getBlogLocale } from '@/lib/seo/blogPosts';
+import { resolveSeoLang } from '@/lib/seo/seoMap';
 
 interface VideoItem {
   id: string;
@@ -437,14 +439,61 @@ const ContentHub = () => {
       </section>
 
       {/* Articles Section */}
+      {/* Belgium AI Guides — localized CTA section linking to /blog/<slug> */}
+      <section className="pb-12">
+        <div className="container mx-auto px-4">
+          {(() => {
+            const seoLang = resolveSeoLang(i18n.language);
+            const HUB_COPY: Record<string, { title: string; sub: string; read: string; viewAll: string }> = {
+              en: { title: 'Latest Belgium AI Guides', sub: 'Member-priced AI tools and tutorials for Belgian users.', read: 'Read guide', viewAll: 'View all guides' },
+              fr: { title: 'Derniers guides IA Belgique', sub: 'Outils IA et tutoriels au prix membre pour les utilisateurs belges.', read: 'Lire le guide', viewAll: 'Voir tous les guides' },
+              nl: { title: 'Nieuwste Belgische AI-gidsen', sub: 'AI-tools en tutorials aan lidprijs voor Belgische gebruikers.', read: 'Lees gids', viewAll: 'Alle gidsen bekijken' },
+              de: { title: 'Neueste Belgien KI-Guides', sub: 'KI-Tools und Tutorials zum Mitgliederpreis für belgische Nutzer.', read: 'Guide lesen', viewAll: 'Alle Guides ansehen' },
+              es: { title: 'Últimas guías IA Bélgica', sub: 'Herramientas IA y tutoriales a precio miembro para usuarios belgas.', read: 'Leer guía', viewAll: 'Ver todas las guías' },
+              pt: { title: 'Últimos guias IA Bélgica', sub: 'Ferramentas IA e tutoriais ao preço de membro para utilizadores belgas.', read: 'Ler guia', viewAll: 'Ver todos os guias' },
+              ar: { title: 'أحدث أدلة الذكاء الاصطناعي لبلجيكا', sub: 'أدوات وأدلة الذكاء الاصطناعي بسعر العضوية للمستخدمين البلجيكيين.', read: 'اقرأ الدليل', viewAll: 'عرض كل الأدلة ←' },
+            };
+            const copy = HUB_COPY[seoLang] ?? HUB_COPY.en;
+            const featured = BLOG_POSTS.slice(0, 6);
+            return (
+              <>
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
+                  <h2 className="text-2xl md:text-3xl font-display font-bold mb-2">{copy.title}</h2>
+                  <p className="text-muted-foreground">{copy.sub}</p>
+                </motion.div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                  {featured.map((post) => {
+                    const loc = getBlogLocale(post, seoLang);
+                    return (
+                      <Link key={post.slug} to={`/blog/${post.slug}`} className="block group">
+                        <div className="glass rounded-2xl overflow-hidden h-full flex flex-col hover:border-primary/30 transition-all duration-300">
+                          <div className="relative aspect-[16/10] overflow-hidden">
+                            <img src={post.thumbnail} alt={loc.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                            <div className="absolute top-4 left-4">
+                              <span className="px-3 py-1.5 rounded-full bg-primary/90 text-primary-foreground text-xs font-semibold backdrop-blur-sm">{post.category}</span>
+                            </div>
+                          </div>
+                          <div className="p-6 flex flex-col flex-grow">
+                            <h3 className="font-display font-bold text-lg leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">{loc.h1}</h3>
+                            <p className="text-sm text-muted-foreground line-clamp-2 mb-4 flex-grow">{loc.description}</p>
+                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                              {copy.read}
+                              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180" />
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      </section>
+
       <section className="pb-24">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-10"
-          >
             <h2 className="text-2xl md:text-3xl font-display font-bold mb-2">
               {t('contentHub.articles')}
             </h2>
