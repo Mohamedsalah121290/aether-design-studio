@@ -157,7 +157,7 @@ const Index = () => {
 
           <div className="container mx-auto px-4 relative z-10 pt-20 pb-24 md:pt-24 md:pb-0">
             <div className="max-w-4xl mx-auto text-center">
-              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="mb-6">
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="hidden md:block mb-6">
                 <img src={logo} alt="AI DEALS" className="h-20 md:h-28 w-auto mx-auto drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]" />
               </motion.div>
 
@@ -241,7 +241,7 @@ const Index = () => {
                   </div>
                 ))}
               </motion.div>
-              <div className="mt-4">
+              <div className="mt-4 hidden md:block">
                 <TrustBadges compact />
               </div>
             </div>
