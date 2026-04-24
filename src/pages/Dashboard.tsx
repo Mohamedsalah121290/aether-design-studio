@@ -19,65 +19,31 @@ import { toast } from '@/hooks/use-toast';
 
 // Import local logos
 import perplexityLogo from '@/assets/perplexity-logo.png';
-import jasperLogo from '@/assets/jasper-logo.png';
 import capcutLogo from '@/assets/capcut-logo.png';
-import leonardoLogo from '@/assets/leonardo-logo.png';
-import runwayLogo from '@/assets/runway-logo.png';
 import elevenlabsLogo from '@/assets/elevenlabs-logo.png';
-import murfLogo from '@/assets/murf-logo.png';
-import adobeLogo from '@/assets/adobe-logo.png';
 import chatgptLogo from '@/assets/chatgpt-logo.png';
-import claudeLogo from '@/assets/claude-logo.png';
-import geminiLogo from '@/assets/gemini-logo.png';
-import midjourneyLogo from '@/assets/midjourney-logo.png';
 
 const toolLogos: Record<string, string> = {
   'chatgpt': chatgptLogo,
-  'claude': claudeLogo,
-  'gemini': geminiLogo,
   'perplexity': perplexityLogo,
-  'jasper': jasperLogo,
-  'midjourney': midjourneyLogo,
-  'leonardo': leonardoLogo,
   'capcut': capcutLogo,
-  'runway': runwayLogo,
   'elevenlabs': elevenlabsLogo,
-  'murf': murfLogo,
-  'claude-code': claudeLogo,
-  'adobe': adobeLogo,
   'windows': 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg',
 };
 
 const toolColors: Record<string, { primary: string; glow: string }> = {
   'chatgpt': { primary: '#10a37f', glow: '160 84% 40%' },
-  'claude': { primary: '#cc785c', glow: '20 55% 58%' },
-  'gemini': { primary: '#4285f4', glow: '217 89% 61%' },
   'perplexity': { primary: '#20808d', glow: '187 63% 34%' },
-  'jasper': { primary: '#ff5c5c', glow: '0 100% 68%' },
-  'midjourney': { primary: '#000000', glow: '0 0% 30%' },
-  'leonardo': { primary: '#8b5cf6', glow: '258 90% 66%' },
   'capcut': { primary: '#00f0ff', glow: '184 100% 50%' },
-  'runway': { primary: '#ff2d55', glow: '349 100% 59%' },
   'elevenlabs': { primary: '#000000', glow: '0 0% 40%' },
-  'murf': { primary: '#6366f1', glow: '239 84% 67%' },
-  'claude-code': { primary: '#ff6b35', glow: '18 100% 60%' },
-  'adobe': { primary: '#ff0000', glow: '0 100% 50%' },
   'windows': { primary: '#0078d4', glow: '206 100% 42%' },
 };
 
 const toolAccessUrls: Record<string, string> = {
   'chatgpt': 'https://chat.openai.com',
-  'claude': 'https://claude.ai',
-  'gemini': 'https://gemini.google.com',
   'perplexity': 'https://perplexity.ai',
-  'jasper': 'https://jasper.ai',
-  'midjourney': 'https://midjourney.com',
-  'leonardo': 'https://leonardo.ai',
   'capcut': 'https://capcut.com',
-  'runway': 'https://runwayml.com',
   'elevenlabs': 'https://elevenlabs.io',
-  'murf': 'https://murf.ai',
-  'adobe': 'https://adobe.com',
 };
 
 interface Order {
