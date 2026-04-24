@@ -377,6 +377,22 @@ const Navbar = () => {
                     </button>
                   ))}
                 </div>
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
+                  {CURRENCIES.map(item => (
+                    <button
+                      key={item.code}
+                      onClick={() => { changeCurrency(item.code); setIsMobileMenuOpen(false); }}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors ${
+                        currency.code === item.code
+                          ? 'bg-primary/15 text-primary border-primary/40'
+                          : 'bg-white/5 text-muted-foreground border-white/10 hover:bg-white/10 hover:text-foreground'
+                      }`}
+                    >
+                      <CircleDollarSign className="w-3.5 h-3.5" />
+                      <span className="uppercase text-xs font-semibold">{item.code}</span>
+                    </button>
+                  ))}
+                </div>
                 
                 <div className="flex flex-col gap-3 pt-4">
                   <Button variant="heroOutline" className="w-full" asChild>
