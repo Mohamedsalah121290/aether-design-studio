@@ -387,7 +387,7 @@ const PaymentPage = () => {
                       >
                         {plan.plan_name}
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
-                          <span className="ml-1.5 opacity-80">${plan.monthly_price}/mo</span>
+                          <span className="ml-1.5 opacity-80">€{plan.monthly_price}</span>
                         )}
                       </button>
                     ))}
