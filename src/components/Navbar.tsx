@@ -231,6 +231,58 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
+            {/* Currency Selector */}
+            <div className="relative" ref={currencyMenuRef}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsCurrencyMenuOpen(!isCurrencyMenuOpen)}
+                aria-label="Currency selector"
+                className="flex items-center gap-2 h-9 px-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-foreground transition-all"
+              >
+                <CircleDollarSign className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs font-semibold tracking-wide uppercase">{currency.code}</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${isCurrencyMenuOpen ? 'rotate-180' : ''}`} />
+              </Button>
+
+              <AnimatePresence>
+                {isCurrencyMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ type: 'spring', damping: 25, stiffness: 400 }}
+                    className="absolute top-full end-0 mt-2 w-64 rounded-2xl overflow-hidden z-50"
+                    style={{
+                      background: 'linear-gradient(135deg, hsl(222 47% 12% / 0.98) 0%, hsl(222 47% 8% / 0.99) 100%)',
+                      backdropFilter: 'blur(40px)',
+                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 40px rgba(168, 85, 247, 0.1)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                    }}
+                  >
+                    <div className="max-h-72 overflow-y-auto py-2">
+                      {CURRENCIES.map((item, index) => (
+                        <motion.button
+                          key={item.code}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.01 }}
+                          onClick={() => changeCurrency(item.code)}
+                          className={`w-full px-4 py-3 text-start flex items-center gap-3 transition-all duration-200 ${
+                            currency.code === item.code ? 'text-primary bg-primary/10' : 'text-foreground hover:bg-white/5'
+                          }`}
+                        >
+                          <span className="w-8 text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">{item.code}</span>
+                          <span className="flex-1 font-medium text-sm">{item.name}</span>
+                          {currency.code === item.code && <Check className="w-4 h-4 text-primary" strokeWidth={2.5} />}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <Button variant="heroOutline" size="sm" asChild>
               <Link to="/dashboard">{t('nav.dashboard')}</Link>
             </Button>
