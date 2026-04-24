@@ -6,6 +6,9 @@ import { ArrowLeft, ArrowRight, Clock, User, Calendar, Share2, Bookmark } from '
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
+import { SITE_URL, resolveSeoLang } from '@/lib/seo/seoMap';
+import { getArticleSeo } from '@/lib/seo/articleSeo';
 
 interface ArticleItem {
   id: string;
