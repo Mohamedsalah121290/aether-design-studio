@@ -144,7 +144,7 @@ const Index = () => {
 
       <main>
         {/* ═══════════════ 1) HERO ═══════════════ */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 w-full h-full">
             <video autoPlay loop muted playsInline poster={heroImage} className="absolute inset-0 w-full h-full object-cover">
               <source src={heroVideo} type="video/mp4" />
@@ -153,7 +153,7 @@ const Index = () => {
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)' }} />
           </div>
 
-          <div className="container mx-auto px-4 relative z-10 pt-24">
+          <div className="container mx-auto px-4 relative z-10 pt-20 pb-24 md:pt-24 md:pb-0">
             <div className="max-w-4xl mx-auto text-center">
               <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="mb-6">
                 <img src={logo} alt="AI DEALS" className="h-20 md:h-28 w-auto mx-auto drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]" />
@@ -207,19 +207,22 @@ const Index = () => {
               </motion.p>
 
               {/* CTAs */}
-              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-                <Button variant="hero" size="xl" className="group min-w-[200px] shadow-2xl" asChild>
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 md:mb-10">
+                <Button variant="hero" size="xl" className="group min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] shadow-2xl" asChild>
                   <Link to="/store">
-                    Explore Tools
+                    Get Access Now
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
-                <Button variant="heroOutline" size="xl" className="backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
+                <Button variant="heroOutline" size="xl" className="hidden sm:inline-flex backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
                   <a href="#how-it-works">
                     Learn How It Works
                   </a>
                 </Button>
               </motion.div>
+              <div className="md:hidden mb-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-medium text-white/75">
+                <span>✔ Instant access</span><span>✔ Works worldwide</span><span>✔ Secure payment</span>
+              </div>
               <p className="text-[11px] text-white/45 mb-5">Secure checkout via Stripe. Final payment in EUR.</p>
 
               {/* Trust badges */}
@@ -261,6 +264,31 @@ const Index = () => {
               </div>
             </motion.div>
           </motion.div>
+        </section>
+
+        <section className="md:hidden py-10 relative" aria-label="Mobile conversion shortcuts">
+          <div className="container mx-auto px-4 space-y-6">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold text-primary uppercase tracking-wider">Most Popular Tools</p>
+                <h2 className="text-2xl font-display font-bold">Buy faster on mobile</h2>
+              </div>
+              <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary">23 viewing now</span>
+            </div>
+            <div className="grid gap-3">
+              {mobilePopularTools.map((tool) => (
+                <Link key={tool.id} to={`/store?scrollTo=${tool.id}`} className="glass min-h-[104px] rounded-2xl p-4 flex items-center justify-between gap-4 active:scale-[0.99] transition-transform">
+                  <div className="min-w-0">
+                    <span className="inline-flex mb-2 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-muted-foreground">{tool.badge}</span>
+                    <h3 className="text-base font-display font-bold text-foreground truncate">{tool.name}</h3>
+                    <p className="text-sm font-semibold text-primary mt-1">{tool.price}</p>
+                  </div>
+                  <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Buy Now</span>
+                </Link>
+              ))}
+            </div>
+            <p className="text-center text-xs text-muted-foreground">Limited availability today · secure checkout · activation support</p>
+          </div>
         </section>
 
         {/* ═══════════════ 2) PROBLEM → SOLUTION ═══════════════ */}
