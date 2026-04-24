@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { CURRENCIES, CURRENCY_STORAGE_KEY, getCurrency, type CurrencyCode, type CurrencyOption } from '@/lib/currency';
 
 interface CurrencyContextValue {
@@ -8,7 +8,7 @@ interface CurrencyContextValue {
 
 const CurrencyContext = createContext<CurrencyContextValue | null>(null);
 
-export const CurrencyProvider = ({ children }: { children: React.ReactNode }) => {
+export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   const [currencyCode, setCurrencyCodeState] = useState<CurrencyCode>(() => {
     if (typeof window === 'undefined') return 'EUR';
     return getCurrency(window.localStorage.getItem(CURRENCY_STORAGE_KEY)).code;
