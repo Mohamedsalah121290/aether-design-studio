@@ -6,6 +6,9 @@ import { ArrowLeft, ArrowRight, Clock, User, Calendar, Share2, Bookmark } from '
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
+import { SITE_URL, resolveSeoLang } from '@/lib/seo/seoMap';
+import { getArticleSeo } from '@/lib/seo/articleSeo';
 
 interface ArticleItem {
   id: string;
@@ -515,6 +518,7 @@ const ArticlePage = () => {
   if (!article) {
     return (
       <main className="min-h-screen mesh-gradient">
+        <SEO page="blog" pathOverride={`/article/${articleId ?? ''}`} noIndex />
         <Navbar />
         <div className="container mx-auto px-4 pt-32 pb-24 text-center">
           <h1 className="text-3xl font-display font-bold mb-4">Article Not Found</h1>
@@ -528,8 +532,62 @@ const ArticlePage = () => {
     );
   }
 
+  // Localized article SEO with safe fallback chain.
+  const seoLang = resolveSeoLang(i18n.language);
+  const articleSeo = getArticleSeo(
+    article.id,
+    seoLang,
+    article.title,
+    article.snippet,
+    article.category,
+  );
+  const articleUrl = `${SITE_URL}/article/${article.id}`;
+  const articleJsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: articleSeo.title,
+      description: articleSeo.description,
+      image: article.thumbnail,
+      author: { '@type': 'Person', name: article.author },
+      publisher: {
+        '@type': 'Organization',
+        name: 'AI DEALS',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${SITE_URL}/lovable-uploads/64d447c1-4f6f-4d56-8e09-a6f5cc5a84e0.png`,
+        },
+      },
+      datePublished: article.date,
+      dateModified: article.date,
+      mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+      articleSection: article.category,
+      inLanguage: seoLang,
+      keywords: [articleSeo.primaryKeyword, ...articleSeo.secondaryKeywords].join(', '),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
+        { '@type': 'ListItem', position: 3, name: article.title, item: articleUrl },
+      ],
+    },
+  ];
+
   return (
     <main className="min-h-screen mesh-gradient">
+      <SEO
+        page="blog"
+        pathOverride={`/article/${article.id}`}
+        image={article.thumbnail}
+        ogType="article"
+        titleOverride={articleSeo.title}
+        descriptionOverride={articleSeo.description}
+        keywordsOverride={[articleSeo.primaryKeyword, ...articleSeo.secondaryKeywords]}
+        jsonLd={articleJsonLd}
+      />
       <Navbar />
 
       {/* Hero Section */}
