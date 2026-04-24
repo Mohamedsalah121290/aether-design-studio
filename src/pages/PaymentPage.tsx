@@ -495,7 +495,7 @@ const PaymentPage = () => {
                       <div>
                         <h4 className="font-semibold text-white text-sm">Apply Wallet Credit</h4>
                         <p className="text-xs text-muted-foreground">
-                          Available: <span style={{ color: '#E8D48B' }} className="font-semibold">${walletBalance.toFixed(2)}</span>
+                          Available: <span style={{ color: '#E8D48B' }} className="font-semibold">€{walletBalance.toFixed(2)}</span>
                         </p>
                       </div>
                     </div>
@@ -509,7 +509,7 @@ const PaymentPage = () => {
                       </div>
                       <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
                         <span>Wallet credit</span>
-                        <span>-${walletDeduction.toFixed(2)}</span>
+                        <span>-€{walletDeduction.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-white">
                         <span>You pay</span>
