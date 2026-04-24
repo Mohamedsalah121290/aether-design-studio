@@ -121,19 +121,6 @@ const Index = () => {
     document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
   }, [i18n.language]);
 
-  const { data: featuredTools = [] } = useQuery({
-    queryKey: ['featured-tools-home'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('tools')
-        .select('*')
-        .eq('is_active', true)
-        .in('tool_id', ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovable', 'canva'])
-        .limit(6);
-      return (data || []) as Tool[];
-    },
-  });
-
   const fadeUp = {
     initial: { opacity: 0, y: 24 },
     whileInView: { opacity: 1, y: 0 },
@@ -156,25 +143,6 @@ const Index = () => {
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.7) 70%, hsl(var(--background)) 100%)' }} />
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)' }} />
           </div>
-
-          {/* Floating Icons */}
-          {floatingElements.map((el, i) => (
-            <motion.div
-              key={el.name}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.8 + el.delay, duration: 0.5 }}
-              className="absolute hidden lg:block z-20"
-              style={{ left: el.x, top: el.y }}
-            >
-              <motion.div animate={{ y: [0, -12, 0], rotate: [0, 3, -3, 0] }} transition={{ duration: 4 + i * 0.5, repeat: Infinity, ease: 'easeInOut' }}>
-                <div className="rounded-2xl p-3 backdrop-blur-xl border border-white/20 shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)' }}>
-                  <img src={el.icon} alt={el.name} style={{ width: el.size, height: el.size }} className="object-contain" />
-                </div>
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-4 rounded-full blur-xl opacity-60" style={{ background: 'hsl(var(--primary))' }} />
-              </motion.div>
-            </motion.div>
-          ))}
 
           <div className="container mx-auto px-4 relative z-10 pt-24">
             <div className="max-w-4xl mx-auto text-center">
