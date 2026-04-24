@@ -254,16 +254,6 @@ const Index = () => {
           </motion.div>
         </section>
 
-        <section className="py-16 relative">
-          <div className="container mx-auto px-4">
-            <motion.div {...fadeUp} className="text-center mb-10">
-              <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">Customer Proof</span>
-              <h2 className="text-3xl md:text-5xl font-display font-bold">Recent buyer <span className="gradient-text">experiences</span></h2>
-            </motion.div>
-            <SocialProofCarousel />
-          </div>
-        </section>
-
         {/* ═══════════════ 2) PROBLEM → SOLUTION ═══════════════ */}
         <section className="py-24 relative">
           <div className="container mx-auto px-4">
@@ -419,41 +409,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ 5) FEATURED TOOLS ═══════════════ */}
-        {featuredTools.length > 0 && (
-          <section className="py-24 relative">
-            <div className="container mx-auto px-4">
-              <motion.div {...fadeUp} className="text-center mb-12">
-                <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                  Curated Selection
-                </span>
-                <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-                  Top AI Tools. <span className="gradient-text">Zero Noise.</span>
-                </h2>
-                <p className="text-muted-foreground max-w-xl mx-auto text-lg">
-                  We only list tools that actually deliver value.
-                </p>
-              </motion.div>
-
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-10">
-                {featuredTools.map((tool, i) => (
-                  <ToolCard key={tool.id} tool={tool} index={i} />
-                ))}
-              </div>
-
-
-              <div className="text-center">
-                <Button variant="heroOutline" size="lg" className="group" asChild>
-                  <Link to="/store">
-                    See All Tools
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* ═══════════════ 6) ACADEMY TEASER ═══════════════ */}
         <section className="py-24 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
@@ -522,22 +477,6 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* ═══════════════ 7) SOCIAL PROOF ═══════════════ */}
-        <section className="py-24 relative">
-          <div className="container mx-auto px-4">
-            <motion.div {...fadeUp} className="text-center mb-12">
-              <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                Real Feedback
-              </span>
-              <h2 className="text-3xl md:text-5xl font-display font-bold">
-                Trusted by <span className="gradient-text">Thousands</span>
-              </h2>
-            </motion.div>
-
-            <SocialProofCarousel />
           </div>
         </section>
 
