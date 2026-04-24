@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard";
 import ContentHub from "./pages/ContentHub";
 import BlogPage from "./pages/BlogPage";
 import ArticlePage from "./pages/ArticlePage";
+import BlogArticlePage from "./pages/BlogArticlePage";
 import Academy from "./pages/Academy";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
@@ -64,6 +65,7 @@ const AppRoutes = () => {
       <Route path="/dashboard" element={wrap("Dashboard", <ProtectedRoute><Dashboard /></ProtectedRoute>)} />
       <Route path="/content-hub" element={<Navigate to="/blog" replace />} />
       <Route path="/blog" element={wrap("BlogPage", <BlogPage />)} />
+      <Route path="/blog/:slug" element={wrap("BlogArticlePage", <BlogArticlePage />)} />
       <Route path="/academy" element={wrap("Academy", <Academy />)} />
       <Route path="/about" element={wrap("AboutPage", <AboutPage />)} />
       <Route path="/contact" element={wrap("ContactPage", <ContactPage />)} />
