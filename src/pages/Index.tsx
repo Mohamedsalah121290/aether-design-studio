@@ -260,7 +260,7 @@ const Index = () => {
                 <span>✔ Instant access</span><span>✔ Works worldwide</span><span>✔ Secure payment</span>
               </div>
               <SessionOfferTimer />
-              <p className="text-[11px] text-white/45 mb-5">Secure checkout via Stripe. Final payment in EUR.</p>
+              <p className="mt-3 text-[11px] text-white/45 mb-5">Secure checkout via Stripe. Final payment in EUR.</p>
 
               {/* Trust badges */}
               <motion.div
