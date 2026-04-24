@@ -53,7 +53,11 @@ const PERIOD_STYLES: Record<PricePeriod, PeriodStyle> = {
 export function inferPeriodFromPlan(planName?: string | null): PricePeriod {
   const s = (planName || '').toLowerCase();
 
-  // One-time markers (warranty plans = one-time purchase, year count = coverage)
+  // One-time markers — only true one-time signals.
+  // NOTE: "warranty" alone is NOT a one-time signal — many warranty plans
+  // are still billed monthly (e.g. "Canva Team — 2yr Warranty" = €5/month
+  // with 2 years of account-coverage warranty). Use lifetime/key/MAK/perpetual
+  // as the only one-time markers.
   if (
     s.includes('lifetime') ||
     s.includes(' key') ||
@@ -62,9 +66,7 @@ export function inferPeriodFromPlan(planName?: string | null): PricePeriod {
     s.includes('retail online') ||
     s.includes('one time') ||
     s.includes('one-time') ||
-    s.includes('perpetual') ||
-    /\d+\s*yr\s*warranty/.test(s) ||
-    /\d+\s*year\s*warranty/.test(s)
+    s.includes('perpetual')
   ) {
     return 'one-time';
   }
