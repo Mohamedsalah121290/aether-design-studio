@@ -11,6 +11,7 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
+import { ChatbotPromoSection, TelegramIcon, TELEGRAM_URL, WhatsAppIcon, WHATSAPP_URL } from '@/components/ChatbotConversion';
 
 const ContactPage = () => {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -34,6 +35,11 @@ const ContactPage = () => {
     { icon: Clock, title: 'Response Time', value: 'Within 24 Hours', description: 'We guarantee a reply within one business day' },
     { icon: Shield, title: 'Privacy First', value: 'GDPR Principled', description: 'Your data is never shared or sold' },
     { icon: Globe, title: 'Global Support', value: 'Worldwide Access', description: 'We serve students and creators globally' },
+  ];
+
+  const contactLinks = [
+    { label: 'WhatsApp', href: WHATSAPP_URL, icon: WhatsAppIcon },
+    { label: 'Telegram', href: TELEGRAM_URL, icon: TelegramIcon },
   ];
 
   return (
@@ -132,6 +138,24 @@ const ContactPage = () => {
               transition={{ delay: 0.3 }}
               className="md:col-span-2 space-y-4"
             >
+              <div className="glass rounded-2xl p-5">
+                <h3 className="font-display font-bold text-sm mb-3">Chat instantly</h3>
+                <div className="flex gap-3">
+                  {contactLinks.map(({ label, href, icon: Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(event) => { if (href.startsWith('#')) event.preventDefault(); }}
+                      className="w-11 h-11 rounded-xl glass flex items-center justify-center hover:border-primary/30 transition-all duration-300 hover:scale-105"
+                      aria-label={`Contact on ${label}`}
+                    >
+                      <Icon />
+                    </a>
+                  ))}
+                </div>
+              </div>
               {supportInfo.map((info) => {
                 const Icon = info.icon;
                 return (
@@ -153,6 +177,7 @@ const ContactPage = () => {
             </motion.div>
           </div>
         </div>
+        <ChatbotPromoSection />
       </main>
 
       <Footer />

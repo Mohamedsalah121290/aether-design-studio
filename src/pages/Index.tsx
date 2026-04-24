@@ -16,6 +16,7 @@ import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
 import TrustBadges from '@/components/TrustBadges';
+import { ChatbotPromoSection } from '@/components/ChatbotConversion';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
@@ -567,6 +568,8 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        <ChatbotPromoSection />
 
 
         {/* ═══════════════ 9) FAQ ═══════════════ */}
