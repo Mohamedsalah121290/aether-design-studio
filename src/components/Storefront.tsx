@@ -6,6 +6,7 @@ import {
   Code, Zap, Briefcase, ShieldCheck, Monitor, Users, Clock, Headphones,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
+import { inferPeriodFromPlan, type PricePeriod } from '@/lib/pricePeriod';
 import TrustStrip from './TrustStrip';
 import FeaturedCarousel from './FeaturedCarousel';
 import FiltersBar, { FilterChip, SortOption } from './FiltersBar';
@@ -81,28 +82,36 @@ const Storefront = () => {
       if (toolsError) throw toolsError;
 
       const { data: plansData, error: plansError } = await supabase
-        .from('tool_plans').select('tool_id, monthly_price').eq('is_active', true);
+        .from('tool_plans').select('tool_id, plan_name, monthly_price').eq('is_active', true);
       if (plansError) throw plansError;
 
-      const minPriceMap: Record<string, number> = {};
+      // Determine the lowest-priced active plan per tool, and remember its plan_name
+      // so we can derive the correct billing period (one-time / monthly / yearly).
+      const minPriceMap: Record<string, { price: number; planName: string }> = {};
       (plansData || []).forEach(p => {
-        const price = p.monthly_price ? Number(p.monthly_price) : null;
+        const price = p.monthly_price != null ? Number(p.monthly_price) : null;
         if (price != null && price > 0) {
-          if (!(p.tool_id in minPriceMap) || price < minPriceMap[p.tool_id]) {
-            minPriceMap[p.tool_id] = price;
+          const existing = minPriceMap[p.tool_id];
+          if (!existing || price < existing.price) {
+            minPriceMap[p.tool_id] = { price, planName: p.plan_name || '' };
           }
         }
       });
 
-      setTools((toolsData || []).map(tool => ({
-        id: tool.id,
-        tool_id: tool.tool_id,
-        name: tool.name,
-        category: tool.category,
-        logo_url: tool.logo_url || null,
-        starting_price: minPriceMap[tool.tool_id] ?? null,
-        status: (tool as any).status || 'active',
-      })));
+      setTools((toolsData || []).map(tool => {
+        const entry = minPriceMap[tool.tool_id];
+        const period: PricePeriod | null = entry ? inferPeriodFromPlan(entry.planName) : null;
+        return {
+          id: tool.id,
+          tool_id: tool.tool_id,
+          name: tool.name,
+          category: tool.category,
+          logo_url: tool.logo_url || null,
+          starting_price: entry?.price ?? null,
+          starting_period: period,
+          status: (tool as any).status || 'active',
+        };
+      }));
     } catch (error) {
       console.error('Error fetching tools:', error);
     } finally {
