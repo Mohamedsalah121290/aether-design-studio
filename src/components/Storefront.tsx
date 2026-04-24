@@ -22,10 +22,10 @@ const SECTION_ORDER: {
   icon: React.ElementType;
   categories: string[];
 }[] = [
-  { key: 'microsoft',  label: '💻 Microsoft',                  subtitle: 'Windows, Office & Microsoft licenses',     icon: Monitor,     categories: ['os-licenses', 'productivity'] },
+  { key: 'microsoft',  label: '💻 Microsoft',                  subtitle: 'Windows, Office & Microsoft licenses',     icon: Monitor,     categories: ['os-licenses'] },
   { key: 'design',     label: '🎨 Design',                     subtitle: 'Creative design & video editing tools',    icon: Palette,     categories: ['design'] },
-  { key: 'ai-tools',   label: '🤖 AI Tools',                   subtitle: 'Premium AI assistants & generators',       icon: Code,        categories: ['ai-text', 'ai-media', 'audio'] },
-  { key: 'other',      label: '🧩 Other Software & Accounts',  subtitle: 'Productivity, security, learning & more',  icon: Briefcase,   categories: ['security', 'education', 'communication', 'stock-media'] },
+  { key: 'ai-tools',   label: '🤖 AI Tools',                   subtitle: 'Premium AI assistants & generators',       icon: Code,        categories: ['ai-text', 'ai-media', 'audio', 'productivity'] },
+  { key: 'other',      label: '🧩 Other Software & Accounts',  subtitle: 'Security, learning & more',                icon: Briefcase,   categories: ['security', 'education', 'communication', 'stock-media'] },
 ];
 
 const FEATURED_TOOL_IDS = ['chatgpt', 'claude', 'gemini', 'midjourney', 'canva', 'perplexity'];
