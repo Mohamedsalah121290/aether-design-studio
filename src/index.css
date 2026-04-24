@@ -361,9 +361,20 @@
 }
 
 @media (max-width: 640px) {
+  body {
+    background-attachment: scroll;
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+
   .chatbot-social-3d {
-    width: 58px;
-    height: 58px;
+    width: 48px;
+    height: 48px;
+    box-shadow: 0 8px 18px hsl(240 40% 2% / 0.38), 0 0 18px hsl(var(--primary) / 0.24), inset 0 2px 4px hsl(0 0% 100% / 0.18);
+  }
+
+  .chatbot-main-float {
+    padding: 4px;
+    box-shadow: 0 10px 22px hsl(240 40% 2% / 0.5), 0 0 20px hsl(var(--primary) / 0.42), inset 0 2px 3px hsl(0 0% 100% / 0.14);
   }
 }
 
