@@ -10,24 +10,16 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { ToolCard, Tool } from '@/components/ToolCard';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
-import SocialProofCarousel from '@/components/SocialProofCarousel';
 import TrustBadges from '@/components/TrustBadges';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
-import chatgptLogo from '@/assets/chatgpt-logo.png';
-import canvaLogo from '@/assets/canva-logo.png';
-import perplexityLogo from '@/assets/perplexity-logo.png';
-import capcutLogo from '@/assets/capcut-logo.png';
 import logo from '@/assets/logo.png';
 
 /* ══════════════════════════════════════════════════════════════
@@ -85,12 +77,7 @@ const faqs = [
   { q: 'Is it monthly?', a: 'Yes. Flexible. Cancel anytime. No annual lock-ins, no questions asked.' },
 ];
 
-const floatingElements = [
-  { icon: chatgptLogo, name: 'ChatGPT', x: '5%', y: '25%', delay: 0, size: 56 },
-  { icon: canvaLogo, name: 'Canva', x: '88%', y: '20%', delay: 0.2, size: 48 },
-  { icon: perplexityLogo, name: 'Perplexity', x: '3%', y: '65%', delay: 0.4, size: 44 },
-  { icon: capcutLogo, name: 'CapCut', x: '92%', y: '60%', delay: 0.6, size: 52 },
-];
+const floatingElements: { name: string; x: string; y: string; delay: number; size: number }[] = [];
 
 /* ══════════════════════════════════════════════════════════════
    FAQ ACCORDION ITEM
