@@ -284,25 +284,55 @@
 
 .chatbot-main-float {
   border-radius: 999px;
-  box-shadow: 0 0 22px hsl(var(--primary) / 0.45), 0 0 48px hsl(var(--secondary) / 0.18);
+  padding: 5px;
+  background: radial-gradient(circle at 35% 28%, hsl(0 0% 100% / 0.22), transparent 28%), linear-gradient(145deg, hsl(var(--primary) / 0.28), hsl(var(--secondary) / 0.18));
+  border: 1px solid hsl(var(--primary) / 0.45);
+  box-shadow: 0 16px 34px hsl(240 40% 2% / 0.58), 0 0 28px hsl(var(--primary) / 0.55), 0 0 62px hsl(var(--secondary) / 0.22), inset 0 2px 3px hsl(0 0% 100% / 0.16);
   animation: chatbot-float-pulse 9s ease-in-out infinite;
 }
 
 .chatbot-social-3d {
-  width: 60px;
-  height: 60px;
-  border-radius: 18px;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
   display: grid;
   place-items: center;
-  background: hsl(var(--card) / 0.82);
-  border: 1px solid hsl(var(--border));
-  box-shadow: 0 12px 24px hsl(240 40% 2% / 0.45), inset 0 1px 0 hsl(0 0% 100% / 0.08);
-  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+  border: 1px solid hsl(0 0% 100% / 0.12);
+  transform-style: preserve-3d;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, filter 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.chatbot-social-3d::before {
+  content: '';
+  position: absolute;
+  inset: 8px 10px auto 10px;
+  height: 22px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.45), hsl(0 0% 100% / 0));
+  filter: blur(1px);
+}
+
+.chatbot-social-3d svg {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 4px 7px hsl(240 40% 2% / 0.35));
+}
+
+.chatbot-telegram-3d {
+  background: radial-gradient(circle at 34% 28%, hsl(0 0% 100% / 0.38), transparent 24%), linear-gradient(145deg, hsl(198 85% 65%), #229ED9 52%, hsl(204 76% 38%));
+  box-shadow: 0 14px 26px hsl(198 80% 45% / 0.26), 0 0 28px hsl(198 90% 58% / 0.55), inset 0 2px 5px hsl(0 0% 100% / 0.24), inset 0 -7px 14px hsl(204 80% 22% / 0.26);
+}
+
+.chatbot-whatsapp-3d {
+  background: radial-gradient(circle at 34% 28%, hsl(0 0% 100% / 0.38), transparent 24%), linear-gradient(145deg, hsl(142 72% 62%), #25D366 52%, hsl(145 70% 34%));
+  box-shadow: 0 14px 26px hsl(145 80% 35% / 0.28), 0 0 28px hsl(145 75% 48% / 0.55), inset 0 2px 5px hsl(0 0% 100% / 0.24), inset 0 -7px 14px hsl(145 80% 22% / 0.26);
 }
 
 .chatbot-social-3d:hover {
   border-color: hsl(var(--primary) / 0.35);
-  box-shadow: 0 16px 30px hsl(240 40% 2% / 0.55), 0 0 26px hsl(var(--primary) / 0.22), inset 0 1px 0 hsl(0 0% 100% / 0.1);
+  filter: brightness(1.08);
 }
 
 @keyframes chatbot-breathe {
@@ -326,8 +356,15 @@
 }
 
 @keyframes chatbot-float-pulse {
-  0%, 100% { box-shadow: 0 0 22px hsl(var(--primary) / 0.38), 0 0 48px hsl(var(--secondary) / 0.16); }
-  50% { box-shadow: 0 0 28px hsl(var(--primary) / 0.52), 0 0 60px hsl(var(--secondary) / 0.22); }
+  0%, 100% { box-shadow: 0 16px 34px hsl(240 40% 2% / 0.58), 0 0 28px hsl(var(--primary) / 0.48), 0 0 62px hsl(var(--secondary) / 0.18), inset 0 2px 3px hsl(0 0% 100% / 0.16); }
+  50% { box-shadow: 0 18px 38px hsl(240 40% 2% / 0.62), 0 0 38px hsl(var(--primary) / 0.64), 0 0 76px hsl(var(--secondary) / 0.28), inset 0 2px 3px hsl(0 0% 100% / 0.18); }
+}
+
+@media (max-width: 640px) {
+  .chatbot-social-3d {
+    width: 58px;
+    height: 58px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
