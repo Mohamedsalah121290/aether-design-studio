@@ -39,33 +39,35 @@ function stringify(obj) {
   return lines.join('\n');
 }
 
-function replaceFirst(src, regex, replacement) {
-  const m = regex.exec(src);
-  if (!m) return { src, ok: false };
-  return { src: src.slice(0, m.index) + replacement + src.slice(m.index + m[0].length), ok: true };
+function replaceFromCursor(src, cursor, regex, replacement) {
+  const tail = src.slice(cursor);
+  const m = regex.exec(tail);
+  if (!m) return { src, cursor, ok: false };
+  const absStart = cursor + m.index;
+  const absEnd = absStart + m[0].length;
+  const newSrc = src.slice(0, absStart) + replacement + src.slice(absEnd);
+  // Advance cursor past the inserted block so next search skips it.
+  return { src: newSrc, cursor: absStart + replacement.length, ok: true };
 }
 
 async function main() {
   let src = await readFile(FILE, 'utf8');
   let heroReplaced = 0;
   let storeReplaced = 0;
+  let cursor = 0;
 
   for (const lang of ORDER) {
     const copy = COPY[lang];
-    if (!copy) {
-      console.warn(`[skip] no COPY for ${lang}`);
-      continue;
-    }
+    if (!copy) { console.warn(`[skip] no COPY for ${lang}`); continue; }
     const heroRe = /hero:\s*\{[^]*?\n {6}\},/;
     const storeRe = /store:\s*\{[^]*?\n {6}\},/;
 
-    // Always walk the FIRST remaining hero block (sequentially down the file).
-    let r = replaceFirst(src, heroRe, `hero: ${stringify(copy.hero)}`);
-    if (r.ok) { src = r.src; heroReplaced++; }
+    let r = replaceFromCursor(src, cursor, heroRe, `hero: ${stringify(copy.hero)}`);
+    if (r.ok) { src = r.src; cursor = r.cursor; heroReplaced++; }
     else console.warn(`[miss] hero for ${lang}`);
 
-    r = replaceFirst(src, storeRe, `store: ${stringify(copy.store)}`);
-    if (r.ok) { src = r.src; storeReplaced++; }
+    r = replaceFromCursor(src, cursor, storeRe, `store: ${stringify(copy.store)}`);
+    if (r.ok) { src = r.src; cursor = r.cursor; storeReplaced++; }
     else console.warn(`[miss] store for ${lang}`);
   }
 
