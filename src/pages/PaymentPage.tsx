@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { z } from 'zod';
 import type { ToolPlan } from '@/components/ToolCard';
+import { inferPeriodFromPlan, getPeriodStyle, formatEuro } from '@/lib/pricePeriod';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -156,16 +157,29 @@ const PaymentPage = () => {
     }
   };
 
+  /* ── Period & price logic (must match storefront EXACTLY) ──
+     The displayed price is ALWAYS the plan's actual stored price in EUR.
+     The Monthly/Annual toggle only applies to plans that are truly
+     "monthly" (we don't fabricate an annual ×0.8 price for one-time
+     keys, 1-year licenses, or 3-month subscriptions).
+  */
+  const period = inferPeriodFromPlan(selectedPlan?.plan_name);
+  const periodStyle = getPeriodStyle(period);
+  const isPureMonthly = period === 'monthly' &&
+    !/3\s*month|3m|90\s*day/i.test(selectedPlan?.plan_name || '');
+  const showBillingToggle = isPureMonthly;
+
   const getDisplayPrice = () => {
     if (!selectedPlan?.monthly_price) return null;
-    if (billingInterval === 'annual') {
-      return Number((selectedPlan.monthly_price * 12 * 0.8).toFixed(2)); // 20% discount
+    // Annual toggle ONLY available on pure-monthly plans.
+    if (showBillingToggle && billingInterval === 'annual') {
+      return Number((selectedPlan.monthly_price * 12 * 0.8).toFixed(2));
     }
     return selectedPlan.monthly_price;
   };
 
   const getMonthlyEquivalent = () => {
-    if (!selectedPlan?.monthly_price) return null;
+    if (!selectedPlan?.monthly_price || !showBillingToggle) return null;
     if (billingInterval === 'annual') {
       return Number((selectedPlan.monthly_price * 0.8).toFixed(2));
     }
@@ -182,7 +196,7 @@ const PaymentPage = () => {
   const formatPrice = (eur: number | null) => {
     if (eur == null) return 'N/A';
     if (eur === 0) return 'Free';
-    return `€${eur.toFixed(2)}`;
+    return formatEuro(eur);
   };
 
   const validateForm = (): boolean => {
