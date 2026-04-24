@@ -32,7 +32,7 @@ const Footer = () => {
     { icon: Twitter, href: '#', label: 'Twitter' },
     { icon: Github, href: '#', label: 'GitHub' },
     { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Mail, href: '#', label: 'Email' },
+    { icon: Mail, href: 'mailto:info@aideals.be', label: 'Email info@aideals.be' },
   ];
 
   const trustBadges = [
@@ -183,7 +183,10 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="py-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} AI DEALS. {t('footer.rights')}
+            © {new Date().getFullYear()} AI DEALS. {t('footer.rights')} ·{' '}
+            <a href="mailto:info@aideals.be" className="hover:text-foreground transition-colors">
+              info@aideals.be
+            </a>
           </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <Link to="/privacy" className="hover:text-foreground transition-colors">
