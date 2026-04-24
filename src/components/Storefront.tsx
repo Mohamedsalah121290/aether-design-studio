@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Sparkles, Search, Loader2, Palette,
-  Code, Briefcase, Monitor, Users,
+  Code, Briefcase, Monitor, Users, Clock,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
 import { inferPeriodFromPlan, type PricePeriod } from '@/lib/pricePeriod';
@@ -81,7 +81,7 @@ const Storefront = () => {
   const fetchTools = async () => {
     try {
       const { data: toolsData, error: toolsError } = await supabase
-        .from('tools').select('*').in('status', ['active', 'coming_soon']).order('name');
+        .from('tools').select('*').in('status', ['active', 'coming_soon', 'paused']).order('name');
       if (toolsError) throw toolsError;
 
       const { data: plansData, error: plansError } = await supabase
@@ -129,7 +129,7 @@ const Storefront = () => {
 
   const processedTools = useMemo(() => {
     let result = tools.filter(t =>
-      ALLOWED_TOOL_IDS.has(t.tool_id) &&
+      ALLOWED_TOOL_IDS.has(t.tool_id) && (t.status !== 'paused' || t.tool_id === 'gemini') &&
       t.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
