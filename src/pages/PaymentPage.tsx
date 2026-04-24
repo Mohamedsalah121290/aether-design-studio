@@ -319,63 +319,91 @@ const PaymentPage = () => {
                 </div>
               </div>
 
-              {/* ── Billing Interval ── */}
-              <div
-                className="p-5 rounded-2xl border border-white/10"
-                style={{ background: 'rgba(20, 20, 35, 0.5)' }}
-              >
-                <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-                  <Crown className="w-4 h-4 text-primary" />
-                  Billing Period
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setBillingInterval('monthly')}
-                    className={`relative p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-                      billingInterval === 'monthly'
-                        ? 'border-primary bg-primary/10 shadow-lg shadow-primary/10'
-                        : 'border-white/10 bg-white/5 hover:border-white/20'
-                    }`}
-                  >
-                    <p className="text-sm font-semibold text-white">Monthly</p>
+              {/* ── Billing Interval (only for pure-monthly plans) ── */}
+              {showBillingToggle ? (
+                <div
+                  className="p-5 rounded-2xl border border-white/10"
+                  style={{ background: 'rgba(20, 20, 35, 0.5)' }}
+                >
+                  <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+                    <Crown className="w-4 h-4 text-primary" />
+                    Billing Period
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setBillingInterval('monthly')}
+                      className={`relative p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                        billingInterval === 'monthly'
+                          ? 'border-primary bg-primary/10 shadow-lg shadow-primary/10'
+                          : 'border-white/10 bg-white/5 hover:border-white/20'
+                      }`}
+                    >
+                      <p className="text-sm font-semibold text-white">Monthly</p>
+                      {selectedPlan?.monthly_price != null && (
+                        <p className="text-lg font-bold text-sky-400 mt-1">
+                          €{selectedPlan.monthly_price}
+                          <span className="text-xs text-muted-foreground font-normal"> / month</span>
+                        </p>
+                      )}
+                      <p className="text-[10px] text-muted-foreground mt-1">Billed every month</p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setBillingInterval('annual')}
+                      className={`relative p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                        billingInterval === 'annual'
+                          ? 'border-primary bg-primary/10 shadow-lg shadow-primary/10'
+                          : 'border-white/10 bg-white/5 hover:border-white/20'
+                      }`}
+                    >
+                      <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400 border border-green-500/30">
+                        Save 20%
+                      </span>
+                      <p className="text-sm font-semibold text-white">Annual</p>
+                      {selectedPlan?.monthly_price != null && (
+                        <>
+                          <p className="text-lg font-bold text-orange-400 mt-1">
+                            €{(selectedPlan.monthly_price * 12 * 0.8).toFixed(2)}
+                            <span className="text-xs text-muted-foreground font-normal"> / year</span>
+                          </p>
+                          <p className="text-[10px] text-muted-foreground mt-1">
+                            €{(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · Billed annually
+                          </p>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* Non-monthly plans show a single, fixed billing summary */
+                <div
+                  className="p-5 rounded-2xl border border-white/10"
+                  style={{ background: 'rgba(20, 20, 35, 0.5)' }}
+                >
+                  <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+                    <Crown className="w-4 h-4 text-primary" />
+                    Billing Period
+                  </h3>
+                  <div className={`p-4 rounded-xl border-2 border-primary bg-primary/10`}>
+                    <p className="text-sm font-semibold text-white">{periodStyle.label}</p>
                     {selectedPlan?.monthly_price != null && (
-                      <p className="text-lg font-bold text-sky-400 mt-1">
+                      <p className={`text-lg font-bold mt-1 ${periodStyle.textClass}`}>
                         €{selectedPlan.monthly_price}
-                        <span className="text-xs text-muted-foreground font-normal"> / month</span>
+                        <span className="text-xs text-muted-foreground font-normal"> {periodStyle.suffix}</span>
                       </p>
                     )}
-                    <p className="text-[10px] text-muted-foreground mt-1">Billed every month</p>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setBillingInterval('annual')}
-                    className={`relative p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-                      billingInterval === 'annual'
-                        ? 'border-primary bg-primary/10 shadow-lg shadow-primary/10'
-                        : 'border-white/10 bg-white/5 hover:border-white/20'
-                    }`}
-                  >
-                    {/* Save badge */}
-                    <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400 border border-green-500/30">
-                      Save 20%
-                    </span>
-                    <p className="text-sm font-semibold text-white">Annual</p>
-                    {selectedPlan?.monthly_price != null && (
-                      <>
-                        <p className="text-lg font-bold text-orange-400 mt-1">
-                          €{(selectedPlan.monthly_price * 12 * 0.8).toFixed(2)}
-                          <span className="text-xs text-muted-foreground font-normal"> / year</span>
-                        </p>
-                        <p className="text-[10px] text-muted-foreground mt-1">
-                          €{(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · Billed annually
-                        </p>
-                      </>
-                    )}
-                  </button>
+                    <p className="text-[10px] text-muted-foreground mt-1">
+                      {period === 'one-time'
+                        ? 'Single payment — no recurring charges'
+                        : period === 'yearly'
+                        ? 'Charged once per year'
+                        : selectedPlan?.plan_name || ''}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* ── Plan Selector (if multiple plans) ── */}
               {plans.length > 1 && (
