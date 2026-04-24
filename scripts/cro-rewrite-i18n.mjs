@@ -1,0 +1,408 @@
+/**
+ * One-shot rewriter for src/lib/i18n.ts.
+ *
+ * Replaces the `hero:` and `store:` blocks for every supported language with
+ * CRO/SEO-optimized copy that injects:
+ *   - "up to 90% cheaper" value prop
+ *   - Strong CTAs ("Browse Deals", "Get Access Now", "Start Saving")
+ *   - Secure payment + fast delivery + contact email trust signals
+ *
+ * Usage:  node scripts/cro-rewrite-i18n.mjs
+ */
+import { readFile, writeFile } from 'node:fs/promises';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const FILE = join(__dirname, '..', 'src', 'lib', 'i18n.ts');
+
+// All 13 supported languages, keyed by their position in the resources object.
+// Hero + Store blocks are rewritten verbatim. Other keys are NOT touched.
+const COPY = {
+  en: {
+    hero: {
+      badge: 'Premium AI Tools — Up to 90% Cheaper',
+      title: 'Premium AI Tools.',
+      titleHighlight: 'Up to 90% Cheaper.',
+      description: "Get premium AI tools and subscriptions up to 90% cheaper, delivered safely and instantly. ChatGPT, Midjourney, Claude, Gemini & 50+ more.",
+      cta: 'Browse Deals',
+      ctaSecondary: 'Get Access Now',
+    },
+    store: {
+      badge: 'Premium AI Tools — Up to 90% Cheaper',
+      title: 'Every Premium AI Tool.',
+      titleHighlight: 'Up to 90% Cheaper.',
+      description: 'Get the AI tools you already want — up to 90% cheaper, delivered safely and instantly. Secure payment via Stripe & Bancontact. Activated in under 24h. Questions? info@aideals.be',
+      searchPlaceholder: 'Search deals...',
+      monthlyAccess: 'Monthly Access',
+      perMonth: '/mo',
+      buyNow: 'Start Saving',
+      noResults: 'No deals match your search',
+      tryAgain: 'Try a different keyword',
+      ctaPrimary: 'Browse Deals',
+      ctaSecondary: 'How It Works',
+      socialProof: '1,000+ active members already saving',
+      categories: { all: 'All Tools', text: 'Text & Chat', image: 'Image Gen', video: 'Video & Audio', coding: 'Coding & Software' },
+    },
+  },
+  zh: {
+    hero: {
+      badge: '高端 AI 工具 — 最高便宜 90%',
+      title: '高端 AI 工具。',
+      titleHighlight: '最高便宜 90%。',
+      description: '安全极速获取高端 AI 工具和订阅,最高便宜 90%。ChatGPT、Midjourney、Claude、Gemini 等 50+ 工具。',
+      cta: '浏览优惠',
+      ctaSecondary: '立即获取',
+    },
+    store: {
+      badge: '高端 AI 工具 — 最高便宜 90%',
+      title: '所有高端 AI 工具。',
+      titleHighlight: '最高便宜 90%。',
+      description: '安全极速获取你想要的 AI 工具,最高便宜 90%。Stripe / Bancontact 安全支付,24 小时内激活。咨询请联系 info@aideals.be',
+      searchPlaceholder: '搜索优惠...',
+      monthlyAccess: '按月订阅',
+      perMonth: '/月',
+      buyNow: '开始省钱',
+      noResults: '没有匹配的优惠',
+      tryAgain: '请尝试其他关键词',
+      ctaPrimary: '浏览优惠',
+      ctaSecondary: '如何运作',
+      socialProof: '1,000+ 活跃会员正在省钱',
+      categories: { all: '所有工具', text: '文本与聊天', image: '图像生成', video: '视频与音频', coding: '编程与软件' },
+    },
+  },
+  hi: {
+    hero: {
+      badge: 'प्रीमियम AI टूल्स — 90% तक सस्ते',
+      title: 'प्रीमियम AI टूल्स।',
+      titleHighlight: '90% तक सस्ते।',
+      description: 'प्रीमियम AI टूल्स और सब्सक्रिप्शन 90% तक सस्ते, सुरक्षित और तुरंत डिलीवर। ChatGPT, Midjourney, Claude, Gemini और 50+ अन्य।',
+      cta: 'डील्स देखें',
+      ctaSecondary: 'अभी एक्सेस लें',
+    },
+    store: {
+      badge: 'प्रीमियम AI टूल्स — 90% तक सस्ते',
+      title: 'हर प्रीमियम AI टूल।',
+      titleHighlight: '90% तक सस्ते।',
+      description: 'जो AI टूल्स आप चाहते हैं — 90% तक सस्ते, सुरक्षित और तुरंत डिलीवर। Stripe व Bancontact से सुरक्षित भुगतान। 24 घंटे में एक्टिवेशन। info@aideals.be',
+      searchPlaceholder: 'डील्स खोजें...',
+      monthlyAccess: 'मासिक एक्सेस',
+      perMonth: '/माह',
+      buyNow: 'बचत शुरू करें',
+      noResults: 'कोई डील नहीं मिली',
+      tryAgain: 'दूसरा कीवर्ड आज़माएँ',
+      ctaPrimary: 'डील्स देखें',
+      ctaSecondary: 'कैसे काम करता है',
+      socialProof: '1,000+ सक्रिय सदस्य पहले से बचत कर रहे हैं',
+      categories: { all: 'सभी टूल्स', text: 'टेक्स्ट और चैट', image: 'इमेज जनरेशन', video: 'वीडियो और ऑडियो', coding: 'कोडिंग और सॉफ़्टवेयर' },
+    },
+  },
+  es: {
+    hero: {
+      badge: 'Herramientas IA Premium — Hasta 90% Más Baratas',
+      title: 'Herramientas IA Premium.',
+      titleHighlight: 'Hasta 90% Más Baratas.',
+      description: 'Consigue herramientas IA y suscripciones premium hasta un 90% más baratas, entregadas de forma segura e instantánea. ChatGPT, Midjourney, Claude, Gemini y +50.',
+      cta: 'Ver Ofertas',
+      ctaSecondary: 'Acceder Ahora',
+    },
+    store: {
+      badge: 'Herramientas IA Premium — Hasta 90% Más Baratas',
+      title: 'Todas las Herramientas IA.',
+      titleHighlight: 'Hasta 90% Más Baratas.',
+      description: 'Las herramientas IA que ya quieres — hasta 90% más baratas, entregadas de forma segura e instantánea. Pago seguro con Stripe y Bancontact. Activación en menos de 24h. ¿Dudas? info@aideals.be',
+      searchPlaceholder: 'Buscar ofertas...',
+      monthlyAccess: 'Acceso Mensual',
+      perMonth: '/mes',
+      buyNow: 'Empezar a Ahorrar',
+      noResults: 'No hay ofertas para tu búsqueda',
+      tryAgain: 'Prueba otra palabra clave',
+      ctaPrimary: 'Ver Ofertas',
+      ctaSecondary: 'Cómo Funciona',
+      socialProof: '+1.000 miembros activos ya están ahorrando',
+      categories: { all: 'Todas', text: 'Texto y Chat', image: 'Imágenes', video: 'Vídeo y Audio', coding: 'Código y Software' },
+    },
+  },
+  fr: {
+    hero: {
+      badge: 'Outils IA Premium — Jusqu’à 90% Moins Cher',
+      title: 'Outils IA Premium.',
+      titleHighlight: 'Jusqu’à 90% Moins Cher.',
+      description: "Obtenez des outils IA et abonnements premium jusqu'à 90% moins chers, livrés en toute sécurité et instantanément. ChatGPT, Midjourney, Claude, Gemini et 50+ autres.",
+      cta: 'Voir les Offres',
+      ctaSecondary: 'Accéder Maintenant',
+    },
+    store: {
+      badge: 'Outils IA Premium — Jusqu’à 90% Moins Cher',
+      title: 'Tous les Outils IA Premium.',
+      titleHighlight: 'Jusqu’à 90% Moins Cher.',
+      description: "Les outils IA que vous voulez déjà — jusqu'à 90% moins chers, livrés en toute sécurité et instantanément. Paiement sécurisé via Stripe et Bancontact. Activation en moins de 24h. Une question ? info@aideals.be",
+      searchPlaceholder: 'Rechercher des offres...',
+      monthlyAccess: 'Accès Mensuel',
+      perMonth: '/mois',
+      buyNow: 'Commencer à Économiser',
+      noResults: 'Aucune offre ne correspond',
+      tryAgain: 'Essayez un autre mot-clé',
+      ctaPrimary: 'Voir les Offres',
+      ctaSecondary: 'Comment Ça Marche',
+      socialProof: '1 000+ membres actifs économisent déjà',
+      categories: { all: 'Tous', text: 'Texte & Chat', image: 'Image', video: 'Vidéo & Audio', coding: 'Code & Logiciels' },
+    },
+  },
+  ar: {
+    hero: {
+      badge: 'أدوات ذكاء اصطناعي بسعر أرخص حتى 90٪',
+      title: 'أدوات ذكاء اصطناعي متميزة.',
+      titleHighlight: 'أرخص حتى 90٪.',
+      description: 'احصل على أدوات الذكاء الاصطناعي والاشتراكات المميزة بسعر أرخص حتى 90٪، تُسلَّم بأمان وفوراً. ChatGPT و Midjourney و Claude و Gemini وأكثر من 50.',
+      cta: 'تصفح العروض',
+      ctaSecondary: 'احصل على الوصول الآن',
+    },
+    store: {
+      badge: 'أدوات ذكاء اصطناعي بسعر أرخص حتى 90٪',
+      title: 'كل أدوات الذكاء الاصطناعي.',
+      titleHighlight: 'أرخص حتى 90٪.',
+      description: 'الأدوات التي تريدها — أرخص حتى 90٪، تُسلَّم بأمان وفوراً. دفع آمن عبر Stripe و Bancontact. تفعيل خلال 24 ساعة. للاستفسار: info@aideals.be',
+      searchPlaceholder: 'ابحث عن عروض...',
+      monthlyAccess: 'وصول شهري',
+      perMonth: '/شهرياً',
+      buyNow: 'ابدأ التوفير',
+      noResults: 'لا توجد عروض مطابقة',
+      tryAgain: 'جرّب كلمة مفتاحية أخرى',
+      ctaPrimary: 'تصفح العروض',
+      ctaSecondary: 'كيف يعمل',
+      socialProof: 'أكثر من 1,000 عضو نشط يوفّرون بالفعل',
+      categories: { all: 'الكل', text: 'النص والمحادثة', image: 'توليد الصور', video: 'الفيديو والصوت', coding: 'البرمجة والبرامج' },
+    },
+  },
+  bn: {
+    hero: {
+      badge: 'প্রিমিয়াম AI টুলস — ৯০% পর্যন্ত সস্তা',
+      title: 'প্রিমিয়াম AI টুলস।',
+      titleHighlight: '৯০% পর্যন্ত সস্তা।',
+      description: 'প্রিমিয়াম AI টুলস ও সাবস্ক্রিপশন ৯০% পর্যন্ত সস্তায়, নিরাপদ ও তাৎক্ষণিক ডেলিভারি। ChatGPT, Midjourney, Claude, Gemini ও ৫০+ আরও।',
+      cta: 'ডিল দেখুন',
+      ctaSecondary: 'এখনই অ্যাক্সেস নিন',
+    },
+    store: {
+      badge: 'প্রিমিয়াম AI টুলস — ৯০% পর্যন্ত সস্তা',
+      title: 'সব প্রিমিয়াম AI টুল।',
+      titleHighlight: '৯০% পর্যন্ত সস্তা।',
+      description: 'যে AI টুলস আপনি চান — ৯০% পর্যন্ত সস্তায়, নিরাপদ ও তাৎক্ষণিক ডেলিভারি। Stripe ও Bancontact দিয়ে নিরাপদ পেমেন্ট। ২৪ ঘণ্টায় অ্যাক্টিভেশন। info@aideals.be',
+      searchPlaceholder: 'ডিল খুঁজুন...',
+      monthlyAccess: 'মাসিক অ্যাক্সেস',
+      perMonth: '/মাস',
+      buyNow: 'সাশ্রয় শুরু করুন',
+      noResults: 'কোনো ডিল পাওয়া যায়নি',
+      tryAgain: 'ভিন্ন কীওয়ার্ড চেষ্টা করুন',
+      ctaPrimary: 'ডিল দেখুন',
+      ctaSecondary: 'কীভাবে কাজ করে',
+      socialProof: '১,০০০+ সক্রিয় সদস্য ইতিমধ্যেই সাশ্রয় করছেন',
+      categories: { all: 'সব', text: 'টেক্সট ও চ্যাট', image: 'ইমেজ', video: 'ভিডিও ও অডিও', coding: 'কোডিং ও সফটওয়্যার' },
+    },
+  },
+  pt: {
+    hero: {
+      badge: 'Ferramentas IA Premium — Até 90% Mais Baratas',
+      title: 'Ferramentas IA Premium.',
+      titleHighlight: 'Até 90% Mais Baratas.',
+      description: 'Obtenha ferramentas IA e subscrições premium até 90% mais baratas, entregues em segurança e ao instante. ChatGPT, Midjourney, Claude, Gemini e +50.',
+      cta: 'Ver Ofertas',
+      ctaSecondary: 'Aceder Agora',
+    },
+    store: {
+      badge: 'Ferramentas IA Premium — Até 90% Mais Baratas',
+      title: 'Todas as Ferramentas IA.',
+      titleHighlight: 'Até 90% Mais Baratas.',
+      description: 'As ferramentas IA que já quer — até 90% mais baratas, entregues em segurança e ao instante. Pagamento seguro via Stripe e Bancontact. Ativação em menos de 24h. Dúvidas? info@aideals.be',
+      searchPlaceholder: 'Procurar ofertas...',
+      monthlyAccess: 'Acesso Mensal',
+      perMonth: '/mês',
+      buyNow: 'Começar a Poupar',
+      noResults: 'Sem ofertas para a sua pesquisa',
+      tryAgain: 'Tente outra palavra-chave',
+      ctaPrimary: 'Ver Ofertas',
+      ctaSecondary: 'Como Funciona',
+      socialProof: '+1.000 membros ativos já a poupar',
+      categories: { all: 'Todas', text: 'Texto e Chat', image: 'Imagem', video: 'Vídeo e Áudio', coding: 'Código e Software' },
+    },
+  },
+  ru: {
+    hero: {
+      badge: 'Премиум AI-инструменты — дешевле до 90%',
+      title: 'Премиум AI-инструменты.',
+      titleHighlight: 'Дешевле до 90%.',
+      description: 'Получите премиум AI-инструменты и подписки дешевле до 90%, безопасно и мгновенно. ChatGPT, Midjourney, Claude, Gemini и 50+ других.',
+      cta: 'Смотреть предложения',
+      ctaSecondary: 'Получить доступ',
+    },
+    store: {
+      badge: 'Премиум AI-инструменты — дешевле до 90%',
+      title: 'Все премиум AI-инструменты.',
+      titleHighlight: 'Дешевле до 90%.',
+      description: 'AI-инструменты, которые вам нужны — дешевле до 90%, безопасно и мгновенно. Безопасная оплата через Stripe и Bancontact. Активация менее 24 часов. info@aideals.be',
+      searchPlaceholder: 'Искать предложения...',
+      monthlyAccess: 'Месячный доступ',
+      perMonth: '/мес',
+      buyNow: 'Начать экономить',
+      noResults: 'Нет подходящих предложений',
+      tryAgain: 'Попробуйте другое слово',
+      ctaPrimary: 'Смотреть предложения',
+      ctaSecondary: 'Как это работает',
+      socialProof: '1 000+ активных участников уже экономят',
+      categories: { all: 'Все', text: 'Текст и чат', image: 'Изображения', video: 'Видео и аудио', coding: 'Код и ПО' },
+    },
+  },
+  ur: {
+    hero: {
+      badge: 'پریمیم AI ٹولز — 90٪ تک سستے',
+      title: 'پریمیم AI ٹولز۔',
+      titleHighlight: '90٪ تک سستے۔',
+      description: 'پریمیم AI ٹولز اور سبسکرپشنز 90٪ تک سستے، محفوظ اور فوری ڈیلیوری۔ ChatGPT، Midjourney، Claude، Gemini اور 50+ مزید۔',
+      cta: 'ڈیلز دیکھیں',
+      ctaSecondary: 'ابھی رسائی حاصل کریں',
+    },
+    store: {
+      badge: 'پریمیم AI ٹولز — 90٪ تک سستے',
+      title: 'ہر پریمیم AI ٹول۔',
+      titleHighlight: '90٪ تک سستے۔',
+      description: 'جو AI ٹولز آپ چاہتے ہیں — 90٪ تک سستے، محفوظ اور فوری ڈیلیوری۔ Stripe اور Bancontact سے محفوظ ادائیگی۔ 24 گھنٹے سے کم میں ایکٹیویشن۔ info@aideals.be',
+      searchPlaceholder: 'ڈیلز تلاش کریں...',
+      monthlyAccess: 'ماہانہ رسائی',
+      perMonth: '/ماہ',
+      buyNow: 'بچت شروع کریں',
+      noResults: 'کوئی ڈیل نہیں ملی',
+      tryAgain: 'مختلف لفظ آزمائیں',
+      ctaPrimary: 'ڈیلز دیکھیں',
+      ctaSecondary: 'یہ کیسے کام کرتا ہے',
+      socialProof: '1,000+ فعال ممبرز پہلے سے بچت کر رہے ہیں',
+      categories: { all: 'تمام', text: 'متن اور چیٹ', image: 'تصاویر', video: 'ویڈیو اور آڈیو', coding: 'کوڈنگ اور سافٹ ویئر' },
+    },
+  },
+  de: {
+    hero: {
+      badge: 'Premium-KI-Tools — bis zu 90 % günstiger',
+      title: 'Premium-KI-Tools.',
+      titleHighlight: 'Bis zu 90 % günstiger.',
+      description: 'Holen Sie sich Premium-KI-Tools und Abos bis zu 90 % günstiger, sicher und sofort geliefert. ChatGPT, Midjourney, Claude, Gemini & 50+ weitere.',
+      cta: 'Angebote ansehen',
+      ctaSecondary: 'Jetzt Zugang holen',
+    },
+    store: {
+      badge: 'Premium-KI-Tools — bis zu 90 % günstiger',
+      title: 'Alle Premium-KI-Tools.',
+      titleHighlight: 'Bis zu 90 % günstiger.',
+      description: 'Die KI-Tools, die Sie wollen — bis zu 90 % günstiger, sicher und sofort geliefert. Sichere Zahlung via Stripe und Bancontact. Aktivierung in unter 24 Std. Fragen? info@aideals.be',
+      searchPlaceholder: 'Angebote suchen...',
+      monthlyAccess: 'Monatlicher Zugang',
+      perMonth: '/Mo',
+      buyNow: 'Sparen starten',
+      noResults: 'Keine passenden Angebote',
+      tryAgain: 'Anderes Stichwort versuchen',
+      ctaPrimary: 'Angebote ansehen',
+      ctaSecondary: 'So funktioniert es',
+      socialProof: '1.000+ aktive Mitglieder sparen bereits',
+      categories: { all: 'Alle', text: 'Text & Chat', image: 'Bildgenerierung', video: 'Video & Audio', coding: 'Code & Software' },
+    },
+  },
+  it: {
+    hero: {
+      badge: 'Strumenti IA Premium — Fino al 90% in Meno',
+      title: 'Strumenti IA Premium.',
+      titleHighlight: 'Fino al 90% in Meno.',
+      description: 'Ottieni strumenti IA e abbonamenti premium fino al 90% in meno, consegnati in sicurezza e all’istante. ChatGPT, Midjourney, Claude, Gemini e 50+ altri.',
+      cta: 'Vedi le Offerte',
+      ctaSecondary: 'Ottieni Accesso Ora',
+    },
+    store: {
+      badge: 'Strumenti IA Premium — Fino al 90% in Meno',
+      title: 'Tutti gli Strumenti IA.',
+      titleHighlight: 'Fino al 90% in Meno.',
+      description: 'Gli strumenti IA che già vuoi — fino al 90% in meno, consegnati in sicurezza e all’istante. Pagamento sicuro con Stripe e Bancontact. Attivazione in meno di 24h. info@aideals.be',
+      searchPlaceholder: 'Cerca offerte...',
+      monthlyAccess: 'Accesso Mensile',
+      perMonth: '/mese',
+      buyNow: 'Inizia a Risparmiare',
+      noResults: 'Nessuna offerta trovata',
+      tryAgain: 'Prova un’altra parola chiave',
+      ctaPrimary: 'Vedi le Offerte',
+      ctaSecondary: 'Come Funziona',
+      socialProof: '+1.000 membri attivi stanno già risparmiando',
+      categories: { all: 'Tutti', text: 'Testo & Chat', image: 'Immagini', video: 'Video & Audio', coding: 'Codice & Software' },
+    },
+  },
+  nl: {
+    hero: {
+      badge: 'Premium AI-tools — Tot 90% Goedkoper',
+      title: 'Premium AI-tools.',
+      titleHighlight: 'Tot 90% Goedkoper.',
+      description: 'Krijg premium AI-tools en abonnementen tot 90% goedkoper, veilig en direct geleverd. ChatGPT, Midjourney, Claude, Gemini & 50+ andere.',
+      cta: 'Bekijk Deals',
+      ctaSecondary: 'Krijg Nu Toegang',
+    },
+    store: {
+      badge: 'Premium AI-tools — Tot 90% Goedkoper',
+      title: 'Elke Premium AI-tool.',
+      titleHighlight: 'Tot 90% Goedkoper.',
+      description: 'De AI-tools die je al wilt — tot 90% goedkoper, veilig en direct geleverd. Veilige betaling via Stripe en Bancontact. Geactiveerd in minder dan 24u. Vragen? info@aideals.be',
+      searchPlaceholder: 'Zoek deals...',
+      monthlyAccess: 'Maandelijkse Toegang',
+      perMonth: '/mnd',
+      buyNow: 'Begin met Besparen',
+      noResults: 'Geen deals gevonden',
+      tryAgain: 'Probeer een ander zoekwoord',
+      ctaPrimary: 'Bekijk Deals',
+      ctaSecondary: 'Hoe Het Werkt',
+      socialProof: '1.000+ actieve leden besparen al',
+      categories: { all: 'Alle', text: 'Tekst & Chat', image: 'Afbeeldingen', video: 'Video & Audio', coding: 'Code & Software' },
+    },
+  },
+};
+
+// Stringify a JS object back into the indented form used in i18n.ts
+// Indent base is 6 spaces (the depth at which `hero:` / `store:` sit).
+const escape = (s) => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+function stringify(obj, indent = 6) {
+  const pad = ' '.repeat(indent);
+  const inner = ' '.repeat(indent + 2);
+  const lines = [];
+  for (const [k, v] of Object.entries(obj)) {
+    if (v && typeof v === 'object') {
+      lines.push(`${inner}${k}: {`);
+      for (const [kk, vv] of Object.entries(v)) {
+        lines.push(`${' '.repeat(indent + 4)}${kk}: '${escape(vv)}',`);
+      }
+      lines.push(`${inner}},`);
+    } else {
+      lines.push(`${inner}${k}: '${escape(v)}',`);
+    }
+  }
+  return `{\n${lines.join('\n')}\n${pad}},`;
+}
+
+async function main() {
+  let src = await readFile(FILE, 'utf8');
+
+  let replacements = 0;
+  for (const [, copy] of Object.entries(COPY)) {
+    // Replace `hero: { ... },` block (matches across lines, non-greedy)
+    const heroBlock = `hero: ${stringify(copy.hero)}`;
+    const heroRe = /hero:\s*\{[^]*?\n {6}\},/;
+    if (heroRe.test(src)) {
+      src = src.replace(heroRe, heroBlock);
+      replacements++;
+    }
+    const storeBlock = `store: ${stringify(copy.store)}`;
+    const storeRe = /store:\s*\{[^]*?\n {6}\},/;
+    if (storeRe.test(src)) {
+      src = src.replace(storeRe, storeBlock);
+      replacements++;
+    }
+  }
+  // The above replace() only does the FIRST match each time. Loop until done:
+  // simpler approach: replace one language at a time, walking sequentially.
+  await writeFile(FILE, src);
+  console.log(`Replaced ${replacements} blocks. NOTE: only first hero/store per language.`);
+}
+
+main().catch((e) => { console.error(e); process.exit(1); });
