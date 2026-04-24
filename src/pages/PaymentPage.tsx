@@ -544,13 +544,19 @@ const PaymentPage = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">
-                      {billingInterval === 'annual' ? 'Annual subscription' : 'Monthly subscription'}
+                      {showBillingToggle
+                        ? (billingInterval === 'annual' ? 'Annual subscription' : 'Monthly subscription')
+                        : period === 'one-time'
+                        ? 'One-time purchase'
+                        : period === 'yearly'
+                        ? 'Yearly subscription'
+                        : selectedPlan?.plan_name || 'Subscription'}
                     </span>
                     <span className="text-white font-semibold">
                       {formatPrice(displayPrice)}
                     </span>
                   </div>
-                  {billingInterval === 'annual' && monthlyEquivalent && (
+                  {showBillingToggle && billingInterval === 'annual' && monthlyEquivalent && (
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Monthly equivalent</span>
                       <span className="text-green-400">€{monthlyEquivalent.toFixed(2)}/mo</span>
