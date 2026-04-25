@@ -17,7 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   Loader2, CheckCircle, Mail, Shield, ShieldCheck, Sparkles,
   Clock, Zap, UserCheck, Wallet, CreditCard, Building2, ArrowLeft,
-  Globe, Crown, Gift, Landmark,
+  Globe, Crown, Gift,
 } from 'lucide-react';
 import { z } from 'zod';
 import type { ToolPlan } from '@/components/ToolCard';
@@ -45,13 +45,6 @@ const PAYMENT_METHODS = [
     description: 'European bank transfer (EUR)',
     icon: Building2,
     stripeTypes: ['sepa_debit'],
-  },
-  {
-    id: 'paypal',
-    label: 'PayPal',
-    description: 'Pay securely with your PayPal account',
-    icon: Landmark,
-    stripeTypes: ['paypal'],
   },
   {
     id: 'eu-methods',
