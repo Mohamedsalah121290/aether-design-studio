@@ -57,9 +57,9 @@ const PAYMENT_METHODS = [
 ] as const;
 
 const WHAT_YOU_GET = [
-  'Instant access',
-  'No setup needed',
-  'Support available',
+  'Works instantly',
+  'No installation needed',
+  'Fast delivery',
 ];
 
 const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
@@ -297,7 +297,7 @@ const PaymentPage = () => {
             <CheckCircle className="w-10 h-10 text-white" />
           </motion.div>
           <h3 className="text-2xl font-bold mb-2 text-white">Thank you for your purchase.</h3>
-          <p className="max-w-md text-muted-foreground mb-4 leading-relaxed">Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp. You can also contact us directly for faster support.</p>
+          <p className="max-w-md text-muted-foreground mb-4 leading-relaxed">Your access is being prepared. You will receive it shortly.</p>
           <div className="flex items-center gap-2 text-sm text-green-400 mb-6">
             <Clock className="w-4 h-4" />
             <span>Activating within {activationTime} hours</span>
