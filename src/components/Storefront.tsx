@@ -255,19 +255,19 @@ const Storefront = () => {
                       <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.whyBuyFromUs')}</p>
                       <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">{t('store.clearSimpleSafe')}</h2>
                     </div>
-                    <div className="grid gap-4 md:grid-cols-3 items-stretch">
+                    <div className="grid gap-4 md:grid-cols-4 items-stretch">
                       {[
-                        { key: 'fastDelivery', icon: Zap },
-                        { key: 'easyAccess', icon: Sparkles },
-                        { key: 'realSupport', icon: Users },
-                        { key: 'securePayment', icon: CheckCircle },
-                      ].map(({ key, icon: Icon }) => (
+                        { key: 'fastDelivery', icon: Zap, title: 'Fast delivery', text: 'Access details are delivered quickly after secure checkout.' },
+                        { key: 'easyAccess', icon: Sparkles, title: 'Easy access', text: 'Simple product access without confusing package choices.' },
+                        { key: 'realSupport', icon: Users, title: 'Real support', text: 'Help is available when you need guidance.' },
+                        { key: 'securePayment', icon: CheckCircle, title: 'Secure payment', text: 'Checkout stays protected through Stripe.' },
+                      ].map(({ key, icon: Icon, title, text }) => (
                         <div key={key} className="relative rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-all hover:border-primary/35">
                           <div className="mb-4 h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
                             <Icon className="h-4 w-4 text-primary" />
                           </div>
-                          <h3 className="text-xl font-bold text-white">{t(`store.trustReasons.${key}.title`)}</h3>
-                          <p className="mt-2 text-sm text-white/50">{t(`store.trustReasons.${key}.text`)}</p>
+                          <h3 className="text-xl font-bold text-white">{t(`store.trustReasons.${key}.title`, title)}</h3>
+                          <p className="mt-2 text-sm text-white/50">{t(`store.trustReasons.${key}.text`, text)}</p>
                         </div>
                       ))}
                     </div>
