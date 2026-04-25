@@ -477,7 +477,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-white">
                         <span>{t('checkout.youPay')}</span>
-                        <span>{effectivePrice === 0 ? '{t('checkout.freeCovered')}' : `€${effectivePrice?.toFixed(2)}/mo (excl. VAT)`}</span>
+                        <span>{effectivePrice === 0 ? t('checkout.freeCovered') : `€${effectivePrice?.toFixed(2)}/mo (excl. VAT)`}</span>
                       </div>
                       <p className="text-xs font-medium text-muted-foreground text-right">{t(TAX_NOTE_KEY)}</p>
                     </div>
