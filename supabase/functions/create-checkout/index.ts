@@ -338,7 +338,22 @@ serve(async (req) => {
       sessionParams.payment_intent_data = { metadata };
     }
 
-    const session = await stripe.checkout.sessions.create(sessionParams);
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create(sessionParams);
+    } catch (checkoutError) {
+      const checkoutMsg = checkoutError instanceof Error ? checkoutError.message : String(checkoutError);
+      const hasCurrencyConflict = checkoutMsg.toLowerCase().includes("cannot combine currencies");
+      if (!customerId || !hasCurrencyConflict) throw checkoutError;
+
+      logStep("Currency conflict on existing customer, retrying with fresh customer", { email });
+      const retryParams: Stripe.Checkout.SessionCreateParams = {
+        ...sessionParams,
+        customer: undefined,
+        customer_email: email,
+      };
+      session = await stripe.checkout.sessions.create(retryParams);
+    }
 
     logStep("Checkout session created", {
       sessionId: session.id,
