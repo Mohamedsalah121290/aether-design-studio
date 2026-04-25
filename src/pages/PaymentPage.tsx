@@ -800,7 +800,7 @@ const PaymentPage = () => {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
-                        {effectivePrice === 0 ? 'Confirm (Wallet Credit)' : `Pay ${formatVatPrice(effectivePrice)}`}
+                        Get Instant Access
                       </span>
                     )}
                   </Button>
