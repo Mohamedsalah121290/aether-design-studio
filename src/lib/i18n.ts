@@ -3869,18 +3869,12 @@ const resources = {
 // Language configuration with flags, RTL support, and font families
 export const languages = [
   { code: 'en', name: 'English', flag: '🇬🇧', country: 'gb', rtl: false, font: 'Inter' },
-  { code: 'zh', name: '中文', flag: '🇨🇳', country: 'cn', rtl: false, font: 'Noto Sans SC' },
-  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳', country: 'in', rtl: false, font: 'Noto Sans Devanagari' },
-  { code: 'es', name: 'Español', flag: '🇪🇸', country: 'es', rtl: false, font: 'Inter' },
   { code: 'fr', name: 'Français', flag: '🇫🇷', country: 'fr', rtl: false, font: 'Inter' },
-  { code: 'ar', name: 'العربية', flag: '🇸🇦', country: 'sa', rtl: true, font: 'Cairo' },
-  { code: 'bn', name: 'বাংলা', flag: '🇧🇩', country: 'bd', rtl: false, font: 'Noto Sans Bengali' },
-  { code: 'pt', name: 'Português', flag: '🇧🇷', country: 'br', rtl: false, font: 'Inter' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺', country: 'ru', rtl: false, font: 'Inter' },
-  { code: 'ur', name: 'اردو', flag: '🇵🇰', country: 'pk', rtl: true, font: 'Noto Sans Arabic' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪', country: 'de', rtl: false, font: 'Inter' },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹', country: 'it', rtl: false, font: 'Inter' },
   { code: 'nl', name: 'Nederlands', flag: '🇧🇪', country: 'be', rtl: false, font: 'Inter' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪', country: 'de', rtl: false, font: 'Inter' },
+  { code: 'es', name: 'Español', flag: '🇪🇸', country: 'es', rtl: false, font: 'Inter' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹', country: 'it', rtl: false, font: 'Inter' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦', country: 'sa', rtl: true, font: 'Cairo' },
 ];
 
 // Get stored language or detect from browser
@@ -3890,9 +3884,14 @@ const getInitialLanguage = (): string => {
     return urlLang;
   }
 
-  const stored = localStorage.getItem('ai-deals-language');
+  const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
   if (stored && languages.some(l => l.code === stored)) {
     return stored;
+  }
+  const region = detectAndStoreRegion();
+  const geoLanguage = languageForRegion(region);
+  if (!localStorage.getItem(LANGUAGE_MANUAL_KEY) && languages.some(l => l.code === geoLanguage)) {
+    return geoLanguage;
   }
   
   // Try to detect from browser
@@ -3912,6 +3911,10 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
+  partialBundledLanguages: true,
+  react: {
+    useSuspense: false,
+  },
 });
 
 // Apply initial settings
@@ -3922,7 +3925,7 @@ document.documentElement.style.fontFamily = `'${initialLang.font}', 'Inter', san
 
 // Listen for language changes to persist and apply settings
 i18n.on('languageChanged', (lng) => {
-  localStorage.setItem('ai-deals-language', lng);
+  localStorage.setItem(LANGUAGE_STORAGE_KEY, lng);
   const lang = languages.find(l => l.code === lng) || languages[0];
   document.documentElement.dir = lang.rtl ? 'rtl' : 'ltr';
   document.documentElement.lang = lang.code;
