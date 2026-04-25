@@ -445,17 +445,21 @@ const PaymentPage = () => {
                     Select Plan
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {plans.map(plan => (
+                    {plans.map((plan, index) => (
                       <button
                         key={plan.id}
                         type="button"
                         onClick={() => setSelectedPlan(plan)}
-                        className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                        className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
                           selectedPlan?.id === plan.id
                             ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
                             : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'
                         }`}
                       >
+                        {tierLabel(index, plans.length) === 'Most Popular' && (
+                          <span className="mb-1 block text-[9px] font-bold uppercase tracking-wider opacity-80">Most Popular</span>
+                        )}
+                        <span className="block text-[10px] uppercase tracking-wider opacity-70">{tierLabel(index, plans.length)}</span>
                         {plan.plan_name}
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
                           <span className="ml-1.5 opacity-80">€{plan.monthly_price}</span>
@@ -590,6 +594,19 @@ const PaymentPage = () => {
                       <span>{formatApproxPrice(displayPrice)}</span>
                     </div>
                   )}
+                  {dailyPrice && (
+                    <div className="flex justify-between text-xs">
+                      <span className="text-muted-foreground">Daily equivalent</span>
+                      <span className="text-primary">{dailyPrice}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-xs">
+                    <span className="text-muted-foreground">Upgrade suggestion</span>
+                    <span className="text-primary">Upgrade for better results</span>
+                  </div>
+                  <div className="flex justify-end text-[10px] font-semibold text-primary">
+                    Limited price today
+                  </div>
                   {showBillingToggle && billingInterval === 'annual' && monthlyEquivalent && (
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Monthly equivalent</span>
