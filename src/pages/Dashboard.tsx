@@ -850,8 +850,8 @@ const Dashboard = () => {
                       className="rounded-2xl p-4 mb-6 text-left border border-white/10" style={{ background: 'rgba(255,255,255,0.03)' }}>
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary/20">
-                          {toolLogos[latestOrder.tool?.tool_id || ''] ? (
-                            <img src={toolLogos[latestOrder.tool?.tool_id || '']} alt="" className="w-6 h-6 object-contain" />
+                          {getProductLogoUrl(latestOrder.tool?.tool_id) ? (
+                            <img src={getProductLogoUrl(latestOrder.tool?.tool_id)!} alt="" className="w-6 h-6 object-contain p-0.5" />
                           ) : (
                             <Sparkles className="w-5 h-5 text-primary" />
                           )}
@@ -1084,13 +1084,14 @@ const Dashboard = () => {
                     {subscriptions.map((sub: any) => {
                       const toolId = sub.tool_id || '';
                       const colors = toolColors[toolId] || { primary: '#a855f7', glow: '270 85% 65%' };
+                      const logoUrl = getProductLogoUrl(toolId);
                       return (
                         <div key={sub.id} className="glass-strong rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl flex items-center justify-center"
                               style={{ background: `linear-gradient(135deg, ${colors.primary}40, ${colors.primary}20)` }}>
-                              {toolLogos[toolId] ? (
-                                <img src={toolLogos[toolId]} alt="" className="w-6 h-6 object-contain" />
+                              {logoUrl ? (
+                                <img src={logoUrl} alt="" className="w-6 h-6 object-contain p-0.5" />
                               ) : (
                                 <CreditCard className="w-5 h-5 text-primary" />
                               )}
