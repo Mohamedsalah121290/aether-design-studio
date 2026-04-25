@@ -16,20 +16,7 @@ import Navbar from '@/components/Navbar';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
-
-// Import local logos
-import perplexityLogo from '@/assets/perplexity-logo.png';
-import capcutLogo from '@/assets/capcut-logo.png';
-import elevenlabsLogo from '@/assets/elevenlabs-logo.png';
-import chatgptLogo from '@/assets/chatgpt-logo.png';
-
-const toolLogos: Record<string, string> = {
-  'chatgpt': chatgptLogo,
-  'perplexity': perplexityLogo,
-  'capcut': capcutLogo,
-  'elevenlabs': elevenlabsLogo,
-  'windows': 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg',
-};
+import { getProductLogoUrl } from '@/lib/productLogos';
 
 const toolColors: Record<string, { primary: string; glow: string }> = {
   'chatgpt': { primary: '#10a37f', glow: '160 84% 40%' },
@@ -220,7 +207,7 @@ const ReportIssueModal = ({ open, onClose, toolName }: { open: boolean; onClose:
 // Subscription Card Component
 const SubscriptionCard = ({ order, index, onViewCredentials, onReportIssue }: { order: Order; index: number; onViewCredentials: (order: Order) => void; onReportIssue: (order: Order) => void }) => {
   const toolId = order.tool?.tool_id || '';
-  const logoUrl = toolLogos[toolId];
+  const logoUrl = getProductLogoUrl(toolId);
   const colors = toolColors[toolId] || { primary: '#a855f7', glow: '270 85% 65%' };
   const [logoLoaded, setLogoLoaded] = useState(false);
   const [logoError, setLogoError] = useState(false);
@@ -278,7 +265,7 @@ const SubscriptionCard = ({ order, index, onViewCredentials, onReportIssue }: { 
                 <img
                   src={logoUrl}
                   alt={`${order.tool?.name} logo`}
-                  className={`w-9 h-9 object-contain transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`w-9 h-9 object-contain p-0.5 transition-opacity duration-300 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onLoad={() => setLogoLoaded(true)}
                   onError={() => setLogoError(true)}
                   loading="lazy"
@@ -863,8 +850,8 @@ const Dashboard = () => {
                       className="rounded-2xl p-4 mb-6 text-left border border-white/10" style={{ background: 'rgba(255,255,255,0.03)' }}>
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary/20">
-                          {toolLogos[latestOrder.tool?.tool_id || ''] ? (
-                            <img src={toolLogos[latestOrder.tool?.tool_id || '']} alt="" className="w-6 h-6 object-contain" />
+                          {getProductLogoUrl(latestOrder.tool?.tool_id) ? (
+                            <img src={getProductLogoUrl(latestOrder.tool?.tool_id)!} alt="" className="w-6 h-6 object-contain p-0.5" />
                           ) : (
                             <Sparkles className="w-5 h-5 text-primary" />
                           )}
@@ -1097,13 +1084,14 @@ const Dashboard = () => {
                     {subscriptions.map((sub: any) => {
                       const toolId = sub.tool_id || '';
                       const colors = toolColors[toolId] || { primary: '#a855f7', glow: '270 85% 65%' };
+                      const logoUrl = getProductLogoUrl(toolId);
                       return (
                         <div key={sub.id} className="glass-strong rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl flex items-center justify-center"
                               style={{ background: `linear-gradient(135deg, ${colors.primary}40, ${colors.primary}20)` }}>
-                              {toolLogos[toolId] ? (
-                                <img src={toolLogos[toolId]} alt="" className="w-6 h-6 object-contain" />
+                              {logoUrl ? (
+                                <img src={logoUrl} alt="" className="w-6 h-6 object-contain p-0.5" />
                               ) : (
                                 <CreditCard className="w-5 h-5 text-primary" />
                               )}
