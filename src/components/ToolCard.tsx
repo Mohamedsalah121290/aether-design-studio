@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap, Shield, Info } from 'lucide-react';
+import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap, Shield, CheckCircle } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { CheckoutDialog } from '@/components/CheckoutDialog';
 import { supabase } from '@/integrations/supabase/client';
@@ -299,19 +299,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   const style = getPeriodStyle(period);
                   return (
                     <>
-                      <div className="flex items-center gap-1">
-                        <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#E8D48B' }}>Member Price</p>
-                        <TooltipProvider delayDuration={200}>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Info className="w-3 h-3 cursor-help opacity-50 hover:opacity-100 transition-opacity" style={{ color: '#E8D48B' }} />
-                            </TooltipTrigger>
-                            <TooltipContent side="top" className="max-w-[220px] text-xs leading-relaxed bg-background border border-white/10 text-foreground">
-                              AI DEALS uses a managed access model — structured platform-level pricing exclusive to members.
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
+                      <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#E8D48B' }}>{t('store.monthlyAccess', 'Monthly Access')}</p>
                        <div className="flex items-baseline flex-wrap gap-x-1.5 gap-y-0.5">
                         <span
                           className={`text-lg sm:text-xl font-bold ${style.textClass}`}
@@ -331,10 +319,9 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                         </span>
                       </div>
                       {dailyPrice && <p className="text-[11px] font-semibold text-primary/80">{dailyPrice}</p>}
-                      <p className="inline-flex w-fit rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[9px] font-semibold text-primary">Limited price today</p>
                       {approxPrice && <p className="text-[11px] font-medium text-muted-foreground/80">{approxPrice}</p>}
                       <p className="text-[11px] font-medium leading-snug text-muted-foreground">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
-                      <p className="text-[11px] text-muted-foreground/80">{t('store.accessPricingModel', 'Access-based pricing model')} · {t('store.finalPaymentNote', 'Final payment is processed in EUR (€)')}</p>
+                      <p className="text-[11px] text-muted-foreground/80">{t('store.finalPaymentNote', 'Final payment is processed in EUR (€)')}</p>
                     </>
                   );
                 })()
@@ -353,6 +340,28 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
             {!isComingSoon && !isPaused && (
               <ProductReviewPreview toolId={tool.tool_id} productName={tool.name} />
+            )}
+
+            {!isComingSoon && !isPaused && (
+              <div className="space-y-2 rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t('store.whatYouGet', 'What you get')}</p>
+                <div className="space-y-1.5 text-[11px] font-medium text-muted-foreground">
+                  {[t('store.instantAccess', 'Instant access'), t('store.noSetupNeeded', 'No setup needed'), t('store.supportAvailable', 'Support available')].map((item) => (
+                    <p key={item} className="flex items-center gap-2"><CheckCircle className="h-3 w-3 text-primary" />{item}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {!isComingSoon && !isPaused && (
+              <div className="space-y-1">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t('store.worksWellWith', 'Works well with')}</p>
+                <div className="flex flex-wrap gap-x-2 gap-y-1 text-[11px]">
+                  {['chatgpt', 'canva', 'microsoft_365'].filter((id) => id !== tool.tool_id).slice(0, 2).map((id) => (
+                    <Link key={id} to={`/store?scrollTo=${id}`} className="font-medium text-primary hover:text-primary/80 transition-colors">{id === 'microsoft_365' ? 'Microsoft 365' : id === 'chatgpt' ? 'ChatGPT' : 'Canva'}</Link>
+                  ))}
+                </div>
+              </div>
             )}
 
             {/* CTA */}
