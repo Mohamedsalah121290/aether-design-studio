@@ -201,6 +201,9 @@ const Storefront = () => {
               <p className="text-base md:text-lg text-white/40 max-w-2xl mx-auto mb-8 leading-relaxed">
                 {t('store.description')}
               </p>
+              <p className="text-sm font-semibold text-primary mb-4">
+                {t('store.saveVsOfficial', 'Save up to 60% vs official subscriptions')}
+              </p>
 
               {/* CTAs */}
               <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-3">
@@ -220,13 +223,13 @@ const Storefront = () => {
 
               {/* Payment + delivery trust note (no design change, inline copy) */}
               <p className="text-[11px] text-white/40 mb-6">
-                {t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment')} · {t('store.regionalTrust')} · {t('store.finalPaymentNote')}
+                {t('store.limitedAvailability', 'Limited availability today')} · {t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment')} · {t('store.supportAfterPurchase', 'Support available if you need help after purchase')}
               </p>
 
               {/* Social proof */}
               <div className="flex items-center justify-center gap-2 text-xs text-white/30">
                 <Users className="w-3.5 h-3.5" />
-                <span>{t('store.socialProof', '1,000+ active members already saving')}</span>
+                <span>{t('store.socialProof', 'Trusted by 500+ users across Europe')}</span>
               </div>
               <div className="mt-5 md:hidden flex flex-wrap items-center justify-center gap-2 text-[11px]">
                 <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 font-semibold text-primary">🔥 {t('store.highDemand')}</span>
@@ -236,6 +239,23 @@ const Storefront = () => {
             </div>
           </div>
         </div>
+
+        <section className="relative z-10 pb-10" aria-label="Customer reviews">
+          <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+            <div className="grid gap-3 md:grid-cols-3 text-center">
+              {[
+                { quote: t('store.reviewLucas', 'Fast delivery, got my account in minutes'), name: 'Lucas, Belgium' },
+                { quote: t('store.reviewEmma', 'Much cheaper than official pricing, works perfectly'), name: 'Emma, France' },
+                { quote: t('store.reviewDaniel', 'Smooth process, instant access'), name: 'Daniel, Netherlands' },
+              ].map((review) => (
+                <blockquote key={review.name} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                  <p className="text-sm text-white/70">“{review.quote}”</p>
+                  <footer className="mt-2 text-xs text-white/35">— {review.name}</footer>
+                </blockquote>
+              ))}
+            </div>
+          </div>
+        </section>
 
 
         {/* ═══ MAIN CONTENT ═══ */}
