@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Facebook, Instagram, Mail, Clock, MessageSquare, Send, Globe, Shield, Youtube, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Mail, Clock, MessageSquare, Send, Globe, Shield, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
-import { ChatbotPromoSection, FACEBOOK_URL, INSTAGRAM_URL, openSocialUrl, TelegramIcon, TELEGRAM_URL, TikTokIcon, TIKTOK_URL, WhatsAppIcon, WHATSAPP_URL, X_URL, YOUTUBE_URL } from '@/components/ChatbotConversion';
+import { ChatbotPromoSection, FACEBOOK_URL, INSTAGRAM_URL, openSocialUrl, WhatsAppIcon, WHATSAPP_URL, YOUTUBE_URL } from '@/components/ChatbotConversion';
 
 const ContactPage = () => {
   const { t } = useTranslation();
@@ -41,12 +41,9 @@ const ContactPage = () => {
 
   const contactLinks = [
     { label: 'WhatsApp', href: WHATSAPP_URL, icon: WhatsAppIcon, tone: 'social-whatsapp-3d' },
-    { label: 'Telegram', href: TELEGRAM_URL, icon: TelegramIcon, tone: 'social-telegram-3d' },
     { label: 'Facebook', href: FACEBOOK_URL, icon: Facebook, tone: 'social-facebook-3d' },
     { label: 'Instagram', href: INSTAGRAM_URL, icon: Instagram, tone: 'social-instagram-3d' },
-    { label: 'TikTok', href: TIKTOK_URL, icon: TikTokIcon, tone: 'social-tiktok-3d' },
     { label: 'YouTube', href: YOUTUBE_URL, icon: Youtube, tone: 'social-youtube-3d' },
-    { label: 'X', href: X_URL, icon: Twitter, tone: 'social-x-3d' },
   ].filter((link) => Boolean(link.href));
 
   return (
