@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -8,14 +9,35 @@ import { Button } from '@/components/ui/button';
 import { getStoredRegion } from '@/lib/geo';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
-export const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61586111130045';
-export const INSTAGRAM_URL = 'https://www.instagram.com/aideals.be/';
-export const TIKTOK_URL = 'https://www.tiktok.com/@aideals.be?lang=en';
-export const YOUTUBE_URL = 'https://www.youtube.com/@AiDeals.belgie';
+export const FACEBOOK_URL = 'https://facebook.com/profile.php?id=61586111130045';
+export const INSTAGRAM_URL = 'https://instagram.com/aideals.be';
+export const TIKTOK_URL = 'https://www.tiktok.com/@aideals.be';
+export const YOUTUBE_URL = 'https://youtube.com/@AiDeals.belgie';
 export const X_URL = 'https://x.com/DealsAi26058';
-export const WHATSAPP_URL = 'https://web.whatsapp.com/send?phone=32494311190';
+export const WHATSAPP_URL = 'https://wa.me/32494311190';
 export const TELEGRAM_URL = 'https://t.me/aideals2026';
 const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook-test/514c0774-7002-4ec6-a91f-3bcde6d932b0';
+
+export const openSocialUrl = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+  event.preventDefault();
+  event.stopPropagation();
+
+  try {
+    const opener = window.top && window.top !== window.self ? window.top : window;
+    const opened = opener.open(href, '_blank', 'noopener,noreferrer');
+    if (opened) {
+      try { opened.opener = null; } catch { /* noop */ }
+      return;
+    }
+  } catch { /* fallback below */ }
+
+  try {
+    if (window.top && window.top !== window.self) window.top.location.href = href;
+    else window.location.href = href;
+  } catch {
+    window.location.href = href;
+  }
+};
 
 declare global {
   interface Window {
@@ -26,15 +48,15 @@ declare global {
 
 export const WhatsAppIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
-    <path fill="#25D366" d="M16.04 3.2C9.02 3.2 3.3 8.9 3.3 15.9c0 2.23.58 4.4 1.69 6.31L3.2 28.8l6.74-1.77a12.68 12.68 0 0 0 6.1 1.55h.01c7.02 0 12.73-5.7 12.73-12.7S23.07 3.2 16.04 3.2Z" />
-    <path fill="#ffffff" d="M23.45 19.13c-.4-.2-2.36-1.16-2.72-1.3-.37-.13-.63-.2-.9.2-.27.4-1.03 1.3-1.27 1.56-.23.27-.47.3-.86.1-.4-.2-1.68-.62-3.2-1.97-1.18-1.06-1.98-2.36-2.21-2.76-.23-.4-.03-.61.17-.81.18-.18.4-.47.6-.7.2-.24.27-.4.4-.67.14-.27.07-.5-.03-.7-.1-.2-.9-2.17-1.23-2.97-.32-.78-.65-.67-.9-.68h-.76c-.27 0-.7.1-1.06.5-.37.4-1.4 1.36-1.4 3.32s1.43 3.86 1.63 4.12c.2.27 2.81 4.3 6.82 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.12 2.36-.96 2.7-1.9.33-.93.33-1.73.23-1.9-.1-.16-.36-.26-.8-.47Z" />
+    <path fill="hsl(142 70% 49%)" d="M16.04 3.2C9.02 3.2 3.3 8.9 3.3 15.9c0 2.23.58 4.4 1.69 6.31L3.2 28.8l6.74-1.77a12.68 12.68 0 0 0 6.1 1.55h.01c7.02 0 12.73-5.7 12.73-12.7S23.07 3.2 16.04 3.2Z" />
+    <path fill="hsl(0 0% 100%)" d="M23.45 19.13c-.4-.2-2.36-1.16-2.72-1.3-.37-.13-.63-.2-.9.2-.27.4-1.03 1.3-1.27 1.56-.23.27-.47.3-.86.1-.4-.2-1.68-.62-3.2-1.97-1.18-1.06-1.98-2.36-2.21-2.76-.23-.4-.03-.61.17-.81.18-.18.4-.47.6-.7.2-.24.27-.4.4-.67.14-.27.07-.5-.03-.7-.1-.2-.9-2.17-1.23-2.97-.32-.78-.65-.67-.9-.68h-.76c-.27 0-.7.1-1.06.5-.37.4-1.4 1.36-1.4 3.32s1.43 3.86 1.63 4.12c.2.27 2.81 4.3 6.82 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.12 2.36-.96 2.7-1.9.33-.93.33-1.73.23-1.9-.1-.16-.36-.26-.8-.47Z" />
   </svg>
 );
 
 export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
-    <circle cx="16" cy="16" r="13" fill="#229ED9" />
-    <path fill="#ffffff" d="M22.74 9.78 20.5 22.04c-.17.87-.63 1.08-1.27.67l-3.5-2.58-1.69 1.63c-.19.19-.35.35-.72.35l.26-3.6 6.56-5.93c.28-.25-.06-.4-.44-.14l-8.1 5.1-3.49-1.09c-.76-.24-.77-.76.16-1.12l13.64-5.26c.63-.24 1.18.14.87 1.7Z" />
+    <circle cx="16" cy="16" r="13" fill="hsl(200 73% 49%)" />
+    <path fill="hsl(0 0% 100%)" d="M22.74 9.78 20.5 22.04c-.17.87-.63 1.08-1.27.67l-3.5-2.58-1.69 1.63c-.19.19-.35.35-.72.35l.26-3.6 6.56-5.93c.28-.25-.06-.4-.44-.14l-8.1 5.1-3.49-1.09c-.76-.24-.77-.76.16-1.12l13.64-5.26c.63-.24 1.18.14.87 1.7Z" />
   </svg>
 );
 
