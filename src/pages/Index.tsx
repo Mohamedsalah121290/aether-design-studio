@@ -20,6 +20,7 @@ import { ChatbotPromoSection } from '@/components/ChatbotConversion';
 import { socialProofReviews } from '@/lib/socialProof';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
+import { languages } from '@/lib/i18n';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
 import heroImageMobile from '@/assets/hero-ai-models-mobile.webp';
@@ -207,7 +208,9 @@ const Index = () => {
   const [activeIntent, setActiveIntent] = useState<IntentKey>('student');
 
   useEffect(() => {
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    const lang = languages.find(l => l.code === i18n.language);
+    document.documentElement.dir = lang?.rtl ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang?.code || 'en';
   }, [i18n.language]);
 
   const fadeUp = {
