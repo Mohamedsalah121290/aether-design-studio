@@ -4019,9 +4019,9 @@ const regionalStoreTranslations = {
   ar: { store: { buyNow: 'احصل على الوصول الفوري', instantDelivery: 'تسليم فوري', securePayment: 'دفع آمن', instantAccessAfterPayment: 'وصول فوري بعد الدفع', accessDeliveredWithinMinutes: 'يتم تسليم الوصول خلال دقائق بعد الدفع', oneTimePurchase: 'شراء لمرة واحدة', yearlyAccess: 'وصول سنوي', monthlyAccess: 'وصول شهري', mostPopular: 'الأكثر شعبية', activationGuarantee: 'ضمان التفعيل', contactSupport: 'تواصل مع الدعم', regionalTrust: 'دفع آمن باليورو عبر Stripe.', regionalTrustCurrency: 'يمكنك عرض الأسعار بعملتك المحلية. يتم الدفع النهائي باليورو.', finalPaymentNote: 'تتم معالجة الدفع النهائي باليورو (€)', taxNote: 'يتم احتساب الضرائب عند الدفع إذا كانت مطبقة.', highDemand: 'طلب مرتفع', viewingNow: '23 شخصاً يشاهدون الآن', limitedAvailability: 'توفر محدود اليوم', pricingSimple: 'أسعار واضحة', chooseAccessLevel: 'اختر مستوى الوصول', limitedPriceToday: 'سعر محدود اليوم', bundles: 'الباقات', upgradeBetterResults: 'رقِّ للوصول إلى نتائج أفضل', moreValue: 'قيمة أكبر وقرارات أقل.', getBundle: 'احصل على الباقة', deliveryActivation: 'التسليم والتفعيل', receiveAccessTitle: 'كيف تستلم الوصول', receiveAccessDescription: 'بعد الدفع، ستستلم الوصول بسرعة.', receiveAccessIntro: 'نوفر أحد الخيارات التالية حسب المنتج:', accountAccess: 'يتم التعامل مع التفعيل بأمان بعد الشراء', activationKey: 'مفتاح تفعيل', directActivation: 'تفعيل مباشر على حسابك عند الطلب', fastDelivery: 'تسليم سريع', secureProcess: 'عملية آمنة', realSupport: 'دعم حقيقي', importantInfo: 'معلومات مهمة:', personalActivationInfo: 'في بعض الخدمات يمكن التفعيل على حسابك الشخصي.', contactGuided: 'عند اختيار ذلك، سنتواصل معك عبر WhatsApp ونرشدك خطوة بخطوة بطريقة آمنة.', noPersonalPasswords: 'نحن لا نطلب كلمات مرورك الشخصية مباشرة على الموقع.', secureMethods: 'قد نستخدم طريقة آمنة مثل وصول مؤقت أو تفعيل موجه أو بدائل آمنة.', needHelp: 'تحتاج مساعدة؟ تواصل معنا فوراً:', getAccess: 'احصل على الوصول', comingSoon: 'قريباً', comingSoonSubtitle: 'هذه الأدوات في الطريق — احصل على وصول مبكر', contactForPrice: 'تواصل لمعرفة السعر' } },
 };
 
-Object.entries(regionalStoreTranslations).forEach(([lng, bundle]) => {
-  i18n.addResourceBundle(lng, 'translation', bundle, true, true);
-});
+// Historical regional copy contained partial/older strings that could override
+// the complete language packs above. Keep the object for reference, but do not
+// merge it so selected languages stay consistent across the full website.
 
 const chatContactTranslations = {
   en: {
