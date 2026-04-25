@@ -5,8 +5,10 @@ import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
 import { MailCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const StorePage = () => {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-background">
       <SEO page="store" />
@@ -18,7 +20,7 @@ const StorePage = () => {
               <MailCheck className="h-5 w-5" aria-hidden="true" />
             </div>
             <p className="text-sm leading-6 text-muted-foreground sm:text-base">
-              Activation by e-mail and password is sent, and if we activate a personal e-mail, bloom as a difference, you must send a personal e-mail and a personal password at the top of the page
+              {t('store.activationNotice', 'Activation details are sent by email. If activation is requested on a personal account, please provide the personal email and password required for that activation at checkout.')}
             </p>
           </div>
         </section>
