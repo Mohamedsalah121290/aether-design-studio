@@ -151,7 +151,7 @@ const steps = [
   { num: '01', title: 'Choose your tool', desc: 'Browse our curated selection of premium AI tools.' },
   { num: '02', title: 'Complete checkout', desc: 'Simple, secure payment — no hidden fees.' },
   { num: '03', title: 'We activate your access', desc: 'Activation is handled securely by our team after purchase.' },
-  { num: '04', title: 'Start using it', desc: '{t('home.noSensitive')}' },
+  { num: '04', title: 'Start using it', desc: 'No sensitive information is required before payment.' },
 ];
 
 const academyPoints = [
