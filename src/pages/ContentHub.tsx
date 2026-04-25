@@ -8,6 +8,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { BLOG_POSTS, getBlogLocale } from '@/lib/seo/blogPosts';
 import { resolveSeoLang } from '@/lib/seo/seoMap';
+import { socialLinks } from '@/lib/socialLinks';
 
 interface VideoItem {
   id: string;
