@@ -18,13 +18,13 @@ const BodySchema = z.object({
 
 const fallbackReply = (language: string) => {
   const replies: Record<string, string> = {
-    en: "I can help you choose now 👍 Instant access, secure payment, and support are available.\nWhat do you need: content, design, or productivity?",
-    fr: "Je peux vous aider à choisir maintenant 👍 Accès instantané, paiement sécurisé et support disponible.\nVous cherchez contenu, design ou productivité ?",
-    nl: "Ik help je nu kiezen 👍 Directe toegang, veilige betaling en support beschikbaar.\nZoek je content, design of productiviteit?",
-    de: "Ich helfe Ihnen jetzt bei der Auswahl 👍 Sofortzugang, sichere Zahlung und Support sind verfügbar.\nGeht es um Content, Design oder Produktivität?",
-    es: "Te ayudo a elegir ahora 👍 Acceso instantáneo, pago seguro y soporte disponible.\n¿Buscas contenido, diseño o productividad?",
-    it: "Ti aiuto a scegliere ora 👍 Accesso immediato, pagamento sicuro e supporto disponibile.\nCerchi contenuti, design o produttività?",
-    ar: "أساعدك تختار الآن 👍 الوصول فوري، الدفع آمن، والدعم متاح.\nتحتاج أداة للمحتوى، التصميم، أم الإنتاجية؟",
+    en: "You get instant access and it’s cheaper than official pricing.\nWant me to show you the best option?",
+    fr: "Vous avez un accès instantané, moins cher que le prix officiel.\nJe vous montre la meilleure option ?",
+    nl: "Je krijgt direct toegang en het is goedkoper dan de officiële prijs.\nZal ik je de beste optie tonen?",
+    de: "Sie erhalten Sofortzugang und zahlen weniger als beim offiziellen Preis.\nSoll ich Ihnen die beste Option zeigen?",
+    es: "Tienes acceso instantáneo y es más barato que el precio oficial.\n¿Te muestro la mejor opción?",
+    it: "Hai accesso immediato ed è più economico del prezzo ufficiale.\nVuoi che ti mostri l’opzione migliore?",
+    ar: "تحصل على وصول فوري والسعر أقل من الرسمي.\nتحب أوريك أفضل خيار لك؟",
   };
   return replies[language] || replies.en;
 };
