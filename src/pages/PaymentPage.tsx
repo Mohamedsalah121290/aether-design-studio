@@ -600,7 +600,7 @@ const PaymentPage = () => {
                         : selectedPlan?.plan_name || 'Subscription'}
                     </span>
                     <span className="text-white font-semibold">
-                      {formatPrice(displayPrice)}
+                      {formatVatPrice(displayPrice)}
                     </span>
                   </div>
                   {formatApproxPrice(displayPrice) && (
@@ -636,7 +636,7 @@ const PaymentPage = () => {
                   <div className="pt-2 border-t border-white/10 flex justify-between text-base font-bold">
                     <span className="text-white">Total</span>
                     <span className="text-primary">
-                      {formatPrice(effectivePrice)} {effectivePrice ? '(excl. VAT)' : ''}
+                      {formatVatPrice(effectivePrice)}
                     </span>
                   </div>
                   <p className="text-xs font-medium text-muted-foreground text-right">{TAX_NOTE}</p>
@@ -696,8 +696,8 @@ const PaymentPage = () => {
                   <div>
                     <p className="mb-2 text-xs font-semibold text-white">Need help? Contact us instantly:</p>
                     <div className="grid grid-cols-2 gap-2">
-                      <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>
-                      <a href={TELEGRAM_URL} onClick={(event) => openSocialUrl(event, TELEGRAM_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><TelegramIcon />Telegram</a>
+                      {WHATSAPP_URL && <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
+                      {TELEGRAM_URL && <a href={TELEGRAM_URL} onClick={(event) => openSocialUrl(event, TELEGRAM_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><TelegramIcon />Telegram</a>}
                     </div>
                   </div>
                 </div>
@@ -763,7 +763,7 @@ const PaymentPage = () => {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
-                        {effectivePrice === 0 ? 'Confirm (Wallet Credit)' : `Pay ${formatPrice(effectivePrice)} (excl. VAT)`}
+                        {effectivePrice === 0 ? 'Confirm (Wallet Credit)' : `Pay ${formatVatPrice(effectivePrice)}`}
                       </span>
                     )}
                   </Button>
