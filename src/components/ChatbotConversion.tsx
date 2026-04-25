@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -130,10 +130,12 @@ export const ChatbotPromoSection = () => (
 );
 
 export const ChatbotSalesFlow = () => {
+  const location = useLocation();
   const lang = useLang();
   const text = copy[lang];
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
+  const [liftForMobileCta, setLiftForMobileCta] = useState(false);
   const [selected, setSelected] = useState<FlowKey | null>(null);
   const [input, setInput] = useState('');
   const [soundOn, setSoundOn] = useState(() => localStorage.getItem('aiDealsChatSound') !== 'off');
@@ -146,6 +148,12 @@ export const ChatbotSalesFlow = () => {
   const [messages, setMessages] = useState<Message[]>([initialMessage]);
 
   useEffect(() => { const timer = window.setTimeout(() => setReady(true), 2200); return () => window.clearTimeout(timer); }, []);
+  useEffect(() => {
+    const update = () => setLiftForMobileCta(location.pathname !== '/' || window.scrollY > window.innerHeight * 0.55);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, [location.pathname]);
   useEffect(() => {
     const storedFlow = localStorage.getItem('aiDealsActiveChatFlow') as FlowKey | null;
     if (storedFlow && products[storedFlow]) {
@@ -240,7 +248,7 @@ export const ChatbotSalesFlow = () => {
   if (!ready) return null;
 
   return (
-    <div className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom))] right-2 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3">
+    <div className={`fixed right-2 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3 ${liftForMobileCta ? 'bottom-[calc(5.75rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1rem+env(safe-area-inset-bottom))]'}`}>
       <AnimatePresence>
         {open && (
           <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[68dvh] sm:max-h-none">
