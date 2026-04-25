@@ -34,9 +34,14 @@ const PLATFORM_URLS: Record<string, string> = {
 };
 
 const LOVABLE_PLAN_OPTIONS = [
-  { planId: 'lovable_2_months', title: '2 Months Plan', price: '€28', duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', badge: 'Best Starter' },
-  { planId: 'lovable_3_months', title: '3 Months Plan', price: '€40', duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', badge: 'Best Value' },
+  { planId: 'lovable_3_months', title: '3 Months Plan', price: 40, durationMonths: 3, duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', badge: '⭐ Best Value', bestValue: true },
+  { planId: 'lovable_2_months', title: '2 Months Plan', price: 28, durationMonths: 2, duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', badge: 'Best Starter', bestValue: false },
 ];
+
+const formatMonthlyValue = (price: number, months: number) => {
+  const monthly = price / months;
+  return `≈ €${Number.isInteger(monthly) ? monthly : monthly.toFixed(1)} / month`;
+};
 
 const emailSchema = z.string().trim().email().max(255);
 
@@ -286,6 +291,9 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   : 'Monthly Access'}{' '}
                 · {categoryLabel}
               </p>
+              {tool.tool_id !== 'lovable' && !isComingSoon && !isPaused && (
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">Most Popular</p>
+              )}
               <ProductRatingInline toolId={tool.tool_id} productName={tool.name} />
             </div>
 
@@ -352,13 +360,16 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                         className={`w-full rounded-xl border p-3 text-left transition-all duration-200 ${
                           isSelected
                             ? 'border-primary bg-primary/10 shadow-lg shadow-primary/15'
+                            : plan.bestValue
+                            ? 'border-primary/60 bg-primary/10 shadow-lg shadow-primary/10 hover:border-primary hover:bg-primary/15'
                             : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10'
                         }`}
                       >
                         <div className="mb-2 flex items-start justify-between gap-2">
                           <div>
                             <p className="text-sm font-bold text-white">{plan.title}</p>
-                            <p className="text-xl font-bold text-primary">{plan.price}</p>
+                            <p className="text-xl font-bold text-primary">€{plan.price}</p>
+                            <p className="text-[11px] font-semibold text-muted-foreground">{formatMonthlyValue(plan.price, plan.durationMonths)}</p>
                           </div>
                           <span className="shrink-0 rounded-full border border-primary/25 bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
                             {plan.badge}
@@ -368,6 +379,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                           <p>{plan.duration}</p>
                           <p>{plan.credits}</p>
                           <p>100 credits are renewed monthly</p>
+                          {plan.bestValue && <p className="font-semibold text-primary">Save more with this plan</p>}
+                          {plan.bestValue && <p>Most users choose this option</p>}
                         </div>
                         <span className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">
                           Get Instant Access
@@ -377,7 +390,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   })}
                 </div>
                 <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-semibold text-muted-foreground">
-                  <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support available</span>
+                  <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support included</span>
                 </div>
               </div>
             )}

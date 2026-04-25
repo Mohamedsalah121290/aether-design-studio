@@ -42,6 +42,30 @@ const WHAT_YOU_GET = [
 
 const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
+const getPlanDurationMonths = (planName: string) => {
+  const name = planName.toLowerCase();
+  const monthMatch = name.match(/\b(\d+)\s*months?\b/) || name.match(/\b(\d+)m\b/);
+  if (monthMatch) return Number(monthMatch[1]);
+  if (name.includes('year') || name.includes('annual') || /\b1\s*y\b/.test(name)) return 12;
+  return 1;
+};
+
+const getMonthlyPlanValue = (plan: ToolPlan) => {
+  if (!plan.monthly_price) return null;
+  const monthly = Number(plan.monthly_price) / getPlanDurationMonths(plan.plan_name);
+  return `≈ €${Number.isInteger(monthly) ? monthly : monthly.toFixed(1)} / month`;
+};
+
+const getBestValuePlan = (plans: ToolPlan[]) => {
+  const pricedPlans = plans.filter(plan => plan.monthly_price && plan.monthly_price > 0);
+  return pricedPlans.reduce<ToolPlan | null>((best, plan) => {
+    if (!best) return plan;
+    const currentValue = Number(plan.monthly_price) / getPlanDurationMonths(plan.plan_name);
+    const bestValue = Number(best.monthly_price) / getPlanDurationMonths(best.plan_name);
+    return currentValue < bestValue ? plan : best;
+  }, null);
+};
+
 export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: CheckoutDialogProps) => {
   const { t } = useTranslation();
   const { currency } = useCurrency();
@@ -117,8 +141,12 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
         activation_time: p.activation_time,
         is_active: p.is_active,
       }));
-      setPlans(mapped);
-      if (mapped.length > 0) setSelectedPlan(mapped[0]);
+      const bestValuePlan = getBestValuePlan(mapped);
+      const displayPlans = bestValuePlan
+        ? [...mapped].sort((a, b) => (b.id === bestValuePlan.id ? 1 : 0) - (a.id === bestValuePlan.id ? 1 : 0))
+        : mapped;
+      setPlans(displayPlans);
+      if (displayPlans.length > 0) setSelectedPlan(bestValuePlan || displayPlans[0]);
     } catch (err) {
       console.error('Error fetching plans:', err);
     } finally {
@@ -281,23 +309,34 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     {t('checkout.selectPlan', 'Select Plan')}
                   </Label>
                   <div className="flex flex-wrap gap-2">
-                    {plans.map(plan => (
-                      <button
-                        key={plan.id}
-                        type="button"
-                        onClick={() => setSelectedPlan(plan)}
-                        className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                          selectedPlan?.id === plan.id
-                            ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
-                            : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10 hover:text-foreground'
-                        }`}
-                      >
-                        {plan.plan_name}
-                        {plan.monthly_price != null && plan.monthly_price > 0 && (
-                          <span className="ml-1.5 opacity-80">€{plan.monthly_price} (excl. VAT)</span>
-                        )}
-                      </button>
-                    ))}
+                    {plans.map(plan => {
+                      const isBestValue = getBestValuePlan(plans)?.id === plan.id;
+                      const monthlyValue = getMonthlyPlanValue(plan);
+                      return (
+                        <button
+                          key={plan.id}
+                          type="button"
+                          onClick={() => setSelectedPlan(plan)}
+                          className={`min-h-11 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                            selectedPlan?.id === plan.id
+                              ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
+                              : isBestValue
+                              ? 'bg-primary/10 text-muted-foreground border border-primary/60 shadow-lg shadow-primary/10 hover:bg-primary/15 hover:text-foreground'
+                              : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10 hover:text-foreground'
+                          }`}
+                        >
+                          <span className="block text-[9px] font-bold uppercase tracking-wider opacity-80">{isBestValue ? '⭐ Best Value' : 'Most Popular'}</span>
+                          <span>{plan.plan_name}</span>
+                          {plan.monthly_price != null && plan.monthly_price > 0 && <span className="ml-1.5 opacity-80">€{plan.monthly_price} (excl. VAT)</span>}
+                          {monthlyValue && <span className="block text-xs opacity-80">{monthlyValue}</span>}
+                          {isBestValue && <span className="block text-xs font-semibold text-primary">Save more with this plan</span>}
+                          {isBestValue && <span className="block text-xs opacity-80">Most users choose this option</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-muted-foreground">
+                    <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support included</span>
                   </div>
                 </div>
               )}
@@ -519,7 +558,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       ) : (
                         <>
                           <Sparkles className="w-5 h-5" />
-                          {t('checkout.confirmPurchase')}
+                          Get Instant Access
                         </>
                       )}
                     </span>
