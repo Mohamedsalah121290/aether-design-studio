@@ -29,6 +29,7 @@ import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
 import { getRegionCategory } from '@/lib/geo';
+import { getStripePaymentLink } from '@/lib/stripePaymentLinks';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -280,6 +281,12 @@ const PaymentPage = () => {
     setIsLoading(true);
     try {
       const buyerEmail = email || user?.email;
+      const directPaymentLink = getStripePaymentLink(tool.tool_id, selectedPlan.plan_id, buyerEmail || undefined);
+      if (directPaymentLink) {
+        window.open(directPaymentLink, '_blank', 'noopener,noreferrer');
+        return;
+      }
+
       const paymentMethod = PAYMENT_METHODS.find(m => m.id === selectedPaymentMethod);
       
       const { data, error } = await supabase.functions.invoke('create-checkout', {
