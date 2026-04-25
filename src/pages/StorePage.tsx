@@ -11,8 +11,8 @@ const StorePage = () => {
     <div className="min-h-screen bg-background">
       <SEO page="store" />
       <Navbar />
-      <main className="pt-24">
-        <section className="mx-auto mb-6 max-w-7xl px-4 sm:px-6 lg:px-8">
+      <main className="pt-20 sm:pt-22 lg:pt-24">
+        <section className="mx-auto mb-8 max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-3 rounded-xl border border-primary/20 bg-card/70 p-4 text-card-foreground shadow-sm backdrop-blur-sm">
             <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <MailCheck className="h-5 w-5" aria-hidden="true" />
