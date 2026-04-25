@@ -8,7 +8,7 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const N8N_CHAT_WEBHOOK_URL = "https://asd202.app.n8n.cloud/webhook/54b9fa98-ba47-49c4-a089-406b8d3028f2";
+const N8N_CHAT_WEBHOOK_URL = "https://asd202.app.n8n.cloud/webhook-test/f5507dd5-c620-4b55-8cd9-afe56f6bd65b";
 
 const BodySchema = z.object({
   message: z.string().trim().min(1).max(1000),
