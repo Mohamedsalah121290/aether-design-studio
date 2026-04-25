@@ -5,11 +5,11 @@ import {
   SEO_LANGS,
   PAGE_PATHS,
   SITE_URL,
-  DEFAULT_OG_IMAGE,
   resolveSeoLang,
   canonicalUrl,
   type SeoPageKey,
 } from '@/lib/seo/seoMap';
+import { languages } from '@/lib/i18n';
 
 interface SEOProps {
   page: SeoPageKey;
@@ -30,8 +30,6 @@ interface SEOProps {
   /** Override the page-level og:type (default 'website'; use 'article' for blog posts) */
   ogType?: string;
 }
-
-const RTL_LANGS = new Set(['ar']);
 
 const SEO = ({
   page,
@@ -60,7 +58,9 @@ const SEO = ({
   // Per-language OG image (generated at build time) with sensible fallback.
   const ogImage =
     image ?? `${SITE_URL}/og/${page}-${lang}.png`;
-  const dir = RTL_LANGS.has(lang) ? 'rtl' : 'ltr';
+  const appLang = i18n.language.split('-')[0].toLowerCase();
+  const currentAppLang = languages.find((l) => l.code === appLang) ?? languages[0];
+  const dir = currentAppLang.rtl ? 'rtl' : 'ltr';
 
   // Build hreflang alternates for all 7 supported languages.
   const alternates = SEO_LANGS.map((l) => ({
