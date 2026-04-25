@@ -8,6 +8,7 @@ import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
 export const WHATSAPP_URL = 'https://web.whatsapp.com/';
 export const TELEGRAM_URL = '#telegram-link-needed';
+const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook-test/514c0774-7002-4ec6-a91f-3bcde6d932b0';
 
 declare global {
   interface Window {
@@ -141,6 +142,7 @@ export const ChatbotSalesFlow = () => {
   const [soundOn, setSoundOn] = useState(() => localStorage.getItem('aiDealsChatSound') !== 'off');
   const [speakingId, setSpeakingId] = useState<number | null>(null);
   const [listening, setListening] = useState(false);
+  const [sending, setSending] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
 
@@ -218,15 +220,43 @@ export const ChatbotSalesFlow = () => {
     if (soundOn) window.setTimeout(() => speak(next), 150);
   };
 
-  const sendMessage = () => {
+  const getBotText = (data: unknown) => {
+    if (typeof data === 'string') return data;
+    if (data && typeof data === 'object') {
+      const record = data as Record<string, unknown>;
+      const value = record.reply || record.response || record.text || record.message || record.output || record.answer;
+      if (typeof value === 'string') return value;
+    }
+    return lang === 'ar' ? 'تم استلام رد البوت.' : 'Bot response received.';
+  };
+
+  const sendMessage = async () => {
     const value = input.trim();
-    if (!value) return;
+    if (!value || sending) return;
     setInput('');
     const userMessage: Message = { id: Date.now(), role: 'user', text: value };
-    const localizedProducts = products.unsure.map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
-    const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: text.intros.unsure, products: localizedProducts };
-    setMessages((current) => [...current, userMessage, botMessage]);
-    if (soundOn) window.setTimeout(() => speak(botMessage), 150);
+    setMessages((current) => [...current, userMessage]);
+    setSending(true);
+
+    try {
+      const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: value }),
+      });
+
+      if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
+      const contentType = response.headers.get('content-type') || '';
+      const data = contentType.includes('application/json') ? await response.json() : await response.text();
+      const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: getBotText(data) };
+      setMessages((current) => [...current, botMessage]);
+      if (soundOn) window.setTimeout(() => speak(botMessage), 150);
+    } catch {
+      const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: lang === 'ar' ? 'تعذر الاتصال حالياً، حاول مرة أخرى.' : 'Unable to connect right now. Please try again.' };
+      setMessages((current) => [...current, botMessage]);
+    } finally {
+      setSending(false);
+    }
   };
 
   const startListening = () => {
