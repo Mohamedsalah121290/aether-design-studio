@@ -34,9 +34,14 @@ const PLATFORM_URLS: Record<string, string> = {
 };
 
 const LOVABLE_PLAN_OPTIONS = [
-  { planId: 'lovable_2_months', title: '2 Months Plan', price: '€28', duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', badge: 'Best Starter' },
-  { planId: 'lovable_3_months', title: '3 Months Plan', price: '€40', duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', badge: 'Best Value' },
+  { planId: 'lovable_3_months', title: '3 Months Plan', price: 40, durationMonths: 3, duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', badge: '⭐ Best Value', bestValue: true },
+  { planId: 'lovable_2_months', title: '2 Months Plan', price: 28, durationMonths: 2, duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', badge: 'Best Starter', bestValue: false },
 ];
+
+const formatMonthlyValue = (price: number, months: number) => {
+  const monthly = price / months;
+  return `≈ €${Number.isInteger(monthly) ? monthly : monthly.toFixed(1)} / month`;
+};
 
 const emailSchema = z.string().trim().email().max(255);
 
@@ -286,6 +291,9 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   : 'Monthly Access'}{' '}
                 · {categoryLabel}
               </p>
+              {tool.tool_id !== 'lovable' && !isComingSoon && !isPaused && (
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">Most Popular</p>
+              )}
               <ProductRatingInline toolId={tool.tool_id} productName={tool.name} />
             </div>
 
