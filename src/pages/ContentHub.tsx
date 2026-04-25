@@ -86,7 +86,7 @@ const ContentHub = () => {
     {
       id: 'v4',
       title: 'AI for Content Creators',
-      description: 'How to use AI tools for YouTube, TikTok, and Instagram content creation workflow optimization.',
+      description: 'How to use AI tools for YouTube, short-form video, and Instagram content creation workflow optimization.',
       thumbnail: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80',
       duration: '28:00',
       views: '175K',
