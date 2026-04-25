@@ -220,6 +220,11 @@ const PaymentPage = () => {
     return formatEuro(eur);
   };
 
+  const formatVatPrice = (eur: number | null) => {
+    const price = formatPrice(eur);
+    return eur && eur > 0 ? `${price} (excl. VAT)` : price;
+  };
+
   const formatApproxPrice = (eur: number | null | undefined) => formatApproxCurrency(eur, currency.code);
   const dailyPrice = dailyEquivalent(displayPrice, period);
 
@@ -471,7 +476,7 @@ const PaymentPage = () => {
                         <span className="block text-[10px] uppercase tracking-wider opacity-70">{tierLabel(index, plans.length)}</span>
                         {plan.plan_name}
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
-                          <span className="ml-1.5 opacity-80">€{plan.monthly_price} excl. VAT</span>
+                          <span className="ml-1.5 opacity-80">€{plan.monthly_price} (excl. VAT)</span>
                         )}
                       </button>
                     ))}
@@ -547,7 +552,7 @@ const PaymentPage = () => {
                     <div className="mt-3 pt-3 border-t border-white/10 space-y-1">
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Original price</span>
-                        <span>{formatPrice(displayPrice)}</span>
+                        <span>{formatVatPrice(displayPrice)}</span>
                       </div>
                       <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
                         <span>Wallet credit</span>
@@ -555,7 +560,7 @@ const PaymentPage = () => {
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-white">
                         <span>You pay</span>
-                        <span>{formatPrice(effectivePrice)}</span>
+                        <span>{formatVatPrice(effectivePrice)}</span>
                       </div>
                     </div>
                   )}
