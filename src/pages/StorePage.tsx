@@ -11,10 +11,10 @@ const StorePage = () => {
     <div className="min-h-screen bg-background">
       <SEO page="store" />
       <Navbar />
-      <main className="pt-20 sm:pt-22 lg:pt-24">
-        <section className="mx-auto mb-8 max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-start gap-3 rounded-xl border border-primary/20 bg-card/70 p-4 text-card-foreground shadow-sm backdrop-blur-sm">
-            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+      <main className="pt-28 sm:pt-32 lg:pt-36">
+        <section className="mx-auto mb-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-start gap-4 rounded-2xl border border-primary/30 bg-gradient-to-r from-primary/15 via-card/90 to-secondary/15 p-5 text-card-foreground shadow-[0_18px_45px_hsl(var(--primary)/0.14)] backdrop-blur-sm sm:p-6">
+            <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
               <MailCheck className="h-5 w-5" aria-hidden="true" />
             </div>
             <p className="text-sm leading-6 text-muted-foreground sm:text-base">
