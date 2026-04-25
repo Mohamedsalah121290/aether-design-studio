@@ -154,7 +154,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const isContactOnly = tool.tool_id === 'gemini';
   const isPaused = tool.status === 'paused' && !isContactOnly;
   const selectedLovablePlanDetails = LOVABLE_PLAN_OPTIONS.find(plan => plan.planId === selectedLovablePlan);
-  const checkoutUrl = getStripeLink(tool.name, tool.tool_id === 'lovable' ? selectedLovablePlanDetails?.title : undefined);
+  const checkoutUrl = getStripeLink(tool.name, tool.tool_id === 'lovable' ? selectedLovablePlanDetails ? t(selectedLovablePlanDetails.titleKey) : undefined : undefined);
 
   const handleNotifyMe = async () => {
     if (!showNotifyInput) { setShowNotifyInput(true); return; }
