@@ -70,7 +70,7 @@ const SEO = ({
 
   return (
     <Helmet>
-      <html lang={lang} dir={dir} />
+      <html lang={currentAppLang.code} dir={dir} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords.join(', ')} />
