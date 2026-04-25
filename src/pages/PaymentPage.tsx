@@ -471,7 +471,7 @@ const PaymentPage = () => {
                         <span className="block text-[10px] uppercase tracking-wider opacity-70">{tierLabel(index, plans.length)}</span>
                         {plan.plan_name}
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
-                          <span className="ml-1.5 opacity-80">€{plan.monthly_price}</span>
+                          <span className="ml-1.5 opacity-80">€{plan.monthly_price} excl. VAT</span>
                         )}
                       </button>
                     ))}
@@ -631,15 +631,16 @@ const PaymentPage = () => {
                   <div className="pt-2 border-t border-white/10 flex justify-between text-base font-bold">
                     <span className="text-white">Total</span>
                     <span className="text-primary">
-                      {formatPrice(effectivePrice)}
+                      {formatPrice(effectivePrice)} {effectivePrice ? '(excl. VAT)' : ''}
                     </span>
                   </div>
+                  <p className="text-xs font-medium text-muted-foreground text-right">{TAX_NOTE}</p>
                   {formatApproxPrice(effectivePrice) && (
                     <div className="flex justify-end text-xs text-muted-foreground">
                       <span>{formatApproxPrice(effectivePrice)}</span>
                     </div>
                   )}
-                  <p className="text-[10px] text-muted-foreground text-right">{FINAL_PAYMENT_EUR_NOTE}</p>
+                  <p className="text-xs text-muted-foreground text-right">{FINAL_PAYMENT_EUR_NOTE}</p>
                 </div>
 
                 {/* What you get */}
