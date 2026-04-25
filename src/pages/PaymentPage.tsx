@@ -528,7 +528,7 @@ const PaymentPage = () => {
                   </div>
                   {tool?.tool_id === 'lovable' && (
                     <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-muted-foreground">
-                      <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support available</span>
+                      <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support included</span>
                     </div>
                   )}
                 </div>
