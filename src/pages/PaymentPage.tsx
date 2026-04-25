@@ -28,31 +28,25 @@ import { ProductRatingInline, ProductReviewsCarousel } from '@/components/Produc
 import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
+import { getRegionCategory } from '@/lib/geo';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
 /* ── Payment method config ─────────────────────────────────────── */
 const PAYMENT_METHODS = [
   {
-    id: 'stripe',
-    label: 'Stripe Checkout',
-    description: 'Visa, Mastercard, Amex via Stripe',
+    id: 'card',
+    label: 'Card',
+    description: 'Visa, Mastercard, Amex — paid in EUR',
     icon: CreditCard,
-    stripeTypes: ['card'],
+    stripeTypes: ['card', 'bancontact'],
   },
   {
-    id: 'sepa',
-    label: 'SEPA Direct Debit',
-    description: 'European bank transfer (EUR)',
+    id: 'bancontact',
+    label: 'Bancontact',
+    description: 'Belgian bank payment — paid in EUR',
     icon: Building2,
-    stripeTypes: ['sepa_debit'],
-  },
-  {
-    id: 'eu-methods',
-    label: 'European Payment Methods',
-    description: 'SEPA Direct Debit, iDEAL, Bancontact',
-    icon: Globe,
-    stripeTypes: ['card', 'sepa_debit', 'ideal', 'bancontact'],
+    stripeTypes: ['bancontact', 'card'],
   },
 ] as const;
 
