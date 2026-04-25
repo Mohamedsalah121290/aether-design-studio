@@ -17,7 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   Loader2, CheckCircle, Mail, Shield, ShieldCheck, Sparkles,
   Clock, Zap, UserCheck, Wallet, CreditCard, Building2, ArrowLeft,
-  Globe, Crown, Gift,
+  Globe, Crown,
 } from 'lucide-react';
 import { z } from 'zod';
 import type { ToolPlan } from '@/components/ToolCard';
