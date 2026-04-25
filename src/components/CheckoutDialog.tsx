@@ -42,6 +42,30 @@ const WHAT_YOU_GET = [
 
 const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
+const getPlanDurationMonths = (planName: string) => {
+  const name = planName.toLowerCase();
+  const monthMatch = name.match(/\b(\d+)\s*months?\b/) || name.match(/\b(\d+)m\b/);
+  if (monthMatch) return Number(monthMatch[1]);
+  if (name.includes('year') || name.includes('annual') || /\b1\s*y\b/.test(name)) return 12;
+  return 1;
+};
+
+const getMonthlyPlanValue = (plan: ToolPlan) => {
+  if (!plan.monthly_price) return null;
+  const monthly = Number(plan.monthly_price) / getPlanDurationMonths(plan.plan_name);
+  return `≈ €${Number.isInteger(monthly) ? monthly : monthly.toFixed(1)} / month`;
+};
+
+const getBestValuePlan = (plans: ToolPlan[]) => {
+  const pricedPlans = plans.filter(plan => plan.monthly_price && plan.monthly_price > 0);
+  return pricedPlans.reduce<ToolPlan | null>((best, plan) => {
+    if (!best) return plan;
+    const currentValue = Number(plan.monthly_price) / getPlanDurationMonths(plan.plan_name);
+    const bestValue = Number(best.monthly_price) / getPlanDurationMonths(best.plan_name);
+    return currentValue < bestValue ? plan : best;
+  }, null);
+};
+
 export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: CheckoutDialogProps) => {
   const { t } = useTranslation();
   const { currency } = useCurrency();
@@ -117,8 +141,12 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
         activation_time: p.activation_time,
         is_active: p.is_active,
       }));
-      setPlans(mapped);
-      if (mapped.length > 0) setSelectedPlan(mapped[0]);
+      const bestValuePlan = getBestValuePlan(mapped);
+      const displayPlans = bestValuePlan
+        ? [...mapped].sort((a, b) => (b.id === bestValuePlan.id ? 1 : 0) - (a.id === bestValuePlan.id ? 1 : 0))
+        : mapped;
+      setPlans(displayPlans);
+      if (displayPlans.length > 0) setSelectedPlan(bestValuePlan || displayPlans[0]);
     } catch (err) {
       console.error('Error fetching plans:', err);
     } finally {
