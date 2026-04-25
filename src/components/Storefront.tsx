@@ -284,12 +284,9 @@ const Storefront = () => {
                             <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.deliveryActivation')}</p>
                             <h2 className="mt-2 text-2xl md:text-3xl font-bold text-white heading-glow">{t('store.receiveAccessTitle')}</h2>
                           </div>
-                          <p className="text-base leading-relaxed text-white/70">{t('store.receiveAccessDescription')}</p>
                           <div className="space-y-2 text-sm leading-relaxed text-white/65">
-                            <p>{t('store.receiveAccessIntro')}</p>
-                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{t('store.accountAccess')}</p>
-                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{t('store.activationKey')}</p>
-                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{t('store.directActivation')}</p>
+                            <p>{t('store.safeActivationMessage', 'Activation is handled securely by our team after purchase.')}</p>
+                            <p className="font-semibold text-primary">{t('store.noSensitiveBeforePayment', 'No sensitive information is required before payment.')}</p>
                           </div>
                           <div className="flex flex-wrap gap-2 text-sm font-semibold text-white/75">
                             <span>✔ {t('store.fastDelivery')}</span><span>✔ {t('store.secureProcess')}</span><span>✔ {t('store.realSupport')}</span>
@@ -299,10 +296,8 @@ const Storefront = () => {
                           <div className="rounded-2xl border border-primary/25 bg-primary/10 p-4">
                              <h3 className="text-base font-bold text-white">{t('store.importantInfo')}</h3>
                             <div className="mt-3 space-y-2 text-sm leading-relaxed text-white/70">
-                               <p>{t('store.personalActivationInfo')}</p>
-                               <p>{t('store.contactGuided')}</p>
-                               <p className="font-semibold text-primary">{t('store.noPersonalPasswords')}</p>
-                               <p>{t('store.secureMethods')}</p>
+                               <p>{t('store.safeActivationMessage', 'Activation is handled securely by our team after purchase.')}</p>
+                               <p className="font-semibold text-primary">{t('store.noSensitiveBeforePayment', 'No sensitive information is required before payment.')}</p>
                             </div>
                           </div>
                           <div>
