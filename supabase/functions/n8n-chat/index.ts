@@ -20,7 +20,7 @@ serve(async (req) => {
   }
 
   try {
-    const { message } = await req.json();
+    const { message, language, instruction } = await req.json();
 
     if (typeof message !== "string" || !message.trim()) {
       return new Response(JSON.stringify({ error: "Message is required" }), {
@@ -32,7 +32,7 @@ serve(async (req) => {
     const n8nResponse = await fetch(N8N_CHAT_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: message.trim() }),
+      body: JSON.stringify({ message: message.trim(), language, instruction }),
     });
 
     const contentType = n8nResponse.headers.get("content-type") || "text/plain";

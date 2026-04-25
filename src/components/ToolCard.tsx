@@ -155,6 +155,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const isPaused = tool.status === 'paused' && !isContactOnly;
   const selectedLovablePlanDetails = LOVABLE_PLAN_OPTIONS.find(plan => plan.planId === selectedLovablePlan);
   const checkoutUrl = getStripeLink(tool.name, tool.tool_id === 'lovable' ? selectedLovablePlanDetails ? t(selectedLovablePlanDetails.titleKey) : undefined : undefined);
+  const periodText = (period: PricePeriod) => t(`store.period.${period.replace('-', '')}`, period === 'one-time' ? 'one time' : period === 'yearly' ? '/ year' : '/ month');
+  const periodLabel = (period: PricePeriod) => t(`store.periodLabel.${period.replace('-', '')}`, period === 'one-time' ? 'One-Time' : period === 'yearly' ? 'Yearly' : 'Monthly');
 
   const handleNotifyMe = async () => {
     if (!showNotifyInput) { setShowNotifyInput(true); return; }
@@ -318,15 +320,15 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                         >
                           {formatEuro(price)}
                         </span>
-                        <span className="text-xs font-semibold text-muted-foreground">(excl. VAT)</span>
+                        <span className="text-xs font-semibold text-muted-foreground">{t('store.exclVat', '(excl. VAT)')}</span>
                         <span className={`text-xs font-medium ${style.textClass} opacity-80`}>
-                          {style.suffix}
+                          {periodText(period)}
                         </span>
                         <span
                           className={`text-[9px] font-semibold uppercase tracking-wider px-1.5 py-[1px] rounded-md border ${style.textClass}`}
                           style={{ borderColor: 'currentColor', opacity: 0.85 }}
                         >
-                          {style.label}
+                          {periodLabel(period)}
                         </span>
                       </div>
                       {approxPrice && <p className="text-[11px] font-medium text-muted-foreground/80">{approxPrice}</p>}
