@@ -12,6 +12,7 @@ import { ProductRatingInline, ProductReviewPreview } from '@/components/ProductR
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
 import { getStripeLink } from '@/lib/stripeLinks';
+import { getProductLogoUrl } from '@/lib/productLogos';
 
 /* ── Category labels ──────────────────────────────────────────── */
 const CATEGORY_LABEL_KEYS: Record<string, string> = {
@@ -145,7 +146,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const [consentChecked, setConsentChecked] = useState(true);
   const [selectedLovablePlan, setSelectedLovablePlan] = useState('lovable_3_months');
 
-  const logoUrl = logoError && !fallbackAttempted ? `/logos/${tool.tool_id}.svg` : tool.logo_url;
+  const logoUrl = logoError && !fallbackAttempted ? `/logos/${tool.tool_id}.svg` : getProductLogoUrl(tool.tool_id, tool.logo_url);
   const showLogo = logoUrl && !(logoError && fallbackAttempted);
   const price = tool.starting_price;
   const approxPrice = formatApproxCurrency(price, currency.code);
@@ -263,7 +264,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   <img
                     src={logoUrl!}
                     alt={`${tool.name} logo`}
-                    className={`h-9 w-9 sm:h-12 sm:w-12 object-contain drop-shadow-sm transition-all duration-300 relative z-10 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    className={`h-9 w-9 sm:h-12 sm:w-12 object-contain p-0.5 drop-shadow-sm transition-all duration-300 relative z-10 group-hover:scale-105 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
                     onError={() => {
                       if (!logoError) { setLogoError(true); setLogoLoaded(false); }
