@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check, CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languages } from '@/lib/i18n';
+import { LANGUAGE_MANUAL_KEY } from '@/lib/geo';
 import { CURRENCIES, type CurrencyCode } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import FlagIcon from '@/components/FlagIcon';
@@ -46,6 +47,7 @@ const Navbar = () => {
   }, []);
 
   const changeLanguage = (code: string) => {
+    localStorage.setItem(LANGUAGE_MANUAL_KEY, 'true');
     i18n.changeLanguage(code);
     const lang = languages.find(l => l.code === code);
     document.documentElement.dir = lang?.rtl ? 'rtl' : 'ltr';
@@ -71,12 +73,12 @@ const Navbar = () => {
   const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
 
   const navLinks = [
-    { href: '/', label: 'Home' },
+    { href: '/', label: t('nav.home', 'Home') },
     { href: '/store', label: t('nav.store') },
     { href: '/academy', label: t('nav.academy') },
-    { href: '/blog', label: 'Blog' },
+    { href: '/blog', label: t('nav.blog', 'Blog') },
     { href: '/about', label: t('nav.about') },
-    { href: '/contact', label: 'Contact' },
+    { href: '/contact', label: t('nav.contact', 'Contact') },
   ];
 
   return (
