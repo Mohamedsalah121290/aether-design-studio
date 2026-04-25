@@ -190,7 +190,8 @@ export const ChatbotSalesFlow = () => {
 
   const addFlow = (key: FlowKey) => {
     setSelected(key);
-    const next: Message = { id: Date.now(), role: 'bot', text: text.intros[key], products: products[key] };
+    const localizedProducts = products[key].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
+    const next: Message = { id: Date.now(), role: 'bot', text: text.intros[key], products: localizedProducts };
     setMessages((current) => [...current.filter((m) => m.id !== next.id), next]);
     if (soundOn) window.setTimeout(() => speak(next), 150);
   };
@@ -200,7 +201,8 @@ export const ChatbotSalesFlow = () => {
     if (!value) return;
     setInput('');
     const userMessage: Message = { id: Date.now(), role: 'user', text: value };
-    const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: text.intros.unsure, products: products.unsure };
+    const localizedProducts = products.unsure.map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
+    const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: text.intros.unsure, products: localizedProducts };
     setMessages((current) => [...current, userMessage, botMessage]);
     if (soundOn) window.setTimeout(() => speak(botMessage), 150);
   };
