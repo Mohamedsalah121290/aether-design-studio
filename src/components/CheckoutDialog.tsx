@@ -22,7 +22,8 @@ import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
-import { openSocialUrl, WHATSAPP_URL, WhatsAppIcon } from './ChatbotConversion';
+import { openSocialUrl, WhatsAppIcon } from './ChatbotConversion';
+import { supportLinks } from '@/lib/socialLinks';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -381,7 +382,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                 <div>
                   <p className="mb-2 text-xs font-semibold text-white">Need help? Contact us instantly:</p>
                   <div className="grid grid-cols-2 gap-2">
-                    {WHATSAPP_URL && <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
+                    {supportLinks.whatsapp && <a href={supportLinks.whatsapp} onClick={(event) => openSocialUrl(event, supportLinks.whatsapp)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
                   </div>
                 </div>
               </div>
