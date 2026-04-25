@@ -33,6 +33,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import RecentActivityToast from "./components/RecentActivityToast";
 import { ChatbotSalesFlow } from "./components/ChatbotConversion";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 import "@/lib/i18n";
 
 const queryClient = new QueryClient();
@@ -96,6 +97,7 @@ const AppRoutes = () => {
 };
 
 const MobileStickyCTA = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const [showAtTop, setShowAtTop] = useState(false);
 
@@ -109,8 +111,8 @@ const MobileStickyCTA = () => {
   if (location.pathname === '/' && !showAtTop) return null;
 
   return (
-    <Link to="/store?scrollTo=chatgpt" className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 md:hidden min-h-[56px] rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold shadow-[0_0_28px_hsl(var(--primary)/0.35)] flex items-center justify-center gap-2 active:scale-[0.99] transition-transform" aria-label="Get access now">
-      Get Access Now
+    <Link to="/store?scrollTo=chatgpt" className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 md:hidden min-h-[56px] rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold shadow-[0_0_28px_hsl(var(--primary)/0.35)] flex items-center justify-center gap-2 active:scale-[0.99] transition-transform" aria-label={t('store.getAccess')}>
+      {t('store.getAccess')}
       <ArrowRight className="h-5 w-5" />
     </Link>
   );

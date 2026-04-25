@@ -2,17 +2,17 @@ import { Search, X, SlidersHorizontal } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const FILTER_CHIPS = [
-  { id: 'all', label: 'All' },
-  { id: 'licenses-productivity', label: '🪟 Licenses & Productivity' },
-  { id: 'design-video', label: '🎨 Design & Video Editing' },
-  { id: 'premium-ai', label: '🤖 Premium AI Tools' },
-  { id: 'education-security-business', label: '🧩 Education, Security & Business' },
+  { id: 'all', labelKey: 'store.categories.all' },
+  { id: 'licenses-productivity', labelKey: 'store.categoriesDetailed.licenses-productivity.label' },
+  { id: 'design-video', labelKey: 'store.categoriesDetailed.design-video.label' },
+  { id: 'premium-ai', labelKey: 'store.categoriesDetailed.premium-ai.label' },
+  { id: 'education-security-business', labelKey: 'store.categoriesDetailed.education-security-business.label' },
 ] as const;
 
 const SORT_OPTIONS = [
-  { id: 'popular', label: 'Most Popular' },
-  { id: 'newest', label: 'Newest' },
-  { id: 'price-asc', label: 'Price: Low → High' },
+  { id: 'popular', labelKey: 'sort.popular' },
+  { id: 'newest', labelKey: 'sort.newest' },
+  { id: 'price-asc', labelKey: 'sort.priceAsc' },
 ] as const;
 
 export type FilterChip = (typeof FILTER_CHIPS)[number]['id'];
@@ -71,7 +71,7 @@ const FiltersBar = ({
                 className="min-h-11 pl-9 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm text-white appearance-none cursor-pointer focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 transition-all min-w-[180px]"
               >
                 {SORT_OPTIONS.map(opt => (
-                  <option key={opt.id} value={opt.id}>{opt.label}</option>
+                  <option key={opt.id} value={opt.id}>{t(opt.labelKey, opt.id)}</option>
                 ))}
               </select>
             </div>
@@ -89,7 +89,7 @@ const FiltersBar = ({
                     : 'bg-white/[0.03] text-white/40 border border-transparent hover:bg-white/[0.06] hover:text-white/60'
                 }`}
               >
-                {chip.label}
+                {t(chip.labelKey, chip.id)}
               </button>
             ))}
           </div>

@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getStoredRegion } from '@/lib/geo';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
 export const WHATSAPP_URL = 'https://web.whatsapp.com/';
@@ -41,13 +42,13 @@ type Product = { name: string; id: string; desc: string; benefits: string[] };
 const copy: Record<LangKey, {
   dir: 'ltr' | 'rtl'; flag: string; voice: string[]; greeting: string; question: string; input: string; access: string; price: string; labels: Record<FlowKey, string>; intros: Record<FlowKey, string>;
 }> = {
-  en: { dir: 'ltr', flag: 'EN', voice: ['en-GB', 'en-US'], greeting: 'Hi 👋 Want me to find the best deal for you?', question: 'Choose what helps you most:', input: 'Type your message...', access: 'Get access', price: 'Price is shown in EUR before checkout. Focus on saved time and practical access.', labels: { ai: 'Best Deal', design: 'Compare', productivity: 'Cheapest', unsure: 'Help me choose' }, intros: { ai: 'Best deals people choose most often.', design: 'Here are strong tools to compare side by side.', productivity: 'Lowest-friction options to start today.', unsure: 'Start with the most useful tools.' } },
-  fr: { dir: 'ltr', flag: 'FR', voice: ['fr-FR', 'fr-BE'], greeting: 'Salut 👋 Voulez-vous que je trouve la meilleure offre pour vous ?', question: 'Choisissez ce qui vous aide le plus :', input: 'Écrivez votre message...', access: 'Obtenir l’accès', price: 'Le prix est affiché en EUR avant le paiement. Pensez gain de temps et accès utile.', labels: { ai: 'Meilleures offres', design: 'Comparer', productivity: 'Option moins chère', unsure: 'Aidez-moi' }, intros: { ai: 'Les offres les plus choisies.', design: 'Voici des outils forts à comparer.', productivity: 'Options simples pour commencer aujourd’hui.', unsure: 'Commencez avec les outils les plus utiles.' } },
+  en: { dir: 'ltr', flag: 'EN', voice: ['en-GB', 'en-US'], greeting: 'Hi, I can help you choose the right AI tool.', question: 'Choose what helps you most:', input: 'Type your message...', access: 'Get access', price: 'Final payment is processed in EUR (€).', labels: { ai: 'Best Deal', design: 'Compare', productivity: 'Cheapest', unsure: 'Help me choose' }, intros: { ai: 'Best deals people choose most often.', design: 'Here are strong tools to compare side by side.', productivity: 'Lowest-friction options to start today.', unsure: 'Start with the most useful tools.' } },
+  fr: { dir: 'ltr', flag: 'FR', voice: ['fr-FR', 'fr-BE'], greeting: 'Bonjour, je peux vous aider à choisir le bon outil IA.', question: 'Choisissez ce qui vous aide le plus :', input: 'Écrivez votre message...', access: 'Obtenir l’accès', price: 'Le paiement final est traité en EUR (€).', labels: { ai: 'Meilleures offres', design: 'Comparer', productivity: 'Option moins chère', unsure: 'Aidez-moi' }, intros: { ai: 'Les offres les plus choisies.', design: 'Voici des outils forts à comparer.', productivity: 'Options simples pour commencer aujourd’hui.', unsure: 'Commencez avec les outils les plus utiles.' } },
   nl: { dir: 'ltr', flag: 'NL', voice: ['nl-BE', 'nl-NL'], greeting: 'Hoi 👋 Zal ik de beste deal voor je vinden?', question: 'Kies wat je het meest helpt:', input: 'Typ je bericht...', access: 'Krijg toegang', price: 'De prijs staat in EUR vóór checkout. Denk aan tijdwinst en praktische toegang.', labels: { ai: 'Beste deals', design: 'Vergelijk tools', productivity: 'Goedkoopste optie', unsure: 'Help kiezen' }, intros: { ai: 'De meest gekozen deals.', design: 'Sterke tools om te vergelijken.', productivity: 'Snelle opties om vandaag te starten.', unsure: 'Start met de meest nuttige tools.' } },
   de: { dir: 'ltr', flag: 'DE', voice: ['de-DE'], greeting: 'Hi 👋 Soll ich den besten Deal für dich finden?', question: 'Wähle, was dir am meisten hilft:', input: 'Nachricht eingeben...', access: 'Zugang erhalten', price: 'Der Preis wird vor dem Checkout in EUR angezeigt. Es geht um Zeitersparnis und praktischen Zugang.', labels: { ai: 'Beste Deals', design: 'Tools vergleichen', productivity: 'Günstigste Option', unsure: 'Hilf mir wählen' }, intros: { ai: 'Die meistgewählten Deals.', design: 'Starke Tools zum Vergleichen.', productivity: 'Einfache Optionen für heute.', unsure: 'Starte mit den nützlichsten Tools.' } },
   es: { dir: 'ltr', flag: 'ES', voice: ['es-ES'], greeting: 'Hola 👋 ¿Quieres que encuentre la mejor oferta para ti?', question: 'Elige lo que más te ayuda:', input: 'Escribe tu mensaje...', access: 'Obtener acceso', price: 'El precio se muestra en EUR antes del pago. Piensa en ahorro de tiempo y acceso práctico.', labels: { ai: 'Mejores ofertas', design: 'Comparar tools', productivity: 'Opción barata', unsure: 'Ayúdame' }, intros: { ai: 'Las ofertas más elegidas.', design: 'Herramientas fuertes para comparar.', productivity: 'Opciones simples para empezar hoy.', unsure: 'Empieza con las herramientas más útiles.' } },
   it: { dir: 'ltr', flag: 'IT', voice: ['it-IT'], greeting: 'Ciao 👋 Vuoi che trovi l’offerta migliore per te?', question: 'Scegli cosa ti aiuta di più:', input: 'Scrivi il tuo messaggio...', access: 'Ottieni accesso', price: 'Il prezzo è mostrato in EUR prima del checkout. Conta il tempo risparmiato e l’accesso pratico.', labels: { ai: 'Migliori offerte', design: 'Confronta tool', productivity: 'Opzione economica', unsure: 'Aiutami' }, intros: { ai: 'Le offerte più scelte.', design: 'Strumenti forti da confrontare.', productivity: 'Opzioni semplici per iniziare oggi.', unsure: 'Inizia dagli strumenti più utili.' } },
-  ar: { dir: 'rtl', flag: 'AR', voice: ['ar-SA', 'ar'], greeting: 'مرحباً 👋 هل تريد أن أجد لك أفضل عرض؟', question: 'اختر ما يناسبك:', input: 'اكتب رسالتك...', access: 'احصل على الوصول', price: 'السعر يظهر باليورو قبل الدفع. ركّز على الوقت الذي ستوفره والقيمة العملية.', labels: { ai: 'أفضل العروض', design: 'قارن الأدوات', productivity: 'الأرخص', unsure: 'ساعدني أختار' }, intros: { ai: 'هذه أكثر العروض طلباً.', design: 'هذه أدوات قوية للمقارنة.', productivity: 'خيارات سهلة لتبدأ اليوم.', unsure: 'ابدأ بالأدوات الأكثر فائدة.' } },
+  ar: { dir: 'rtl', flag: 'AR', voice: ['ar-SA', 'ar'], greeting: 'مرحباً، أستطيع مساعدتك في اختيار أداة الذكاء الاصطناعي المناسبة.', question: 'اختر ما يناسبك:', input: 'اكتب رسالتك...', access: 'احصل على الوصول', price: 'تتم معالجة الدفع النهائي باليورو (€).', labels: { ai: 'أفضل العروض', design: 'قارن الأدوات', productivity: 'الأرخص', unsure: 'ساعدني أختار' }, intros: { ai: 'هذه أكثر العروض طلباً.', design: 'هذه أدوات قوية للمقارنة.', productivity: 'خيارات سهلة لتبدأ اليوم.', unsure: 'ابدأ بالأدوات الأكثر فائدة.' } },
 };
 
 const products: Record<FlowKey, Product[]> = {
@@ -91,6 +92,15 @@ const productLocale: Record<LangKey, Record<string, Pick<Product, 'desc' | 'bene
 
 const bullets = ['Instant replies', 'Works in multiple languages', '24/7 availability', 'Works across all platforms', 'Increases conversions'];
 const langTint: Record<LangKey, string> = { en: 'hsl(var(--primary))', fr: 'hsl(var(--secondary))', nl: '#25D366', de: 'hsl(var(--accent))', es: '#F5C542', it: '#25D366', ar: 'hsl(var(--secondary))' };
+const fallbackText: Record<LangKey, { received: string; error: string; assistant: string; online: string; soundOff: string; soundOn: string; close: string; play: string; mic: string; send: string; open: string }> = {
+  en: { received: 'Bot response received.', error: 'Unable to connect right now. Please try again.', assistant: 'AI Deals Assistant', online: 'Online', soundOff: 'Turn sound off', soundOn: 'Turn sound on', close: 'Close chatbot', play: 'Play message', mic: 'Press to talk', send: 'Send message', open: 'Open AI Deals chatbot' },
+  fr: { received: 'Réponse du bot reçue.', error: 'Connexion impossible pour le moment. Veuillez réessayer.', assistant: 'Assistant AI Deals', online: 'En ligne', soundOff: 'Couper le son', soundOn: 'Activer le son', close: 'Fermer le chat', play: 'Lire le message', mic: 'Parler', send: 'Envoyer le message', open: 'Ouvrir le chatbot AI Deals' },
+  nl: { received: 'Botantwoord ontvangen.', error: 'Kan nu geen verbinding maken. Probeer opnieuw.', assistant: 'AI Deals Assistent', online: 'Online', soundOff: 'Geluid uit', soundOn: 'Geluid aan', close: 'Chatbot sluiten', play: 'Bericht afspelen', mic: 'Druk om te praten', send: 'Bericht verzenden', open: 'Open AI Deals chatbot' },
+  de: { received: 'Bot-Antwort erhalten.', error: 'Verbindung derzeit nicht möglich. Bitte erneut versuchen.', assistant: 'AI Deals Assistent', online: 'Online', soundOff: 'Ton ausschalten', soundOn: 'Ton einschalten', close: 'Chatbot schließen', play: 'Nachricht abspielen', mic: 'Zum Sprechen drücken', send: 'Nachricht senden', open: 'AI Deals Chatbot öffnen' },
+  es: { received: 'Respuesta del bot recibida.', error: 'No se puede conectar ahora. Inténtalo de nuevo.', assistant: 'Asistente AI Deals', online: 'En línea', soundOff: 'Desactivar sonido', soundOn: 'Activar sonido', close: 'Cerrar chatbot', play: 'Reproducir mensaje', mic: 'Pulsa para hablar', send: 'Enviar mensaje', open: 'Abrir chatbot AI Deals' },
+  it: { received: 'Risposta del bot ricevuta.', error: 'Impossibile connettersi ora. Riprova.', assistant: 'Assistente AI Deals', online: 'Online', soundOff: 'Disattiva audio', soundOn: 'Attiva audio', close: 'Chiudi chatbot', play: 'Riproduci messaggio', mic: 'Premi per parlare', send: 'Invia messaggio', open: 'Apri chatbot AI Deals' },
+  ar: { received: 'تم استلام رد البوت.', error: 'تعذر الاتصال حالياً، حاول مرة أخرى.', assistant: 'مساعد AI Deals', online: 'متصل', soundOff: 'إيقاف الصوت', soundOn: 'تشغيل الصوت', close: 'إغلاق الدردشة', play: 'تشغيل الرسالة', mic: 'اضغط للتحدث', send: 'إرسال الرسالة', open: 'افتح دردشة AI Deals' },
+};
 
 const useLang = () => {
   const { i18n } = useTranslation();
@@ -227,7 +237,7 @@ export const ChatbotSalesFlow = () => {
       const value = record.reply || record.response || record.text || record.message || record.output || record.answer;
       if (typeof value === 'string') return value;
     }
-    return lang === 'ar' ? 'تم استلام رد البوت.' : 'Bot response received.';
+    return fallbackText[lang].received;
   };
 
   const sendMessage = async () => {
@@ -242,7 +252,7 @@ export const ChatbotSalesFlow = () => {
       const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: value }),
+        body: JSON.stringify({ message: value, language: lang, locale: text.voice[0], region: getStoredRegion(), instruction: `Reply only in ${lang}. Do not mix languages.` }),
       });
 
       if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
@@ -252,7 +262,7 @@ export const ChatbotSalesFlow = () => {
       setMessages((current) => [...current, botMessage]);
       if (soundOn) window.setTimeout(() => speak(botMessage), 150);
     } catch {
-      const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: lang === 'ar' ? 'تعذر الاتصال حالياً، حاول مرة أخرى.' : 'Unable to connect right now. Please try again.' };
+      const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: fallbackText[lang].error };
       setMessages((current) => [...current, botMessage]);
     } finally {
       setSending(false);
@@ -283,10 +293,10 @@ export const ChatbotSalesFlow = () => {
         {open && (
           <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[68dvh] sm:max-h-none">
             <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border/60">
-              <div className="flex items-center gap-3 min-w-0"><RobotAvatar lang={lang} rounded="rounded-xl" speaking={speakingId !== null} /><div><p className="text-sm font-semibold text-foreground">AI Deals Assistant</p><p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />Online</p></div></div>
+              <div className="flex items-center gap-3 min-w-0"><RobotAvatar lang={lang} rounded="rounded-xl" speaking={speakingId !== null} /><div><p className="text-sm font-semibold text-foreground">{fallbackText[lang].assistant}</p><p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />{fallbackText[lang].online}</p></div></div>
               <div className="flex items-center gap-1">
-                <button onClick={() => setSoundOn((value) => !value)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}>{soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}</button>
-                <button onClick={() => setOpen(false)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label="Close chatbot"><X className="w-4 h-4" /></button>
+                <button onClick={() => setSoundOn((value) => !value)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label={soundOn ? fallbackText[lang].soundOff : fallbackText[lang].soundOn}>{soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}</button>
+                <button onClick={() => setOpen(false)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label={fallbackText[lang].close}><X className="w-4 h-4" /></button>
               </div>
             </div>
 
@@ -297,7 +307,7 @@ export const ChatbotSalesFlow = () => {
                   <div className={`max-w-[84%] break-words ${message.role === 'user' ? 'bg-primary/20 text-foreground' : 'bg-white/[0.04] text-foreground'} rounded-xl px-3 sm:px-4 py-3 text-sm leading-relaxed`}>
                     <div className="flex items-start gap-2">
                       <p className="flex-1">{message.text}</p>
-                      {message.role === 'bot' && <button onClick={() => speak(message)} className="shrink-0 text-muted-foreground hover:text-primary transition-colors" aria-label="Play message"><Volume2 className="w-3.5 h-3.5" /></button>}
+                      {message.role === 'bot' && <button onClick={() => speak(message)} className="shrink-0 text-muted-foreground hover:text-primary transition-colors" aria-label={fallbackText[lang].play}><Volume2 className="w-3.5 h-3.5" /></button>}
                     </div>
                     {message.products && <div className="mt-3 space-y-2">{message.products.map((product) => <div key={product.id} className="rounded-xl border border-border bg-muted/20 p-3"><div className="flex items-start justify-between gap-3 mb-2"><div><h4 className="text-sm font-semibold text-foreground">{product.name}</h4><p className="text-xs text-muted-foreground mt-1">{product.desc}</p></div><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)} className="text-primary hover:text-foreground transition-colors" aria-label={`Open ${product.name}`}><ChevronRight className="w-4 h-4" /></Link></div><ul className="space-y-1 mb-3">{product.benefits.map((benefit) => <li key={benefit} className="flex items-center gap-2 text-[11px] text-muted-foreground"><CheckCircle className="w-3 h-3 text-primary shrink-0" />{benefit}</li>)}</ul><p className="text-[11px] text-muted-foreground mb-3">{text.price}</p><Button variant="heroOutline" size="sm" asChild className="w-full"><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)}>{text.access}</Link></Button></div>)}</div>}
                   </div>
@@ -309,9 +319,9 @@ export const ChatbotSalesFlow = () => {
 
             <div className="p-3 border-t border-border/60">
               <div className="flex items-center gap-2 rounded-2xl border border-border bg-muted/30 px-3 py-2">
-                <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void sendMessage(); }} placeholder={text.input} className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" aria-label="Chat message" disabled={sending} />
-                <button onClick={startListening} className={`w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center transition-colors ${listening ? 'bg-primary/20 text-primary' : 'hover:bg-muted/50 text-muted-foreground'}`} aria-label="Press to talk"><Mic className="w-4 h-4" /></button>
-                <button onClick={() => void sendMessage()} disabled={sending} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center bg-primary text-primary-foreground hover:scale-105 transition-transform disabled:opacity-60 disabled:hover:scale-100" aria-label="Send message"><Send className="w-4 h-4" /></button>
+                <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void sendMessage(); }} placeholder={text.input} className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" aria-label={fallbackText[lang].send} disabled={sending} />
+                <button onClick={startListening} className={`w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center transition-colors ${listening ? 'bg-primary/20 text-primary' : 'hover:bg-muted/50 text-muted-foreground'}`} aria-label={fallbackText[lang].mic}><Mic className="w-4 h-4" /></button>
+                <button onClick={() => void sendMessage()} disabled={sending} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center bg-primary text-primary-foreground hover:scale-105 transition-transform disabled:opacity-60 disabled:hover:scale-100" aria-label={fallbackText[lang].send}><Send className="w-4 h-4" /></button>
               </div>
             </div>
           </motion.div>
@@ -323,7 +333,7 @@ export const ChatbotSalesFlow = () => {
           <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
           <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
         </div>
-        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label="Open AI Deals chatbot"><RobotAvatar className="w-[64px] h-[64px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
+        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label={fallbackText[lang].open}><RobotAvatar className="w-[64px] h-[64px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
     </div>
   );

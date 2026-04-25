@@ -19,15 +19,13 @@ import { TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from './Chatbo
 /* ── Section config ─────────────────────────────────────────────── */
 const SECTION_ORDER: {
   key: string;
-  label: string;
-  subtitle: string;
   icon: React.ElementType;
   toolIds: string[];
 }[] = [
-  { key: 'licenses-productivity', label: 'Licenses & Productivity 🪟', subtitle: 'Windows, Office & productivity access', icon: Monitor, toolIds: ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'] },
-  { key: 'design-video', label: 'Design & Video Editing 🎨', subtitle: 'Creative design and video editing tools', icon: Palette, toolIds: ['canva', 'capcut'] },
-  { key: 'premium-ai', label: 'Premium AI Tools 🤖', subtitle: 'Premium AI assistants and creation tools', icon: Code, toolIds: ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'] },
-  { key: 'education-security-business', label: 'Education, Security & Business 🧩', subtitle: 'Learning, security and business software', icon: Briefcase, toolIds: ['coursera', 'linkedin', 'notion', 'zoom', 'eset'] },
+  { key: 'licenses-productivity', icon: Monitor, toolIds: ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'] },
+  { key: 'design-video', icon: Palette, toolIds: ['canva', 'capcut'] },
+  { key: 'premium-ai', icon: Code, toolIds: ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'] },
+  { key: 'education-security-business', icon: Briefcase, toolIds: ['coursera', 'linkedin', 'notion', 'zoom', 'eset'] },
 ];
 
 const ALLOWED_TOOL_IDS = new Set(SECTION_ORDER.flatMap(section => section.toolIds));
@@ -36,18 +34,16 @@ const FEATURED_TOOL_IDS = ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovab
 const POPULAR_TOOL_IDS  = ['capcut', 'windows', 'windows_home', 'microsoft_365', 'microsoft_office', 'coursera'];
 
 const PRICING_TIERS = [
-  { name: 'Starter', text: 'Best for trying one premium tool', cta: 'Start simple', toolId: 'perplexity' },
-  { name: 'Most Popular', text: 'Best balance for daily AI access', cta: 'Choose popular', toolId: 'chatgpt', featured: true },
-  { name: 'Pro', text: 'Best for creators and power users', cta: 'Go pro', toolId: 'canva' },
+  { key: 'starter', toolId: 'perplexity' },
+  { key: 'popular', toolId: 'chatgpt', featured: true },
+  { key: 'pro', toolId: 'canva' },
 ];
 
 const BUNDLES = [
-  { name: 'AI Starter Pack', products: 'ChatGPT + Perplexity + Notion', original: '€45/month', price: '€29/month', daily: '≈ €0.97/day', toolId: 'chatgpt' },
-  { name: 'Creator Pack', products: 'Canva + CapCut + ElevenLabs', original: '€54/month', price: '€35/month', daily: '≈ €1.17/day', toolId: 'canva' },
-  { name: 'Business Pack', products: 'ChatGPT + Office 365 + Notion', original: '€59/month', price: '€39/month', daily: '≈ €1.30/day', toolId: 'microsoft_365' },
+  { key: 'aiStarter', original: '€45/month', price: '€29/month', daily: '≈ €0.97/day', toolId: 'chatgpt' },
+  { key: 'creator', original: '€54/month', price: '€35/month', daily: '≈ €1.17/day', toolId: 'canva' },
+  { key: 'business', original: '€59/month', price: '€39/month', daily: '≈ €1.30/day', toolId: 'microsoft_365' },
 ];
-
-const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   'licenses-productivity': ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'],
@@ -234,7 +230,7 @@ const Storefront = () => {
 
               {/* Payment + delivery trust note (no design change, inline copy) */}
               <p className="text-[11px] text-white/40 mb-6">
-                {t('store.paymentNote', 'Secure payment via Stripe & Bancontact')} · {t('store.monthlyAccess', 'Monthly Access')} · 24h
+                {t('store.regionalTrust')} · {t('store.finalPaymentNote')} · 24h
               </p>
 
               {/* Social proof */}
@@ -243,9 +239,9 @@ const Storefront = () => {
                 <span>{t('store.socialProof', '1,000+ active members already saving')}</span>
               </div>
               <div className="mt-5 md:hidden flex flex-wrap items-center justify-center gap-2 text-[11px]">
-                <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 font-semibold text-primary">🔥 High demand</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">23 people are viewing this now</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">Limited availability today</span>
+                <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 font-semibold text-primary">🔥 {t('store.highDemand')}</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">{t('store.viewingNow')}</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">{t('store.limitedAvailability')}</span>
               </div>
             </div>
           </div>
@@ -267,17 +263,17 @@ const Storefront = () => {
                 <section className="py-12" aria-label="Pricing options">
                   <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
                     <div className="mb-6 text-center">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">Pricing made simple</p>
-                      <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">Choose your access level</h2>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.pricingSimple')}</p>
+                      <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">{t('store.chooseAccessLevel')}</h2>
                     </div>
                     <div className="grid gap-4 md:grid-cols-3 items-stretch">
                       {PRICING_TIERS.map((tier) => (
-                        <Link key={tier.name} to={`/store?scrollTo=${tier.toolId}`} className={`relative rounded-2xl border p-5 transition-all hover:border-primary/35 ${tier.featured ? 'md:-mt-3 md:mb-0 border-primary/40 bg-primary/10 shadow-lg shadow-primary/10' : 'border-white/10 bg-white/[0.03]'}`}>
-                          {tier.featured && <span className="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">Most Popular</span>}
-                          <h3 className="text-xl font-bold text-white">{tier.name}</h3>
-                          <p className="mt-2 text-sm text-white/50">{tier.text}</p>
-                          <p className="mt-4 text-[11px] font-semibold text-primary">Limited price today</p>
-                          <span className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{tier.cta}</span>
+                        <Link key={tier.key} to={`/store?scrollTo=${tier.toolId}`} className={`relative rounded-2xl border p-5 transition-all hover:border-primary/35 ${tier.featured ? 'md:-mt-3 md:mb-0 border-primary/40 bg-primary/10 shadow-lg shadow-primary/10' : 'border-white/10 bg-white/[0.03]'}`}>
+                          {tier.featured && <span className="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">{t('store.pricingTiers.popular.name')}</span>}
+                          <h3 className="text-xl font-bold text-white">{t(`store.pricingTiers.${tier.key}.name`)}</h3>
+                          <p className="mt-2 text-sm text-white/50">{t(`store.pricingTiers.${tier.key}.text`)}</p>
+                          <p className="mt-4 text-[11px] font-semibold text-primary">{t('store.limitedPriceToday')}</p>
+                          <span className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{t(`store.pricingTiers.${tier.key}.cta`)}</span>
                         </Link>
                       ))}
                     </div>
@@ -288,31 +284,31 @@ const Storefront = () => {
                   <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
                     <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-wider text-primary">Bundles</p>
-                        <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">Upgrade for better results</h2>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.bundles')}</p>
+                      <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">{t('store.upgradeBetterResults')}</h2>
                       </div>
-                      <p className="text-sm text-white/45">More value, fewer decisions.</p>
+                       <p className="text-sm text-white/45">{t('store.moreValue')}</p>
                     </div>
                     <div className="grid gap-4 md:grid-cols-3">
                       {BUNDLES.map((bundle, index) => (
-                        <Link key={bundle.name} to={`/store?scrollTo=${bundle.toolId}`} className={`rounded-2xl border p-5 transition-all hover:border-primary/35 ${index === 1 ? 'border-primary/40 bg-primary/10 md:scale-[1.03]' : 'border-white/10 bg-white/[0.03]'}`}>
+                        <Link key={bundle.key} to={`/store?scrollTo=${bundle.toolId}`} className={`rounded-2xl border p-5 transition-all hover:border-primary/35 ${index === 1 ? 'border-primary/40 bg-primary/10 md:scale-[1.03]' : 'border-white/10 bg-white/[0.03]'}`}>
                           <div className="mb-4 flex items-center justify-between gap-3">
-                            <h3 className="text-lg font-bold text-white">{bundle.name}</h3>
-                            {index === 1 && <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary">Most Popular</span>}
+                            <h3 className="text-lg font-bold text-white">{t(`store.bundlesList.${bundle.key}.name`)}</h3>
+                            {index === 1 && <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary">{t('store.pricingTiers.popular.name')}</span>}
                           </div>
-                          <p className="mb-4 text-sm text-white/50">{bundle.products}</p>
+                          <p className="mb-4 text-sm text-white/50">{t(`store.bundlesList.${bundle.key}.products`)}</p>
                           <div className="flex items-end gap-2">
                             <span className="text-sm text-white/35 line-through">{bundle.original}</span>
                             <span className="text-2xl font-black text-white">{bundle.price}</span>
                           </div>
                           <p className="mt-1 text-sm font-semibold text-white/70">(excl. VAT)</p>
-                          <p className="mt-1 text-xs font-medium text-muted-foreground">{TAX_NOTE}</p>
+                          <p className="mt-1 text-xs font-medium text-muted-foreground">{t('store.taxNote')}</p>
                           <p className="mt-1 text-xs font-semibold text-primary/80">{bundle.daily}</p>
                           <div className="mt-4 space-y-2 text-sm text-white/55">
-                            <p className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-primary" />Upgrade for better results</p>
-                            <p className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-primary" />Limited price today</p>
+                            <p className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-primary" />{t('store.upgradeBetterResults')}</p>
+                            <p className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-primary" />{t('store.limitedPriceToday')}</p>
                           </div>
-                          <span className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Get Bundle</span>
+                          <span className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{t('store.getBundle')}</span>
                         </Link>
                       ))}
                     </div>
@@ -325,32 +321,32 @@ const Storefront = () => {
                       <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-start">
                         <div className="space-y-4">
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-primary">Delivery & activation</p>
-                            <h2 className="mt-2 text-2xl md:text-3xl font-bold text-white heading-glow">How you receive your access</h2>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.deliveryActivation')}</p>
+                            <h2 className="mt-2 text-2xl md:text-3xl font-bold text-white heading-glow">{t('store.receiveAccessTitle')}</h2>
                           </div>
-                          <p className="text-base leading-relaxed text-white/70">After payment, you will receive your access quickly.</p>
+                          <p className="text-base leading-relaxed text-white/70">{t('store.receiveAccessDescription')}</p>
                           <div className="space-y-2 text-sm leading-relaxed text-white/65">
-                            <p>We provide one of the following depending on the product:</p>
-                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Account access (username + password)</p>
-                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Activation key</p>
-                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Direct activation on your account (on request)</p>
+                            <p>{t('store.receiveAccessIntro')}</p>
+                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{t('store.accountAccess')}</p>
+                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{t('store.activationKey')}</p>
+                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{t('store.directActivation')}</p>
                           </div>
                           <div className="flex flex-wrap gap-2 text-sm font-semibold text-white/75">
-                            <span>✔ Fast delivery</span><span>✔ Secure process</span><span>✔ Real support</span>
+                            <span>✔ {t('store.fastDelivery')}</span><span>✔ {t('store.secureProcess')}</span><span>✔ {t('store.realSupport')}</span>
                           </div>
                         </div>
                         <div className="space-y-4">
                           <div className="rounded-2xl border border-primary/25 bg-primary/10 p-4">
-                            <h3 className="text-base font-bold text-white">Important information:</h3>
+                             <h3 className="text-base font-bold text-white">{t('store.importantInfo')}</h3>
                             <div className="mt-3 space-y-2 text-sm leading-relaxed text-white/70">
-                              <p>For some services, activation can be done on your personal account.</p>
-                              <p>If you choose this option, you will be contacted via WhatsApp or Telegram and guided step-by-step through a secure process.</p>
-                              <p className="font-semibold text-primary">We do NOT ask for your personal passwords directly on the website.</p>
-                              <p>If you want activation on your own account, we may use a secure method such as temporary access, guided activation, or alternative safe methods.</p>
+                               <p>{t('store.personalActivationInfo')}</p>
+                               <p>{t('store.contactGuided')}</p>
+                               <p className="font-semibold text-primary">{t('store.noPersonalPasswords')}</p>
+                               <p>{t('store.secureMethods')}</p>
                             </div>
                           </div>
                           <div>
-                            <p className="mb-3 text-sm font-semibold text-white">Need help? Contact us instantly:</p>
+                             <p className="mb-3 text-sm font-semibold text-white">{t('store.needHelp')}</p>
                             <div className="grid grid-cols-2 gap-3">
                               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><WhatsAppIcon />WhatsApp</a>
                               <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><TelegramIcon />Telegram</a>
@@ -392,8 +388,8 @@ const Storefront = () => {
                             <Icon className="w-4 h-4 text-white/40" />
                           </div>
                           <div className="space-y-0.5">
-                            <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">{section.label}</h2>
-                            <p className="text-white/50 text-sm">{section.subtitle}</p>
+                             <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">{t(`store.categoriesDetailed.${section.key}.label`)}</h2>
+                             <p className="text-white/50 text-sm">{t(`store.categoriesDetailed.${section.key}.subtitle`)}</p>
                           </div>
                           <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/5 text-white/40 border border-white/10">
                             {section.tools.length}
@@ -407,7 +403,7 @@ const Storefront = () => {
                         </div>
                         {sectionIndex < activeSections.length - 1 && section.tools[0] && (
                           <Link to={`/store?scrollTo=${section.tools[0].tool_id}`} className="md:hidden mt-6 min-h-[52px] relative z-10 inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">
-                            Get Access
+                             {t('store.getAccess')}
                           </Link>
                         )}
                         {section.key === 'microsoft' && (
@@ -433,8 +429,8 @@ const Storefront = () => {
                           <Clock className="w-4 h-4 text-amber-400/60" />
                         </div>
                         <div className="space-y-0.5">
-                          <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">Coming Soon</h2>
-                          <p className="text-white/50 text-sm">These tools are on their way — get early access</p>
+                           <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">{t('store.comingSoon')}</h2>
+                           <p className="text-white/50 text-sm">{t('store.comingSoonSubtitle')}</p>
                         </div>
                         <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400/60 border border-amber-500/15">
                           {comingSoonTools.length}

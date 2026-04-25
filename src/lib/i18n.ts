@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { detectAndStoreRegion, LANGUAGE_MANUAL_KEY, LANGUAGE_STORAGE_KEY, languageForRegion } from '@/lib/geo';
 
 // Complete translations for 13 languages
 const resources = {
@@ -43,6 +44,57 @@ const resources = {
         ctaSecondary: 'How It Works',
         socialProof: '1,000+ active members already saving',
         paymentNote: 'Secure payment via Stripe & Bancontact',
+        regionalTrust: 'Secure EUR checkout via Stripe.',
+        regionalTrustCurrency: 'View prices in your currency. Checkout is securely processed in EUR.',
+        finalPaymentNote: 'Final payment is processed in EUR (€)',
+        taxNote: 'Taxes (if applicable) are calculated at checkout.',
+        accessPricingModel: 'Access-based pricing model',
+        highDemand: 'High demand',
+        viewingNow: '23 people are viewing this now',
+        limitedAvailability: 'Limited availability today',
+        pricingSimple: 'Pricing made simple',
+        chooseAccessLevel: 'Choose your access level',
+        limitedPriceToday: 'Limited price today',
+        bundles: 'Bundles',
+        upgradeBetterResults: 'Upgrade for better results',
+        moreValue: 'More value, fewer decisions.',
+        getBundle: 'Get Bundle',
+        deliveryActivation: 'Delivery & activation',
+        receiveAccessTitle: 'How you receive your access',
+        receiveAccessDescription: 'After payment, you will receive your access quickly.',
+        receiveAccessIntro: 'We provide one of the following depending on the product:',
+        accountAccess: 'Account access (username + password)',
+        activationKey: 'Activation key',
+        directActivation: 'Direct activation on your account (on request)',
+        fastDelivery: 'Fast delivery',
+        secureProcess: 'Secure process',
+        realSupport: 'Real support',
+        importantInfo: 'Important information:',
+        personalActivationInfo: 'For some services, activation can be done on your personal account.',
+        contactGuided: 'If you choose this option, you will be contacted via WhatsApp or Telegram and guided step-by-step through a secure process.',
+        noPersonalPasswords: 'We do NOT ask for your personal passwords directly on the website.',
+        secureMethods: 'If you want activation on your own account, we may use a secure method such as temporary access, guided activation, or alternative safe methods.',
+        needHelp: 'Need help? Contact us instantly:',
+        getAccess: 'Get Access',
+        comingSoon: 'Coming Soon',
+        comingSoonSubtitle: 'These tools are on their way — get early access',
+        contactForPrice: 'Contact for pricing',
+        categoriesDetailed: {
+          'licenses-productivity': { label: 'Licenses & Productivity 🪟', subtitle: 'Windows, Office & productivity access' },
+          'design-video': { label: 'Design & Video Editing 🎨', subtitle: 'Creative design and video editing tools' },
+          'premium-ai': { label: 'Premium AI Tools 🤖', subtitle: 'Premium AI assistants and creation tools' },
+          'education-security-business': { label: 'Education, Security & Business 🧩', subtitle: 'Learning, security and business software' },
+        },
+        pricingTiers: {
+          starter: { name: 'Starter', text: 'Best for trying one premium tool', cta: 'Start simple' },
+          popular: { name: 'Most Popular', text: 'Best balance for daily AI access', cta: 'Choose popular' },
+          pro: { name: 'Pro', text: 'Best for creators and power users', cta: 'Go pro' },
+        },
+        bundlesList: {
+          aiStarter: { name: 'AI Starter Pack', products: 'ChatGPT + Perplexity + Notion' },
+          creator: { name: 'Creator Pack', products: 'Canva + CapCut + ElevenLabs' },
+          business: { name: 'Business Pack', products: 'ChatGPT + Office 365 + Notion' },
+        },
         categories: {
           all: 'All Tools',
           text: 'Text & Chat',
@@ -3817,18 +3869,12 @@ const resources = {
 // Language configuration with flags, RTL support, and font families
 export const languages = [
   { code: 'en', name: 'English', flag: '🇬🇧', country: 'gb', rtl: false, font: 'Inter' },
-  { code: 'zh', name: '中文', flag: '🇨🇳', country: 'cn', rtl: false, font: 'Noto Sans SC' },
-  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳', country: 'in', rtl: false, font: 'Noto Sans Devanagari' },
-  { code: 'es', name: 'Español', flag: '🇪🇸', country: 'es', rtl: false, font: 'Inter' },
   { code: 'fr', name: 'Français', flag: '🇫🇷', country: 'fr', rtl: false, font: 'Inter' },
-  { code: 'ar', name: 'العربية', flag: '🇸🇦', country: 'sa', rtl: true, font: 'Cairo' },
-  { code: 'bn', name: 'বাংলা', flag: '🇧🇩', country: 'bd', rtl: false, font: 'Noto Sans Bengali' },
-  { code: 'pt', name: 'Português', flag: '🇧🇷', country: 'br', rtl: false, font: 'Inter' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺', country: 'ru', rtl: false, font: 'Inter' },
-  { code: 'ur', name: 'اردو', flag: '🇵🇰', country: 'pk', rtl: true, font: 'Noto Sans Arabic' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪', country: 'de', rtl: false, font: 'Inter' },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹', country: 'it', rtl: false, font: 'Inter' },
   { code: 'nl', name: 'Nederlands', flag: '🇧🇪', country: 'be', rtl: false, font: 'Inter' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪', country: 'de', rtl: false, font: 'Inter' },
+  { code: 'es', name: 'Español', flag: '🇪🇸', country: 'es', rtl: false, font: 'Inter' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹', country: 'it', rtl: false, font: 'Inter' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦', country: 'sa', rtl: true, font: 'Cairo' },
 ];
 
 // Get stored language or detect from browser
@@ -3838,9 +3884,14 @@ const getInitialLanguage = (): string => {
     return urlLang;
   }
 
-  const stored = localStorage.getItem('ai-deals-language');
+  const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
   if (stored && languages.some(l => l.code === stored)) {
     return stored;
+  }
+  const region = detectAndStoreRegion();
+  const geoLanguage = languageForRegion(region);
+  if (!localStorage.getItem(LANGUAGE_MANUAL_KEY) && languages.some(l => l.code === geoLanguage)) {
+    return geoLanguage;
   }
   
   // Try to detect from browser
@@ -3860,6 +3911,27 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
+  partialBundledLanguages: true,
+  react: {
+    useSuspense: false,
+  },
+});
+
+const regionalStoreTranslations = {
+  fr: {
+    store: {
+      regionalTrust: 'Paiement sécurisé en EUR via Stripe.', regionalTrustCurrency: 'Affichez les prix dans votre devise. Le paiement est traité en EUR de manière sécurisée.', finalPaymentNote: 'Le paiement final est traité en EUR (€)', taxNote: 'Les taxes éventuelles sont calculées au paiement.', accessPricingModel: 'Modèle de prix basé sur l’accès', highDemand: 'Forte demande', viewingNow: '23 personnes consultent cette page', limitedAvailability: 'Disponibilité limitée aujourd’hui', pricingSimple: 'Des prix simples', chooseAccessLevel: 'Choisissez votre niveau d’accès', limitedPriceToday: 'Prix limité aujourd’hui', bundles: 'Packs', upgradeBetterResults: 'Passez au niveau supérieur', moreValue: 'Plus de valeur, moins de décisions.', getBundle: 'Obtenir le pack', deliveryActivation: 'Livraison et activation', receiveAccessTitle: 'Comment vous recevez votre accès', receiveAccessDescription: 'Après le paiement, vous recevez votre accès rapidement.', receiveAccessIntro: 'Selon le produit, nous fournissons l’une des options suivantes :', accountAccess: 'Accès au compte (identifiant + mot de passe)', activationKey: 'Clé d’activation', directActivation: 'Activation directe sur votre compte (sur demande)', fastDelivery: 'Livraison rapide', secureProcess: 'Processus sécurisé', realSupport: 'Support réel', importantInfo: 'Information importante :', personalActivationInfo: 'Pour certains services, l’activation peut être faite sur votre compte personnel.', contactGuided: 'Dans ce cas, nous vous contactons via WhatsApp ou Telegram et vous guidons étape par étape.', noPersonalPasswords: 'Nous ne demandons PAS vos mots de passe personnels directement sur le site.', secureMethods: 'Nous pouvons utiliser une méthode sûre comme un accès temporaire, une activation guidée ou une alternative sécurisée.', needHelp: 'Besoin d’aide ? Contactez-nous :', getAccess: 'Obtenir l’accès', comingSoon: 'Bientôt disponible', comingSoonSubtitle: 'Ces outils arrivent bientôt — demandez un accès anticipé', contactForPrice: 'Contactez-nous pour le prix',
+    },
+  },
+  nl: { store: { regionalTrust: 'Veilige EUR-checkout via Stripe.', regionalTrustCurrency: 'Bekijk prijzen in je eigen valuta. Checkout wordt veilig in EUR verwerkt.', finalPaymentNote: 'De uiteindelijke betaling wordt verwerkt in EUR (€)', taxNote: 'Belastingen worden indien nodig berekend bij checkout.', highDemand: 'Veel vraag', viewingNow: '23 mensen bekijken dit nu', limitedAvailability: 'Vandaag beperkt beschikbaar', pricingSimple: 'Eenvoudige prijzen', chooseAccessLevel: 'Kies je toegangsniveau', limitedPriceToday: 'Tijdelijke prijs vandaag', bundles: 'Bundels', upgradeBetterResults: 'Upgrade voor betere resultaten', moreValue: 'Meer waarde, minder keuzes.', getBundle: 'Neem bundel', deliveryActivation: 'Levering en activatie', receiveAccessTitle: 'Hoe je toegang ontvangt', receiveAccessDescription: 'Na betaling ontvang je snel toegang.', receiveAccessIntro: 'Afhankelijk van het product leveren we één van deze opties:', accountAccess: 'Accounttoegang (gebruikersnaam + wachtwoord)', activationKey: 'Activatiesleutel', directActivation: 'Directe activatie op je account (op aanvraag)', fastDelivery: 'Snelle levering', secureProcess: 'Veilig proces', realSupport: 'Echte support', importantInfo: 'Belangrijke informatie:', personalActivationInfo: 'Voor sommige diensten kan activatie op je persoonlijke account.', contactGuided: 'We contacteren je via WhatsApp of Telegram en begeleiden je veilig stap voor stap.', noPersonalPasswords: 'We vragen je persoonlijke wachtwoorden NIET rechtstreeks op de website.', secureMethods: 'We gebruiken veilige methodes zoals tijdelijke toegang, begeleide activatie of veilige alternatieven.', needHelp: 'Hulp nodig? Contacteer ons direct:', getAccess: 'Krijg toegang', comingSoon: 'Binnenkort', comingSoonSubtitle: 'Deze tools komen eraan — vraag vroegtijdige toegang', contactForPrice: 'Contacteer voor prijs' } },
+  de: { store: { regionalTrust: 'Sicherer EUR-Checkout über Stripe.', regionalTrustCurrency: 'Preise in deiner Währung anzeigen. Der Checkout wird sicher in EUR verarbeitet.', finalPaymentNote: 'Die endgültige Zahlung erfolgt in EUR (€)', taxNote: 'Steuern werden ggf. im Checkout berechnet.', highDemand: 'Hohe Nachfrage', viewingNow: '23 Personen sehen sich das gerade an', limitedAvailability: 'Heute begrenzte Verfügbarkeit', pricingSimple: 'Einfache Preise', chooseAccessLevel: 'Wähle dein Zugangslevel', limitedPriceToday: 'Heute limitierter Preis', bundles: 'Bundles', upgradeBetterResults: 'Upgrade für bessere Ergebnisse', moreValue: 'Mehr Wert, weniger Entscheidungen.', getBundle: 'Bundle sichern', deliveryActivation: 'Lieferung & Aktivierung', receiveAccessTitle: 'So erhältst du deinen Zugang', receiveAccessDescription: 'Nach der Zahlung erhältst du deinen Zugang schnell.', receiveAccessIntro: 'Je nach Produkt stellen wir Folgendes bereit:', accountAccess: 'Kontozugang (Benutzername + Passwort)', activationKey: 'Aktivierungsschlüssel', directActivation: 'Direkte Aktivierung auf deinem Konto (auf Anfrage)', fastDelivery: 'Schnelle Lieferung', secureProcess: 'Sicherer Prozess', realSupport: 'Echter Support', importantInfo: 'Wichtige Information:', personalActivationInfo: 'Bei einigen Diensten kann die Aktivierung auf deinem persönlichen Konto erfolgen.', contactGuided: 'Wir kontaktieren dich per WhatsApp oder Telegram und führen dich sicher Schritt für Schritt.', noPersonalPasswords: 'Wir fragen deine persönlichen Passwörter NICHT direkt auf der Website ab.', secureMethods: 'Wir nutzen sichere Methoden wie temporären Zugriff, geführte Aktivierung oder sichere Alternativen.', needHelp: 'Brauchst du Hilfe? Kontaktiere uns direkt:', getAccess: 'Zugang erhalten', comingSoon: 'Demnächst', comingSoonSubtitle: 'Diese Tools kommen bald — erhalte frühen Zugang', contactForPrice: 'Preis anfragen' } },
+  es: { store: { regionalTrust: 'Pago seguro en EUR mediante Stripe.', regionalTrustCurrency: 'Ver precios en tu moneda. El pago se procesa de forma segura en EUR.', finalPaymentNote: 'El pago final se procesa en EUR (€)', taxNote: 'Los impuestos, si aplican, se calculan al pagar.', highDemand: 'Alta demanda', viewingNow: '23 personas lo están viendo ahora', limitedAvailability: 'Disponibilidad limitada hoy', pricingSimple: 'Precios simples', chooseAccessLevel: 'Elige tu nivel de acceso', limitedPriceToday: 'Precio limitado hoy', bundles: 'Packs', upgradeBetterResults: 'Mejora para obtener mejores resultados', moreValue: 'Más valor, menos decisiones.', getBundle: 'Obtener pack', deliveryActivation: 'Entrega y activación', receiveAccessTitle: 'Cómo recibes tu acceso', receiveAccessDescription: 'Después del pago, recibirás tu acceso rápidamente.', receiveAccessIntro: 'Según el producto, ofrecemos una de estas opciones:', accountAccess: 'Acceso a cuenta (usuario + contraseña)', activationKey: 'Clave de activación', directActivation: 'Activación directa en tu cuenta (bajo solicitud)', fastDelivery: 'Entrega rápida', secureProcess: 'Proceso seguro', realSupport: 'Soporte real', importantInfo: 'Información importante:', personalActivationInfo: 'En algunos servicios, la activación puede hacerse en tu cuenta personal.', contactGuided: 'Te contactaremos por WhatsApp o Telegram y te guiaremos paso a paso.', noPersonalPasswords: 'NO pedimos tus contraseñas personales directamente en el sitio.', secureMethods: 'Podemos usar métodos seguros como acceso temporal, activación guiada o alternativas seguras.', needHelp: '¿Necesitas ayuda? Contáctanos:', getAccess: 'Obtener acceso', comingSoon: 'Próximamente', comingSoonSubtitle: 'Estas herramientas están en camino — obtén acceso anticipado', contactForPrice: 'Consultar precio' } },
+  it: { store: { regionalTrust: 'Checkout sicuro in EUR tramite Stripe.', regionalTrustCurrency: 'Visualizza i prezzi nella tua valuta. Il checkout è elaborato in modo sicuro in EUR.', finalPaymentNote: 'Il pagamento finale viene elaborato in EUR (€)', taxNote: 'Le tasse, se applicabili, sono calcolate al checkout.', highDemand: 'Alta richiesta', viewingNow: '23 persone lo stanno guardando ora', limitedAvailability: 'Disponibilità limitata oggi', pricingSimple: 'Prezzi semplici', chooseAccessLevel: 'Scegli il tuo livello di accesso', limitedPriceToday: 'Prezzo limitato oggi', bundles: 'Pacchetti', upgradeBetterResults: 'Fai upgrade per risultati migliori', moreValue: 'Più valore, meno decisioni.', getBundle: 'Ottieni pacchetto', deliveryActivation: 'Consegna e attivazione', receiveAccessTitle: 'Come ricevi l’accesso', receiveAccessDescription: 'Dopo il pagamento riceverai rapidamente l’accesso.', receiveAccessIntro: 'A seconda del prodotto, forniamo una di queste opzioni:', accountAccess: 'Accesso account (username + password)', activationKey: 'Chiave di attivazione', directActivation: 'Attivazione diretta sul tuo account (su richiesta)', fastDelivery: 'Consegna rapida', secureProcess: 'Processo sicuro', realSupport: 'Supporto reale', importantInfo: 'Informazione importante:', personalActivationInfo: 'Per alcuni servizi, l’attivazione può essere fatta sul tuo account personale.', contactGuided: 'Ti contatteremo via WhatsApp o Telegram e ti guideremo in sicurezza passo dopo passo.', noPersonalPasswords: 'NON chiediamo le tue password personali direttamente sul sito.', secureMethods: 'Possiamo usare metodi sicuri come accesso temporaneo, attivazione guidata o alternative sicure.', needHelp: 'Serve aiuto? Contattaci subito:', getAccess: 'Ottieni accesso', comingSoon: 'In arrivo', comingSoonSubtitle: 'Questi strumenti stanno arrivando — richiedi accesso anticipato', contactForPrice: 'Contattaci per il prezzo' } },
+  ar: { store: { regionalTrust: 'دفع آمن باليورو عبر Stripe.', regionalTrustCurrency: 'يمكنك عرض الأسعار بعملتك المحلية. يتم الدفع النهائي باليورو.', finalPaymentNote: 'تتم معالجة الدفع النهائي باليورو (€)', taxNote: 'يتم احتساب الضرائب عند الدفع إذا كانت مطبقة.', highDemand: 'طلب مرتفع', viewingNow: '23 شخصاً يشاهدون الآن', limitedAvailability: 'توفر محدود اليوم', pricingSimple: 'أسعار واضحة', chooseAccessLevel: 'اختر مستوى الوصول', limitedPriceToday: 'سعر محدود اليوم', bundles: 'الباقات', upgradeBetterResults: 'رقِّ للوصول إلى نتائج أفضل', moreValue: 'قيمة أكبر وقرارات أقل.', getBundle: 'احصل على الباقة', deliveryActivation: 'التسليم والتفعيل', receiveAccessTitle: 'كيف تستلم الوصول', receiveAccessDescription: 'بعد الدفع، ستستلم الوصول بسرعة.', receiveAccessIntro: 'نوفر أحد الخيارات التالية حسب المنتج:', accountAccess: 'بيانات حساب (اسم مستخدم + كلمة مرور)', activationKey: 'مفتاح تفعيل', directActivation: 'تفعيل مباشر على حسابك عند الطلب', fastDelivery: 'تسليم سريع', secureProcess: 'عملية آمنة', realSupport: 'دعم حقيقي', importantInfo: 'معلومات مهمة:', personalActivationInfo: 'في بعض الخدمات يمكن التفعيل على حسابك الشخصي.', contactGuided: 'عند اختيار ذلك، سنتواصل معك عبر WhatsApp أو Telegram ونرشدك خطوة بخطوة بطريقة آمنة.', noPersonalPasswords: 'نحن لا نطلب كلمات مرورك الشخصية مباشرة على الموقع.', secureMethods: 'قد نستخدم طريقة آمنة مثل وصول مؤقت أو تفعيل موجه أو بدائل آمنة.', needHelp: 'تحتاج مساعدة؟ تواصل معنا فوراً:', getAccess: 'احصل على الوصول', comingSoon: 'قريباً', comingSoonSubtitle: 'هذه الأدوات في الطريق — احصل على وصول مبكر', contactForPrice: 'تواصل لمعرفة السعر' } },
+};
+
+Object.entries(regionalStoreTranslations).forEach(([lng, bundle]) => {
+  i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
 
 // Apply initial settings
@@ -3870,7 +3942,7 @@ document.documentElement.style.fontFamily = `'${initialLang.font}', 'Inter', san
 
 // Listen for language changes to persist and apply settings
 i18n.on('languageChanged', (lng) => {
-  localStorage.setItem('ai-deals-language', lng);
+  localStorage.setItem(LANGUAGE_STORAGE_KEY, lng);
   const lang = languages.find(l => l.code === lng) || languages[0];
   document.documentElement.dir = lang.rtl ? 'rtl' : 'ltr';
   document.documentElement.lang = lang.code;

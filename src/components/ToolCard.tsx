@@ -8,7 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { getPeriodStyle, formatEuro, type PricePeriod } from '@/lib/pricePeriod';
-import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
+import { formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewPreview } from '@/components/ProductReviews';
 
@@ -328,8 +328,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                       {dailyPrice && <p className="text-[11px] font-semibold text-primary/80">{dailyPrice}</p>}
                       <p className="inline-flex w-fit rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[9px] font-semibold text-primary">Limited price today</p>
                       {approxPrice && <p className="text-[11px] font-medium text-muted-foreground/80">{approxPrice}</p>}
-                      <p className="text-[11px] font-medium leading-snug text-muted-foreground">Taxes (if applicable) are calculated at checkout.</p>
-                      <p className="text-[11px] text-muted-foreground/80">Access-based pricing model · {FINAL_PAYMENT_EUR_NOTE}</p>
+                      <p className="text-[11px] font-medium leading-snug text-muted-foreground">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
+                      <p className="text-[11px] text-muted-foreground/80">{t('store.accessPricingModel', 'Access-based pricing model')} · {t('store.finalPaymentNote', 'Final payment is processed in EUR (€)')}</p>
                     </>
                   );
                 })()
