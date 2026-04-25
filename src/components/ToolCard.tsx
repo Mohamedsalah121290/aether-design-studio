@@ -14,16 +14,16 @@ import { supportLinks } from '@/lib/socialLinks';
 import { getStripeLink } from '@/lib/stripeLinks';
 
 /* ── Category labels ──────────────────────────────────────────── */
-const CATEGORY_LABELS: Record<string, string> = {
-  text: 'AI Writing',
-  image: 'AI Design',
-  video: 'AI Video',
-  audio: 'AI Audio',
-  coding: 'Dev Tools',
-  automation: 'Automation',
-  productivity: 'Productivity',
-  security: 'Security',
-  'os-licenses': 'Licenses',
+const CATEGORY_LABEL_KEYS: Record<string, string> = {
+  text: 'store.category.text',
+  image: 'store.category.image',
+  video: 'store.category.video',
+  audio: 'store.category.audio',
+  coding: 'store.category.coding',
+  automation: 'store.category.automation',
+  productivity: 'store.category.productivity',
+  security: 'store.category.security',
+  'os-licenses': 'store.category.licenses',
 };
 
 /* Platform official URLs */
@@ -34,9 +34,9 @@ const PLATFORM_URLS: Record<string, string> = {
 };
 
 const LOVABLE_PLAN_OPTIONS = [
-  { planId: 'pro_monthly', title: '1 Month Plan', price: 15, durationMonths: 1, duration: 'Duration: 1 month', credits: 'Includes: 100 credits per month', badge: 'Most Popular', bestValue: false },
-  { planId: 'lovable_2_months', title: '2 Months Plan', price: 28, durationMonths: 2, duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', badge: 'Best Starter', bestValue: false },
-  { planId: 'lovable_3_months', title: '3 Months Plan', price: 40, durationMonths: 3, duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', badge: '⭐ Best Value', bestValue: true },
+  { planId: 'pro_monthly', titleKey: 'store.oneMonthPlan', price: 15, durationMonths: 1, durationKey: 'store.durationOneMonth', creditsKey: 'store.creditsMonthly', badgeKey: 'store.mostPopular', bestValue: false },
+  { planId: 'lovable_2_months', titleKey: 'store.twoMonthsPlan', price: 28, durationMonths: 2, durationKey: 'store.durationTwoMonths', creditsKey: 'store.creditsMonthly', badgeKey: 'store.bestStarter', bestValue: false },
+  { planId: 'lovable_3_months', titleKey: 'store.threeMonthsPlan', price: 40, durationMonths: 3, durationKey: 'store.durationThreeMonths', creditsKey: 'store.creditsMonthly', badgeKey: 'store.bestValue', bestValue: true },
 ];
 
 const formatMonthlyValue = (price: number, months: number) => {
@@ -79,14 +79,15 @@ interface ToolCardProps {
 }
 
 /* ── Badge ─────────────────────────────────────────────────────── */
-const TIER_LABEL: Record<CardTier, { icon: typeof Crown; text: string }> = {
-  featured: { icon: Crown, text: 'Premium' },
-  popular: { icon: TrendingUp, text: 'Trending' },
-  standard: { icon: Zap, text: 'Instant' },
+const TIER_LABEL: Record<CardTier, { icon: typeof Crown; textKey: string }> = {
+  featured: { icon: Crown, textKey: 'store.premium' },
+  popular: { icon: TrendingUp, textKey: 'store.trending' },
+  standard: { icon: Zap, textKey: 'store.instant' },
 };
 
 const TierBadge = ({ tier }: { tier: CardTier }) => {
-  const { icon: Icon, text } = TIER_LABEL[tier];
+  const { icon: Icon, textKey } = TIER_LABEL[tier];
+  const { t } = useTranslation();
   return (
     <span
       className="relative inline-flex items-center gap-1.5 rounded-full px-3 py-[5px] text-[10px] font-semibold uppercase tracking-[0.1em] overflow-hidden"
@@ -106,13 +107,15 @@ const TierBadge = ({ tier }: { tier: CardTier }) => {
         }}
       />
       <Icon className="w-2.5 h-2.5 relative z-10 opacity-80" style={{ filter: 'drop-shadow(0 0 2px rgba(212,175,55,0.4))' }} />
-      <span className="relative z-10">{text}</span>
+      <span className="relative z-10">{t(textKey)}</span>
     </span>
   );
 };
 
 /* ── Coming Soon Glass Badge ───────────────────────────────────── */
-const ComingSoonBadge = () => (
+const ComingSoonBadge = () => {
+  const { t } = useTranslation();
+  return (
   <span
     className="inline-flex items-center gap-1.5 rounded-full px-3 py-[5px] text-[10px] font-semibold uppercase tracking-[0.1em]"
     style={{
@@ -124,9 +127,10 @@ const ComingSoonBadge = () => (
     }}
   >
     <Lock className="w-2.5 h-2.5 opacity-80" />
-    <span>Coming Soon</span>
+    <span>{t('store.comingSoon')}</span>
   </span>
 );
+};
 
 /* ── Component ─────────────────────────────────────────────────── */
 export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
@@ -145,7 +149,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const showLogo = logoUrl && !(logoError && fallbackAttempted);
   const price = tool.starting_price;
   const approxPrice = formatApproxCurrency(price, currency.code);
-  const categoryLabel = CATEGORY_LABELS[tool.category] || tool.category;
+  const categoryLabel = CATEGORY_LABEL_KEYS[tool.category] ? t(CATEGORY_LABEL_KEYS[tool.category]) : tool.category;
   const isComingSoon = tool.status === 'coming_soon';
   const isContactOnly = tool.tool_id === 'gemini';
   const isPaused = tool.status === 'paused' && !isContactOnly;
@@ -156,8 +160,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
     if (!showNotifyInput) { setShowNotifyInput(true); return; }
     const trimmed = notifyEmail.trim().toLowerCase();
     const result = emailSchema.safeParse(trimmed);
-    if (!result.success) { toast.error('Please enter a valid email address.'); return; }
-    if (!consentChecked) { toast.error('Please agree to be notified.'); return; }
+    if (!result.success) { toast.error(t('store.validEmail')); return; }
+    if (!consentChecked) { toast.error(t('store.agreeNotify')); return; }
 
     setNotifyLoading(true);
     try {
@@ -168,14 +172,14 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
         consent: true,
       } as any);
       if (error) {
-        if (error.code === '23505') toast.info("You're already on the waitlist for this tool!");
-        else toast.error('Something went wrong.');
+        if (error.code === '23505') toast.info(t('store.alreadyWaitlist'));
+        else toast.error(t('store.genericError'));
       } else {
-        toast.success(`We'll notify you when ${tool.name} is available! 🎉`);
+        toast.success(t('store.notifySuccess', { tool: tool.name }));
         setNotifyEmail('');
         setShowNotifyInput(false);
       }
-    } catch { toast.error('Something went wrong.'); }
+    } catch { toast.error(t('store.genericError')); }
     finally { setNotifyLoading(false); }
   };
 
@@ -241,7 +245,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                 href={PLATFORM_URLS[tool.tool_id] || undefined}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Visit ${tool.name}`}
+                aria-label={t('store.visitTool', { tool: tool.name })}
                 className="h-14 w-14 sm:h-[4.5rem] sm:w-[4.5rem] rounded-xl sm:rounded-2xl grid place-items-center border border-[hsl(0_0%_100%/0.06)] backdrop-blur-sm relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-110"
                 style={{ background: 'hsl(210 50% 50% / 0.06)' }}
                 onClick={(e) => {
@@ -274,7 +278,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               </a>
               {isComingSoon ? <ComingSoonBadge /> : isPaused ? (
                 <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-[4px] text-[10px] font-semibold uppercase tracking-wider bg-gray-500/15 border border-gray-500/30 text-gray-400">
-                  Unavailable
+                  {t('store.unavailable')}
                 </span>
               ) : <TierBadge tier={tier} />}
             </div>
@@ -368,20 +372,20 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                       >
                         <div className="mb-2 flex items-start justify-between gap-2">
                           <div>
-                            <p className="text-sm font-bold text-white">{plan.title}</p>
+                            <p className="text-sm font-bold text-white">{t(plan.titleKey)}</p>
                             <p className="text-xl font-bold text-primary">€{plan.price}</p>
-                            <p className="text-[11px] font-semibold text-muted-foreground">{formatMonthlyValue(plan.price, plan.durationMonths)}</p>
+                            <p className="text-[11px] font-semibold text-muted-foreground">{t('store.monthlyApprox', { price: Number.isInteger(plan.price / plan.durationMonths) ? plan.price / plan.durationMonths : (plan.price / plan.durationMonths).toFixed(1) })}</p>
                           </div>
                           <span className="shrink-0 rounded-full border border-primary/25 bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
-                            {plan.badge}
+                            {t(plan.badgeKey)}
                           </span>
                         </div>
                         <div className="space-y-1 text-[11px] font-medium text-muted-foreground">
-                          <p>{plan.duration}</p>
-                          <p>{plan.credits}</p>
-                          <p>100 credits are renewed monthly</p>
-                          {plan.bestValue && <p className="font-semibold text-primary">Save more with this plan</p>}
-                          {plan.bestValue && <p>Most users choose this option</p>}
+                          <p>{t(plan.durationKey)}</p>
+                          <p>{t(plan.creditsKey)}</p>
+                          <p>{t('store.creditsRenewed')}</p>
+                          {plan.bestValue && <p className="font-semibold text-primary">{t('store.saveMorePlan')}</p>}
+                          {plan.bestValue && <p>{t('store.mostUsersChoose')}</p>}
                         </div>
                         <span className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">
                           {t('store.buyNow', 'Get Instant Access')}
@@ -433,7 +437,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   <div className="space-y-2">
                     <input
                       type="email"
-                      placeholder="your@email.com"
+                      placeholder={t('store.notifyPlaceholder')}
                       value={notifyEmail}
                       onChange={e => setNotifyEmail(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleNotifyMe()}
@@ -447,7 +451,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                         className="mt-0.5 rounded border-white/20 accent-amber-400"
                       />
                       <span className="text-[10px] text-white/40 leading-tight">
-                        We'll only email you about this tool's availability.
+                        {t('store.notifyConsent')}
                       </span>
                     </label>
                   </div>
@@ -462,7 +466,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   onClick={handleNotifyMe}
                   disabled={notifyLoading}
                 >
-                  {notifyLoading ? 'Saving...' : showNotifyInput ? 'Get Early Access' : 'Notify Me'}
+                  {notifyLoading ? t('store.saving') : showNotifyInput ? t('store.getEarlyAccess') : t('store.notifyMe')}
                   <Bell className="w-3.5 h-3.5" />
                 </button>
               </div>
