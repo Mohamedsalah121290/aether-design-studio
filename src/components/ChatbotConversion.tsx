@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -55,7 +55,7 @@ export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) 
   </svg>
 );
 
-export const Social3DLink = ({ href, label, children, tone = 'social-whatsapp-3d', className = 'w-12 h-12' }: { href: string; label: string; children: React.ReactNode; tone?: string; className?: string }) => (
+export const Social3DLink = ({ href, label, children, tone = 'social-whatsapp-3d', className = 'w-12 h-12' }: { href: string; label: string; children: ReactNode; tone?: string; className?: string }) => (
   <motion.a
     href={href}
     onClick={(event) => openSocialUrl(event, href)}
