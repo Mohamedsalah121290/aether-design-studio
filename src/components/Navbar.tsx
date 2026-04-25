@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check, CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { languages } from '@/lib/i18n';
-import { LANGUAGE_MANUAL_KEY } from '@/lib/geo';
+import { getResolvedAppLanguage, languages, setAppLanguage } from '@/lib/i18n';
 import { CURRENCIES, type CurrencyCode } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import FlagIcon from '@/components/FlagIcon';
@@ -46,13 +45,8 @@ const Navbar = () => {
     };
   }, []);
 
-  const changeLanguage = (code: string) => {
-    localStorage.setItem(LANGUAGE_MANUAL_KEY, 'true');
-    localStorage.setItem('ai-deals-language', code);
-    i18n.changeLanguage(code);
-    const lang = languages.find(l => l.code === code);
-    document.documentElement.dir = lang?.rtl ? 'rtl' : 'ltr';
-    document.documentElement.lang = code;
+  const changeLanguage = async (code: string) => {
+    await setAppLanguage(code);
     setIsLangMenuOpen(false);
     setLangSearch('');
   };
@@ -71,12 +65,13 @@ const Navbar = () => {
     lang.name.toLowerCase().includes(langSearch.toLowerCase()) || 
     lang.code.toLowerCase().includes(langSearch.toLowerCase())
   );
-  const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
+  const currentCode = getResolvedAppLanguage(i18n.language);
+  const currentLang = languages.find(l => l.code === currentCode) || languages[0];
 
   const navLinks = [
     { href: '/', label: t('nav.home', 'Home') },
     { href: '/store', label: t('nav.store') },
-    { href: '/academy', label: `${t('nav.academy')} · ${t('store.comingSoon', 'Coming Soon')}` },
+    { href: '/academy', label: `${t('nav.academy')} · ${t('nav.comingSoon', 'Coming Soon')}` },
     ...(user ? [{ href: '/dashboard', label: t('nav.dashboard') }] : []),
   ];
 
@@ -201,7 +196,7 @@ const Navbar = () => {
                           transition={{ delay: index * 0.02 }}
                           onClick={() => changeLanguage(lang.code)} 
                           className={`w-full px-4 py-3 text-start flex items-center gap-3 transition-all duration-200 ${
-                            i18n.language === lang.code 
+                            currentCode === lang.code 
                               ? 'text-primary bg-primary/10' 
                               : 'text-foreground hover:bg-white/5'
                           }`}
@@ -216,7 +211,7 @@ const Navbar = () => {
                               RTL
                             </span>
                           )}
-                          {i18n.language === lang.code && (
+                          {currentCode === lang.code && (
                             <Check className="w-4 h-4 text-primary" strokeWidth={2.5} />
                           )}
                         </motion.button>
@@ -293,9 +288,9 @@ const Navbar = () => {
             {/* Admin Link - Only show if admin */}
             {isAdmin && (
               <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
-                <Link to="/admin" className="flex items-center gap-1.5">
+                  <Link to="/admin" className="flex items-center gap-1.5">
                   <Shield className="w-4 h-4" />
-                  Admin
+                  {t('nav.adminPanel')}
                 </Link>
               </Button>
             )}
@@ -370,7 +365,7 @@ const Navbar = () => {
                       key={lang.code}
                       onClick={() => { changeLanguage(lang.code); setIsMobileMenuOpen(false); }}
                       className={`flex min-h-11 items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors ${
-                        i18n.language === lang.code
+                        currentCode === lang.code
                           ? 'bg-primary/15 text-primary border-primary/40'
                           : 'bg-white/5 text-muted-foreground border-white/10 hover:bg-white/10 hover:text-foreground'
                       }`}
@@ -408,7 +403,7 @@ const Navbar = () => {
                     <Button variant="ghost" className="w-full text-muted-foreground" asChild>
                       <Link to="/admin" className="flex items-center justify-center gap-2">
                         <Shield className="w-4 h-4" />
-                        Admin Panel
+                        {t('nav.adminPanel')}
                       </Link>
                     </Button>
                   )}
@@ -417,7 +412,7 @@ const Navbar = () => {
                     user ? (
                       <Button variant="ghost" className="w-full" onClick={handleSignOut}>
                         <LogOut className="w-4 h-4 mr-2" />
-                        Sign Out
+                        {t('nav.signOut')}
                       </Button>
                     ) : (
                       <Button variant="hero" className="w-full" onClick={() => { setShowAuthDialog(true); setIsMobileMenuOpen(false); }}>
