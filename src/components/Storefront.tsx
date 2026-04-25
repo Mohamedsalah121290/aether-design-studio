@@ -211,10 +211,10 @@ const Storefront = () => {
                   {t('store.buyNow', 'Get Instant Access')}
                 </a>
                 <a
-                  href="#trust-faq"
+                  href="#tools-grid"
                   className="min-h-11 inline-flex items-center px-8 py-3 rounded-xl font-medium text-sm text-white/50 border border-white/5 transition-all duration-300 hover:text-white/70 hover:border-white/10"
                 >
-                  {t('store.ctaSecondary', 'How It Works')}
+                  {t('store.buyNow', 'Get Instant Access')}
                 </a>
               </div>
 
