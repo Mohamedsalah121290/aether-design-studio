@@ -24,6 +24,7 @@ import { ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
+import { getStripePaymentLink } from '@/lib/stripePaymentLinks';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -174,6 +175,13 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
     setIsLoading(true);
     try {
       const buyerEmail = email || user?.email;
+      const directPaymentLink = getStripePaymentLink(tool.tool_id, selectedPlan.plan_id, buyerEmail || undefined);
+      if (directPaymentLink) {
+        if (buyerEmail && !user) localStorage.setItem('buyer_email', buyerEmail);
+        window.open(directPaymentLink, '_blank', 'noopener,noreferrer');
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: {
           toolId: tool.id,
