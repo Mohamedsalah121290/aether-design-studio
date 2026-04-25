@@ -146,7 +146,17 @@ export const ChatbotSalesFlow = () => {
   const [messages, setMessages] = useState<Message[]>([initialMessage]);
 
   useEffect(() => { const timer = window.setTimeout(() => setReady(true), 2200); return () => window.clearTimeout(timer); }, []);
-  useEffect(() => { setMessages([initialMessage]); setSelected(null); }, [initialMessage]);
+  useEffect(() => {
+    const storedFlow = localStorage.getItem('aiDealsActiveChatFlow') as FlowKey | null;
+    if (storedFlow && products[storedFlow]) {
+      const localizedProducts = products[storedFlow].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
+      setSelected(storedFlow);
+      setMessages([{ id: Date.now(), role: 'bot', text: text.intros[storedFlow], products: localizedProducts }]);
+      return;
+    }
+    setMessages([initialMessage]);
+    setSelected(null);
+  }, [initialMessage, lang, text.intros]);
   useEffect(() => { localStorage.setItem('aiDealsChatSound', soundOn ? 'on' : 'off'); }, [soundOn]);
   useEffect(() => { if (open) window.setTimeout(() => inputRef.current?.focus(), 180); }, [open]);
   useEffect(() => {
@@ -156,6 +166,7 @@ export const ChatbotSalesFlow = () => {
       if (!funnel) return;
       const localizedProducts = products[funnel.flow].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
       const next: Message = { id: Date.now(), role: 'bot', text: funnel.text[lang], products: localizedProducts };
+      localStorage.setItem('aiDealsActiveChatFlow', funnel.flow);
       setSelected(funnel.flow);
       setMessages([next]);
       setOpen(true);
@@ -192,6 +203,7 @@ export const ChatbotSalesFlow = () => {
 
   const addFlow = (key: FlowKey) => {
     setSelected(key);
+    localStorage.setItem('aiDealsActiveChatFlow', key);
     const localizedProducts = products[key].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
     const next: Message = { id: Date.now(), role: 'bot', text: text.intros[key], products: localizedProducts };
     setMessages((current) => [...current.filter((m) => m.id !== next.id), next]);
