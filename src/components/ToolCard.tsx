@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap, Shield, CheckCircle } from 'lucide-react';
+import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, Shield, CheckCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -286,14 +286,14 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               </h3>
               <p className="text-xs text-muted-foreground">
                 {tool.starting_period === 'one-time'
-                  ? 'One-Time Purchase'
+                  ? t('store.oneTimePurchase', 'One-Time Purchase')
                   : tool.starting_period === 'yearly'
-                  ? 'Yearly Access'
-                  : 'Monthly Access'}{' '}
+                  ? t('store.yearlyAccess', 'Yearly Access')
+                  : t('store.monthlyAccess', 'Monthly Access')}{' '}
                 · {categoryLabel}
               </p>
               {tool.tool_id !== 'lovable' && !isComingSoon && !isPaused && (
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">Most Popular</p>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">{t('store.mostPopular', 'Most Popular')}</p>
               )}
               <ProductRatingInline toolId={tool.tool_id} productName={tool.name} />
             </div>
@@ -340,7 +340,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             {!isComingSoon && !isPaused && (
               <div className="flex items-center gap-1.5 mb-1" title="If activation fails within 24 hours, you're protected with credit or refund.">
                 <Shield className="w-3 h-3" style={{ color: '#E8D48B' }} />
-                <span className="text-[10px] font-semibold tracking-wide" style={{ color: '#E8D48B' }}>Activation Guarantee</span>
+                <span className="text-[10px] font-semibold tracking-wide" style={{ color: '#E8D48B' }}>{t('store.activationGuarantee', 'Activation Guarantee')}</span>
               </div>
             )}
 
@@ -384,14 +384,15 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                           {plan.bestValue && <p>Most users choose this option</p>}
                         </div>
                         <span className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">
-                          Get Instant Access
+                          {t('store.buyNow', 'Get Instant Access')}
                         </span>
+                        <p className="mt-2 text-center text-[11px] font-semibold text-primary">{t('store.instantAccessAfterPayment', 'Instant access after payment')}</p>
                       </button>
                     );
                   })}
                 </div>
                 <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-semibold text-muted-foreground">
-                  <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support included</span>
+                  <span>✔ {t('store.instantDelivery', 'Instant delivery')}</span><span>✔ {t('store.noSetupNeeded', 'No setup needed')}</span><span>✔ {t('store.supportAvailable', 'Support available')}</span>
                 </div>
               </div>
             )}
@@ -476,16 +477,10 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   onClick={() => checkoutUrl && window.open(checkoutUrl, '_blank', 'noopener,noreferrer')}
                   disabled={!checkoutUrl}
                 >
-                  {checkoutUrl ? t('store.buyNow') : 'Contact support'}
+                  {checkoutUrl ? t('store.buyNow', 'Get Instant Access') : t('store.contactSupport', 'Contact support')}
                   <Sparkles className="w-3.5 h-3.5" />
                 </button>
-                <Link
-                  to={`/academy?tool_id=${tool.tool_id}`}
-                  className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg py-2 text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <GraduationCap className="w-3 h-3" />
-                  Learn This Tool
-                </Link>
+                <p className="text-center text-[11px] font-semibold text-primary">{t('store.instantAccessAfterPayment', 'Instant access after payment')}</p>
               </div>
             )}
           </div>
