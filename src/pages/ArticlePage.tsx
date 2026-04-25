@@ -157,7 +157,7 @@ Showcase your best work to attract clients. Use AI to help you create sample pro
 ## Pricing Strategies
 
 - Value-based pricing for business clients
-- Package deals for predictable revenue
+- Clear single-service offers for predictable revenue
 - Retainer arrangements for ongoing work
 
 ## Marketing Your Services

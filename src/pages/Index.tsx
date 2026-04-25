@@ -275,7 +275,7 @@ const Index = () => {
                 style={{ textShadow: '0 0 60px hsl(var(--primary) / 0.5), 0 4px 20px rgba(0,0,0,0.8)' }}
               >
                 <span className="gradient-text" style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))' }}>
-                  Exclusive Access Pricing.
+                  Clear Product Access.
                 </span>
                 <br />
                 <span className="text-white drop-shadow-2xl">Every Month.</span>
@@ -287,7 +287,7 @@ const Index = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-3"
               >
-                Premium software access — at platform-level pricing you won't find elsewhere.
+                Choose the product you need, see the monthly price clearly, and get support when you need it.
               </motion.p>
 
               <motion.p
@@ -296,7 +296,7 @@ const Index = () => {
                 transition={{ duration: 0.6, delay: 0.5 }}
                 className="text-xs sm:text-sm text-white/40 max-w-lg mx-auto mb-8 md:mb-10 tracking-wide"
               >
-                Member-based pricing. Structured access. Simplified.
+                No bundles. No confusing offers. Secure checkout.
               </motion.p>
 
               {/* CTAs */}
@@ -749,16 +749,16 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════════ 8.5) WHY OUR PRICING WORKS ═══════════════ */}
+        {/* ═══════════════ 8.5) WHY BUY FROM US ═══════════════ */}
         <section className="py-24 relative">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <motion.div {...fadeUp} className="text-center mb-12">
                 <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                  Our Model
+                  Why buy from us
                 </span>
                 <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-                  Why Our Pricing <span className="gradient-text">Works</span>
+                  Clear. Simple. <span className="gradient-text">Safe.</span>
                 </h2>
               </motion.div>
 
@@ -770,17 +770,16 @@ const Index = () => {
                 className="glass rounded-3xl p-8 md:p-12 space-y-6"
               >
                 <p className="text-foreground text-base md:text-lg leading-relaxed">
-                  AI DEALS operates on a <span className="font-semibold text-white">managed access model</span>.
+                  Every product is presented on its own, with a clear price and a secure checkout.
                 </p>
                 <p className="text-muted-foreground text-base leading-relaxed">
-                  Instead of traditional retail subscriptions, we provide structured platform-level access. 
-                  This allows us to offer exclusive pricing to our members — every month.
+                  No bundle pressure, no combined pricing, and no confusing offers — just the product you choose.
                 </p>
                 <div className="grid sm:grid-cols-3 gap-4 pt-4">
                   {[
-                    { icon: Layers, title: 'Structured Access', desc: 'Platform-managed accounts with dedicated support.' },
-                    { icon: Shield, title: 'Member Pricing', desc: 'Exclusive rates available only through our platform.' },
-                    { icon: Zap, title: 'Monthly Flexibility', desc: 'No annual lock-ins. Scale up or down anytime.' },
+                    { icon: Zap, title: 'Fast delivery', desc: 'Your access details are handled quickly after payment.' },
+                    { icon: Shield, title: 'Secure payment', desc: 'Checkout is protected through Stripe.' },
+                    { icon: UserCheck, title: 'Real support', desc: 'Help is available if you need guidance.' },
                   ].map((item, i) => {
                     const Icon = item.icon;
                     return (
