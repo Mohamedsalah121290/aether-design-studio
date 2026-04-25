@@ -72,10 +72,10 @@ const products: Record<FlowKey, Product[]> = {
   ],
 };
 
-const funnelMessages: Record<IntentKey, { text: string; flow: FlowKey }> = {
-  student: { text: 'Want help with studying tools?', flow: 'ai' },
-  creator: { text: 'Need help creating content?', flow: 'design' },
-  business: { text: 'Want to automate your workflow?', flow: 'productivity' },
+const funnelMessages: Record<IntentKey, { flow: FlowKey; text: Record<LangKey, string> }> = {
+  student: { flow: 'ai', text: { en: 'Want help with studying tools?', fr: 'Besoin d’aide pour choisir des outils d’étude ?', nl: 'Hulp nodig met studietools?', de: 'Brauchst du Hilfe mit Lern-Tools?', es: '¿Quieres ayuda con herramientas de estudio?', it: 'Vuoi aiuto con gli strumenti per studiare?', ar: 'هل تريد مساعدة في اختيار أدوات الدراسة؟' } },
+  creator: { flow: 'design', text: { en: 'Need help creating content?', fr: 'Besoin d’aide pour créer du contenu ?', nl: 'Hulp nodig bij content maken?', de: 'Brauchst du Hilfe beim Erstellen von Content?', es: '¿Necesitas ayuda para crear contenido?', it: 'Ti serve aiuto per creare contenuti?', ar: 'هل تحتاج مساعدة في إنشاء المحتوى؟' } },
+  business: { flow: 'productivity', text: { en: 'Want to automate your workflow?', fr: 'Vous voulez automatiser votre workflow ?', nl: 'Wil je je workflow automatiseren?', de: 'Möchtest du deinen Workflow automatisieren?', es: '¿Quieres automatizar tu flujo de trabajo?', it: 'Vuoi automatizzare il tuo workflow?', ar: 'هل تريد أتمتة سير عملك؟' } },
 };
 
 const bullets = ['Instant replies', 'Works in multiple languages', '24/7 availability', 'Works across all platforms', 'Increases conversions'];
@@ -144,7 +144,7 @@ export const ChatbotSalesFlow = () => {
       const key = (event as CustomEvent<IntentKey>).detail;
       const funnel = funnelMessages[key];
       if (!funnel) return;
-      const next: Message = { id: Date.now(), role: 'bot', text: funnel.text, products: products[funnel.flow] };
+      const next: Message = { id: Date.now(), role: 'bot', text: funnel.text[lang], products: products[funnel.flow] };
       setSelected(funnel.flow);
       setMessages([next]);
       setOpen(true);
@@ -155,10 +155,10 @@ export const ChatbotSalesFlow = () => {
     if (stored && funnelMessages[stored]) {
       const funnel = funnelMessages[stored];
       setSelected(funnel.flow);
-      setMessages([{ id: Date.now(), role: 'bot', text: funnel.text, products: products[funnel.flow] }]);
+      setMessages([{ id: Date.now(), role: 'bot', text: funnel.text[lang], products: products[funnel.flow] }]);
     }
     return () => window.removeEventListener('aiDeals:funnel', adaptToFunnel as EventListener);
-  }, [soundOn, text.voice]);
+  }, [lang, soundOn, text.voice]);
 
   const pickVoice = () => {
     const voices = window.speechSynthesis?.getVoices?.() || [];
