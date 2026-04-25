@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { socialLinks, supportLinks } from '@/lib/socialLinks';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
-const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook/514c0774-7002-4ec6-a91f-3bcde6d932b0';
+const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook/e01e2727-e586-4b51-be17-ed1fb782b9c6';
 
 export const openSocialUrl = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
   event.preventDefault();
@@ -310,11 +310,7 @@ export const ChatbotSalesFlow = () => {
       const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: value,
-          language: lang,
-          instruction: `${t('chatbot.directionInstruction', { lng: lang })} ${t('store.noSensitiveBeforePayment', { lng: lang })} ${t('store.safeActivationMessage', { lng: lang })}`
-        }),
+        body: JSON.stringify({ message: value }),
       });
 
       if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
