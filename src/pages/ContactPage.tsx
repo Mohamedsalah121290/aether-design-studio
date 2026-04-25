@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
-import { ChatbotPromoSection, openSocialUrl, WhatsAppIcon } from '@/components/ChatbotConversion';
+import { ChatbotPromoSection, Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { socialLinks } from '@/lib/socialLinks';
 
 const ContactPage = () => {
@@ -45,6 +45,7 @@ const ContactPage = () => {
     { label: 'Facebook', href: socialLinks.facebook, icon: Facebook, tone: 'social-facebook-3d' },
     { label: 'Instagram', href: socialLinks.instagram, icon: Instagram, tone: 'social-instagram-3d' },
     { label: 'YouTube', href: socialLinks.youtube, icon: Youtube, tone: 'social-youtube-3d' },
+    { label: 'Telegram', href: socialLinks.telegram, icon: TelegramIcon, tone: 'social-telegram-3d' },
   ].filter((link) => Boolean(link.href));
 
   return (
@@ -147,17 +148,15 @@ const ContactPage = () => {
                 <h3 className="font-display font-bold text-sm mb-3">{t('contact.instant')}</h3>
                 <div className="flex flex-wrap gap-3">
                   {contactLinks.map(({ label, href, icon: Icon, tone }) => (
-                    <a
+                    <Social3DLink
                       key={label}
                       href={href}
-                      onClick={(event) => openSocialUrl(event, href)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`social-link-3d ${tone} w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105`}
-                      aria-label={t('contact.socialAria', { platform: label })}
+                      label={t('contact.socialAria', { platform: label })}
+                      tone={tone}
+                      className="w-12 h-12"
                     >
                       <Icon />
-                    </a>
+                    </Social3DLink>
                   ))}
                 </div>
               </div>
