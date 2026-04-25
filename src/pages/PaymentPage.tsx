@@ -65,6 +65,7 @@ const WHAT_YOU_GET = [
 const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
 const LOVABLE_PLAN_DETAILS: Record<string, { badge: string; duration: string; credits: string; months: number }> = {
+  pro_monthly: { badge: 'Most Popular', duration: 'Duration: 1 month', credits: 'Includes: 100 credits per month', months: 1 },
   lovable_2_months: { badge: 'Best Starter', duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', months: 2 },
   lovable_3_months: { badge: '⭐ Best Value', duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', months: 3 },
 };
@@ -175,8 +176,11 @@ const PaymentPage = () => {
         activation_time: p.activation_time,
         is_active: p.is_active,
       }));
+      const lovableOrder = ['pro_monthly', 'lovable_2_months', 'lovable_3_months'];
       const bestValuePlan = getBestValuePlan(mapped);
-      const displayPlans = bestValuePlan
+      const displayPlans = id === 'lovable'
+        ? [...mapped].sort((a, b) => lovableOrder.indexOf(a.plan_id) - lovableOrder.indexOf(b.plan_id))
+        : bestValuePlan
         ? [...mapped].sort((a, b) => (b.id === bestValuePlan.id ? 1 : 0) - (a.id === bestValuePlan.id ? 1 : 0))
         : mapped;
       setPlans(displayPlans);
