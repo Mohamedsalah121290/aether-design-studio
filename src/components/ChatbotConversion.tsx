@@ -92,6 +92,15 @@ const productLocale: Record<LangKey, Record<string, Pick<Product, 'desc' | 'bene
 
 const bullets = ['Instant replies', 'Works in multiple languages', '24/7 availability', 'Works across all platforms', 'Increases conversions'];
 const langTint: Record<LangKey, string> = { en: 'hsl(var(--primary))', fr: 'hsl(var(--secondary))', nl: '#25D366', de: 'hsl(var(--accent))', es: '#F5C542', it: '#25D366', ar: 'hsl(var(--secondary))' };
+const fallbackText: Record<LangKey, { received: string; error: string; assistant: string; online: string; soundOff: string; soundOn: string; close: string; play: string; mic: string; send: string; open: string }> = {
+  en: { received: 'Bot response received.', error: 'Unable to connect right now. Please try again.', assistant: 'AI Deals Assistant', online: 'Online', soundOff: 'Turn sound off', soundOn: 'Turn sound on', close: 'Close chatbot', play: 'Play message', mic: 'Press to talk', send: 'Send message', open: 'Open AI Deals chatbot' },
+  fr: { received: 'Réponse du bot reçue.', error: 'Connexion impossible pour le moment. Veuillez réessayer.', assistant: 'Assistant AI Deals', online: 'En ligne', soundOff: 'Couper le son', soundOn: 'Activer le son', close: 'Fermer le chat', play: 'Lire le message', mic: 'Parler', send: 'Envoyer le message', open: 'Ouvrir le chatbot AI Deals' },
+  nl: { received: 'Botantwoord ontvangen.', error: 'Kan nu geen verbinding maken. Probeer opnieuw.', assistant: 'AI Deals Assistent', online: 'Online', soundOff: 'Geluid uit', soundOn: 'Geluid aan', close: 'Chatbot sluiten', play: 'Bericht afspelen', mic: 'Druk om te praten', send: 'Bericht verzenden', open: 'Open AI Deals chatbot' },
+  de: { received: 'Bot-Antwort erhalten.', error: 'Verbindung derzeit nicht möglich. Bitte erneut versuchen.', assistant: 'AI Deals Assistent', online: 'Online', soundOff: 'Ton ausschalten', soundOn: 'Ton einschalten', close: 'Chatbot schließen', play: 'Nachricht abspielen', mic: 'Zum Sprechen drücken', send: 'Nachricht senden', open: 'AI Deals Chatbot öffnen' },
+  es: { received: 'Respuesta del bot recibida.', error: 'No se puede conectar ahora. Inténtalo de nuevo.', assistant: 'Asistente AI Deals', online: 'En línea', soundOff: 'Desactivar sonido', soundOn: 'Activar sonido', close: 'Cerrar chatbot', play: 'Reproducir mensaje', mic: 'Pulsa para hablar', send: 'Enviar mensaje', open: 'Abrir chatbot AI Deals' },
+  it: { received: 'Risposta del bot ricevuta.', error: 'Impossibile connettersi ora. Riprova.', assistant: 'Assistente AI Deals', online: 'Online', soundOff: 'Disattiva audio', soundOn: 'Attiva audio', close: 'Chiudi chatbot', play: 'Riproduci messaggio', mic: 'Premi per parlare', send: 'Invia messaggio', open: 'Apri chatbot AI Deals' },
+  ar: { received: 'تم استلام رد البوت.', error: 'تعذر الاتصال حالياً، حاول مرة أخرى.', assistant: 'مساعد AI Deals', online: 'متصل', soundOff: 'إيقاف الصوت', soundOn: 'تشغيل الصوت', close: 'إغلاق الدردشة', play: 'تشغيل الرسالة', mic: 'اضغط للتحدث', send: 'إرسال الرسالة', open: 'افتح دردشة AI Deals' },
+};
 
 const useLang = () => {
   const { i18n } = useTranslation();
@@ -228,7 +237,7 @@ export const ChatbotSalesFlow = () => {
       const value = record.reply || record.response || record.text || record.message || record.output || record.answer;
       if (typeof value === 'string') return value;
     }
-    return lang === 'ar' ? 'تم استلام رد البوت.' : 'Bot response received.';
+    return fallbackText[lang].received;
   };
 
   const sendMessage = async () => {
@@ -253,7 +262,7 @@ export const ChatbotSalesFlow = () => {
       setMessages((current) => [...current, botMessage]);
       if (soundOn) window.setTimeout(() => speak(botMessage), 150);
     } catch {
-      const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: lang === 'ar' ? 'تعذر الاتصال حالياً، حاول مرة أخرى.' : 'Unable to connect right now. Please try again.' };
+      const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: fallbackText[lang].error };
       setMessages((current) => [...current, botMessage]);
     } finally {
       setSending(false);
