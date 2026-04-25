@@ -19,15 +19,13 @@ import { TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from './Chatbo
 /* ── Section config ─────────────────────────────────────────────── */
 const SECTION_ORDER: {
   key: string;
-  label: string;
-  subtitle: string;
   icon: React.ElementType;
   toolIds: string[];
 }[] = [
-  { key: 'licenses-productivity', label: 'Licenses & Productivity 🪟', subtitle: 'Windows, Office & productivity access', icon: Monitor, toolIds: ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'] },
-  { key: 'design-video', label: 'Design & Video Editing 🎨', subtitle: 'Creative design and video editing tools', icon: Palette, toolIds: ['canva', 'capcut'] },
-  { key: 'premium-ai', label: 'Premium AI Tools 🤖', subtitle: 'Premium AI assistants and creation tools', icon: Code, toolIds: ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'] },
-  { key: 'education-security-business', label: 'Education, Security & Business 🧩', subtitle: 'Learning, security and business software', icon: Briefcase, toolIds: ['coursera', 'linkedin', 'notion', 'zoom', 'eset'] },
+  { key: 'licenses-productivity', icon: Monitor, toolIds: ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'] },
+  { key: 'design-video', icon: Palette, toolIds: ['canva', 'capcut'] },
+  { key: 'premium-ai', icon: Code, toolIds: ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'] },
+  { key: 'education-security-business', icon: Briefcase, toolIds: ['coursera', 'linkedin', 'notion', 'zoom', 'eset'] },
 ];
 
 const ALLOWED_TOOL_IDS = new Set(SECTION_ORDER.flatMap(section => section.toolIds));
@@ -36,18 +34,16 @@ const FEATURED_TOOL_IDS = ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovab
 const POPULAR_TOOL_IDS  = ['capcut', 'windows', 'windows_home', 'microsoft_365', 'microsoft_office', 'coursera'];
 
 const PRICING_TIERS = [
-  { name: 'Starter', text: 'Best for trying one premium tool', cta: 'Start simple', toolId: 'perplexity' },
-  { name: 'Most Popular', text: 'Best balance for daily AI access', cta: 'Choose popular', toolId: 'chatgpt', featured: true },
-  { name: 'Pro', text: 'Best for creators and power users', cta: 'Go pro', toolId: 'canva' },
+  { key: 'starter', toolId: 'perplexity' },
+  { key: 'popular', toolId: 'chatgpt', featured: true },
+  { key: 'pro', toolId: 'canva' },
 ];
 
 const BUNDLES = [
-  { name: 'AI Starter Pack', products: 'ChatGPT + Perplexity + Notion', original: '€45/month', price: '€29/month', daily: '≈ €0.97/day', toolId: 'chatgpt' },
-  { name: 'Creator Pack', products: 'Canva + CapCut + ElevenLabs', original: '€54/month', price: '€35/month', daily: '≈ €1.17/day', toolId: 'canva' },
-  { name: 'Business Pack', products: 'ChatGPT + Office 365 + Notion', original: '€59/month', price: '€39/month', daily: '≈ €1.30/day', toolId: 'microsoft_365' },
+  { key: 'aiStarter', original: '€45/month', price: '€29/month', daily: '≈ €0.97/day', toolId: 'chatgpt' },
+  { key: 'creator', original: '€54/month', price: '€35/month', daily: '≈ €1.17/day', toolId: 'canva' },
+  { key: 'business', original: '€59/month', price: '€39/month', daily: '≈ €1.30/day', toolId: 'microsoft_365' },
 ];
-
-const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   'licenses-productivity': ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'],
