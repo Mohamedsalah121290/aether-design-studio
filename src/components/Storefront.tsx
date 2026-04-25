@@ -258,7 +258,7 @@ const Storefront = () => {
                     <div className="grid gap-4 md:grid-cols-4 items-stretch">
                       {[
                         { key: 'fastDelivery', icon: Zap, title: 'Fast delivery', text: 'Access details are delivered quickly after secure checkout.' },
-                        { key: 'easyAccess', icon: Sparkles, title: 'Easy access', text: 'Simple product access without confusing package choices.' },
+                        { key: 'easyAccess', icon: Sparkles, title: 'Easy access', text: 'Simple product access without confusing product choices.' },
                         { key: 'realSupport', icon: Users, title: 'Real support', text: 'Help is available when you need guidance.' },
                         { key: 'securePayment', icon: CheckCircle, title: 'Secure payment', text: 'Checkout stays protected through Stripe.' },
                       ].map(({ key, icon: Icon, title, text }) => (
