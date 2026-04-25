@@ -34,8 +34,9 @@ const PLATFORM_URLS: Record<string, string> = {
 };
 
 const LOVABLE_PLAN_OPTIONS = [
-  { planId: 'lovable_3_months', title: '3 Months Plan', price: 40, durationMonths: 3, duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', badge: '⭐ Best Value', bestValue: true },
+  { planId: 'pro_monthly', title: '1 Month Plan', price: 15, durationMonths: 1, duration: 'Duration: 1 month', credits: 'Includes: 100 credits per month', badge: 'Most Popular', bestValue: false },
   { planId: 'lovable_2_months', title: '2 Months Plan', price: 28, durationMonths: 2, duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', badge: 'Best Starter', bestValue: false },
+  { planId: 'lovable_3_months', title: '3 Months Plan', price: 40, durationMonths: 3, duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', badge: '⭐ Best Value', bestValue: true },
 ];
 
 const formatMonthlyValue = (price: number, months: number) => {
