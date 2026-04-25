@@ -7,4 +7,5 @@ export const socialLinks = {
 
 export const supportLinks = {
   whatsapp: "https://wa.me/32494311190",
+  telegram: "https://t.me/aideals2026",
 };
