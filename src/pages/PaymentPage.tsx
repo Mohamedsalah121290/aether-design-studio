@@ -545,8 +545,8 @@ const PaymentPage = () => {
                   <CreditCard className="w-4 h-4 text-primary" />
                   Payment Method
                 </h3>
-                <div className="space-y-3">
-                  {PAYMENT_METHODS.map(method => {
+                  <div className="space-y-3">
+                  {paymentMethods.map(method => {
                     const Icon = method.icon;
                     const isSelected = selectedPaymentMethod === method.id;
                     return (
@@ -566,7 +566,12 @@ const PaymentPage = () => {
                           <Icon className="w-5 h-5" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-semibold text-white">{method.label}</p>
+                          <p className="text-sm font-semibold text-white">
+                            {method.label}
+                            {isBelgianUser && method.id === 'bancontact' && (
+                              <span className="ml-2 text-xs font-semibold text-primary">Recommended in Belgium</span>
+                            )}
+                          </p>
                           <p className="text-xs text-muted-foreground">{method.description}</p>
                         </div>
                         <div className={`h-5 w-5 rounded-full border-2 grid place-items-center ${
