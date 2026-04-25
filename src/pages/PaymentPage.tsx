@@ -105,12 +105,13 @@ const PaymentPage = () => {
   const { t } = useTranslation();
   const { currency } = useCurrency();
   const { user } = useAuth();
+  const isBelgianUser = getRegionCategory() === 'belgium';
 
   const [tool, setTool] = useState<any>(null);
   const [plans, setPlans] = useState<ToolPlan[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<ToolPlan | null>(null);
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('monthly');
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('stripe');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(isBelgianUser ? 'bancontact' : 'card');
   const [email, setEmail] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -241,6 +242,9 @@ const PaymentPage = () => {
   const walletDeduction = applyWalletCredit && displayPrice ? Math.min(walletBalance, displayPrice) : 0;
   const effectivePrice = displayPrice ? Math.max(0, displayPrice - walletDeduction) : displayPrice;
   const activationTime = selectedPlan?.activation_time || 6;
+  const paymentMethods = isBelgianUser
+    ? [...PAYMENT_METHODS].sort((a, b) => (a.id === 'bancontact' ? -1 : 0) - (b.id === 'bancontact' ? -1 : 0))
+    : PAYMENT_METHODS;
 
   // كل الأسعار باليورو € (no conversion)
   const formatPrice = (eur: number | null) => {
