@@ -7,8 +7,13 @@ import { Button } from '@/components/ui/button';
 import { getStoredRegion } from '@/lib/geo';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
-export const WHATSAPP_URL = 'https://web.whatsapp.com/';
-export const TELEGRAM_URL = '#telegram-link-needed';
+export const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61586111130045';
+export const INSTAGRAM_URL = 'https://instagram.com/aideals.be';
+export const TIKTOK_URL = 'https://tiktok.com/@aideals.be';
+export const YOUTUBE_URL = 'https://youtube.com/%40AiDeals.belgie';
+export const X_URL = 'https://x.com/DealsAi26058';
+export const WHATSAPP_URL = 'https://wa.me/32494311190';
+export const TELEGRAM_URL = 'https://t.me/aideals2026';
 const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook-test/514c0774-7002-4ec6-a91f-3bcde6d932b0';
 
 declare global {
@@ -29,6 +34,12 @@ export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) 
   <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
     <circle cx="16" cy="16" r="13" fill="#229ED9" />
     <path fill="#ffffff" d="M22.74 9.78 20.5 22.04c-.17.87-.63 1.08-1.27.67l-3.5-2.58-1.69 1.63c-.19.19-.35.35-.72.35l.26-3.6 6.56-5.93c.28-.25-.06-.4-.44-.14l-8.1 5.1-3.49-1.09c-.76-.24-.77-.76.16-1.12l13.64-5.26c.63-.24 1.18.14.87 1.7Z" />
+  </svg>
+);
+
+export const TikTokIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
+  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M21.42 4.2c.43 3.05 2.14 4.86 5.1 5.05v4.52c-1.72.17-3.23-.39-5.02-1.45v8.45c0 10.72-11.68 14.07-16.37 6.39-3.01-4.94-1.17-13.62 8.49-13.97v4.77c-.56.09-1.16.23-1.7.42-1.63.55-2.56 1.58-2.3 3.39.5 3.48 6.88 4.51 6.35-2.29V4.21h5.45Z" />
   </svg>
 );
 
@@ -284,7 +295,6 @@ export const ChatbotSalesFlow = () => {
     recognition.start();
   };
 
-  const handleTelegramClick = (event: React.MouseEvent<HTMLAnchorElement>) => { if (TELEGRAM_URL.startsWith('#')) event.preventDefault(); };
   if (!ready) return null;
 
   return (
@@ -330,7 +340,7 @@ export const ChatbotSalesFlow = () => {
 
       <div className="flex flex-col items-end gap-1.5 sm:gap-3 translate-y-2 sm:translate-y-0">
         <div className="flex flex-col items-end gap-2 sm:gap-3">
-          <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
+          <motion.a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
           <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
         </div>
         <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label={fallbackText[lang].open}><RobotAvatar className="w-[64px] h-[64px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>

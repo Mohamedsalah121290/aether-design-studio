@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Clock, MessageSquare, Send, Globe, Shield } from 'lucide-react';
+import { Facebook, Instagram, Mail, Clock, MessageSquare, Send, Globe, Shield, Youtube, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,7 +11,7 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
-import { ChatbotPromoSection, TelegramIcon, TELEGRAM_URL, WhatsAppIcon, WHATSAPP_URL } from '@/components/ChatbotConversion';
+import { ChatbotPromoSection, FACEBOOK_URL, INSTAGRAM_URL, TelegramIcon, TELEGRAM_URL, TikTokIcon, TIKTOK_URL, WhatsAppIcon, WHATSAPP_URL, X_URL, YOUTUBE_URL } from '@/components/ChatbotConversion';
 
 const ContactPage = () => {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -40,6 +40,11 @@ const ContactPage = () => {
   const contactLinks = [
     { label: 'WhatsApp', href: WHATSAPP_URL, icon: WhatsAppIcon },
     { label: 'Telegram', href: TELEGRAM_URL, icon: TelegramIcon },
+    { label: 'Facebook', href: FACEBOOK_URL, icon: Facebook },
+    { label: 'Instagram', href: INSTAGRAM_URL, icon: Instagram },
+    { label: 'TikTok', href: TIKTOK_URL, icon: TikTokIcon },
+    { label: 'YouTube', href: YOUTUBE_URL, icon: Youtube },
+    { label: 'X', href: X_URL, icon: Twitter },
   ];
 
   return (
@@ -139,16 +144,15 @@ const ContactPage = () => {
               className="md:col-span-2 space-y-4"
             >
               <div className="glass rounded-2xl p-5">
-                <h3 className="font-display font-bold text-sm mb-3">Chat instantly</h3>
-                <div className="flex gap-3">
+                <h3 className="font-display font-bold text-sm mb-3">Contact us instantly</h3>
+                <div className="flex flex-wrap gap-3">
                   {contactLinks.map(({ label, href, icon: Icon }) => (
                     <a
                       key={label}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(event) => { if (href.startsWith('#')) event.preventDefault(); }}
-                      className="w-11 h-11 rounded-xl glass flex items-center justify-center hover:border-primary/30 transition-all duration-300 hover:scale-105"
+                      className="w-12 h-12 rounded-xl glass flex items-center justify-center hover:border-primary/30 transition-all duration-300 hover:scale-105"
                       aria-label={`Contact on ${label}`}
                     >
                       <Icon />
