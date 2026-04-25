@@ -386,7 +386,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                         <span className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">
                           {t('store.buyNow', 'Get Instant Access')}
                         </span>
-                        <p className="mt-2 text-center text-[11px] font-semibold text-primary">{t('store.instantAccessAfterPayment', 'Instant access after payment')}</p>
+                        <p className="mt-2 text-center text-[11px] font-semibold text-primary">{t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment')}</p>
                       </button>
                     );
                   })}
@@ -480,7 +480,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   {checkoutUrl ? t('store.buyNow', 'Get Instant Access') : t('store.contactSupport', 'Contact support')}
                   <Sparkles className="w-3.5 h-3.5" />
                 </button>
-                <p className="text-center text-[11px] font-semibold text-primary">{t('store.instantAccessAfterPayment', 'Instant access after payment')}</p>
+                <p className="text-center text-[11px] font-semibold text-primary">{t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment')}</p>
               </div>
             )}
           </div>

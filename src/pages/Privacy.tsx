@@ -67,22 +67,22 @@ const Privacy = () => {
             <Section number="02" title="Information We Do NOT Collect">
               <div className="glass rounded-xl p-4 border border-primary/20">
                 <ul className="space-y-2">
-                  <li className="flex items-center gap-2 text-foreground"><Lock className="w-4 h-4 text-primary shrink-0" /> We do <strong>not</strong> collect your passwords for third-party tools.</li>
+                  <li className="flex items-center gap-2 text-foreground"><Lock className="w-4 h-4 text-primary shrink-0" /> No sensitive information is required before payment.</li>
                   <li className="flex items-center gap-2 text-foreground"><Shield className="w-4 h-4 text-primary shrink-0" /> We do <strong>not</strong> store payment card data — all payments are processed securely by our payment provider (Stripe).</li>
                 </ul>
               </div>
             </Section>
 
-            <Section number="03" title="Credential Storage & Security">
-              <p>Login credentials provided to you after activation are stored using <strong className="text-foreground">AES-256-GCM encryption</strong>.</p>
-              <p>Only you can access your credentials through your personal dashboard after authentication. Admin access for credential delivery is logged and restricted.</p>
+            <Section number="03" title="Access Delivery & Security">
+              <p>Activation is handled securely by our team after purchase.</p>
+              <p>Access delivery is protected, logged, and restricted to authorized workflows.</p>
             </Section>
 
             <Section number="04" title="How We Use Your Information">
               <p>Your data is used exclusively for:</p>
               <ul className="list-disc list-inside space-y-2">
                 <li>Processing and activating your tool subscriptions</li>
-                <li>Managing your account and delivering credentials</li>
+                <li>Managing your account and delivering access</li>
                 <li>Communicating order updates and support responses</li>
                 <li>Improving our service quality</li>
               </ul>

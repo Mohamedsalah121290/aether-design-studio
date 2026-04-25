@@ -90,12 +90,12 @@ const Terms = () => {
           <motion.div variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.3 }} className="space-y-0">
             <Section id="overview" number="01" title="Overview">
               <p>AI DEALS provides managed access to third-party software tools. We are not the original developer, publisher, or owner of those tools.</p>
-              <p>Our service consists of purchasing, configuring, and managing premium tool subscriptions on your behalf, providing you with secure access credentials through your personal dashboard.</p>
+              <p>Our service consists of purchasing, configuring, and managing premium tool subscriptions on your behalf through a secure managed-access process.</p>
             </Section>
 
             <Section id="activation" number="02" title="Activation & Delivery">
-              <p><strong className="text-foreground">"Delivered"</strong> means your login credentials have been made available in your user dashboard and/or sent to the activation email you provided at checkout.</p>
-              <p>Activation is typically completed within a few hours of purchase. However, exact timing is not guaranteed and may vary depending on the tool provider and availability.</p>
+              <p>Activation is handled securely by our team after purchase.</p>
+              <p>No sensitive information is required before payment.</p>
             </Section>
 
             <Section id="subscription" number="03" title="Subscription Terms">
@@ -125,8 +125,8 @@ const Terms = () => {
                 <p className="text-sm">We believe in treating every case with care. Our goal is resolution, not conflict.</p>
               </div>
               <ul className="list-disc list-inside space-y-3">
-                <li>If credentials are <strong className="text-foreground">not delivered</strong>, you may request a full refund within 24 hours of purchase.</li>
-                <li>Once credentials are delivered, subscriptions are generally <strong className="text-foreground">non-refundable</strong>.</li>
+                <li>If access is <strong className="text-foreground">not delivered</strong>, you may request a full refund within 24 hours of purchase.</li>
+                <li>Once access is delivered, subscriptions are generally <strong className="text-foreground">non-refundable</strong>.</li>
                 <li>In case of activation failure or extended service interruption, AI DEALS may issue <strong className="text-foreground">account credit</strong>, subscription extension, or refund at its discretion.</li>
                 <li>Account credit (Wallet Credit) is the primary resolution method and is applied automatically at your next checkout.</li>
                 <li>Service interruptions caused by third-party providers do not automatically qualify for refunds.</li>
@@ -143,7 +143,7 @@ const Terms = () => {
             </Section>
 
             <Section id="abuse" number="06" title="Abuse & Misuse">
-              <p>Sharing, reselling, or redistributing account credentials provided through AI DEALS is strictly prohibited.</p>
+              <p>Sharing, reselling, or redistributing access provided through AI DEALS is strictly prohibited.</p>
               <p>Violation of this policy may result in immediate account termination and forfeiture of any remaining credits, extensions, or refund eligibility.</p>
             </Section>
 

@@ -73,7 +73,7 @@ const PaymentSuccess = () => {
               </div>
               <div>
                 <p className="text-sm font-semibold text-white">Check Your Dashboard</p>
-                <p className="text-xs text-muted-foreground">Track your order status and access credentials from your dashboard.</p>
+                <p className="text-xs text-muted-foreground">Track your order status and secure access from your dashboard.</p>
               </div>
             </div>
 

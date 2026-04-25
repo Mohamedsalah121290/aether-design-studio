@@ -79,7 +79,7 @@ type Product = { name: string; id: string; desc: string; benefits: string[] };
 const copy: Record<LangKey, {
   dir: 'ltr' | 'rtl'; flag: string; voice: string[]; greeting: string; question: string; input: string; access: string; price: string; labels: Record<FlowKey, string>; intros: Record<FlowKey, string>;
 }> = {
-  en: { dir: 'ltr', flag: 'EN', voice: ['en-GB', 'en-US'], greeting: 'I’ll help you get started in seconds.', question: 'Choose what helps you most:', input: 'Type your message...', access: 'Get access', price: 'Final payment is processed in EUR (€).', labels: { ai: 'Best Deal', design: 'Compare', productivity: 'Cheapest', unsure: 'Help me choose' }, intros: { ai: 'Best deals people choose most often.', design: 'Here are strong tools to compare side by side.', productivity: 'Lowest-friction options to start today.', unsure: 'Start with the most useful tools.' } },
+  en: { dir: 'ltr', flag: 'EN', voice: ['en-GB', 'en-US'], greeting: 'I’ll help you choose safely and get started in seconds.', question: 'Choose what helps you most:', input: 'Type your message...', access: 'Get access', price: 'Final payment is processed in EUR (€).', labels: { ai: 'Best Deal', design: 'Compare', productivity: 'Cheapest', unsure: 'Help me choose' }, intros: { ai: 'Best deals people choose most often.', design: 'Here are strong tools to compare side by side.', productivity: 'Lowest-friction options to start today.', unsure: 'Start with the most useful tools.' } },
   fr: { dir: 'ltr', flag: 'FR', voice: ['fr-FR', 'fr-BE'], greeting: 'Bonjour, je peux vous aider à choisir le bon outil IA.', question: 'Choisissez ce qui vous aide le plus :', input: 'Écrivez votre message...', access: 'Obtenir l’accès', price: 'Le paiement final est traité en EUR (€).', labels: { ai: 'Meilleures offres', design: 'Comparer', productivity: 'Option moins chère', unsure: 'Aidez-moi' }, intros: { ai: 'Les offres les plus choisies.', design: 'Voici des outils forts à comparer.', productivity: 'Options simples pour commencer aujourd’hui.', unsure: 'Commencez avec les outils les plus utiles.' } },
   nl: { dir: 'ltr', flag: 'NL', voice: ['nl-BE', 'nl-NL'], greeting: 'Hoi 👋 Zal ik de beste deal voor je vinden?', question: 'Kies wat je het meest helpt:', input: 'Typ je bericht...', access: 'Krijg toegang', price: 'De prijs staat in EUR vóór checkout. Denk aan tijdwinst en praktische toegang.', labels: { ai: 'Beste deals', design: 'Vergelijk tools', productivity: 'Goedkoopste optie', unsure: 'Help kiezen' }, intros: { ai: 'De meest gekozen deals.', design: 'Sterke tools om te vergelijken.', productivity: 'Snelle opties om vandaag te starten.', unsure: 'Start met de meest nuttige tools.' } },
   de: { dir: 'ltr', flag: 'DE', voice: ['de-DE'], greeting: 'Hi 👋 Soll ich den besten Deal für dich finden?', question: 'Wähle, was dir am meisten hilft:', input: 'Nachricht eingeben...', access: 'Zugang erhalten', price: 'Der Preis wird vor dem Checkout in EUR angezeigt. Es geht um Zeitersparnis und praktischen Zugang.', labels: { ai: 'Beste Deals', design: 'Tools vergleichen', productivity: 'Günstigste Option', unsure: 'Hilf mir wählen' }, intros: { ai: 'Die meistgewählten Deals.', design: 'Starke Tools zum Vergleichen.', productivity: 'Einfache Optionen für heute.', unsure: 'Starte mit den nützlichsten Tools.' } },
@@ -310,7 +310,7 @@ export const ChatbotSalesFlow = () => {
       const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: value, language: lang, instruction: t('chatbot.directionInstruction', { lng: lang }) }),
+        body: JSON.stringify({ message: value, language: lang, instruction: `${t('chatbot.directionInstruction', { lng: lang })} Do not ask for sensitive information. Say: Activation is handled securely by our team after purchase. No sensitive information is required before payment.` }),
       });
 
       if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
@@ -345,7 +345,7 @@ export const ChatbotSalesFlow = () => {
   if (!ready) return null;
 
   return (
-    <div className={`fixed right-2 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3 ${liftForMobileCta ? 'bottom-[calc(5.75rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1rem+env(safe-area-inset-bottom))]'}`}>
+    <div className={`fixed right-2 z-40 flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:flex sm:gap-3 ${location.pathname === '/store' || location.pathname.startsWith('/payment') ? 'hidden' : 'flex'} ${liftForMobileCta ? 'bottom-[calc(5.75rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1rem+env(safe-area-inset-bottom))]'}`}>
       <AnimatePresence>
         {open && (
           <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[68dvh] sm:max-h-none">
