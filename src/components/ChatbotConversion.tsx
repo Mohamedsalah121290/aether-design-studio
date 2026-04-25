@@ -310,7 +310,7 @@ export const ChatbotSalesFlow = () => {
       const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: value, language: lang, instruction: `${t('chatbot.directionInstruction', { lng: lang })} Do not ask for passwords, login credentials, account access details, or sensitive information. Say: Activation is handled securely by our team after purchase. No sensitive information is required before payment.` }),
+        body: JSON.stringify({ message: value, language: lang, instruction: `${t('chatbot.directionInstruction', { lng: lang })} Do not ask for sensitive information. Say: Activation is handled securely by our team after purchase. No sensitive information is required before payment.` }),
       });
 
       if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
