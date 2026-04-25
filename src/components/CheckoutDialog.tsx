@@ -232,8 +232,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
             >
               <CheckCircle className="w-10 h-10 text-white" />
             </motion.div>
-            <h3 className="text-2xl font-display font-bold mb-2 text-white">{t('checkout.orderPlaced')}</h3>
-            <p className="text-muted-foreground mb-4">{t('checkout.checkVault')}</p>
+            <h3 className="text-2xl font-display font-bold mb-2 text-white">Thank you for your purchase.</h3>
+            <p className="text-muted-foreground mb-4 leading-relaxed">Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp or Telegram. You can also contact us directly for faster support.</p>
             <div className="flex items-center gap-2 text-sm text-green-400">
               <Clock className="w-4 h-4" />
               <span>{t('checkout.activatingIn', { hours: activationTime })}</span>
@@ -257,6 +257,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       <>
                         <span className="text-muted-foreground"> &mdash; </span>
                         <span className={`font-bold ${style.textClass}`}>€{displayPrice}</span>
+                        <span className="text-muted-foreground text-xs font-semibold"> (excl. VAT)</span>
                         <span className={`${style.textClass} opacity-80`}> {style.suffix}</span>
                         <span className={`ml-1.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-[1px] rounded-md border ${style.textClass}`} style={{ borderColor: 'currentColor', opacity: 0.85 }}>
                           {style.label}
@@ -266,7 +267,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     );
                   })()}
                 </SheetDescription>
-                <p className="text-[10px] text-muted-foreground mt-1">{FINAL_PAYMENT_EUR_NOTE}</p>
+                <p className="text-xs font-medium text-muted-foreground mt-2">{TAX_NOTE}</p>
+                <p className="text-xs text-muted-foreground mt-1">{FINAL_PAYMENT_EUR_NOTE}</p>
               </SheetHeader>
             </div>
 
