@@ -108,11 +108,11 @@ const MobileStickyCTA = () => {
     return () => window.removeEventListener('scroll', update);
   }, [location.pathname]);
 
-  if (location.pathname === '/' && !showAtTop) return null;
+  if (location.pathname === '/store' || (location.pathname === '/' && !showAtTop)) return null;
 
   return (
-    <Link to="/store?scrollTo=chatgpt" className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 md:hidden min-h-[56px] rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold shadow-[0_0_28px_hsl(var(--primary)/0.35)] flex items-center justify-center gap-2 active:scale-[0.99] transition-transform" aria-label={t('store.getAccess')}>
-      {t('store.getAccess')}
+    <Link to="/store?scrollTo=chatgpt" className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 md:hidden min-h-[56px] rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold shadow-[0_0_28px_hsl(var(--primary)/0.35)] flex items-center justify-center gap-2 active:scale-[0.99] transition-transform" aria-label={t('store.buyNow', 'Get Instant Access')}>
+      {t('store.buyNow', 'Get Instant Access')}
       <ArrowRight className="h-5 w-5" />
     </Link>
   );

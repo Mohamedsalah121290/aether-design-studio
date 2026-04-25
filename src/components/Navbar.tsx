@@ -75,10 +75,8 @@ const Navbar = () => {
   const navLinks = [
     { href: '/', label: t('nav.home', 'Home') },
     { href: '/store', label: t('nav.store') },
-    { href: '/academy', label: t('nav.academy') },
-    { href: '/blog', label: t('nav.blog', 'Blog') },
-    { href: '/about', label: t('nav.about') },
-    { href: '/contact', label: t('nav.contact', 'Contact') },
+    { href: '/academy', label: `${t('nav.academy')} · ${t('store.comingSoon', 'Coming Soon')}` },
+    ...(user ? [{ href: '/dashboard', label: t('nav.dashboard') }] : []),
   ];
 
   return (
@@ -285,9 +283,11 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
-            <Button variant="heroOutline" size="sm" asChild>
-              <Link to="/dashboard">{t('nav.dashboard')}</Link>
-            </Button>
+            {user && (
+              <Button variant="heroOutline" size="sm" asChild>
+                <Link to="/dashboard">{t('nav.dashboard')}</Link>
+              </Button>
+            )}
 
             {/* Admin Link - Only show if admin */}
             {isAdmin && (
@@ -397,9 +397,11 @@ const Navbar = () => {
                 </div>
                 
                 <div className="flex flex-col gap-3 pt-4">
-                  <Button variant="heroOutline" className="w-full" asChild>
-                    <Link to="/dashboard">{t('nav.dashboard')}</Link>
-                  </Button>
+                  {user && (
+                    <Button variant="heroOutline" className="w-full" asChild>
+                      <Link to="/dashboard">{t('nav.dashboard')}</Link>
+                    </Button>
+                  )}
                   
                   {isAdmin && (
                     <Button variant="ghost" className="w-full text-muted-foreground" asChild>
