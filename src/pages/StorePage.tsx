@@ -1,7 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Storefront from '@/components/Storefront';
 import Footer from '@/components/Footer';
-import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
 import { MailCheck } from 'lucide-react';
@@ -28,7 +27,6 @@ const StorePage = () => {
         <KeywordCluster page="store" />
       </main>
       <Footer />
-      <ScrollToTop />
     </div>
   );
 };
