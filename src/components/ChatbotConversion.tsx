@@ -184,6 +184,7 @@ export const ChatbotPromoSection = () => {
 
 export const ChatbotSalesFlow = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   const lang = useLang();
   const text = copy[lang];
   const [ready, setReady] = useState(false);
