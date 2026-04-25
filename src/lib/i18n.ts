@@ -65,7 +65,7 @@ const resources = {
         worksWellWith: 'Works well with',
         trustReasons: {
           fastDelivery: { title: 'Fast delivery', text: 'Access details are delivered quickly after secure checkout.' },
-          easyAccess: { title: 'Easy access', text: 'Simple product access without confusing package choices.' },
+          easyAccess: { title: 'Easy access', text: 'Simple product access without confusing product choices.' },
           realSupport: { title: 'Real support', text: 'Help is available when you need guidance.' },
           securePayment: { title: 'Secure payment', text: 'Checkout stays protected through Stripe.' },
         },
