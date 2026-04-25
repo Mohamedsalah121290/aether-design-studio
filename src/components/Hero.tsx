@@ -185,7 +185,7 @@ const Hero = () => {
                 filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))',
               }}
             >
-              Clear Product Access.
+              Get instant access to premium AI tools — no setup needed.
             </span>
             <br />
             <span className="text-white drop-shadow-2xl">Every Month.</span>
@@ -204,7 +204,7 @@ const Hero = () => {
                 textShadow: '0 2px 10px rgba(0,0,0,0.5)',
               }}
             >
-              Choose the product you need, see the monthly price clearly, and get support when you need it.
+              Buy faster, start easier, and get real support when you need it.
             </p>
           </motion.div>
 
@@ -215,7 +215,7 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-xs sm:text-sm text-white/40 max-w-lg mx-auto mb-8 md:mb-10 tracking-wide"
           >
-            No bundles. No confusing offers. Secure checkout.
+            Simple access. Fast delivery. Secure checkout.
           </motion.p>
 
           {/* CTA Buttons */}
