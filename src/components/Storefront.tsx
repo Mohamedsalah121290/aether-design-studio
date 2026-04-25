@@ -80,7 +80,7 @@ const Storefront = () => {
       if (toolsError) throw toolsError;
 
       const { data: plansData, error: plansError } = await supabase
-        .from('tool_plans').select('tool_id, plan_name, monthly_price').eq('is_active', true);
+        .from('tool_plans').select('tool_id, plan_id, plan_name, monthly_price').eq('is_active', true);
       if (plansError) throw plansError;
 
       // Determine the lowest-priced active plan per tool, and remember its plan_name
