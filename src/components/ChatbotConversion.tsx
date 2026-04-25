@@ -11,9 +11,9 @@ import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 export const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61586111130045';
 export const INSTAGRAM_URL = 'https://www.instagram.com/aideals.be/';
 export const TIKTOK_URL = 'https://www.tiktok.com/@aideals.be?lang=en';
-export const YOUTUBE_URL = 'https://youtube.com/%40AiDeals.belgie';
+export const YOUTUBE_URL = 'https://www.youtube.com/@AiDeals.belgie';
 export const X_URL = 'https://x.com/DealsAi26058';
-export const WHATSAPP_URL = 'https://wa.me/+32494311190';
+export const WHATSAPP_URL = 'https://web.whatsapp.com/send?phone=32494311190';
 export const TELEGRAM_URL = 'https://t.me/aideals2026';
 const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook-test/514c0774-7002-4ec6-a91f-3bcde6d932b0';
 
