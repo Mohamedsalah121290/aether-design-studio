@@ -34,6 +34,12 @@ const PLATFORM_URLS: Record<string, string> = {
 
 const emailSchema = z.string().trim().email().max(255);
 
+const dailyEquivalent = (price?: number | null, period?: PricePeriod | null) => {
+  if (!price || price <= 0) return null;
+  const days = period === 'yearly' ? 365 : period === 'one-time' ? 30 : 30;
+  return `≈ ${formatEuro(price / days)}/day`;
+};
+
 /* ── Types ─────────────────────────────────────────────────────── */
 export interface ToolPlan {
   id: string;
@@ -134,6 +140,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const showLogo = logoUrl && !(logoError && fallbackAttempted);
   const price = tool.starting_price;
   const approxPrice = formatApproxCurrency(price, currency.code);
+  const dailyPrice = dailyEquivalent(price, tool.starting_period);
   const categoryLabel = CATEGORY_LABELS[tool.category] || tool.category;
   const isComingSoon = tool.status === 'coming_soon';
   const isContactOnly = tool.tool_id === 'gemini';
@@ -317,6 +324,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                           {style.label}
                         </span>
                       </div>
+                      {dailyPrice && <p className="text-[11px] font-semibold text-primary/80">{dailyPrice}</p>}
+                      <p className="inline-flex w-fit rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[9px] font-semibold text-primary">Limited price today</p>
                       {approxPrice && <p className="text-[11px] font-medium text-muted-foreground/80">{approxPrice}</p>}
                       <p className="text-[9px] text-muted-foreground/60">Excl. VAT · Access-based pricing model</p>
                       <p className="text-[9px] text-muted-foreground/60">{FINAL_PAYMENT_EUR_NOTE}</p>
