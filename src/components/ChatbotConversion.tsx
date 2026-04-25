@@ -12,6 +12,27 @@ import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
 const N8N_CHAT_FUNCTION = 'n8n-chat';
 
+const detectMessageLanguage = (message: string): LangKey => {
+  const text = message.toLowerCase();
+  if (/\p{Script=Arabic}/u.test(message)) return 'ar';
+  if (/[àâçéèêëîïôùûüÿœæ]/.test(text) || /\b(bonjour|merci|vous|outil|choix|acheter|paiement)\b/.test(text)) return 'fr';
+  if (/[äöüß]/.test(text) || /\b(hallo|danke|bitte|werkzeug|zahlung|kaufen)\b/.test(text)) return 'de';
+  if (/[áéíóúñ¿¡]/.test(text) || /\b(hola|gracias|herramienta|comprar|pago)\b/.test(text)) return 'es';
+  if (/\b(ciao|grazie|strumento|acquistare|pagamento|scegliere)\b/.test(text)) return 'it';
+  if (/\b(hallo|hoi|dank|bedankt|tool|kopen|betaling|kiezen)\b/.test(text)) return 'nl';
+  return 'en';
+};
+
+const salesAssistantInstructions: Record<LangKey, string> = {
+  en: 'Reply only in English. Be clear, confident, and direct. Max 2–3 lines. Help the user choose and buy AI tools quickly. Recommend 2–3 tools max. Mention instant access, secure payment, and support available. End with a short purchase-oriented question.',
+  fr: 'Réponds uniquement en français naturel. Style simple et professionnel. Maximum 2 à 3 lignes. Aide l’utilisateur à choisir et acheter vite. Recommande 2 ou 3 outils maximum. Mentionne l’accès instantané, le paiement sécurisé et le support disponible. Termine par une question courte orientée achat.',
+  nl: 'Antwoord alleen in natuurlijk Nederlands. Vriendelijk maar professioneel. Maximaal 2 tot 3 regels. Help de gebruiker snel kiezen en kopen. Beveel maximaal 2 of 3 tools aan. Noem directe toegang, veilige betaling en beschikbare support. Eindig met een korte aankoopgerichte vraag.',
+  de: 'Antworte ausschließlich in natürlichem Deutsch. Strukturiert, präzise und professionell. Maximal 2 bis 3 Zeilen. Hilf dem Nutzer schnell zu wählen und zu kaufen. Empfiehl maximal 2 bis 3 Tools. Erwähne Sofortzugang, sichere Zahlung und verfügbaren Support. Schließe mit einer kurzen kauforientierten Frage.',
+  es: 'Responde solo en español natural. Tono claro y fluido. Máximo 2 o 3 líneas. Ayuda al usuario a elegir y comprar rápido. Recomienda como máximo 2 o 3 herramientas. Menciona acceso instantáneo, pago seguro y soporte disponible. Termina con una pregunta breve orientada a la compra.',
+  it: 'Rispondi solo in italiano naturale. Tono chiaro e cordiale. Massimo 2 o 3 righe. Aiuta l’utente a scegliere e acquistare rapidamente. Consiglia al massimo 2 o 3 strumenti. Cita accesso immediato, pagamento sicuro e supporto disponibile. Chiudi con una domanda breve orientata all’acquisto.',
+  ar: 'أجب باللغة العربية الفصحى فقط. استخدم جملاً قصيرة وواضحة وطبيعية. لا تخلط اللغات. لا تترجم حرفياً. الحد الأقصى سطران إلى ثلاثة أسطر. ساعد المستخدم على اختيار وشراء أدوات الذكاء الاصطناعي بسرعة. رشّح أداتين أو ثلاثاً فقط. اذكر الوصول الفوري، الدفع الآمن، وتوفر الدعم. اختم بسؤال قصير يدفعه للاختيار أو الشراء.',
+};
+
 export const openSocialUrl = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
   event.preventDefault();
   event.stopPropagation();
@@ -306,13 +327,14 @@ export const ChatbotSalesFlow = () => {
     const userMessage: Message = { id: Date.now(), role: 'user', text: value };
     setMessages((current) => [...current, userMessage]);
     setSending(true);
+    const messageLanguage = detectMessageLanguage(value);
 
     try {
       const { data, error } = await supabase.functions.invoke(N8N_CHAT_FUNCTION, {
         body: {
           message: value,
-          language: lang,
-          instruction: `${t('chatbot.directionInstruction', { lng: lang })} ${t('store.noSensitiveBeforePayment', { lng: lang })} ${t('store.safeActivationMessage', { lng: lang })}`,
+          language: messageLanguage,
+          instruction: salesAssistantInstructions[messageLanguage],
         },
       });
 
