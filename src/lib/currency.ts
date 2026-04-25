@@ -9,6 +9,7 @@ export interface CurrencyOption {
 }
 
 export const CURRENCY_STORAGE_KEY = 'ai_deals_currency';
+export const CURRENCY_MANUAL_KEY = 'ai_deals_currency_manual';
 
 export const CURRENCIES: CurrencyOption[] = [
   { code: 'EUR', name: 'Euro', rate: 1 },
@@ -66,4 +67,5 @@ export const formatApproxCurrency = (eurAmount: number | null | undefined, code:
   return `≈ ${formatCurrencyPrice(eurAmount * currency.rate, currency.code)}`;
 };
 
+export const FINAL_PAYMENT_EUR_NOTE_KEY = 'currency.finalPaymentNote';
 export const FINAL_PAYMENT_EUR_NOTE = 'Final payment is processed in EUR (€)';
