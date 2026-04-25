@@ -6219,7 +6219,7 @@ const runInternalI18nQa = () => {
     return { language: code, missingKeys: missing.length, englishFallbacks: englishFallback.length, sampleMissing: missing.slice(0, 12), sampleFallbacks: englishFallback.slice(0, 12) };
   });
   console.table(report);
-  window.__AI_DEALS_I18N_QA__ = report;
+  (window as typeof window & { __AI_DEALS_I18N_QA__?: typeof report }).__AI_DEALS_I18N_QA__ = report;
 };
 
 runInternalI18nQa();
