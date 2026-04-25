@@ -318,7 +318,7 @@ const PaymentPage = () => {
           {/* Back button */}
           <button
             onClick={() => navigate('/store')}
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-white transition-colors mb-8"
+            className="inline-flex min-h-11 items-center gap-2 text-sm text-muted-foreground hover:text-white transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Store
@@ -351,7 +351,7 @@ const PaymentPage = () => {
                     <Crown className="w-4 h-4 text-primary" />
                     Billing Period
                   </h3>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setBillingInterval('monthly')}
@@ -444,13 +444,13 @@ const PaymentPage = () => {
                     <Zap className="w-4 h-4 text-primary" />
                     Select Plan
                   </h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {plans.map((plan, index) => (
                       <button
                         key={plan.id}
                         type="button"
                         onClick={() => setSelectedPlan(plan)}
-                        className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                        className={`relative min-h-11 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
                           selectedPlan?.id === plan.id
                             ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
                             : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'

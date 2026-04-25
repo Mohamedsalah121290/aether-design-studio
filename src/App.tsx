@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { CurrencyProvider } from "@/hooks/useCurrency";
@@ -95,6 +95,27 @@ const AppRoutes = () => {
   );
 };
 
+const MobileStickyCTA = () => {
+  const location = useLocation();
+  const [showAtTop, setShowAtTop] = useState(false);
+
+  useEffect(() => {
+    const update = () => setShowAtTop(window.scrollY > window.innerHeight * 0.55);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, [location.pathname]);
+
+  if (location.pathname === '/' && !showAtTop) return null;
+
+  return (
+    <Link to="/store?scrollTo=chatgpt" className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 md:hidden min-h-[56px] rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold shadow-[0_0_28px_hsl(var(--primary)/0.35)] flex items-center justify-center gap-2 active:scale-[0.99] transition-transform" aria-label="Get access now">
+      Get Access Now
+      <ArrowRight className="h-5 w-5" />
+    </Link>
+  );
+};
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -122,10 +143,7 @@ const App = () => {
                   </ErrorBoundary>
                   <RecentActivityToast />
                   <ChatbotSalesFlow />
-                  <Link to="/store?scrollTo=chatgpt" className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 md:hidden min-h-[64px] rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold shadow-[0_0_28px_hsl(var(--primary)/0.35)] flex items-center justify-center gap-2 active:scale-[0.99] transition-transform" aria-label="Get access now">
-                    Get Access Now
-                    <ArrowRight className="h-5 w-5" />
-                  </Link>
+                  <MobileStickyCTA />
                 </BrowserRouter>
               </TooltipProvider>
             </CurrencyProvider>

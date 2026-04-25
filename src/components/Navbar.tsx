@@ -335,7 +335,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <Button variant="ghost" size="icon" className="lg:hidden min-h-11 min-w-11" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X /> : <Menu />}
           </Button>
         </nav>
@@ -366,7 +366,7 @@ const Navbar = () => {
                     <button
                       key={lang.code}
                       onClick={() => { changeLanguage(lang.code); setIsMobileMenuOpen(false); }}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors ${
+                      className={`flex min-h-11 items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors ${
                         i18n.language === lang.code
                           ? 'bg-primary/15 text-primary border-primary/40'
                           : 'bg-white/5 text-muted-foreground border-white/10 hover:bg-white/10 hover:text-foreground'
@@ -382,7 +382,7 @@ const Navbar = () => {
                     <button
                       key={item.code}
                       onClick={() => { changeCurrency(item.code); setIsMobileMenuOpen(false); }}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors ${
+                      className={`flex min-h-11 items-center gap-2 px-3 py-2 rounded-full text-sm border transition-colors ${
                         currency.code === item.code
                           ? 'bg-primary/15 text-primary border-primary/40'
                           : 'bg-white/5 text-muted-foreground border-white/10 hover:bg-white/10 hover:text-foreground'

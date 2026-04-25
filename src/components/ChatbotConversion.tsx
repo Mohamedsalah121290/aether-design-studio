@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -72,10 +72,20 @@ const products: Record<FlowKey, Product[]> = {
   ],
 };
 
-const funnelMessages: Record<IntentKey, { text: string; flow: FlowKey }> = {
-  student: { text: 'Want help with studying tools?', flow: 'ai' },
-  creator: { text: 'Need help creating content?', flow: 'design' },
-  business: { text: 'Want to automate your workflow?', flow: 'productivity' },
+const funnelMessages: Record<IntentKey, { flow: FlowKey; text: Record<LangKey, string> }> = {
+  student: { flow: 'ai', text: { en: 'Want help with studying tools?', fr: 'Besoin d’aide pour choisir des outils d’étude ?', nl: 'Hulp nodig met studietools?', de: 'Brauchst du Hilfe mit Lern-Tools?', es: '¿Quieres ayuda con herramientas de estudio?', it: 'Vuoi aiuto con gli strumenti per studiare?', ar: 'هل تريد مساعدة في اختيار أدوات الدراسة؟' } },
+  creator: { flow: 'design', text: { en: 'Need help creating content?', fr: 'Besoin d’aide pour créer du contenu ?', nl: 'Hulp nodig bij content maken?', de: 'Brauchst du Hilfe beim Erstellen von Content?', es: '¿Necesitas ayuda para crear contenido?', it: 'Ti serve aiuto per creare contenuti?', ar: 'هل تحتاج مساعدة في إنشاء المحتوى؟' } },
+  business: { flow: 'productivity', text: { en: 'Want to automate your workflow?', fr: 'Vous voulez automatiser votre workflow ?', nl: 'Wil je je workflow automatiseren?', de: 'Möchtest du deinen Workflow automatisieren?', es: '¿Quieres automatizar tu flujo de trabajo?', it: 'Vuoi automatizzare il tuo workflow?', ar: 'هل تريد أتمتة سير عملك؟' } },
+};
+
+const productLocale: Record<LangKey, Record<string, Pick<Product, 'desc' | 'benefits'>>> = {
+  en: {},
+  fr: { chatgpt: { desc: 'Assistant IA pour tous les jours.', benefits: ['Aide à l’écriture', 'Recherche plus rapide', 'Idées de workflow'] }, perplexity: { desc: 'Recherche rapide avec sources.', benefits: ['Sources claires', 'Réponses rapides', 'Bon pour décider'] }, elevenlabs: { desc: 'Création de voix et audio.', benefits: ['Voix naturelles', 'Plusieurs langues', 'Audio prêt à publier'] }, canva: { desc: 'Créez des visuels plus vite.', benefits: ['Templates prêts', 'Éditions rapides', 'Mobile friendly'] }, capcut: { desc: 'Montage vidéo court.', benefits: ['Montage rapide', 'Outils créateur', 'Exports simples'] }, microsoft_365: { desc: 'Documents et outils cloud.', benefits: ['Apps Office', 'Workflow cloud', 'Prêt pour business'] }, notion: { desc: 'Planifier, écrire et organiser.', benefits: ['Espace clair', 'Meilleure organisation', 'Travail en équipe'] }, zoom: { desc: 'Réunions fiables.', benefits: ['Appels stables', 'Outils réunion', 'Setup pro'] } },
+  nl: { chatgpt: { desc: 'Dagelijkse AI-assistent.', benefits: ['Schrijfhulp', 'Sneller onderzoek', 'Workflow ideeën'] }, perplexity: { desc: 'Snel onderzoek met bronnen.', benefits: ['Duidelijke bronnen', 'Snelle antwoorden', 'Goed voor beslissingen'] }, elevenlabs: { desc: 'Stem en audio maken.', benefits: ['Natuurlijke stemmen', 'Meerdere talen', 'Publicatieklare audio'] }, canva: { desc: 'Ontwerp sneller posts en assets.', benefits: ['Kant-en-klare templates', 'Snelle edits', 'Werkt op mobiel'] }, capcut: { desc: 'Korte video’s bewerken.', benefits: ['Snel monteren', 'Creator tools', 'Makkelijk exporteren'] }, microsoft_365: { desc: 'Documenten en cloudtools.', benefits: ['Office apps', 'Cloud workflow', 'Zakelijk klaar'] }, notion: { desc: 'Plannen, schrijven en organiseren.', benefits: ['Duidelijke workspace', 'Betere planning', 'Teamvriendelijk'] }, zoom: { desc: 'Betrouwbare meetings.', benefits: ['Stabiele calls', 'Meeting tools', 'Professionele setup'] } },
+  de: { chatgpt: { desc: 'KI-Assistent für den Alltag.', benefits: ['Schreibhilfe', 'Recherche-Support', 'Workflow-Ideen'] }, perplexity: { desc: 'Schnelle Recherche mit Quellen.', benefits: ['Klare Quellen', 'Schnelle Antworten', 'Gut für Entscheidungen'] }, elevenlabs: { desc: 'Voice- und Audio-Erstellung.', benefits: ['Natürliche Stimmen', 'Mehrere Sprachen', 'Content-ready Audio'] }, canva: { desc: 'Designs schneller erstellen.', benefits: ['Fertige Vorlagen', 'Schnelle Bearbeitung', 'Auf allen Geräten'] }, capcut: { desc: 'Kurzvideos bearbeiten.', benefits: ['Schneller Schnitt', 'Creator Tools', 'Einfache Exporte'] }, microsoft_365: { desc: 'Dokumente und Cloud-Tools.', benefits: ['Office Apps', 'Cloud Workflow', 'Business-ready'] }, notion: { desc: 'Planen, schreiben und organisieren.', benefits: ['Klarer Workspace', 'Bessere Planung', 'Teamfreundlich'] }, zoom: { desc: 'Zuverlässige Meetings.', benefits: ['Stabile Calls', 'Meeting Tools', 'Professionelles Setup'] } },
+  es: { chatgpt: { desc: 'Asistente IA para el día a día.', benefits: ['Ayuda para escribir', 'Apoyo de investigación', 'Ideas de workflow'] }, perplexity: { desc: 'Investigación rápida con fuentes.', benefits: ['Fuentes claras', 'Respuestas rápidas', 'Bueno para decidir'] }, elevenlabs: { desc: 'Creación de voz y audio.', benefits: ['Voces naturales', 'Varios idiomas', 'Audio listo para contenido'] }, canva: { desc: 'Diseña posts y assets más rápido.', benefits: ['Plantillas listas', 'Edición rápida', 'Funciona en móvil'] }, capcut: { desc: 'Edición de videos cortos.', benefits: ['Edición rápida', 'Herramientas creator', 'Exportación fácil'] }, microsoft_365: { desc: 'Documentos y herramientas cloud.', benefits: ['Apps Office', 'Workflow cloud', 'Listo para negocio'] }, notion: { desc: 'Planifica, escribe y organiza.', benefits: ['Workspace claro', 'Mejor planificación', 'Para equipos'] }, zoom: { desc: 'Reuniones fiables.', benefits: ['Llamadas estables', 'Herramientas meeting', 'Setup profesional'] } },
+  it: { chatgpt: { desc: 'Assistente AI quotidiano.', benefits: ['Aiuto scrittura', 'Supporto ricerca', 'Idee workflow'] }, perplexity: { desc: 'Ricerca veloce con fonti.', benefits: ['Fonti chiare', 'Risposte rapide', 'Utile per decidere'] }, elevenlabs: { desc: 'Creazione voce e audio.', benefits: ['Voci naturali', 'Più lingue', 'Audio pronto'] }, canva: { desc: 'Crea grafiche più velocemente.', benefits: ['Template pronti', 'Modifiche rapide', 'Funziona su mobile'] }, capcut: { desc: 'Editing video brevi.', benefits: ['Editing rapido', 'Tool creator', 'Export facile'] }, microsoft_365: { desc: 'Documenti e strumenti cloud.', benefits: ['App Office', 'Workflow cloud', 'Pronto per business'] }, notion: { desc: 'Pianifica, scrivi e organizza.', benefits: ['Workspace chiaro', 'Migliore planning', 'Adatto ai team'] }, zoom: { desc: 'Meeting affidabili.', benefits: ['Chiamate stabili', 'Tool meeting', 'Setup pro'] } },
+  ar: { chatgpt: { desc: 'مساعد ذكاء اصطناعي للاستخدام اليومي.', benefits: ['مساعدة في الكتابة', 'بحث أسرع', 'أفكار لسير العمل'] }, perplexity: { desc: 'بحث سريع مع مصادر.', benefits: ['مصادر واضحة', 'إجابات سريعة', 'مناسب لاتخاذ القرار'] }, elevenlabs: { desc: 'إنشاء الصوت والمحتوى الصوتي.', benefits: ['أصوات طبيعية', 'لغات متعددة', 'صوت جاهز للمحتوى'] }, canva: { desc: 'صمّم المنشورات والمواد أسرع.', benefits: ['قوالب جاهزة', 'تعديلات سريعة', 'يعمل على الموبايل'] }, capcut: { desc: 'تعديل الفيديوهات القصيرة.', benefits: ['مونتاج سريع', 'أدوات للمبدعين', 'تصدير سهل'] }, microsoft_365: { desc: 'مستندات وأدوات عمل سحابية.', benefits: ['تطبيقات Office', 'سير عمل سحابي', 'مناسب للأعمال'] }, notion: { desc: 'خطّط واكتب ونظّم.', benefits: ['مساحة عمل واضحة', 'تنظيم أفضل', 'مناسب للفِرق'] }, zoom: { desc: 'اجتماعات موثوقة.', benefits: ['مكالمات مستقرة', 'أدوات اجتماعات', 'إعداد احترافي'] } },
 };
 
 const bullets = ['Instant replies', 'Works in multiple languages', '24/7 availability', 'Works across all platforms', 'Increases conversions'];
@@ -120,10 +130,12 @@ export const ChatbotPromoSection = () => (
 );
 
 export const ChatbotSalesFlow = () => {
+  const location = useLocation();
   const lang = useLang();
   const text = copy[lang];
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
+  const [liftForMobileCta, setLiftForMobileCta] = useState(false);
   const [selected, setSelected] = useState<FlowKey | null>(null);
   const [input, setInput] = useState('');
   const [soundOn, setSoundOn] = useState(() => localStorage.getItem('aiDealsChatSound') !== 'off');
@@ -136,7 +148,23 @@ export const ChatbotSalesFlow = () => {
   const [messages, setMessages] = useState<Message[]>([initialMessage]);
 
   useEffect(() => { const timer = window.setTimeout(() => setReady(true), 2200); return () => window.clearTimeout(timer); }, []);
-  useEffect(() => { setMessages([initialMessage]); setSelected(null); }, [initialMessage]);
+  useEffect(() => {
+    const update = () => setLiftForMobileCta(location.pathname !== '/' || window.scrollY > window.innerHeight * 0.55);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => window.removeEventListener('scroll', update);
+  }, [location.pathname]);
+  useEffect(() => {
+    const storedFlow = localStorage.getItem('aiDealsActiveChatFlow') as FlowKey | null;
+    if (storedFlow && products[storedFlow]) {
+      const localizedProducts = products[storedFlow].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
+      setSelected(storedFlow);
+      setMessages([{ id: Date.now(), role: 'bot', text: text.intros[storedFlow], products: localizedProducts }]);
+      return;
+    }
+    setMessages([initialMessage]);
+    setSelected(null);
+  }, [initialMessage, lang, text.intros]);
   useEffect(() => { localStorage.setItem('aiDealsChatSound', soundOn ? 'on' : 'off'); }, [soundOn]);
   useEffect(() => { if (open) window.setTimeout(() => inputRef.current?.focus(), 180); }, [open]);
   useEffect(() => {
@@ -144,7 +172,9 @@ export const ChatbotSalesFlow = () => {
       const key = (event as CustomEvent<IntentKey>).detail;
       const funnel = funnelMessages[key];
       if (!funnel) return;
-      const next: Message = { id: Date.now(), role: 'bot', text: funnel.text, products: products[funnel.flow] };
+      const localizedProducts = products[funnel.flow].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
+      const next: Message = { id: Date.now(), role: 'bot', text: funnel.text[lang], products: localizedProducts };
+      localStorage.setItem('aiDealsActiveChatFlow', funnel.flow);
       setSelected(funnel.flow);
       setMessages([next]);
       setOpen(true);
@@ -154,11 +184,12 @@ export const ChatbotSalesFlow = () => {
     const stored = localStorage.getItem('aiDealsActiveFunnel') as IntentKey | null;
     if (stored && funnelMessages[stored]) {
       const funnel = funnelMessages[stored];
+      const localizedProducts = products[funnel.flow].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
       setSelected(funnel.flow);
-      setMessages([{ id: Date.now(), role: 'bot', text: funnel.text, products: products[funnel.flow] }]);
+      setMessages([{ id: Date.now(), role: 'bot', text: funnel.text[lang], products: localizedProducts }]);
     }
     return () => window.removeEventListener('aiDeals:funnel', adaptToFunnel as EventListener);
-  }, [soundOn, text.voice]);
+  }, [lang, soundOn, text.voice]);
 
   const pickVoice = () => {
     const voices = window.speechSynthesis?.getVoices?.() || [];
@@ -180,7 +211,9 @@ export const ChatbotSalesFlow = () => {
 
   const addFlow = (key: FlowKey) => {
     setSelected(key);
-    const next: Message = { id: Date.now(), role: 'bot', text: text.intros[key], products: products[key] };
+    localStorage.setItem('aiDealsActiveChatFlow', key);
+    const localizedProducts = products[key].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
+    const next: Message = { id: Date.now(), role: 'bot', text: text.intros[key], products: localizedProducts };
     setMessages((current) => [...current.filter((m) => m.id !== next.id), next]);
     if (soundOn) window.setTimeout(() => speak(next), 150);
   };
@@ -190,7 +223,8 @@ export const ChatbotSalesFlow = () => {
     if (!value) return;
     setInput('');
     const userMessage: Message = { id: Date.now(), role: 'user', text: value };
-    const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: text.intros.unsure, products: products.unsure };
+    const localizedProducts = products.unsure.map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
+    const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: text.intros.unsure, products: localizedProducts };
     setMessages((current) => [...current, userMessage, botMessage]);
     if (soundOn) window.setTimeout(() => speak(botMessage), 150);
   };
@@ -214,10 +248,10 @@ export const ChatbotSalesFlow = () => {
   if (!ready) return null;
 
   return (
-    <div className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom))] right-2 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3">
+    <div className={`fixed right-2 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3 ${liftForMobileCta ? 'bottom-[calc(5.75rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1rem+env(safe-area-inset-bottom))]'}`}>
       <AnimatePresence>
         {open && (
-          <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1.5rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[72dvh] sm:max-h-none">
+          <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[68dvh] sm:max-h-none">
             <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border/60">
               <div className="flex items-center gap-3 min-w-0"><RobotAvatar lang={lang} rounded="rounded-xl" speaking={speakingId !== null} /><div><p className="text-sm font-semibold text-foreground">AI Deals Assistant</p><p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />Online</p></div></div>
               <div className="flex items-center gap-1">
@@ -226,11 +260,11 @@ export const ChatbotSalesFlow = () => {
               </div>
             </div>
 
-            <div className="p-4 space-y-4 max-h-[48dvh] sm:max-h-[62vh] overflow-y-auto overscroll-contain">
+            <div className="p-3 sm:p-4 space-y-3 sm:space-y-4 max-h-[43dvh] sm:max-h-[62vh] overflow-y-auto overscroll-contain">
               {messages.map((message) => (
                 <div key={message.id} className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {message.role === 'bot' && <RobotAvatar className="w-8 h-8" lang={lang} speaking={speakingId === message.id} />}
-                  <div className={`max-w-[82%] ${message.role === 'user' ? 'bg-primary/20 text-foreground' : 'bg-white/[0.04] text-foreground'} rounded-xl px-4 py-3 text-sm leading-relaxed`}>
+                  <div className={`max-w-[84%] break-words ${message.role === 'user' ? 'bg-primary/20 text-foreground' : 'bg-white/[0.04] text-foreground'} rounded-xl px-3 sm:px-4 py-3 text-sm leading-relaxed`}>
                     <div className="flex items-start gap-2">
                       <p className="flex-1">{message.text}</p>
                       {message.role === 'bot' && <button onClick={() => speak(message)} className="shrink-0 text-muted-foreground hover:text-primary transition-colors" aria-label="Play message"><Volume2 className="w-3.5 h-3.5" /></button>}
@@ -254,7 +288,7 @@ export const ChatbotSalesFlow = () => {
         )}
       </AnimatePresence>
 
-      <div className="flex flex-col items-end gap-2 sm:gap-3 translate-y-3 sm:translate-y-0">
+      <div className="flex flex-col items-end gap-1.5 sm:gap-3 translate-y-2 sm:translate-y-0">
         <div className="flex flex-col items-end gap-2 sm:gap-3">
           <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
           <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
