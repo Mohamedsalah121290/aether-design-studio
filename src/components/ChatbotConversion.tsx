@@ -293,10 +293,10 @@ export const ChatbotSalesFlow = () => {
         {open && (
           <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[68dvh] sm:max-h-none">
             <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border/60">
-              <div className="flex items-center gap-3 min-w-0"><RobotAvatar lang={lang} rounded="rounded-xl" speaking={speakingId !== null} /><div><p className="text-sm font-semibold text-foreground">AI Deals Assistant</p><p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />Online</p></div></div>
+              <div className="flex items-center gap-3 min-w-0"><RobotAvatar lang={lang} rounded="rounded-xl" speaking={speakingId !== null} /><div><p className="text-sm font-semibold text-foreground">{fallbackText[lang].assistant}</p><p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />{fallbackText[lang].online}</p></div></div>
               <div className="flex items-center gap-1">
-                <button onClick={() => setSoundOn((value) => !value)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}>{soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}</button>
-                <button onClick={() => setOpen(false)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label="Close chatbot"><X className="w-4 h-4" /></button>
+                <button onClick={() => setSoundOn((value) => !value)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label={soundOn ? fallbackText[lang].soundOff : fallbackText[lang].soundOn}>{soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}</button>
+                <button onClick={() => setOpen(false)} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl hover:bg-muted/50 grid place-items-center transition-colors" aria-label={fallbackText[lang].close}><X className="w-4 h-4" /></button>
               </div>
             </div>
 
@@ -307,7 +307,7 @@ export const ChatbotSalesFlow = () => {
                   <div className={`max-w-[84%] break-words ${message.role === 'user' ? 'bg-primary/20 text-foreground' : 'bg-white/[0.04] text-foreground'} rounded-xl px-3 sm:px-4 py-3 text-sm leading-relaxed`}>
                     <div className="flex items-start gap-2">
                       <p className="flex-1">{message.text}</p>
-                      {message.role === 'bot' && <button onClick={() => speak(message)} className="shrink-0 text-muted-foreground hover:text-primary transition-colors" aria-label="Play message"><Volume2 className="w-3.5 h-3.5" /></button>}
+                      {message.role === 'bot' && <button onClick={() => speak(message)} className="shrink-0 text-muted-foreground hover:text-primary transition-colors" aria-label={fallbackText[lang].play}><Volume2 className="w-3.5 h-3.5" /></button>}
                     </div>
                     {message.products && <div className="mt-3 space-y-2">{message.products.map((product) => <div key={product.id} className="rounded-xl border border-border bg-muted/20 p-3"><div className="flex items-start justify-between gap-3 mb-2"><div><h4 className="text-sm font-semibold text-foreground">{product.name}</h4><p className="text-xs text-muted-foreground mt-1">{product.desc}</p></div><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)} className="text-primary hover:text-foreground transition-colors" aria-label={`Open ${product.name}`}><ChevronRight className="w-4 h-4" /></Link></div><ul className="space-y-1 mb-3">{product.benefits.map((benefit) => <li key={benefit} className="flex items-center gap-2 text-[11px] text-muted-foreground"><CheckCircle className="w-3 h-3 text-primary shrink-0" />{benefit}</li>)}</ul><p className="text-[11px] text-muted-foreground mb-3">{text.price}</p><Button variant="heroOutline" size="sm" asChild className="w-full"><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)}>{text.access}</Link></Button></div>)}</div>}
                   </div>
@@ -319,9 +319,9 @@ export const ChatbotSalesFlow = () => {
 
             <div className="p-3 border-t border-border/60">
               <div className="flex items-center gap-2 rounded-2xl border border-border bg-muted/30 px-3 py-2">
-                <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void sendMessage(); }} placeholder={text.input} className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" aria-label="Chat message" disabled={sending} />
-                <button onClick={startListening} className={`w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center transition-colors ${listening ? 'bg-primary/20 text-primary' : 'hover:bg-muted/50 text-muted-foreground'}`} aria-label="Press to talk"><Mic className="w-4 h-4" /></button>
-                <button onClick={() => void sendMessage()} disabled={sending} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center bg-primary text-primary-foreground hover:scale-105 transition-transform disabled:opacity-60 disabled:hover:scale-100" aria-label="Send message"><Send className="w-4 h-4" /></button>
+                <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter') void sendMessage(); }} placeholder={text.input} className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" aria-label={fallbackText[lang].send} disabled={sending} />
+                <button onClick={startListening} className={`w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center transition-colors ${listening ? 'bg-primary/20 text-primary' : 'hover:bg-muted/50 text-muted-foreground'}`} aria-label={fallbackText[lang].mic}><Mic className="w-4 h-4" /></button>
+                <button onClick={() => void sendMessage()} disabled={sending} className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl grid place-items-center bg-primary text-primary-foreground hover:scale-105 transition-transform disabled:opacity-60 disabled:hover:scale-100" aria-label={fallbackText[lang].send}><Send className="w-4 h-4" /></button>
               </div>
             </div>
           </motion.div>
@@ -333,7 +333,7 @@ export const ChatbotSalesFlow = () => {
           <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
           <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
         </div>
-        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label="Open AI Deals chatbot"><RobotAvatar className="w-[64px] h-[64px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
+        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label={fallbackText[lang].open}><RobotAvatar className="w-[64px] h-[64px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
     </div>
   );
