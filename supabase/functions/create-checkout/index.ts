@@ -116,11 +116,9 @@ serve(async (req) => {
       ? paymentMethodTypes
       : ['card'];
     const euMethods = ['ideal', 'bancontact', 'sepa_debit'];
-    const walletMethods = ['paypal'];
     const hasEuMethods = requestedPmTypes.some((pm: string) => euMethods.includes(pm));
-    const hasWalletMethods = requestedPmTypes.some((pm: string) => walletMethods.includes(pm));
     const currency = 'eur'; // كل الأسعار في DB باليورو
-    const pmTypes = hasEuMethods || hasWalletMethods
+    const pmTypes = hasEuMethods
       ? ['card', ...requestedPmTypes.filter((pm: string) => pm !== 'card')]
       : requestedPmTypes.includes('card') ? requestedPmTypes : ['card', ...requestedPmTypes];
 
@@ -340,7 +338,22 @@ serve(async (req) => {
       sessionParams.payment_intent_data = { metadata };
     }
 
-    const session = await stripe.checkout.sessions.create(sessionParams);
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create(sessionParams);
+    } catch (checkoutError) {
+      const checkoutMsg = checkoutError instanceof Error ? checkoutError.message : String(checkoutError);
+      const hasCurrencyConflict = checkoutMsg.toLowerCase().includes("cannot combine currencies");
+      if (!customerId || !hasCurrencyConflict) throw checkoutError;
+
+      logStep("Currency conflict on existing customer, retrying with fresh customer", { email });
+      const retryParams: Stripe.Checkout.SessionCreateParams = {
+        ...sessionParams,
+        customer: undefined,
+        customer_email: email,
+      };
+      session = await stripe.checkout.sessions.create(retryParams);
+    }
 
     logStep("Checkout session created", {
       sessionId: session.id,
