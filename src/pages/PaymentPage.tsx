@@ -758,10 +758,11 @@ const PaymentPage = () => {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
-                        {effectivePrice === 0 ? 'Confirm (Wallet Credit)' : `Pay ${formatPrice(effectivePrice)}`}
+                        {effectivePrice === 0 ? 'Confirm (Wallet Credit)' : `Pay ${formatPrice(effectivePrice)} (excl. VAT)`}
                       </span>
                     )}
                   </Button>
+                  <p className="text-xs font-medium text-muted-foreground text-center">{TAX_NOTE}</p>
                   <p className="text-[11px] text-muted-foreground text-center">Secure checkout via Stripe. Final payment in EUR.</p>
 
                   {/* Trust microcopy */}
