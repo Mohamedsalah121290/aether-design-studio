@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { detectAndStoreRegion, LANGUAGE_MANUAL_KEY, LANGUAGE_STORAGE_KEY, languageForRegion } from '@/lib/geo';
+import { supportLinks } from '@/lib/socialLinks';
 
 // Complete translations for 13 languages
 const resources = {
