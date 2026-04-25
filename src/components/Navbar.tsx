@@ -48,6 +48,7 @@ const Navbar = () => {
 
   const changeLanguage = (code: string) => {
     localStorage.setItem(LANGUAGE_MANUAL_KEY, 'true');
+    localStorage.setItem('ai-deals-language', code);
     i18n.changeLanguage(code);
     const lang = languages.find(l => l.code === code);
     document.documentElement.dir = lang?.rtl ? 'rtl' : 'ltr';
@@ -237,7 +238,7 @@ const Navbar = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsCurrencyMenuOpen(!isCurrencyMenuOpen)}
-                aria-label="Currency selector"
+                aria-label={t('nav.currencySelector')}
                 className="flex items-center gap-2 h-9 px-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-foreground transition-all"
               >
                 <CircleDollarSign className="w-4 h-4 text-muted-foreground" />

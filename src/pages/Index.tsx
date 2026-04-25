@@ -31,10 +31,10 @@ import logo from '@/assets/logo.png';
    ══════════════════════════════════════════════════════════════ */
 
 const trustBadges = [
-  { icon: UserCheck, label: 'No Password Sharing' },
-  { icon: Lock, label: 'Secure Checkout' },
-  { icon: Layers, label: 'Monthly Only' },
-  { icon: Zap, label: 'Fast Activation' },
+  { icon: UserCheck, labelKey: 'store.noSensitiveBeforePayment' },
+  { icon: Lock, labelKey: 'home.securePayment' },
+  { icon: Layers, labelKey: 'store.monthlyAccess' },
+  { icon: Zap, labelKey: 'home.fastActivation' },
 ];
 
 const mobilePopularTools = [
@@ -91,6 +91,7 @@ type IntentKey = keyof typeof intentFunnels;
 const SESSION_OFFER_MS = 15 * 60 * 1000;
 
 const SessionOfferTimer = () => {
+  const { t } = useTranslation();
   const [remaining, setRemaining] = useState(SESSION_OFFER_MS);
 
   useEffect(() => {
@@ -111,13 +112,13 @@ const SessionOfferTimer = () => {
 
   return (
     <div className="mx-auto mt-3 max-w-sm rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 backdrop-blur-md">
-      <p className="mb-1 text-[11px] font-semibold text-white/70">🔥 17 people are viewing this now</p>
+      <p className="mb-1 text-[11px] font-semibold text-white/70">{t('home.sessionViewing')}</p>
       {remaining > 0 ? (
-        <p className="text-xs text-white/70">⏳ Limited-time access for this session <span className="ml-1 text-lg font-black tabular-nums" style={{ color: 'hsl(25 95% 58%)' }}>{minutes}:{seconds}</span></p>
+        <p className="text-xs text-white/70">{t('home.sessionLimited')} <span className="ml-1 text-lg font-black tabular-nums" style={{ color: 'hsl(25 95% 58%)' }}>{minutes}:{seconds}</span></p>
       ) : (
-        <p className="text-xs font-semibold" style={{ color: 'hsl(25 95% 58%)' }}>Offer expired — new deals available</p>
+        <p className="text-xs font-semibold" style={{ color: 'hsl(25 95% 58%)' }}>{t('home.offerExpired')}</p>
       )}
-      <p className="mt-2 text-[11px] text-white/60">✔ Real-time demand&nbsp;&nbsp; ✔ Limited daily access&nbsp;&nbsp; ✔ Secure checkout</p>
+      <p className="mt-2 text-[11px] text-white/60">{t('home.sessionTrust')}</p>
     </div>
   );
 };
@@ -203,7 +204,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
    PAGE COMPONENT
    ══════════════════════════════════════════════════════════════ */
 const Index = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const newsletter = useNewsletterSubscribe();
   const [activeIntent, setActiveIntent] = useState<IntentKey>('student');
 
@@ -228,6 +229,9 @@ const Index = () => {
 
   const activeFunnel = intentFunnels[activeIntent];
   const ActiveFunnelIcon = activeFunnel.icon;
+  const localizedSteps = t('howSteps', { returnObjects: true }) as { title: string; desc: string }[];
+  const localizedAudiences = t('audiences', { returnObjects: true }) as Record<string, { title: string; headline: string; lines: string[] }>;
+  const audienceKeys = ['students', 'creators', 'professionals'] as const;
 
   return (
     <div className="min-h-screen bg-background">
@@ -264,7 +268,7 @@ const Index = () => {
                   letterSpacing: '0.15em',
                 }}
               >
-                Access. Learn. Scale.
+                {t('home.tagline')}
               </motion.p>
 
               <motion.h1
@@ -275,10 +279,10 @@ const Index = () => {
                 style={{ textShadow: '0 0 60px hsl(var(--primary) / 0.5), 0 4px 20px rgba(0,0,0,0.8)' }}
               >
                 <span className="gradient-text" style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))' }}>
-                  Get instant access to premium AI tools — no setup needed.
+                  {t('home.heroTitle')}
                 </span>
                 <br />
-                <span className="text-white drop-shadow-2xl">Every Month.</span>
+                <span className="text-white drop-shadow-2xl">{t('home.heroHighlight')}</span>
               </motion.h1>
 
               <motion.p
@@ -287,7 +291,7 @@ const Index = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-3"
               >
-                Buy faster, start easier, and get real support when you need it.
+                {t('home.heroSubtitle')}
               </motion.p>
 
               <motion.p
@@ -296,28 +300,28 @@ const Index = () => {
                 transition={{ duration: 0.6, delay: 0.5 }}
                 className="text-xs sm:text-sm text-white/40 max-w-lg mx-auto mb-8 md:mb-10 tracking-wide"
               >
-                Simple access. Fast delivery. Secure checkout.
+                {t('home.heroTrust')}
               </motion.p>
 
               {/* CTAs */}
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 md:mb-10">
                 <Button variant="hero" size="xl" className="group min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] shadow-2xl" asChild>
                   <Link to="/store">
-                    <span>Get Instant Access</span>
+                    <span>{t('store.buyNow')}</span>
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
                 <Button variant="heroOutline" size="xl" className="hidden sm:inline-flex backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
                   <a href="#how-it-works">
-                    Get Instant Access
+                    {t('store.buyNow')}
                   </a>
                 </Button>
               </motion.div>
               <div className="md:hidden mb-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-medium text-white/75">
-                <span>✔ Instant access</span><span>✔ Works worldwide</span><span>✔ Secure payment</span>
+                <span>✔ {t('home.instantAccess')}</span><span>✔ {t('home.worksWorldwide')}</span><span>✔ {t('home.securePayment')}</span>
               </div>
               <SessionOfferTimer />
-              <p className="mt-3 text-[11px] text-white/45 mb-5">Secure checkout via Stripe. Final payment in EUR.</p>
+              <p className="mt-3 text-[11px] text-white/45 mb-5">{t('home.secureCheckoutEur')}</p>
 
               {/* Trust badges */}
               <motion.div
@@ -326,10 +330,10 @@ const Index = () => {
                 transition={{ duration: 0.5, delay: 0.7 }}
                 className="flex flex-wrap items-center justify-center gap-3 md:gap-4"
               >
-                {trustBadges.map(({ icon: Icon, label }) => (
-                  <div key={label} className="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                {trustBadges.map(({ icon: Icon, labelKey }) => (
+                  <div key={labelKey} className="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10" style={{ background: 'rgba(255,255,255,0.05)' }}>
                     <Icon className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-xs font-medium text-white/70">{label}</span>
+                    <span className="text-xs font-medium text-white/70">{t(labelKey)}</span>
                   </div>
                 ))}
               </motion.div>
@@ -352,7 +356,7 @@ const Index = () => {
               transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
               className="flex flex-col items-center gap-2"
             >
-              <span className="text-[10px] uppercase tracking-widest text-white/30 font-medium">Scroll</span>
+              <span className="text-[10px] uppercase tracking-widest text-white/30 font-medium">{t('home.scroll')}</span>
               <div className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center p-1.5">
                 <motion.div animate={{ height: ['20%', '60%', '20%'] }} transition={{ duration: 2, repeat: Infinity }} className="w-0.5 rounded-full bg-primary/60" />
               </div>
@@ -360,10 +364,10 @@ const Index = () => {
           </motion.div>
         </section>
 
-        <section className="py-16 md:py-20 relative" aria-label="Choose what fits you">
+        <section className="py-16 md:py-20 relative" aria-label={t('home.chooseFits')}>
           <div className="container mx-auto px-4">
             <motion.div {...fadeUp} className="text-center mb-10">
-              <h2 className="text-3xl md:text-5xl font-display font-bold">Choose what fits you</h2>
+              <h2 className="text-3xl md:text-5xl font-display font-bold">{t('home.chooseFits')}</h2>
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto mb-8">
@@ -383,9 +387,9 @@ const Index = () => {
                     aria-pressed={isActive}
                   >
                     <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon className="h-6 w-6" /></span>
-                    <h3 className="font-display text-xl font-bold text-foreground">{funnel.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{funnel.description}</p>
-                    <span className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground">Start</span>
+                    <h3 className="font-display text-xl font-bold text-foreground">{t(`funnels.${key}.title`)}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`funnels.${key}.description`)}</p>
+                    <span className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground">{t('home.start')}</span>
                   </motion.button>
                 );
               })}
@@ -395,14 +399,14 @@ const Index = () => {
               <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-6 lg:gap-8 items-start">
                 <div>
                   <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><ActiveFunnelIcon className="h-6 w-6" /></div>
-                  <h3 className="text-2xl md:text-4xl font-display font-bold leading-tight">{activeFunnel.headline}</h3>
+                  <h3 className="text-2xl md:text-4xl font-display font-bold leading-tight">{t(`funnels.${activeIntent}.headline`)}</h3>
                   <div className="mt-5 space-y-3">
-                    {activeFunnel.reasons.map((reason) => (
+                    {(t(`funnels.${activeIntent}.reasons`, { returnObjects: true }) as string[]).map((reason) => (
                       <div key={reason} className="flex items-center gap-3 text-sm text-foreground"><CheckCircle className="h-4 w-4 shrink-0 text-primary" />{reason}</div>
                     ))}
                   </div>
                   <Button variant="hero" size="lg" className="mt-7 min-h-[52px] w-full sm:w-auto" asChild>
-                    <Link to={`/store?scrollTo=${activeFunnel.products[0].id}`} onClick={() => enterFunnel(activeIntent)}>{activeFunnel.cta}<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    <Link to={`/store?scrollTo=${activeFunnel.products[0].id}`} onClick={() => enterFunnel(activeIntent)}>{t(`funnels.${activeIntent}.cta`)}<ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </div>
 
@@ -412,12 +416,12 @@ const Index = () => {
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                           <div className="mb-2 flex flex-wrap items-center gap-2">
-                            {product.best && <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold text-primary">Best choice</span>}
-                            {product.best && <span className="text-[11px] font-medium text-muted-foreground">Most users like you choose this</span>}
+                            {product.best && <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold text-primary">{t('home.bestChoice')}</span>}
+                            {product.best && <span className="text-[11px] font-medium text-muted-foreground">{t('home.usersLikeYou')}</span>}
                           </div>
                           <h4 className="truncate font-display text-lg font-bold text-foreground">{product.name}</h4>
                         </div>
-                        <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Start</span>
+                        <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{t('home.start')}</span>
                       </div>
                     </Link>
                   ))}
@@ -431,10 +435,10 @@ const Index = () => {
           <div className="container mx-auto px-4 space-y-6">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-xs font-semibold text-primary uppercase tracking-wider">Most Popular Tools</p>
-                <h2 className="text-2xl font-display font-bold">Buy faster on mobile</h2>
+                <p className="text-xs font-semibold text-primary uppercase tracking-wider">{t('home.mobilePopularTools')}</p>
+                <h2 className="text-2xl font-display font-bold">{t('home.buyFasterMobile')}</h2>
               </div>
-              <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary">23 viewing now</span>
+              <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary">{t('home.viewingNowShort')}</span>
             </div>
             <div className="grid gap-3">
               {mobilePopularTools.map((tool) => (
@@ -443,13 +447,13 @@ const Index = () => {
                     <span className="inline-flex mb-2 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-muted-foreground">{tool.badge}</span>
                     <h3 className="text-base font-display font-bold text-foreground truncate">{tool.name}</h3>
                     <p className="text-sm font-semibold text-primary mt-1">{tool.price}</p>
-                    <p className="mt-1 text-xs font-medium text-muted-foreground">Taxes (if applicable) are calculated at checkout.</p>
+                    <p className="mt-1 text-xs font-medium text-muted-foreground">{t('home.taxNote')}</p>
                   </div>
-                  <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Buy Now</span>
+                  <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{t('store.buyNow')}</span>
                 </Link>
               ))}
             </div>
-            <p className="text-center text-xs text-muted-foreground">Limited availability today · secure checkout · activation support</p>
+            <p className="text-center text-xs text-muted-foreground">{t('home.mobileTrustLine')}</p>
           </div>
         </section>
 
@@ -459,7 +463,7 @@ const Index = () => {
             <div className="max-w-4xl mx-auto">
               <motion.div {...fadeUp} className="text-center mb-12">
                 <h2 className="text-3xl md:text-5xl font-display font-bold mb-6">
-                  AI Is Powerful. <span className="gradient-text">Access Shouldn't Be Complicated.</span>
+                  {t('store.clearSimpleSafe')}
                 </h2>
               </motion.div>
 
@@ -472,23 +476,18 @@ const Index = () => {
               >
                 <div className="grid md:grid-cols-2 gap-10">
                   <div className="space-y-4">
-                    <p className="text-lg font-semibold text-foreground">The problem:</p>
+                    <p className="text-lg font-semibold text-foreground">{t('home.problemTitle')}</p>
                     <div className="space-y-2">
-                      {['Too many tools.', 'Too many subscriptions.', 'Too much noise.'].map((line, i) => (
+                      {(t('home.problemLines', { returnObjects: true }) as string[]).map((line, i) => (
                         <p key={i} className="text-muted-foreground text-base">{line}</p>
                       ))}
                     </div>
                   </div>
                   <div className="space-y-4">
-                    <p className="text-lg font-semibold text-foreground">The solution:</p>
-                    <p className="text-primary font-bold text-lg mb-3">AI DEALS simplifies everything.</p>
+                    <p className="text-lg font-semibold text-foreground">{t('home.solutionTitle')}</p>
+                    <p className="text-primary font-bold text-lg mb-3">{t('home.solutionLead')}</p>
                     <div className="space-y-3">
-                      {[
-                        'Curated tools — not a random marketplace',
-                        'Clear activation — no guesswork',
-                        'Structured learning — use AI effectively',
-                        'One platform. Zero friction.',
-                      ].map((item, i) => (
+                      {(t('home.solutionLines', { returnObjects: true }) as string[]).map((item, i) => (
                         <div key={i} className="flex items-center gap-3">
                           <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
                             <CheckCircle className="w-3.5 h-3.5 text-primary" />
@@ -509,16 +508,17 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <motion.div {...fadeUp} className="text-center mb-16">
               <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                Built For You
+                {t('home.builtForYou')}
               </span>
               <h2 className="text-3xl md:text-5xl font-display font-bold">
-                Who Uses <span className="gradient-text">AI DEALS</span>?
+                {t('home.whoUses')} <span className="gradient-text">AI DEALS</span>?
               </h2>
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {audiences.map((a, i) => {
-                const Icon = a.icon;
+              {audienceKeys.map((key, i) => {
+                const a = localizedAudiences[key];
+                const Icon = audiences[i].icon;
                 return (
                   <motion.div
                     key={a.title}
@@ -528,7 +528,7 @@ const Index = () => {
                     transition={{ delay: i * 0.12 }}
                     className="glass rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300 group"
                   >
-                    <div className={`bg-gradient-to-br ${a.gradient} p-6 flex items-center gap-4`}>
+                    <div className={`bg-gradient-to-br ${audiences[i].gradient} p-6 flex items-center gap-4`}>
                       <div className="w-12 h-12 rounded-xl bg-background/30 backdrop-blur-sm flex items-center justify-center">
                         <Icon className="w-6 h-6 text-primary" />
                       </div>
@@ -555,7 +555,7 @@ const Index = () => {
               className="text-center text-xs text-muted-foreground mt-8 max-w-md mx-auto flex items-center justify-center gap-2"
             >
               <Shield className="w-3.5 h-3.5 text-primary" />
-              Built with responsible use and privacy-first principles.
+              {t('home.responsiblePrivacy')}
             </motion.p>
           </div>
         </section>
@@ -566,17 +566,17 @@ const Index = () => {
           <div className="container mx-auto px-4 relative z-10">
             <motion.div {...fadeUp} className="text-center mb-16">
               <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                How It Works
+                {t('home.howItWorks')}
               </span>
               <h2 className="text-3xl md:text-5xl font-display font-bold">
-                Simple. Clear. <span className="gradient-text">Done.</span>
+                {t('home.simpleClearDone')}
               </h2>
             </motion.div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto mb-8">
-              {steps.map((step, i) => (
+              {localizedSteps.map((step, i) => (
                 <motion.div
-                  key={step.num}
+                  key={steps[i].num}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -587,10 +587,10 @@ const Index = () => {
                     className="text-5xl font-display font-black absolute top-4 right-4 opacity-[0.06]"
                     style={{ lineHeight: 1 }}
                   >
-                    {step.num}
+                    {steps[i].num}
                   </span>
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                    <span className="text-primary font-display font-bold text-sm">{step.num}</span>
+                    <span className="text-primary font-display font-bold text-sm">{steps[i].num}</span>
                   </div>
                   <h3 className="font-display font-bold text-sm mb-2">{step.title}</h3>
                   <p className="text-muted-foreground text-xs leading-relaxed">{step.desc}</p>
@@ -603,7 +603,7 @@ const Index = () => {
               className="text-center text-xs text-muted-foreground flex items-center justify-center gap-2"
             >
               <Lock className="w-3.5 h-3.5 text-primary" />
-              No sensitive information is required before payment.
+              {t('home.noSensitive')}
             </motion.p>
           </div>
         </section>
@@ -614,12 +614,12 @@ const Index = () => {
               <div className="flex items-center justify-center gap-1 mb-2" aria-label="4.8 out of 5 rating">
                 {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="h-4 w-4 fill-current text-primary" />)}
               </div>
-              <h2 className="text-xl font-display font-bold">Trusted by 1000+ users</h2>
-              <p className="mt-2 text-sm text-muted-foreground">Secure payment, EUR checkout, and verified digital access.</p>
+              <h2 className="text-xl font-display font-bold">{t('home.trustedUsers')}</h2>
+              <p className="mt-2 text-sm text-muted-foreground">{t('home.verifiedAccess')}</p>
               <div className="mt-4 flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
-                <span className="inline-flex items-center gap-1"><Shield className="h-3.5 w-3.5 text-primary" />Protected</span>
+                <span className="inline-flex items-center gap-1"><Shield className="h-3.5 w-3.5 text-primary" />{t('home.protected')}</span>
                 <span className="inline-flex items-center gap-1"><CreditCard className="h-3.5 w-3.5 text-primary" />Stripe</span>
-                <span className="inline-flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-primary" />Fast activation</span>
+                <span className="inline-flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-primary" />{t('home.fastActivation')}</span>
               </div>
             </div>
             <div className="overflow-x-auto -mx-4 px-4 pb-1">
@@ -636,7 +636,7 @@ const Index = () => {
                 ))}
               </div>
             </div>
-            <Link to="/store" className="min-h-[52px] inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">See more reviews →</Link>
+            <Link to="/store" className="min-h-[52px] inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">{t('home.seeMoreReviews')}</Link>
           </div>
         </section>
 
@@ -651,15 +651,15 @@ const Index = () => {
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
                     <GraduationCap className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-xs font-semibold text-primary uppercase tracking-wider">Academy</span>
+                    <span className="text-xs font-semibold text-primary uppercase tracking-wider">{t('home.academyLabel')}</span>
                   </div>
 
                   <h2 className="text-2xl md:text-4xl font-display font-bold mb-4">
-                    Don't Just Use AI. <span className="gradient-text">Master It.</span>
+                    {t('home.academyTitle')}
                   </h2>
 
                   <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                    Access is one thing. Knowing how to use it properly is another.
+                    {t('home.academyText')}
                   </p>
 
                   <div className="space-y-3 mb-8">
@@ -673,7 +673,7 @@ const Index = () => {
 
                   <Button variant="hero" size="lg" className="group" asChild>
                     <Link to="/academy">
-                      Enter Academy
+                      {t('home.enterAcademy')}
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
@@ -721,10 +721,10 @@ const Index = () => {
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-4xl font-display font-bold mb-3">
-                  Stay Ahead. <span className="gradient-text">Not Overwhelmed.</span>
+                  {t('home.newsletterTitle')}
                 </h2>
                 <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-md mx-auto mb-8">
-                  Weekly AI tips, smart workflows, and tool updates.
+                  {t('home.newsletterText')}
                 </p>
                 <form
                   onSubmit={newsletter.subscribe}
@@ -732,7 +732,7 @@ const Index = () => {
                 >
                   <Input
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder={t('footer.emailPlaceholder')}
                     required
                     value={newsletter.email}
                     onChange={(e) => newsletter.setEmail(e.target.value)}
@@ -740,10 +740,10 @@ const Index = () => {
                   />
                   <Button variant="hero" size="lg" type="submit" disabled={newsletter.loading} className="h-12 rounded-xl whitespace-nowrap">
                     <Mail className="w-4 h-4 mr-2" />
-                    {newsletter.loading ? 'Joining...' : 'Join Free'}
+                    {newsletter.loading ? t('home.joining') : t('home.joinFree')}
                   </Button>
                 </form>
-                <p className="text-[10px] text-muted-foreground/60 mt-4">No spam. Ever.</p>
+                <p className="text-[10px] text-muted-foreground/60 mt-4">{t('home.noSpam')}</p>
               </motion.div>
             </div>
           </div>
@@ -755,10 +755,10 @@ const Index = () => {
             <div className="max-w-3xl mx-auto">
               <motion.div {...fadeUp} className="text-center mb-12">
                 <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                  Why buy from us
+                  {t('home.whyBuyFromUs')}
                 </span>
                 <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-                  Clear. Simple. <span className="gradient-text">Safe.</span>
+                  {t('home.clearSimpleSafe')}
                 </h2>
               </motion.div>
 
@@ -770,10 +770,10 @@ const Index = () => {
                 className="glass rounded-3xl p-8 md:p-12 space-y-6"
               >
                 <p className="text-foreground text-base md:text-lg leading-relaxed">
-                  Get the AI tool you need without setup, installation, or technical steps.
+                  {t('home.whyText1')}
                 </p>
                 <p className="text-muted-foreground text-base leading-relaxed">
-                  We prepare your access quickly and keep support available if you need help.
+                  {t('home.whyText2')}
                 </p>
                 <div className="grid sm:grid-cols-3 gap-4 pt-4">
                   {[
@@ -850,21 +850,21 @@ const Index = () => {
 
                 <div className="relative z-10">
                   <h2 className="text-3xl md:text-5xl font-display font-bold mb-6">
-                    Ready to Use AI <span className="gradient-text">the Smart Way?</span>
+                    {t('home.readyTitle')}
                   </h2>
                   <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
-                    Join thousands of students, creators, and professionals who trust AI DEALS.
+                    {t('home.readyText')}
                   </p>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Button variant="hero" size="xl" className="group" asChild>
                       <Link to="/store">
-                        Get Instant Access
+                        {t('store.buyNow')}
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
                     <Button variant="heroOutline" size="xl" asChild>
                       <Link to="/store">
-                        Get Instant Access
+                        {t('store.buyNow')}
                         <ChevronRight className="w-5 h-5" />
                       </Link>
                     </Button>
