@@ -337,16 +337,16 @@ const Storefront = () => {
                         </div>
                         <div className="space-y-4">
                           <div className="rounded-2xl border border-primary/25 bg-primary/10 p-4">
-                            <h3 className="text-base font-bold text-white">Important information:</h3>
+                             <h3 className="text-base font-bold text-white">{t('store.importantInfo')}</h3>
                             <div className="mt-3 space-y-2 text-sm leading-relaxed text-white/70">
-                              <p>For some services, activation can be done on your personal account.</p>
-                              <p>If you choose this option, you will be contacted via WhatsApp or Telegram and guided step-by-step through a secure process.</p>
-                              <p className="font-semibold text-primary">We do NOT ask for your personal passwords directly on the website.</p>
-                              <p>If you want activation on your own account, we may use a secure method such as temporary access, guided activation, or alternative safe methods.</p>
+                               <p>{t('store.personalActivationInfo')}</p>
+                               <p>{t('store.contactGuided')}</p>
+                               <p className="font-semibold text-primary">{t('store.noPersonalPasswords')}</p>
+                               <p>{t('store.secureMethods')}</p>
                             </div>
                           </div>
                           <div>
-                            <p className="mb-3 text-sm font-semibold text-white">Need help? Contact us instantly:</p>
+                             <p className="mb-3 text-sm font-semibold text-white">{t('store.needHelp')}</p>
                             <div className="grid grid-cols-2 gap-3">
                               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><WhatsAppIcon />WhatsApp</a>
                               <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><TelegramIcon />Telegram</a>
@@ -403,7 +403,7 @@ const Storefront = () => {
                         </div>
                         {sectionIndex < activeSections.length - 1 && section.tools[0] && (
                           <Link to={`/store?scrollTo=${section.tools[0].tool_id}`} className="md:hidden mt-6 min-h-[52px] relative z-10 inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">
-                            Get Access
+                             {t('store.getAccess')}
                           </Link>
                         )}
                         {section.key === 'microsoft' && (
@@ -429,8 +429,8 @@ const Storefront = () => {
                           <Clock className="w-4 h-4 text-amber-400/60" />
                         </div>
                         <div className="space-y-0.5">
-                          <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">Coming Soon</h2>
-                          <p className="text-white/50 text-sm">These tools are on their way — get early access</p>
+                           <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">{t('store.comingSoon')}</h2>
+                           <p className="text-white/50 text-sm">{t('store.comingSoonSubtitle')}</p>
                         </div>
                         <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400/60 border border-amber-500/15">
                           {comingSoonTools.length}
