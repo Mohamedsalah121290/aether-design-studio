@@ -33,6 +33,11 @@ const PLATFORM_URLS: Record<string, string> = {
   canva: 'https://www.canva.com',
 };
 
+const LOVABLE_PLAN_OPTIONS = [
+  { planId: 'lovable_2_months', title: '2 Months Plan', price: '€28', duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', badge: 'Best Starter' },
+  { planId: 'lovable_3_months', title: '3 Months Plan', price: '€40', duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', badge: 'Best Value' },
+];
+
 const emailSchema = z.string().trim().email().max(255);
 
 /* ── Types ─────────────────────────────────────────────────────── */
@@ -130,6 +135,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const [showNotifyInput, setShowNotifyInput] = useState(false);
   const [notifyLoading, setNotifyLoading] = useState(false);
   const [consentChecked, setConsentChecked] = useState(true);
+  const [selectedLovablePlan, setSelectedLovablePlan] = useState('lovable_3_months');
 
   const logoUrl = logoError && !fallbackAttempted ? `/logos/${tool.tool_id}.svg` : tool.logo_url;
   const showLogo = logoUrl && !(logoError && fallbackAttempted);
@@ -333,6 +339,49 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               <ProductReviewPreview toolId={tool.tool_id} productName={tool.name} />
             )}
 
+            {tool.tool_id === 'lovable' && !isComingSoon && !isPaused && (
+              <div className="space-y-3 rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
+                <div className="grid grid-cols-1 gap-2">
+                  {LOVABLE_PLAN_OPTIONS.map((plan) => {
+                    const isSelected = selectedLovablePlan === plan.planId;
+                    return (
+                      <button
+                        key={plan.planId}
+                        type="button"
+                        onClick={() => setSelectedLovablePlan(plan.planId)}
+                        className={`w-full rounded-xl border p-3 text-left transition-all duration-200 ${
+                          isSelected
+                            ? 'border-primary bg-primary/10 shadow-lg shadow-primary/15'
+                            : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10'
+                        }`}
+                      >
+                        <div className="mb-2 flex items-start justify-between gap-2">
+                          <div>
+                            <p className="text-sm font-bold text-white">{plan.title}</p>
+                            <p className="text-xl font-bold text-primary">{plan.price}</p>
+                          </div>
+                          <span className="shrink-0 rounded-full border border-primary/25 bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+                            {plan.badge}
+                          </span>
+                        </div>
+                        <div className="space-y-1 text-[11px] font-medium text-muted-foreground">
+                          <p>{plan.duration}</p>
+                          <p>{plan.credits}</p>
+                          <p>100 credits are renewed monthly</p>
+                        </div>
+                        <span className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">
+                          Get Instant Access
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-semibold text-muted-foreground">
+                  <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support available</span>
+                </div>
+              </div>
+            )}
+
             {!isComingSoon && !isPaused && (
               <div className="space-y-2 rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t('store.whatYouGet', 'What you get')}</p>
@@ -410,7 +459,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                     background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
                     boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
                   }}
-                  onClick={() => navigate(`/payment/${tool.tool_id}`)}
+                  onClick={() => navigate(tool.tool_id === 'lovable' ? `/payment/${tool.tool_id}?plan=${selectedLovablePlan}` : `/payment/${tool.tool_id}`)}
                 >
                   {t('store.buyNow')}
                   <Sparkles className="w-3.5 h-3.5" />

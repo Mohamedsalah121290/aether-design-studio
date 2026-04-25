@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
@@ -64,6 +64,11 @@ const WHAT_YOU_GET = [
 
 const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
+const LOVABLE_PLAN_DETAILS: Record<string, { badge: string; duration: string; credits: string }> = {
+  lovable_2_months: { badge: 'Best Starter', duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month' },
+  lovable_3_months: { badge: 'Best Value', duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month' },
+};
+
 const tierLabel = (index: number, total: number) => {
   if (total <= 1) return 'Most Popular';
   if (index === 0) return 'Starter';
@@ -76,6 +81,7 @@ type BillingInterval = 'monthly' | 'annual';
 const PaymentPage = () => {
   const { toolId } = useParams<{ toolId: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const { currency } = useCurrency();
   const { user } = useAuth();
@@ -145,7 +151,11 @@ const PaymentPage = () => {
         is_active: p.is_active,
       }));
       setPlans(mapped);
-      if (mapped.length > 0) setSelectedPlan(mapped[0]);
+      const requestedPlan = searchParams.get('plan');
+      const defaultPlan = id === 'lovable'
+        ? mapped.find(plan => plan.plan_id === (requestedPlan || 'lovable_3_months')) || mapped.find(plan => plan.plan_id === 'lovable_3_months')
+        : null;
+      if (mapped.length > 0) setSelectedPlan(defaultPlan || mapped[0]);
     } catch (err) {
       console.error(err);
     } finally {
@@ -457,23 +467,35 @@ const PaymentPage = () => {
                         key={plan.id}
                         type="button"
                         onClick={() => setSelectedPlan(plan)}
-                        className={`relative min-h-11 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                        className={`relative min-h-11 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
                           selectedPlan?.id === plan.id
                             ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
                             : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'
                         }`}
                       >
-                        {tierLabel(index, plans.length) === 'Most Popular' && (
-                          <span className="mb-1 block text-[9px] font-bold uppercase tracking-wider opacity-80">Most Popular</span>
-                        )}
-                        <span className="block text-[10px] uppercase tracking-wider opacity-70">{tierLabel(index, plans.length)}</span>
-                        {plan.plan_name}
+                        <span className="mb-1 block text-[9px] font-bold uppercase tracking-wider opacity-80">
+                          {tool?.tool_id === 'lovable' && LOVABLE_PLAN_DETAILS[plan.plan_id] ? LOVABLE_PLAN_DETAILS[plan.plan_id].badge : tierLabel(index, plans.length)}
+                        </span>
+                        <span className="block text-white">{plan.plan_name}</span>
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
-                          <span className="ml-1.5 opacity-80">€{plan.monthly_price} (excl. VAT)</span>
+                          <span className="mt-1 block text-lg font-bold">€{plan.monthly_price}</span>
+                        )}
+                        {tool?.tool_id === 'lovable' && LOVABLE_PLAN_DETAILS[plan.plan_id] && (
+                          <span className="mt-2 block space-y-1 text-xs font-medium opacity-80">
+                            <span className="block">{LOVABLE_PLAN_DETAILS[plan.plan_id].duration}</span>
+                            <span className="block">{LOVABLE_PLAN_DETAILS[plan.plan_id].credits}</span>
+                            <span className="block">100 credits are renewed monthly</span>
+                            <span className="mt-3 flex min-h-11 items-center justify-center rounded-xl bg-primary/20 px-3 py-2 font-bold">Get Instant Access</span>
+                          </span>
                         )}
                       </button>
                     ))}
                   </div>
+                  {tool?.tool_id === 'lovable' && (
+                    <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-muted-foreground">
+                      <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support available</span>
+                    </div>
+                  )}
                 </div>
               )}
 

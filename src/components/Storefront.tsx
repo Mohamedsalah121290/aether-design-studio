@@ -80,13 +80,14 @@ const Storefront = () => {
       if (toolsError) throw toolsError;
 
       const { data: plansData, error: plansError } = await supabase
-        .from('tool_plans').select('tool_id, plan_name, monthly_price').eq('is_active', true);
+        .from('tool_plans').select('tool_id, plan_id, plan_name, monthly_price').eq('is_active', true);
       if (plansError) throw plansError;
 
       // Determine the lowest-priced active plan per tool, and remember its plan_name
       // so we can derive the correct billing period (one-time / monthly / yearly).
       const minPriceMap: Record<string, { price: number; planName: string }> = {};
       (plansData || []).forEach(p => {
+        if (p.tool_id === 'lovable' && !['lovable_2_months', 'lovable_3_months'].includes((p as any).plan_id || '')) return;
         const price = p.monthly_price != null ? Number(p.monthly_price) : null;
         if (price != null && price > 0) {
           const existing = minPriceMap[p.tool_id];
