@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
-import { ChatbotPromoSection, FACEBOOK_URL, INSTAGRAM_URL, TelegramIcon, TELEGRAM_URL, TikTokIcon, TIKTOK_URL, WhatsAppIcon, WHATSAPP_URL, X_URL, YOUTUBE_URL } from '@/components/ChatbotConversion';
+import { ChatbotPromoSection, FACEBOOK_URL, INSTAGRAM_URL, openSocialUrl, TelegramIcon, TELEGRAM_URL, TikTokIcon, TIKTOK_URL, WhatsAppIcon, WHATSAPP_URL, X_URL, YOUTUBE_URL } from '@/components/ChatbotConversion';
 
 const ContactPage = () => {
   const { t } = useTranslation();
@@ -40,13 +40,13 @@ const ContactPage = () => {
   ];
 
   const contactLinks = [
-    { label: 'WhatsApp', href: WHATSAPP_URL, icon: WhatsAppIcon },
-    { label: 'Telegram', href: TELEGRAM_URL, icon: TelegramIcon },
-    { label: 'Facebook', href: FACEBOOK_URL, icon: Facebook },
-    { label: 'Instagram', href: INSTAGRAM_URL, icon: Instagram },
-    { label: 'TikTok', href: TIKTOK_URL, icon: TikTokIcon },
-    { label: 'YouTube', href: YOUTUBE_URL, icon: Youtube },
-    { label: 'X', href: X_URL, icon: Twitter },
+    { label: 'WhatsApp', href: WHATSAPP_URL, icon: WhatsAppIcon, tone: 'social-whatsapp-3d' },
+    { label: 'Telegram', href: TELEGRAM_URL, icon: TelegramIcon, tone: 'social-telegram-3d' },
+    { label: 'Facebook', href: FACEBOOK_URL, icon: Facebook, tone: 'social-facebook-3d' },
+    { label: 'Instagram', href: INSTAGRAM_URL, icon: Instagram, tone: 'social-instagram-3d' },
+    { label: 'TikTok', href: TIKTOK_URL, icon: TikTokIcon, tone: 'social-tiktok-3d' },
+    { label: 'YouTube', href: YOUTUBE_URL, icon: Youtube, tone: 'social-youtube-3d' },
+    { label: 'X', href: X_URL, icon: Twitter, tone: 'social-x-3d' },
   ].filter((link) => Boolean(link.href));
 
   return (
@@ -148,13 +148,14 @@ const ContactPage = () => {
               <div className="glass rounded-2xl p-5">
                 <h3 className="font-display font-bold text-sm mb-3">{t('contact.instant')}</h3>
                 <div className="flex flex-wrap gap-3">
-                  {contactLinks.map(({ label, href, icon: Icon }) => (
+                  {contactLinks.map(({ label, href, icon: Icon, tone }) => (
                     <a
                       key={label}
                       href={href}
+                      onClick={(event) => openSocialUrl(event, href)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-12 h-12 rounded-xl glass flex items-center justify-center hover:border-primary/30 transition-all duration-300 hover:scale-105"
+                      className={`social-link-3d ${tone} w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105`}
                       aria-label={t('contact.socialAria', { platform: label })}
                     >
                       <Icon />
