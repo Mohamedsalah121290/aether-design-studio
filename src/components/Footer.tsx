@@ -5,7 +5,7 @@ import { Facebook, Instagram, Mail, Shield, Lock, Globe, Zap, Youtube } from 'lu
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
-import { openSocialUrl, WhatsAppIcon } from '@/components/ChatbotConversion';
+import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { socialLinks } from '@/lib/socialLinks';
 import logo from '@/assets/logo.png';
 
@@ -108,6 +108,7 @@ const Footer = () => {
     { icon: Facebook, href: socialLinks.facebook, label: 'Facebook', tone: 'social-facebook-3d' },
     { icon: Instagram, href: socialLinks.instagram, label: 'Instagram', tone: 'social-instagram-3d' },
     { icon: Youtube, href: socialLinks.youtube, label: 'YouTube', tone: 'social-youtube-3d' },
+    { icon: TelegramIcon, href: socialLinks.telegram, label: 'Telegram', tone: 'social-telegram-3d' },
     { icon: Mail, href: 'mailto:info@aideals.be', label: 'Email info@aideals.be', tone: 'social-mail-3d' },
   ].filter((social) => Boolean(social.href));
 
@@ -176,18 +177,15 @@ const Footer = () => {
               {footerSocialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
-                  <motion.a
+                  <Social3DLink
                     key={social.label}
                     href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(event) => !social.href.startsWith('mailto:') && openSocialUrl(event, social.href)}
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    className={`social-link-3d ${social.tone} w-10 h-10 rounded-xl flex items-center justify-center transition-colors`}
-                    aria-label={social.label}
+                    label={social.label}
+                    tone={social.tone}
+                    className="w-10 h-10"
                   >
                     <Icon className="w-5 h-5" />
-                  </motion.a>
+                  </Social3DLink>
                 );
               })}
               {flagKeys.map((flag) => (
