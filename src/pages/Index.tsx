@@ -91,6 +91,7 @@ type IntentKey = keyof typeof intentFunnels;
 const SESSION_OFFER_MS = 15 * 60 * 1000;
 
 const SessionOfferTimer = () => {
+  const { t } = useTranslation();
   const [remaining, setRemaining] = useState(SESSION_OFFER_MS);
 
   useEffect(() => {
@@ -228,6 +229,9 @@ const Index = () => {
 
   const activeFunnel = intentFunnels[activeIntent];
   const ActiveFunnelIcon = activeFunnel.icon;
+  const localizedSteps = t('howSteps', { returnObjects: true }) as { title: string; desc: string }[];
+  const localizedAudiences = t('audiences', { returnObjects: true }) as Record<string, { title: string; headline: string; lines: string[] }>;
+  const audienceKeys = ['students', 'creators', 'professionals'] as const;
 
   return (
     <div className="min-h-screen bg-background">
@@ -512,8 +516,9 @@ const Index = () => {
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {audiences.map((a, i) => {
-                const Icon = a.icon;
+              {audienceKeys.map((key, i) => {
+                const a = localizedAudiences[key];
+                const Icon = audiences[i].icon;
                 return (
                   <motion.div
                     key={a.title}
@@ -523,7 +528,7 @@ const Index = () => {
                     transition={{ delay: i * 0.12 }}
                     className="glass rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300 group"
                   >
-                    <div className={`bg-gradient-to-br ${a.gradient} p-6 flex items-center gap-4`}>
+                    <div className={`bg-gradient-to-br ${audiences[i].gradient} p-6 flex items-center gap-4`}>
                       <div className="w-12 h-12 rounded-xl bg-background/30 backdrop-blur-sm flex items-center justify-center">
                         <Icon className="w-6 h-6 text-primary" />
                       </div>
@@ -569,9 +574,9 @@ const Index = () => {
             </motion.div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto mb-8">
-              {steps.map((step, i) => (
+              {localizedSteps.map((step, i) => (
                 <motion.div
-                  key={step.num}
+                  key={steps[i].num}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -582,10 +587,10 @@ const Index = () => {
                     className="text-5xl font-display font-black absolute top-4 right-4 opacity-[0.06]"
                     style={{ lineHeight: 1 }}
                   >
-                    {step.num}
+                    {steps[i].num}
                   </span>
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                    <span className="text-primary font-display font-bold text-sm">{step.num}</span>
+                    <span className="text-primary font-display font-bold text-sm">{steps[i].num}</span>
                   </div>
                   <h3 className="font-display font-bold text-sm mb-2">{step.title}</h3>
                   <p className="text-muted-foreground text-xs leading-relaxed">{step.desc}</p>
@@ -727,7 +732,7 @@ const Index = () => {
                 >
                   <Input
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder={t('footer.emailPlaceholder')}
                     required
                     value={newsletter.email}
                     onChange={(e) => newsletter.setEmail(e.target.value)}
