@@ -318,7 +318,7 @@ const SubscriptionCard = ({ order, index, onViewCredentials, onReportIssue }: { 
                 </motion.div>
                 <p className="text-xs text-orange-400 font-semibold">Activation in progress</p>
               </div>
-              <p className="text-sm text-orange-300">Your account is being set up. You'll receive your credentials soon.</p>
+              <p className="text-sm text-orange-300">Activation is handled securely by our team after purchase.</p>
             </div>
           )}
 
@@ -349,7 +349,7 @@ const SubscriptionCard = ({ order, index, onViewCredentials, onReportIssue }: { 
               >
                 <span className="relative z-10 flex items-center gap-2 font-semibold text-white">
                   <Eye className="w-4 h-4" />
-                  View Credentials
+                  View Access
                 </span>
               </Button>
             ) : (
@@ -423,9 +423,9 @@ const CredentialsModal = ({ open, onClose, order }: { open: boolean; onClose: ()
     <Dialog open={open} onOpenChange={v => !v && onClose()}>
       <DialogContent className="max-w-md border-white/10" style={{ background: 'linear-gradient(180deg, hsl(222 47% 12%) 0%, hsl(222 47% 8%) 100%)' }}>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-white">
+            <DialogTitle className="flex items-center gap-2 text-white">
             <Shield className="w-5 h-5 text-primary" />
-            Your Credentials — {order?.tool?.name}
+            Your Access — {order?.tool?.name}
           </DialogTitle>
         </DialogHeader>
 
@@ -948,7 +948,7 @@ const Dashboard = () => {
                   </div>
                   <div>
                     <h1 className="text-3xl md:text-4xl font-display font-black">My Subscriptions</h1>
-                    <p className="text-muted-foreground">Your purchased tools & credentials</p>
+              <p className="text-muted-foreground">Your purchased tools and secure access</p>
                   </div>
                 </div>
               </motion.div>
