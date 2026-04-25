@@ -305,6 +305,8 @@ const Storefront = () => {
                             <span className="text-sm text-white/35 line-through">{bundle.original}</span>
                             <span className="text-2xl font-black text-white">{bundle.price}</span>
                           </div>
+                          <p className="mt-1 text-sm font-semibold text-white/70">(excl. VAT)</p>
+                          <p className="mt-1 text-xs font-medium text-muted-foreground">{TAX_NOTE}</p>
                           <p className="mt-1 text-xs font-semibold text-primary/80">{bundle.daily}</p>
                           <div className="mt-4 space-y-2 text-sm text-white/55">
                             <p className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-primary" />Upgrade for better results</p>
