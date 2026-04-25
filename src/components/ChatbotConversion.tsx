@@ -184,6 +184,7 @@ export const ChatbotPromoSection = () => {
 
 export const ChatbotSalesFlow = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   const lang = useLang();
   const text = copy[lang];
   const [ready, setReady] = useState(false);
@@ -285,6 +286,10 @@ export const ChatbotSalesFlow = () => {
 
   const getBotText = (data: unknown) => {
     if (typeof data === 'string') return data;
+    if (Array.isArray(data)) {
+      const firstText = data.map(getBotText).find((value) => value && value !== fallbackText[lang].received);
+      return firstText || fallbackText[lang].received;
+    }
     if (data && typeof data === 'object') {
       const record = data as Record<string, unknown>;
       const value = record.reply || record.response || record.text || record.message || record.output || record.answer;
@@ -305,7 +310,7 @@ export const ChatbotSalesFlow = () => {
       const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: value }),
+        body: JSON.stringify({ message: value, language: lang, instruction: t('chatbot.directionInstruction', { lng: lang }) }),
       });
 
       if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
@@ -381,7 +386,7 @@ export const ChatbotSalesFlow = () => {
       </AnimatePresence>
 
       <div className="flex flex-col items-end gap-1.5 sm:gap-3 translate-y-2 sm:translate-y-0">
-        <div className="flex flex-col items-end gap-2 sm:gap-3">
+        <div className="hidden sm:flex flex-col items-end gap-2 sm:gap-3">
           {socialLinks.whatsapp && <motion.a href={socialLinks.whatsapp} onClick={(event) => openSocialUrl(event, socialLinks.whatsapp)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d social-link-movie" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
           {supportLinks.telegram && <motion.a href={supportLinks.telegram} onClick={(event) => openSocialUrl(event, supportLinks.telegram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d social-link-movie" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
         </div>

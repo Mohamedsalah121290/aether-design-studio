@@ -25,7 +25,7 @@ const SECTION_ORDER: {
 }[] = [
   { key: 'licenses-productivity', icon: Monitor, toolIds: ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'] },
   { key: 'design-video', icon: Palette, toolIds: ['canva', 'capcut'] },
-  { key: 'premium-ai', icon: Code, toolIds: ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'] },
+  { key: 'premium-ai', icon: Code, toolIds: ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs'] },
   { key: 'education-security-business', icon: Briefcase, toolIds: ['coursera', 'linkedin', 'notion', 'zoom', 'eset'] },
 ];
 
@@ -37,7 +37,7 @@ const POPULAR_TOOL_IDS  = ['capcut', 'windows', 'windows_home', 'microsoft_365',
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   'licenses-productivity': ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'],
   'design-video': ['canva', 'capcut'],
-  'premium-ai': ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'],
+  'premium-ai': ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs'],
   'education-security-business': ['coursera', 'linkedin', 'notion', 'zoom', 'eset'],
 };
 
