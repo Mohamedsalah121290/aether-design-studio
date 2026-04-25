@@ -275,7 +275,7 @@ const Index = () => {
                 style={{ textShadow: '0 0 60px hsl(var(--primary) / 0.5), 0 4px 20px rgba(0,0,0,0.8)' }}
               >
                 <span className="gradient-text" style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))' }}>
-                  Clear Product Access.
+                  Get instant access to premium AI tools — no setup needed.
                 </span>
                 <br />
                 <span className="text-white drop-shadow-2xl">Every Month.</span>
@@ -287,7 +287,7 @@ const Index = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-3"
               >
-                Choose the product you need, see the monthly price clearly, and get support when you need it.
+                Buy faster, start easier, and get real support when you need it.
               </motion.p>
 
               <motion.p
@@ -296,7 +296,7 @@ const Index = () => {
                 transition={{ duration: 0.6, delay: 0.5 }}
                 className="text-xs sm:text-sm text-white/40 max-w-lg mx-auto mb-8 md:mb-10 tracking-wide"
               >
-                No bundles. No confusing offers. Secure checkout.
+                Simple access. Fast delivery. Secure checkout.
               </motion.p>
 
               {/* CTAs */}
@@ -770,16 +770,17 @@ const Index = () => {
                 className="glass rounded-3xl p-8 md:p-12 space-y-6"
               >
                 <p className="text-foreground text-base md:text-lg leading-relaxed">
-                  Every product is presented on its own, with a clear price and a secure checkout.
+                  Get the AI tool you need without setup, installation, or technical steps.
                 </p>
                 <p className="text-muted-foreground text-base leading-relaxed">
-                  No bundle pressure, no combined pricing, and no confusing offers — just the product you choose.
+                  We prepare your access quickly and keep support available if you need help.
                 </p>
                 <div className="grid sm:grid-cols-3 gap-4 pt-4">
                   {[
-                    { icon: Zap, title: 'Fast delivery', desc: 'Your access details are handled quickly after payment.' },
-                    { icon: Shield, title: 'Secure payment', desc: 'Checkout is protected through Stripe.' },
-                    { icon: UserCheck, title: 'Real support', desc: 'Help is available if you need guidance.' },
+                    { icon: Zap, title: 'Instant access', desc: 'Start faster without waiting through setup steps.' },
+                    { icon: UserCheck, title: 'No setup required', desc: 'We keep access simple so you can use your tool quickly.' },
+                    { icon: Shield, title: 'Support included', desc: 'Real help is available when you need it.' },
+                    { icon: CheckCircle, title: 'Works immediately', desc: 'Everything is prepared so access feels easy and safe.' },
                   ].map((item, i) => {
                     const Icon = item.icon;
                     return (

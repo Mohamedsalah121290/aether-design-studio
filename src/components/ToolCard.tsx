@@ -337,7 +337,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
               <div className="space-y-2 rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t('store.whatYouGet', 'What you get')}</p>
                 <div className="space-y-1.5 text-[11px] font-medium text-muted-foreground">
-                  {[t('store.instantAccess', 'Instant access'), t('store.noSetupNeeded', 'No setup needed'), t('store.supportAvailable', 'Support available')].map((item) => (
+                  {[t('store.worksInstantly', 'Works instantly'), t('store.noInstallationNeeded', 'No installation needed'), t('store.fastDelivery', 'Fast delivery')].map((item) => (
                     <p key={item} className="flex items-center gap-2"><CheckCircle className="h-3 w-3 text-primary" />{item}</p>
                   ))}
                 </div>
