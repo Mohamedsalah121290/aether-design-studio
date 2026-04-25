@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Github, Twitter, Linkedin, Mail, Shield, Lock, Globe, Zap } from 'lucide-react';
+import { Facebook, Instagram, Mail, Shield, Lock, Globe, Zap, Youtube, Twitter } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
-import { TelegramIcon, TELEGRAM_URL, WhatsAppIcon, WHATSAPP_URL } from '@/components/ChatbotConversion';
+import { FACEBOOK_URL, INSTAGRAM_URL, TELEGRAM_URL, TikTokIcon, TIKTOK_URL, WhatsAppIcon, WHATSAPP_URL, X_URL, YOUTUBE_URL, TelegramIcon } from '@/components/ChatbotConversion';
 import logo from '@/assets/logo.png';
 
 type FlagKey = 'eu' | 'us' | 'sa' | 'ae' | 'tr' | 'iq' | 'lb';
@@ -103,9 +103,11 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Github, href: '#', label: 'GitHub' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+    { icon: Facebook, href: FACEBOOK_URL, label: 'Facebook' },
+    { icon: Instagram, href: INSTAGRAM_URL, label: 'Instagram' },
+    { icon: TikTokIcon, href: TIKTOK_URL, label: 'TikTok' },
+    { icon: Youtube, href: YOUTUBE_URL, label: 'YouTube' },
+    { icon: Twitter, href: X_URL, label: 'X' },
     { icon: Mail, href: 'mailto:info@aideals.be', label: 'Email info@aideals.be' },
   ];
 
@@ -185,7 +187,6 @@ const Footer = () => {
                 href={TELEGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(event) => { if (TELEGRAM_URL.startsWith('#')) event.preventDefault(); }}
                 whileHover={{ scale: 1.1, y: -2 }}
                 className="w-10 h-10 rounded-xl glass flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
                 aria-label="Telegram"
@@ -198,6 +199,8 @@ const Footer = () => {
                   <motion.a
                     key={social.label}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, y: -2 }}
                     className="w-10 h-10 rounded-xl glass flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
                     aria-label={social.label}
