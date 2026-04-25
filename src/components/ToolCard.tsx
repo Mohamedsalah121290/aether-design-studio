@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Sparkles, Zap, Crown, TrendingUp, Bell, Lock, GraduationCap, Shield, CheckCircle } from 'lucide-react';
-import { CheckoutDialog } from '@/components/CheckoutDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -12,6 +11,7 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewPreview } from '@/components/ProductReviews';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
+import { getStripeLink } from '@/lib/stripeLinks';
 
 /* ── Category labels ──────────────────────────────────────────── */
 const CATEGORY_LABELS: Record<string, string> = {
@@ -132,11 +132,9 @@ const ComingSoonBadge = () => (
 export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const { t } = useTranslation();
   const { currency } = useCurrency();
-  const navigate = useNavigate();
   const [logoLoaded, setLogoLoaded] = useState(false);
   const [logoError, setLogoError] = useState(false);
   const [fallbackAttempted, setFallbackAttempted] = useState(false);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [notifyEmail, setNotifyEmail] = useState('');
   const [showNotifyInput, setShowNotifyInput] = useState(false);
   const [notifyLoading, setNotifyLoading] = useState(false);
@@ -151,6 +149,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const isComingSoon = tool.status === 'coming_soon';
   const isContactOnly = tool.tool_id === 'gemini';
   const isPaused = tool.status === 'paused' && !isContactOnly;
+  const selectedLovablePlanDetails = LOVABLE_PLAN_OPTIONS.find(plan => plan.planId === selectedLovablePlan);
+  const checkoutUrl = getStripeLink(tool.name, tool.tool_id === 'lovable' ? selectedLovablePlanDetails?.title : undefined);
 
   const handleNotifyMe = async () => {
     if (!showNotifyInput) { setShowNotifyInput(true); return; }
@@ -473,9 +473,10 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                     background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
                     boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
                   }}
-                  onClick={() => navigate(tool.tool_id === 'lovable' ? `/payment/${tool.tool_id}?plan=${selectedLovablePlan}` : `/payment/${tool.tool_id}`)}
+                  onClick={() => checkoutUrl && window.open(checkoutUrl, '_blank', 'noopener,noreferrer')}
+                  disabled={!checkoutUrl}
                 >
-                  {t('store.buyNow')}
+                  {checkoutUrl ? t('store.buyNow') : 'Contact support'}
                   <Sparkles className="w-3.5 h-3.5" />
                 </button>
                 <Link
@@ -491,9 +492,6 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
         </div>
       </div>
 
-      {!isComingSoon && !isPaused && (
-        <CheckoutDialog tool={tool} open={checkoutOpen} onOpenChange={setCheckoutOpen} />
-      )}
     </>
   );
 };

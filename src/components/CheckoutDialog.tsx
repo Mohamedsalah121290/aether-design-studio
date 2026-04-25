@@ -24,7 +24,7 @@ import { ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
-import { getStripePaymentLink } from '@/lib/stripePaymentLinks';
+import { getStripeLink } from '@/lib/stripeLinks';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -84,6 +84,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const [plansLoading, setPlansLoading] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
   const [applyWalletCredit, setApplyWalletCredit] = useState(false);
+  const checkoutUrl = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name) : null;
 
   // Guard: prevent checkout for non-active tools
   const isNonActive = tool && tool.status && tool.status !== 'active';
@@ -175,7 +176,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
     setIsLoading(true);
     try {
       const buyerEmail = email || user?.email;
-      const directPaymentLink = getStripePaymentLink(tool.tool_id, selectedPlan.plan_id, buyerEmail || undefined);
+      const directPaymentLink = getStripeLink(tool.name, selectedPlan.plan_name, buyerEmail || undefined);
       if (directPaymentLink) {
         if (buyerEmail && !user) localStorage.setItem('buyer_email', buyerEmail);
         window.open(directPaymentLink, '_blank', 'noopener,noreferrer');
@@ -551,7 +552,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   <Button
                     type="submit"
                     className="w-full h-14 text-base font-semibold rounded-2xl relative overflow-hidden group"
-                    disabled={isLoading || !agreedToTerms}
+                    disabled={isLoading || !agreedToTerms || !checkoutUrl}
                     style={{
                       background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)',
                       boxShadow: '0 8px 30px hsl(var(--primary) / 0.3)',
@@ -566,7 +567,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       ) : (
                         <>
                           <Sparkles className="w-5 h-5" />
-                          Get Instant Access
+                          {checkoutUrl ? 'Get Instant Access' : 'Contact support'}
                         </>
                       )}
                     </span>

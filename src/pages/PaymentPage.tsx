@@ -29,7 +29,7 @@ import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
 import { getRegionCategory } from '@/lib/geo';
-import { getStripePaymentLink } from '@/lib/stripePaymentLinks';
+import { getStripeLink } from '@/lib/stripeLinks';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -246,6 +246,7 @@ const PaymentPage = () => {
   const paymentMethods = isBelgianUser
     ? [...PAYMENT_METHODS].sort((a, b) => (a.id === 'bancontact' ? -1 : 0) - (b.id === 'bancontact' ? -1 : 0))
     : PAYMENT_METHODS;
+  const checkoutUrl = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name) : null;
 
   // كل الأسعار باليورو € (no conversion)
   const formatPrice = (eur: number | null) => {
@@ -281,7 +282,7 @@ const PaymentPage = () => {
     setIsLoading(true);
     try {
       const buyerEmail = email || user?.email;
-      const directPaymentLink = getStripePaymentLink(tool.tool_id, selectedPlan.plan_id, buyerEmail || undefined);
+      const directPaymentLink = getStripeLink(tool.name, selectedPlan.plan_name, buyerEmail || undefined);
       if (directPaymentLink) {
         window.open(directPaymentLink, '_blank', 'noopener,noreferrer');
         return;
@@ -800,7 +801,7 @@ const PaymentPage = () => {
                   <Button
                     type="submit"
                     className="w-full h-12 text-sm font-semibold rounded-xl relative overflow-hidden"
-                    disabled={isLoading || !agreedToTerms}
+                    disabled={isLoading || !agreedToTerms || !checkoutUrl}
                     style={{
                       background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)',
                       boxShadow: '0 8px 30px hsl(var(--primary) / 0.3)',
@@ -814,7 +815,7 @@ const PaymentPage = () => {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
-                        Get Instant Access
+                        {checkoutUrl ? 'Get Instant Access' : 'Contact support'}
                       </span>
                     )}
                   </Button>
