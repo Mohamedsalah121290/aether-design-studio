@@ -170,7 +170,7 @@ const Footer = () => {
             <p className="text-muted-foreground mb-6 max-w-sm text-sm">
               {t('footer.description')}
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap items-center gap-3">
               <motion.a
                 href={WHATSAPP_URL}
                 target="_blank"
@@ -206,6 +206,11 @@ const Footer = () => {
                   </motion.a>
                 );
               })}
+              {flagKeys.map((flag) => (
+                <div key={flag} className="h-5 w-7 overflow-hidden rounded-[4px] ring-1 ring-white/10">
+                  <FlagIcon flag={flag} />
+                </div>
+              ))}
             </div>
           </div>
 
@@ -272,16 +277,6 @@ const Footer = () => {
                 {newsletter.loading ? 'Subscribing...' : 'Subscribe'}
               </Button>
             </form>
-          </div>
-        </div>
-
-        <div className="pb-8">
-          <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-3 sm:gap-4" aria-label="Supported regions">
-            {flagKeys.map((flag) => (
-              <div key={flag} className="h-8 w-12 overflow-hidden rounded-[6px] ring-1 ring-white/10 sm:h-10 sm:w-15">
-                <FlagIcon flag={flag} />
-              </div>
-            ))}
           </div>
         </div>
 
