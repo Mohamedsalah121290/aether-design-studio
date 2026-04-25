@@ -2,8 +2,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  Sparkles, Search, Loader2, PenTool, Palette, Film, Mic,
-  Code, Zap, Briefcase, ShieldCheck, Monitor, Users, Clock, Headphones,
+  Sparkles, Search, Loader2, Palette,
+  Code, Briefcase, Monitor, Users, Clock,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
 import { inferPeriodFromPlan, type PricePeriod } from '@/lib/pricePeriod';
@@ -21,27 +21,24 @@ const SECTION_ORDER: {
   label: string;
   subtitle: string;
   icon: React.ElementType;
-  categories: string[];
+  toolIds: string[];
 }[] = [
-  { key: 'microsoft',  label: '💻 Microsoft',                  subtitle: 'Windows, Office & Microsoft licenses',     icon: Monitor,     categories: ['os-licenses'] },
-  { key: 'design',     label: '🎨 Design',                     subtitle: 'Creative design & video editing tools',    icon: Palette,     categories: ['design'] },
-  { key: 'ai-tools',   label: '🤖 AI Tools',                   subtitle: 'Premium AI assistants & generators',       icon: Code,        categories: ['ai-text', 'ai-media', 'audio', 'productivity'] },
-  { key: 'other',      label: '🧩 Other Software & Accounts',  subtitle: 'Security, learning & more',                icon: Briefcase,   categories: ['security', 'education', 'communication', 'stock-media'] },
+  { key: 'licenses-productivity', label: 'Licenses & Productivity 🪟', subtitle: 'Windows, Office & productivity access', icon: Monitor, toolIds: ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'] },
+  { key: 'design-video', label: 'Design & Video Editing 🎨', subtitle: 'Creative design and video editing tools', icon: Palette, toolIds: ['canva', 'capcut'] },
+  { key: 'premium-ai', label: 'Premium AI Tools 🤖', subtitle: 'Premium AI assistants and creation tools', icon: Code, toolIds: ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'] },
+  { key: 'education-security-business', label: 'Education, Security & Business 🧩', subtitle: 'Learning, security and business software', icon: Briefcase, toolIds: ['coursera', 'linkedin', 'notion', 'zoom', 'eset'] },
 ];
+
+const ALLOWED_TOOL_IDS = new Set(SECTION_ORDER.flatMap(section => section.toolIds));
 
 const FEATURED_TOOL_IDS = ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovable', 'canva'];
 const POPULAR_TOOL_IDS  = ['capcut', 'windows', 'windows_home', 'microsoft_365', 'microsoft_office', 'coursera'];
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
-  'os-servers': ['os-licenses'],
-  'office-productivity': ['productivity'],
-  'design-video': ['design'],
-  'stock-media': ['stock-media'],
-  'ai-text-code': ['ai-text'],
-  'ai-media': ['ai-media'],
-  'security-vpn': ['security'],
-  'education': ['education'],
-  'communication': ['communication'],
+  'licenses-productivity': ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'],
+  'design-video': ['canva', 'capcut'],
+  'premium-ai': ['chatgpt', 'lovable', 'perplexity', 'grok', 'elevenlabs', 'gemini'],
+  'education-security-business': ['coursera', 'linkedin', 'notion', 'zoom', 'eset'],
 };
 
 /* ── Component ──────────────────────────────────────────────────── */
@@ -79,7 +76,7 @@ const Storefront = () => {
   const fetchTools = async () => {
     try {
       const { data: toolsData, error: toolsError } = await supabase
-        .from('tools').select('*').in('status', ['active', 'coming_soon']).order('name');
+        .from('tools').select('*').in('status', ['active', 'coming_soon', 'paused']).order('name');
       if (toolsError) throw toolsError;
 
       const { data: plansData, error: plansError } = await supabase
@@ -127,11 +124,12 @@ const Storefront = () => {
 
   const processedTools = useMemo(() => {
     let result = tools.filter(t =>
+      ALLOWED_TOOL_IDS.has(t.tool_id) && (t.status !== 'paused' || t.tool_id === 'gemini') &&
       t.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     if (activeFilter !== 'all' && FILTER_CATEGORY_MAP[activeFilter]) {
-      result = result.filter(t => FILTER_CATEGORY_MAP[activeFilter].includes(t.category));
+      result = result.filter(t => FILTER_CATEGORY_MAP[activeFilter].includes(t.tool_id));
     }
 
     if (sortBy === 'price-asc') {
@@ -149,12 +147,12 @@ const Storefront = () => {
 
   const activeSections = SECTION_ORDER.map(section => ({
     ...section,
-    tools: activeTools.filter(t => section.categories.includes(t.category)),
+    tools: section.toolIds.map(toolId => activeTools.find(t => t.tool_id === toolId)).filter(Boolean) as Tool[],
   })).filter(s => s.tools.length > 0);
 
   const comingSoonSections = SECTION_ORDER.map(section => ({
     ...section,
-    tools: comingSoonTools.filter(t => section.categories.includes(t.category)),
+    tools: section.toolIds.map(toolId => comingSoonTools.find(t => t.tool_id === toolId)).filter(Boolean) as Tool[],
   })).filter(s => s.tools.length > 0);
 
   return (

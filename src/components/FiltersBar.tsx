@@ -3,15 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 const FILTER_CHIPS = [
   { id: 'all', label: 'All' },
-  { id: 'os-servers', label: '💻 Operating Systems & Servers' },
-  { id: 'office-productivity', label: '👨‍💻 Office & Productivity' },
+  { id: 'licenses-productivity', label: '🪟 Licenses & Productivity' },
   { id: 'design-video', label: '🎨 Design & Video Editing' },
-  { id: 'stock-media', label: '🖼 Stock Media Platforms' },
-  { id: 'ai-text-code', label: '🤖 AI Models (Text & Code)' },
-  { id: 'ai-media', label: '🎬 AI Tools (Media & Design)' },
-  { id: 'security-vpn', label: '🛡 Security & VPNs' },
-  { id: 'education', label: '🎓 Education & Career' },
-  { id: 'communication', label: '🛰 Communication & Networking' },
+  { id: 'premium-ai', label: '🤖 Premium AI Tools' },
+  { id: 'education-security-business', label: '🧩 Education, Security & Business' },
 ] as const;
 
 const SORT_OPTIONS = [
@@ -55,7 +50,7 @@ const FiltersBar = ({
                 value={searchQuery}
                 onChange={e => onSearchChange(e.target.value)}
                 placeholder={t('store.searchPlaceholder')}
-                className="w-full pl-11 pr-10 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 transition-all text-white placeholder:text-white/30 text-sm"
+                className="w-full min-h-11 pl-11 pr-10 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 transition-all text-white placeholder:text-white/30 text-sm"
               />
               {searchQuery && (
                 <button
@@ -73,7 +68,7 @@ const FiltersBar = ({
               <select
                 value={sortBy}
                 onChange={e => onSortChange(e.target.value as SortOption)}
-                className="pl-9 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm text-white appearance-none cursor-pointer focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 transition-all min-w-[180px]"
+                className="min-h-11 pl-9 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-sm text-white appearance-none cursor-pointer focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 transition-all min-w-[180px]"
               >
                 {SORT_OPTIONS.map(opt => (
                   <option key={opt.id} value={opt.id}>{opt.label}</option>
@@ -88,7 +83,7 @@ const FiltersBar = ({
               <button
                 key={chip.id}
                 onClick={() => onFilterChange(chip.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 ${
+                className={`min-h-11 px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 ${
                   activeFilter === chip.id
                     ? 'bg-white/10 text-white border border-white/20'
                     : 'bg-white/[0.03] text-white/40 border border-transparent hover:bg-white/[0.06] hover:text-white/60'
