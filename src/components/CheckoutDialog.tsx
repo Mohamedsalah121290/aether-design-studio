@@ -35,10 +35,9 @@ interface CheckoutDialogProps {
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
 const WHAT_YOU_GET = [
-  'Full premium access to all features',
-  'Priority activation & setup',
-  'Dedicated support channel',
-  'Cancel anytime, no lock-in',
+  'Works instantly',
+  'No installation needed',
+  'Fast delivery',
 ];
 
 const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
@@ -234,7 +233,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
               <CheckCircle className="w-10 h-10 text-white" />
             </motion.div>
             <h3 className="text-2xl font-display font-bold mb-2 text-white">Thank you for your purchase.</h3>
-            <p className="text-muted-foreground mb-4 leading-relaxed">Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp. You can also contact us directly for faster support.</p>
+            <p className="text-muted-foreground mb-4 leading-relaxed">Your access is being prepared. You will receive it shortly.</p>
             <div className="flex items-center gap-2 text-sm text-green-400">
               <Clock className="w-4 h-4" />
               <span>{t('checkout.activatingIn', { hours: activationTime })}</span>
