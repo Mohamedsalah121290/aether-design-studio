@@ -227,7 +227,7 @@ export const ChatbotSalesFlow = () => {
         )}
       </AnimatePresence>
 
-      <div className="flex flex-col items-end gap-2 sm:gap-3">
+      <div className="flex flex-col items-end gap-2 sm:gap-3 translate-y-3 sm:translate-y-0">
         <div className="flex flex-col items-end gap-2 sm:gap-3">
           <motion.a href={TELEGRAM_URL} onClick={handleTelegramClick} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
           <motion.a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>
