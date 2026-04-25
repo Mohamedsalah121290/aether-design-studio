@@ -175,14 +175,13 @@ const PaymentPage = () => {
         activation_time: p.activation_time,
         is_active: p.is_active,
       }));
-      const displayPlans = id === 'lovable'
-        ? [...mapped].sort((a, b) => (b.plan_id === 'lovable_3_months' ? 1 : 0) - (a.plan_id === 'lovable_3_months' ? 1 : 0))
+      const bestValuePlan = getBestValuePlan(mapped);
+      const displayPlans = bestValuePlan
+        ? [...mapped].sort((a, b) => (b.id === bestValuePlan.id ? 1 : 0) - (a.id === bestValuePlan.id ? 1 : 0))
         : mapped;
       setPlans(displayPlans);
       const requestedPlan = searchParams.get('plan');
-      const defaultPlan = id === 'lovable'
-        ? displayPlans.find(plan => plan.plan_id === requestedPlan) || getBestValuePlan(displayPlans)
-        : null;
+      const defaultPlan = displayPlans.find(plan => plan.plan_id === requestedPlan) || getBestValuePlan(displayPlans);
       if (displayPlans.length > 0) setSelectedPlan(defaultPlan || displayPlans[0]);
     } catch (err) {
       console.error(err);
