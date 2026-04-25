@@ -33,6 +33,7 @@ export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) 
 const supported = ['en', 'fr', 'nl', 'de', 'es', 'it', 'ar'] as const;
 type LangKey = typeof supported[number];
 type FlowKey = 'ai' | 'design' | 'productivity' | 'unsure';
+type IntentKey = 'student' | 'creator' | 'business';
 type Message = { id: number; role: 'bot' | 'user'; text: string; products?: Product[] };
 type Product = { name: string; id: string; desc: string; benefits: string[] };
 
@@ -69,6 +70,12 @@ const products: Record<FlowKey, Product[]> = {
     { name: 'Canva Pro', id: 'canva', desc: 'Best for visual content.', benefits: ['Simple design', 'Fast output', 'Business posts'] },
     { name: 'Perplexity Pro', id: 'perplexity', desc: 'Best for research.', benefits: ['Source-based', 'Saves time', 'Less browsing'] },
   ],
+};
+
+const funnelMessages: Record<IntentKey, { text: string; flow: FlowKey }> = {
+  student: { text: 'Want help with studying tools?', flow: 'ai' },
+  creator: { text: 'Need help creating content?', flow: 'design' },
+  business: { text: 'Want to automate your workflow?', flow: 'productivity' },
 };
 
 const bullets = ['Instant replies', 'Works in multiple languages', '24/7 availability', 'Works across all platforms', 'Increases conversions'];
@@ -132,6 +139,26 @@ export const ChatbotSalesFlow = () => {
   useEffect(() => { setMessages([initialMessage]); setSelected(null); }, [initialMessage]);
   useEffect(() => { localStorage.setItem('aiDealsChatSound', soundOn ? 'on' : 'off'); }, [soundOn]);
   useEffect(() => { if (open) window.setTimeout(() => inputRef.current?.focus(), 180); }, [open]);
+  useEffect(() => {
+    const adaptToFunnel = (event: Event) => {
+      const key = (event as CustomEvent<IntentKey>).detail;
+      const funnel = funnelMessages[key];
+      if (!funnel) return;
+      const next: Message = { id: Date.now(), role: 'bot', text: funnel.text, products: products[funnel.flow] };
+      setSelected(funnel.flow);
+      setMessages([next]);
+      setOpen(true);
+      if (soundOn) window.setTimeout(() => speak(next), 180);
+    };
+    window.addEventListener('aiDeals:funnel', adaptToFunnel as EventListener);
+    const stored = localStorage.getItem('aiDealsActiveFunnel') as IntentKey | null;
+    if (stored && funnelMessages[stored]) {
+      const funnel = funnelMessages[stored];
+      setSelected(funnel.flow);
+      setMessages([{ id: Date.now(), role: 'bot', text: funnel.text, products: products[funnel.flow] }]);
+    }
+    return () => window.removeEventListener('aiDeals:funnel', adaptToFunnel as EventListener);
+  }, [soundOn, text.voice]);
 
   const pickVoice = () => {
     const voices = window.speechSynthesis?.getVoices?.() || [];
