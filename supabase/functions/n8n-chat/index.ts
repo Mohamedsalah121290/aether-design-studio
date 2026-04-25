@@ -29,6 +29,31 @@ const fallbackReply = (language: string) => {
   return replies[language] || replies.en;
 };
 
+const readResponseBody = async (response: Response) => {
+  const contentType = response.headers.get("content-type") || "";
+  const raw = await response.text();
+
+  if (!raw) return null;
+  if (!contentType.includes("application/json")) return raw;
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return raw;
+  }
+};
+
+const extractReply = (body: unknown) => {
+  if (typeof body === "string") return body;
+  if (Array.isArray(body)) return body.map(extractReply).find(Boolean) || null;
+  if (body && typeof body === "object") {
+    const record = body as Record<string, unknown>;
+    const value = record.reply || record.response || record.text || record.message || record.output || record.answer;
+    return typeof value === "string" ? value : null;
+  }
+  return null;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -57,8 +82,7 @@ serve(async (req) => {
       body: JSON.stringify({ message, language, instruction }),
     });
 
-    const contentType = n8nResponse.headers.get("content-type") || "text/plain";
-    const body = contentType.includes("application/json") ? await n8nResponse.json() : await n8nResponse.text();
+    const body = await readResponseBody(n8nResponse);
 
     if (!n8nResponse.ok) {
       console.warn("[n8n-chat] Upstream webhook unavailable", { status: n8nResponse.status, body });
@@ -68,14 +92,23 @@ serve(async (req) => {
       });
     }
 
-    return new Response(typeof body === "string" ? body : JSON.stringify(body), {
+    const reply = extractReply(body);
+    if (!reply || /Unused Respond to Webhook node found/i.test(reply)) {
+      console.warn("[n8n-chat] Upstream webhook returned no usable reply", { status: n8nResponse.status, body });
+      return new Response(JSON.stringify({ reply: fallbackReply(language), upstreamStatus: n8nResponse.status }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify({ reply }), {
       status: 200,
-      headers: { ...corsHeaders, "Content-Type": contentType.includes("application/json") ? "application/json" : "text/plain" },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
     console.error("[n8n-chat] Request failed", error);
-    return new Response(JSON.stringify({ error: "Chat connection failed" }), {
-      status: 502,
+    return new Response(JSON.stringify({ reply: fallbackReply("en"), upstreamStatus: "failed" }), {
+      status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
