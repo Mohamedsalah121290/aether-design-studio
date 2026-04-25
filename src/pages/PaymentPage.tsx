@@ -17,7 +17,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   Loader2, CheckCircle, Mail, Shield, ShieldCheck, Sparkles,
   Clock, Zap, UserCheck, Wallet, CreditCard, Building2, ArrowLeft,
-  Globe, Crown,
+  Crown,
 } from 'lucide-react';
 import { z } from 'zod';
 import type { ToolPlan } from '@/components/ToolCard';
@@ -28,31 +28,25 @@ import { ProductRatingInline, ProductReviewsCarousel } from '@/components/Produc
 import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
+import { getRegionCategory } from '@/lib/geo';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
 /* ── Payment method config ─────────────────────────────────────── */
 const PAYMENT_METHODS = [
   {
-    id: 'stripe',
-    label: 'Stripe Checkout',
-    description: 'Visa, Mastercard, Amex via Stripe',
+    id: 'card',
+    label: 'Card',
+    description: 'Visa, Mastercard, Amex — paid in EUR',
     icon: CreditCard,
-    stripeTypes: ['card'],
+    stripeTypes: ['card', 'bancontact'],
   },
   {
-    id: 'sepa',
-    label: 'SEPA Direct Debit',
-    description: 'European bank transfer (EUR)',
+    id: 'bancontact',
+    label: 'Bancontact',
+    description: 'Belgian bank payment — paid in EUR',
     icon: Building2,
-    stripeTypes: ['sepa_debit'],
-  },
-  {
-    id: 'eu-methods',
-    label: 'European Payment Methods',
-    description: 'SEPA Direct Debit, iDEAL, Bancontact',
-    icon: Globe,
-    stripeTypes: ['card', 'sepa_debit', 'ideal', 'bancontact'],
+    stripeTypes: ['bancontact', 'card'],
   },
 ] as const;
 
@@ -111,12 +105,13 @@ const PaymentPage = () => {
   const { t } = useTranslation();
   const { currency } = useCurrency();
   const { user } = useAuth();
+  const isBelgianUser = getRegionCategory() === 'belgium';
 
   const [tool, setTool] = useState<any>(null);
   const [plans, setPlans] = useState<ToolPlan[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<ToolPlan | null>(null);
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('monthly');
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('stripe');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(isBelgianUser ? 'bancontact' : 'card');
   const [email, setEmail] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -247,6 +242,9 @@ const PaymentPage = () => {
   const walletDeduction = applyWalletCredit && displayPrice ? Math.min(walletBalance, displayPrice) : 0;
   const effectivePrice = displayPrice ? Math.max(0, displayPrice - walletDeduction) : displayPrice;
   const activationTime = selectedPlan?.activation_time || 6;
+  const paymentMethods = isBelgianUser
+    ? [...PAYMENT_METHODS].sort((a, b) => (a.id === 'bancontact' ? -1 : 0) - (b.id === 'bancontact' ? -1 : 0))
+    : PAYMENT_METHODS;
 
   // كل الأسعار باليورو € (no conversion)
   const formatPrice = (eur: number | null) => {
@@ -547,8 +545,8 @@ const PaymentPage = () => {
                   <CreditCard className="w-4 h-4 text-primary" />
                   Payment Method
                 </h3>
-                <div className="space-y-3">
-                  {PAYMENT_METHODS.map(method => {
+                  <div className="space-y-3">
+                  {paymentMethods.map(method => {
                     const Icon = method.icon;
                     const isSelected = selectedPaymentMethod === method.id;
                     return (
@@ -568,7 +566,12 @@ const PaymentPage = () => {
                           <Icon className="w-5 h-5" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-semibold text-white">{method.label}</p>
+                          <p className="text-sm font-semibold text-white">
+                            {method.label}
+                            {isBelgianUser && method.id === 'bancontact' && (
+                              <span className="ml-2 text-xs font-semibold text-primary">Recommended in Belgium</span>
+                            )}
+                          </p>
                           <p className="text-xs text-muted-foreground">{method.description}</p>
                         </div>
                         <div className={`h-5 w-5 rounded-full border-2 grid place-items-center ${
