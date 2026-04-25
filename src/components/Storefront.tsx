@@ -321,18 +321,18 @@ const Storefront = () => {
                       <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-start">
                         <div className="space-y-4">
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-primary">Delivery & activation</p>
-                            <h2 className="mt-2 text-2xl md:text-3xl font-bold text-white heading-glow">How you receive your access</h2>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.deliveryActivation')}</p>
+                            <h2 className="mt-2 text-2xl md:text-3xl font-bold text-white heading-glow">{t('store.receiveAccessTitle')}</h2>
                           </div>
-                          <p className="text-base leading-relaxed text-white/70">After payment, you will receive your access quickly.</p>
+                          <p className="text-base leading-relaxed text-white/70">{t('store.receiveAccessDescription')}</p>
                           <div className="space-y-2 text-sm leading-relaxed text-white/65">
-                            <p>We provide one of the following depending on the product:</p>
-                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Account access (username + password)</p>
-                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Activation key</p>
-                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Direct activation on your account (on request)</p>
+                            <p>{t('store.receiveAccessIntro')}</p>
+                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{t('store.accountAccess')}</p>
+                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{t('store.activationKey')}</p>
+                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />{t('store.directActivation')}</p>
                           </div>
                           <div className="flex flex-wrap gap-2 text-sm font-semibold text-white/75">
-                            <span>✔ Fast delivery</span><span>✔ Secure process</span><span>✔ Real support</span>
+                            <span>✔ {t('store.fastDelivery')}</span><span>✔ {t('store.secureProcess')}</span><span>✔ {t('store.realSupport')}</span>
                           </div>
                         </div>
                         <div className="space-y-4">
