@@ -335,6 +335,40 @@
   filter: brightness(1.08);
 }
 
+.social-link-3d {
+  position: relative;
+  overflow: hidden;
+  color: hsl(0 0% 100%);
+  border: 1px solid hsl(0 0% 100% / 0.16);
+  transform-style: preserve-3d;
+  box-shadow: 0 10px 22px hsl(240 40% 2% / 0.34), inset 0 1px 3px hsl(0 0% 100% / 0.22), inset 0 -8px 16px hsl(240 40% 2% / 0.22);
+}
+
+.social-link-3d::before {
+  content: '';
+  position: absolute;
+  inset: 6px 8px auto 8px;
+  height: 38%;
+  border-radius: inherit;
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.46), hsl(0 0% 100% / 0));
+  pointer-events: none;
+}
+
+.social-link-3d svg {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 3px 6px hsl(240 40% 2% / 0.38));
+}
+
+.social-facebook-3d { background: linear-gradient(145deg, hsl(214 89% 64%), hsl(214 89% 52%) 55%, hsl(214 84% 36%)); }
+.social-instagram-3d { background: radial-gradient(circle at 28% 108%, hsl(45 100% 60%) 0 26%, transparent 27%), radial-gradient(circle at 18% 92%, hsl(24 96% 53%) 0 24%, transparent 25%), linear-gradient(145deg, hsl(281 86% 58%), hsl(340 75% 54%) 56%, hsl(225 73% 57%)); }
+.social-tiktok-3d { background: linear-gradient(145deg, hsl(0 0% 18%), hsl(0 0% 3%) 58%, hsl(0 0% 0%)); box-shadow: 0 10px 22px hsl(240 40% 2% / 0.38), 4px 0 14px hsl(348 100% 59% / 0.30), -4px 0 14px hsl(178 100% 44% / 0.30), inset 0 1px 3px hsl(0 0% 100% / 0.20); }
+.social-youtube-3d { background: linear-gradient(145deg, hsl(0 100% 64%), hsl(0 100% 50%) 58%, hsl(0 100% 34%)); }
+.social-whatsapp-3d { background: linear-gradient(145deg, hsl(142 70% 62%), hsl(142 70% 49%) 56%, hsl(145 70% 32%)); }
+.social-telegram-3d { background: linear-gradient(145deg, hsl(200 73% 65%), hsl(200 73% 49%) 56%, hsl(204 76% 36%)); }
+.social-x-3d { background: linear-gradient(145deg, hsl(0 0% 20%), hsl(0 0% 4%) 58%, hsl(0 0% 0%)); }
+.social-mail-3d { background: linear-gradient(145deg, hsl(var(--primary) / 0.88), hsl(var(--secondary) / 0.82)); }
+
 @keyframes chatbot-breathe {
   0%, 100% { transform: scale(1) rotate(0deg); }
   50% { transform: scale(1.025) rotate(1deg); }
