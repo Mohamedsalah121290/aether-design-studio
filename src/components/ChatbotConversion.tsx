@@ -6,10 +6,11 @@ import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
 import { socialLinks, supportLinks } from '@/lib/socialLinks';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
-const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook-test/e01e2727-e586-4b51-be17-ed1fb782b9c6';
+const N8N_CHAT_FUNCTION = 'n8n-chat';
 
 export const openSocialUrl = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
   event.preventDefault();
@@ -307,15 +308,11 @@ export const ChatbotSalesFlow = () => {
     setSending(true);
 
     try {
-      const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: value }),
+      const { data, error } = await supabase.functions.invoke(N8N_CHAT_FUNCTION, {
+        body: { message: value },
       });
 
-      if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
-      const contentType = response.headers.get('content-type') || '';
-      const data = contentType.includes('application/json') ? await response.json() : await response.text();
+      if (error) throw error;
       const botMessage: Message = { id: Date.now() + 1, role: 'bot', text: getBotText(data) };
       setMessages((current) => [...current, botMessage]);
       if (soundOn) window.setTimeout(() => speak(botMessage), 150);

@@ -26,3 +26,6 @@ verify_jwt = false
 
 [functions.recommend-tools]
 verify_jwt = false
+
+[functions.n8n-chat]
+verify_jwt = false
