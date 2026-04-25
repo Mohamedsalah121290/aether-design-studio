@@ -43,6 +43,50 @@ const mobilePopularTools = [
   { name: 'CapCut Pro', id: 'capcut', price: 'From €7.99', badge: 'Popular choice' },
 ];
 
+const intentFunnels = {
+  student: {
+    icon: GraduationCap,
+    title: 'Student',
+    description: 'Study faster with the right AI stack.',
+    headline: 'Study smarter with AI tools',
+    products: [
+      { name: 'ChatGPT Plus', id: 'chatgpt', best: true },
+      { name: 'Perplexity', id: 'perplexity' },
+      { name: 'Notion', id: 'notion' },
+    ],
+    reasons: ['faster answers', 'better understanding', 'save time'],
+    cta: 'Start Learning Now',
+  },
+  creator: {
+    icon: Play,
+    title: 'Content Creator',
+    description: 'Create, edit, and publish with less friction.',
+    headline: 'Create content faster with AI',
+    products: [
+      { name: 'Canva Pro', id: 'canva', best: true },
+      { name: 'CapCut', id: 'capcut' },
+      { name: 'ElevenLabs', id: 'elevenlabs' },
+    ],
+    reasons: ['design faster', 'edit videos', 'create voice content'],
+    cta: 'Start Creating',
+  },
+  business: {
+    icon: Briefcase,
+    title: 'Business',
+    description: 'Automate daily work and move faster.',
+    headline: 'Automate and grow your business',
+    products: [
+      { name: 'ChatGPT Business', id: 'chatgpt', best: true },
+      { name: 'Office 365', id: 'microsoft_365' },
+      { name: 'Notion', id: 'notion' },
+    ],
+    reasons: ['automate tasks', 'increase productivity', 'save hours daily'],
+    cta: 'Start Growing',
+  },
+};
+
+type IntentKey = keyof typeof intentFunnels;
+
 const SESSION_OFFER_MS = 15 * 60 * 1000;
 
 const SessionOfferTimer = () => {
@@ -160,6 +204,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 const Index = () => {
   const { i18n } = useTranslation();
   const newsletter = useNewsletterSubscribe();
+  const [activeIntent, setActiveIntent] = useState<IntentKey>('student');
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
@@ -171,6 +216,15 @@ const Index = () => {
     viewport: { once: true },
     transition: { duration: 0.5 },
   };
+
+  const enterFunnel = (key: IntentKey) => {
+    setActiveIntent(key);
+    localStorage.setItem('aiDealsActiveFunnel', key);
+    window.dispatchEvent(new CustomEvent('aiDeals:funnel', { detail: key }));
+  };
+
+  const activeFunnel = intentFunnels[activeIntent];
+  const ActiveFunnelIcon = activeFunnel.icon;
 
   return (
     <div className="min-h-screen bg-background">
