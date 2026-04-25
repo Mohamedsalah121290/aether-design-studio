@@ -5,12 +5,15 @@ import { ArrowRight, Play, BookOpen, Video, Lightbulb, Clock, Calendar, User, Tr
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { languages } from '@/lib/i18n';
 
 const ResourcesPage = () => {
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    const lang = languages.find(l => l.code === i18n.language);
+    document.documentElement.dir = lang?.rtl ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang?.code || 'en';
     window.scrollTo(0, 0);
   }, [i18n.language]);
 

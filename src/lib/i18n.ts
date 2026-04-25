@@ -3833,6 +3833,11 @@ export const languages = [
 
 // Get stored language or detect from browser
 const getInitialLanguage = (): string => {
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
+  if (urlLang && languages.some(l => l.code === urlLang)) {
+    return urlLang;
+  }
+
   const stored = localStorage.getItem('ai-deals-language');
   if (stored && languages.some(l => l.code === stored)) {
     return stored;
@@ -3860,6 +3865,7 @@ i18n.use(initReactI18next).init({
 // Apply initial settings
 const initialLang = languages.find(l => l.code === i18n.language) || languages[0];
 document.documentElement.dir = initialLang.rtl ? 'rtl' : 'ltr';
+document.documentElement.lang = initialLang.code;
 document.documentElement.style.fontFamily = `'${initialLang.font}', 'Inter', sans-serif`;
 
 // Listen for language changes to persist and apply settings
@@ -3867,6 +3873,7 @@ i18n.on('languageChanged', (lng) => {
   localStorage.setItem('ai-deals-language', lng);
   const lang = languages.find(l => l.code === lng) || languages[0];
   document.documentElement.dir = lang.rtl ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang.code;
   document.documentElement.style.fontFamily = `'${lang.font}', 'Inter', sans-serif`;
 });
 
