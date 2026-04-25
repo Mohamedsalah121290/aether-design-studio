@@ -83,7 +83,7 @@ export const BLOG_POSTS: BlogPost[] = [
         'AI DEALS gives Belgian users a managed-access route to ChatGPT Plus at member pricing — without the EUR/USD friction, double VAT or yearly lock-in.',
         [
           ['Why Belgian users overpay for ChatGPT Plus', 'OpenAI invoices in USD and the EUR equivalent shifts every month. With AI DEALS, you pay a single transparent member price in euros, locked in for the term you choose.'],
-          ['How member access works', 'You buy access through AI DEALS, we provision a managed seat, and your credentials arrive within 24 hours. Cancel anytime — no auto-renew traps.'],
+          ['How member access works', 'You buy access through AI DEALS, we provision a managed seat, and access is delivered after purchase. Cancel anytime — no auto-renew traps.'],
           ['Bancontact + Stripe checkout', 'Pay with Bancontact, card or SEPA. Stripe handles the transaction; we never store your card details. Same security as buying directly from OpenAI.'],
           ['What you actually get', 'Full GPT-4o / GPT-5 access, image generation, advanced data analysis, voice mode and the latest model rollouts — at a fraction of the standard list price.'],
         ],
@@ -113,7 +113,7 @@ export const BLOG_POSTS: BlogPost[] = [
         'AI DEALS geeft Belgische gebruikers een beheerde toegang tot ChatGPT Plus aan lidprijs — zonder EUR/USD-wrijving, dubbele btw of jaarcontract.',
         [
           ['Waarom Belgen te veel betalen voor ChatGPT Plus', 'OpenAI factureert in USD en de EUR-koers verandert maandelijks. Met AI DEALS betaalt u één transparante lidprijs in euro, vast voor de gekozen termijn.'],
-          ['Hoe lid-toegang werkt', 'U koopt toegang via AI DEALS, wij voorzien een beheerd account en uw credentials komen binnen 24 uur. Op elk moment opzegbaar.'],
+          ['Hoe lid-toegang werkt', 'U koopt toegang via AI DEALS, wij voorzien een beheerd account en uw toegang wordt na aankoop geleverd. Op elk moment opzegbaar.'],
           ['Bancontact + Stripe checkout', 'Betaal met Bancontact, kaart of SEPA. Stripe verwerkt de transactie, wij bewaren nooit kaartgegevens. Even veilig als rechtstreeks bij OpenAI.'],
           ['Wat u echt krijgt', 'Volledige GPT-4o / GPT-5 toegang, beeldgeneratie, geavanceerde data-analyse, voice mode en de nieuwste modellen — voor een fractie van de listprijs.'],
         ],
