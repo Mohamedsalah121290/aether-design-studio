@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
@@ -64,6 +64,11 @@ const WHAT_YOU_GET = [
 
 const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
+const LOVABLE_PLAN_DETAILS: Record<string, { badge: string; duration: string; credits: string }> = {
+  lovable_2_months: { badge: 'Best Starter', duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month' },
+  lovable_3_months: { badge: 'Best Value', duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month' },
+};
+
 const tierLabel = (index: number, total: number) => {
   if (total <= 1) return 'Most Popular';
   if (index === 0) return 'Starter';
@@ -76,6 +81,7 @@ type BillingInterval = 'monthly' | 'annual';
 const PaymentPage = () => {
   const { toolId } = useParams<{ toolId: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const { currency } = useCurrency();
   const { user } = useAuth();
@@ -145,7 +151,11 @@ const PaymentPage = () => {
         is_active: p.is_active,
       }));
       setPlans(mapped);
-      if (mapped.length > 0) setSelectedPlan(mapped[0]);
+      const requestedPlan = searchParams.get('plan');
+      const defaultPlan = id === 'lovable'
+        ? mapped.find(plan => plan.plan_id === (requestedPlan || 'lovable_3_months')) || mapped.find(plan => plan.plan_id === 'lovable_3_months')
+        : null;
+      if (mapped.length > 0) setSelectedPlan(defaultPlan || mapped[0]);
     } catch (err) {
       console.error(err);
     } finally {
