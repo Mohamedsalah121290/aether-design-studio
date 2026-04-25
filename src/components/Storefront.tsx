@@ -14,6 +14,7 @@ import TrustAndFAQ from './TrustAndFAQ';
 import AIRecommendations from './AIRecommendations';
 import { supabase } from '@/integrations/supabase/client';
 import SocialProofCarousel from './SocialProofCarousel';
+import { TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
 
 /* ── Section config ─────────────────────────────────────────────── */
 const SECTION_ORDER: {
@@ -45,6 +46,8 @@ const BUNDLES = [
   { name: 'Creator Pack', products: 'Canva + CapCut + ElevenLabs', original: '€54/month', price: '€35/month', daily: '≈ €1.17/day', toolId: 'canva' },
   { name: 'Business Pack', products: 'ChatGPT + Office 365 + Notion', original: '€59/month', price: '€39/month', daily: '≈ €1.30/day', toolId: 'microsoft_365' },
 ];
+
+const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   'licenses-productivity': ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'],
