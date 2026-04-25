@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import ReactMarkdown from 'react-markdown';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getStoredRegion } from '@/lib/geo';
@@ -158,6 +159,7 @@ export const ChatbotPromoSection = () => {
 
 export const ChatbotSalesFlow = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   const lang = useLang();
   const text = copy[lang];
   const [ready, setReady] = useState(false);
@@ -182,6 +184,17 @@ export const ChatbotSalesFlow = () => {
     window.addEventListener('scroll', update, { passive: true });
     return () => window.removeEventListener('scroll', update);
   }, [location.pathname]);
+  useEffect(() => {
+    window.speechSynthesis?.cancel?.();
+    setSpeakingId(null);
+    setListening(false);
+    setSending(false);
+    setInput('');
+    localStorage.removeItem('aiDealsActiveChatFlow');
+    localStorage.removeItem('aiDealsActiveFunnel');
+    setMessages([initialMessage]);
+    setSelected(null);
+  }, [lang, initialMessage]);
   useEffect(() => {
     const storedFlow = localStorage.getItem('aiDealsActiveChatFlow') as FlowKey | null;
     if (storedFlow && products[storedFlow]) {
@@ -268,7 +281,7 @@ export const ChatbotSalesFlow = () => {
       const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: value, language: lang, locale: text.voice[0], region: getStoredRegion(), instruction: `Reply only in ${lang}. Do not mix languages.` }),
+        body: JSON.stringify({ message: value, language: lang, locale: text.voice[0], region: getStoredRegion(), instruction: t('chatbot.directionInstruction') }),
       });
 
       if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
@@ -321,7 +334,7 @@ export const ChatbotSalesFlow = () => {
                   {message.role === 'bot' && <RobotAvatar className="w-8 h-8" lang={lang} speaking={speakingId === message.id} />}
                   <div className={`max-w-[84%] break-words ${message.role === 'user' ? 'bg-primary/20 text-foreground' : 'bg-white/[0.04] text-foreground'} rounded-xl px-3 sm:px-4 py-3 text-sm leading-relaxed`}>
                     <div className="flex items-start gap-2">
-                      <p className="flex-1">{message.text}</p>
+                      <div className="flex-1 prose prose-sm prose-invert max-w-none prose-p:my-0 prose-ul:my-1 prose-li:my-0"><ReactMarkdown>{message.text}</ReactMarkdown></div>
                       {message.role === 'bot' && <button onClick={() => speak(message)} className="shrink-0 text-muted-foreground hover:text-primary transition-colors" aria-label={fallbackText[lang].play}><Volume2 className="w-3.5 h-3.5" /></button>}
                     </div>
                     {message.products && <div className="mt-3 space-y-2">{message.products.map((product) => <div key={product.id} className="rounded-xl border border-border bg-muted/20 p-3"><div className="flex items-start justify-between gap-3 mb-2"><div><h4 className="text-sm font-semibold text-foreground">{product.name}</h4><p className="text-xs text-muted-foreground mt-1">{product.desc}</p></div><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)} className="text-primary hover:text-foreground transition-colors" aria-label={`Open ${product.name}`}><ChevronRight className="w-4 h-4" /></Link></div><ul className="space-y-1 mb-3">{product.benefits.map((benefit) => <li key={benefit} className="flex items-center gap-2 text-[11px] text-muted-foreground"><CheckCircle className="w-3 h-3 text-primary shrink-0" />{benefit}</li>)}</ul><p className="text-[11px] text-muted-foreground mb-3">{text.price}</p><Button variant="heroOutline" size="sm" asChild className="w-full"><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)}>{text.access}</Link></Button></div>)}</div>}
