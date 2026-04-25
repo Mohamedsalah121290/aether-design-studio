@@ -285,6 +285,10 @@ export const ChatbotSalesFlow = () => {
 
   const getBotText = (data: unknown) => {
     if (typeof data === 'string') return data;
+    if (Array.isArray(data)) {
+      const firstText = data.map(getBotText).find((value) => value && value !== fallbackText[lang].received);
+      return firstText || fallbackText[lang].received;
+    }
     if (data && typeof data === 'object') {
       const record = data as Record<string, unknown>;
       const value = record.reply || record.response || record.text || record.message || record.output || record.answer;
@@ -305,7 +309,7 @@ export const ChatbotSalesFlow = () => {
       const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: value }),
+        body: JSON.stringify({ message: value, language: lang, instruction: t('chatbot.directionInstruction', { lng: lang }) }),
       });
 
       if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
