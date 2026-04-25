@@ -284,10 +284,10 @@ const Storefront = () => {
                   <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
                     <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-wider text-primary">Bundles</p>
-                        <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">Upgrade for better results</h2>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.bundles')}</p>
+                      <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">{t('store.upgradeBetterResults')}</h2>
                       </div>
-                      <p className="text-sm text-white/45">More value, fewer decisions.</p>
+                       <p className="text-sm text-white/45">{t('store.moreValue')}</p>
                     </div>
                     <div className="grid gap-4 md:grid-cols-3">
                       {BUNDLES.map((bundle, index) => (
@@ -388,8 +388,8 @@ const Storefront = () => {
                             <Icon className="w-4 h-4 text-white/40" />
                           </div>
                           <div className="space-y-0.5">
-                            <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">{section.label}</h2>
-                            <p className="text-white/50 text-sm">{section.subtitle}</p>
+                             <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">{t(`store.categoriesDetailed.${section.key}.label`)}</h2>
+                             <p className="text-white/50 text-sm">{t(`store.categoriesDetailed.${section.key}.subtitle`)}</p>
                           </div>
                           <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/5 text-white/40 border border-white/10">
                             {section.tools.length}
