@@ -61,6 +61,19 @@ const WHAT_YOU_GET = [
   'Cancel anytime, no lock-in',
 ];
 
+const dailyEquivalent = (price: number | null | undefined, period: ReturnType<typeof inferPeriodFromPlan>) => {
+  if (!price || price <= 0) return null;
+  const days = period === 'yearly' ? 365 : 30;
+  return `≈ ${formatEuro(price / days)}/day`;
+};
+
+const tierLabel = (index: number, total: number) => {
+  if (total <= 1) return 'Most Popular';
+  if (index === 0) return 'Starter';
+  if (index === Math.min(1, total - 1)) return 'Most Popular';
+  return 'Pro';
+};
+
 type BillingInterval = 'monthly' | 'annual';
 
 const PaymentPage = () => {
@@ -205,6 +218,7 @@ const PaymentPage = () => {
   };
 
   const formatApproxPrice = (eur: number | null | undefined) => formatApproxCurrency(eur, currency.code);
+  const dailyPrice = dailyEquivalent(displayPrice, period);
 
   const validateForm = (): boolean => {
     const newErrors: { email?: string } = {};
