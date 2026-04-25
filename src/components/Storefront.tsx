@@ -239,9 +239,9 @@ const Storefront = () => {
                 <span>{t('store.socialProof', '1,000+ active members already saving')}</span>
               </div>
               <div className="mt-5 md:hidden flex flex-wrap items-center justify-center gap-2 text-[11px]">
-                <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 font-semibold text-primary">🔥 High demand</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">23 people are viewing this now</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">Limited availability today</span>
+                <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 font-semibold text-primary">🔥 {t('store.highDemand')}</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">{t('store.viewingNow')}</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/60">{t('store.limitedAvailability')}</span>
               </div>
             </div>
           </div>
@@ -263,17 +263,17 @@ const Storefront = () => {
                 <section className="py-12" aria-label="Pricing options">
                   <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
                     <div className="mb-6 text-center">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">Pricing made simple</p>
-                      <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">Choose your access level</h2>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.pricingSimple')}</p>
+                      <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">{t('store.chooseAccessLevel')}</h2>
                     </div>
                     <div className="grid gap-4 md:grid-cols-3 items-stretch">
                       {PRICING_TIERS.map((tier) => (
-                        <Link key={tier.name} to={`/store?scrollTo=${tier.toolId}`} className={`relative rounded-2xl border p-5 transition-all hover:border-primary/35 ${tier.featured ? 'md:-mt-3 md:mb-0 border-primary/40 bg-primary/10 shadow-lg shadow-primary/10' : 'border-white/10 bg-white/[0.03]'}`}>
-                          {tier.featured && <span className="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">Most Popular</span>}
-                          <h3 className="text-xl font-bold text-white">{tier.name}</h3>
-                          <p className="mt-2 text-sm text-white/50">{tier.text}</p>
-                          <p className="mt-4 text-[11px] font-semibold text-primary">Limited price today</p>
-                          <span className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{tier.cta}</span>
+                        <Link key={tier.key} to={`/store?scrollTo=${tier.toolId}`} className={`relative rounded-2xl border p-5 transition-all hover:border-primary/35 ${tier.featured ? 'md:-mt-3 md:mb-0 border-primary/40 bg-primary/10 shadow-lg shadow-primary/10' : 'border-white/10 bg-white/[0.03]'}`}>
+                          {tier.featured && <span className="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">{t('store.pricingTiers.popular.name')}</span>}
+                          <h3 className="text-xl font-bold text-white">{t(`store.pricingTiers.${tier.key}.name`)}</h3>
+                          <p className="mt-2 text-sm text-white/50">{t(`store.pricingTiers.${tier.key}.text`)}</p>
+                          <p className="mt-4 text-[11px] font-semibold text-primary">{t('store.limitedPriceToday')}</p>
+                          <span className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{t(`store.pricingTiers.${tier.key}.cta`)}</span>
                         </Link>
                       ))}
                     </div>
