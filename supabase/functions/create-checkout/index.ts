@@ -329,6 +329,7 @@ serve(async (req) => {
       line_items: [{ price: priceId, quantity: 1 }],
       mode: billing.mode, // "payment" or "subscription"
       payment_method_types: pmTypes as Stripe.Checkout.SessionCreateParams.PaymentMethodType[],
+      adaptive_pricing: { enabled: false },
       success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/payment/cancelled`,
       metadata,
