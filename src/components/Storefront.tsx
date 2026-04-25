@@ -230,7 +230,7 @@ const Storefront = () => {
 
               {/* Payment + delivery trust note (no design change, inline copy) */}
               <p className="text-[11px] text-white/40 mb-6">
-                {t('store.paymentNote', 'Secure payment via Stripe & Bancontact')} · {t('store.monthlyAccess', 'Monthly Access')} · 24h
+                {t('store.regionalTrust')} · {t('store.finalPaymentNote')} · 24h
               </p>
 
               {/* Social proof */}
