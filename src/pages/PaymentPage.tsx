@@ -57,19 +57,12 @@ const PAYMENT_METHODS = [
 ] as const;
 
 const WHAT_YOU_GET = [
-  'Full premium access to all features',
-  'Priority activation & setup',
-  'Dedicated support channel',
-  'Cancel anytime, no lock-in',
+  'Instant access',
+  'No setup needed',
+  'Support available',
 ];
 
 const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
-
-const dailyEquivalent = (price: number | null | undefined, period: ReturnType<typeof inferPeriodFromPlan>) => {
-  if (!price || price <= 0) return null;
-  const days = period === 'yearly' ? 365 : 30;
-  return `≈ ${formatEuro(price / days)}/day`;
-};
 
 const tierLabel = (index: number, total: number) => {
   if (total <= 1) return 'Most Popular';
@@ -227,7 +220,6 @@ const PaymentPage = () => {
   };
 
   const formatApproxPrice = (eur: number | null | undefined) => formatApproxCurrency(eur, currency.code);
-  const dailyPrice = dailyEquivalent(displayPrice, period);
 
   const validateForm = (): boolean => {
     const newErrors: { email?: string } = {};
@@ -609,19 +601,6 @@ const PaymentPage = () => {
                       <span>{formatApproxPrice(displayPrice)}</span>
                     </div>
                   )}
-                  {dailyPrice && (
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">Daily equivalent</span>
-                      <span className="text-primary">{dailyPrice}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between text-xs">
-                    <span className="text-muted-foreground">Upgrade suggestion</span>
-                    <span className="text-primary">Upgrade for better results</span>
-                  </div>
-                  <div className="flex justify-end text-[10px] font-semibold text-primary">
-                    Limited price today
-                  </div>
                   {showBillingToggle && billingInterval === 'annual' && monthlyEquivalent && (
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Monthly equivalent</span>
