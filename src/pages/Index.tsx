@@ -43,6 +43,50 @@ const mobilePopularTools = [
   { name: 'CapCut Pro', id: 'capcut', price: 'From €7.99', badge: 'Popular choice' },
 ];
 
+const intentFunnels = {
+  student: {
+    icon: GraduationCap,
+    title: 'Student',
+    description: 'Study faster with the right AI stack.',
+    headline: 'Study smarter with AI tools',
+    products: [
+      { name: 'ChatGPT Plus', id: 'chatgpt', best: true },
+      { name: 'Perplexity', id: 'perplexity' },
+      { name: 'Notion', id: 'notion' },
+    ],
+    reasons: ['faster answers', 'better understanding', 'save time'],
+    cta: 'Start Learning Now',
+  },
+  creator: {
+    icon: Play,
+    title: 'Content Creator',
+    description: 'Create, edit, and publish with less friction.',
+    headline: 'Create content faster with AI',
+    products: [
+      { name: 'Canva Pro', id: 'canva', best: true },
+      { name: 'CapCut', id: 'capcut' },
+      { name: 'ElevenLabs', id: 'elevenlabs' },
+    ],
+    reasons: ['design faster', 'edit videos', 'create voice content'],
+    cta: 'Start Creating',
+  },
+  business: {
+    icon: Briefcase,
+    title: 'Business',
+    description: 'Automate daily work and move faster.',
+    headline: 'Automate and grow your business',
+    products: [
+      { name: 'ChatGPT Business', id: 'chatgpt', best: true },
+      { name: 'Office 365', id: 'microsoft_365' },
+      { name: 'Notion', id: 'notion' },
+    ],
+    reasons: ['automate tasks', 'increase productivity', 'save hours daily'],
+    cta: 'Start Growing',
+  },
+};
+
+type IntentKey = keyof typeof intentFunnels;
+
 const SESSION_OFFER_MS = 15 * 60 * 1000;
 
 const SessionOfferTimer = () => {
@@ -160,6 +204,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 const Index = () => {
   const { i18n } = useTranslation();
   const newsletter = useNewsletterSubscribe();
+  const [activeIntent, setActiveIntent] = useState<IntentKey>('student');
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
@@ -171,6 +216,15 @@ const Index = () => {
     viewport: { once: true },
     transition: { duration: 0.5 },
   };
+
+  const enterFunnel = (key: IntentKey) => {
+    setActiveIntent(key);
+    localStorage.setItem('aiDealsActiveFunnel', key);
+    window.dispatchEvent(new CustomEvent('aiDeals:funnel', { detail: key }));
+  };
+
+  const activeFunnel = intentFunnels[activeIntent];
+  const ActiveFunnelIcon = activeFunnel.icon;
 
   return (
     <div className="min-h-screen bg-background">
@@ -301,6 +355,73 @@ const Index = () => {
               </div>
             </motion.div>
           </motion.div>
+        </section>
+
+        <section className="py-16 md:py-20 relative" aria-label="Choose what fits you">
+          <div className="container mx-auto px-4">
+            <motion.div {...fadeUp} className="text-center mb-10">
+              <h2 className="text-3xl md:text-5xl font-display font-bold">Choose what fits you</h2>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto mb-8">
+              {(Object.entries(intentFunnels) as [IntentKey, typeof intentFunnels[IntentKey]][]).map(([key, funnel], index) => {
+                const Icon = funnel.icon;
+                const isActive = activeIntent === key;
+                return (
+                  <motion.button
+                    key={key}
+                    type="button"
+                    onClick={() => enterFunnel(key)}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.08 }}
+                    className={`glass min-h-[164px] rounded-2xl p-5 text-left transition-all duration-300 active:scale-[0.99] ${isActive ? 'border-primary/45 bg-primary/10' : 'hover:border-primary/30'}`}
+                    aria-pressed={isActive}
+                  >
+                    <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon className="h-6 w-6" /></span>
+                    <h3 className="font-display text-xl font-bold text-foreground">{funnel.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{funnel.description}</p>
+                    <span className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground">Start</span>
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            <motion.div key={activeIntent} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className="glass rounded-3xl p-5 md:p-8 max-w-5xl mx-auto">
+              <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-6 lg:gap-8 items-start">
+                <div>
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><ActiveFunnelIcon className="h-6 w-6" /></div>
+                  <h3 className="text-2xl md:text-4xl font-display font-bold leading-tight">{activeFunnel.headline}</h3>
+                  <div className="mt-5 space-y-3">
+                    {activeFunnel.reasons.map((reason) => (
+                      <div key={reason} className="flex items-center gap-3 text-sm text-foreground"><CheckCircle className="h-4 w-4 shrink-0 text-primary" />{reason}</div>
+                    ))}
+                  </div>
+                  <Button variant="hero" size="lg" className="mt-7 min-h-[52px] w-full sm:w-auto" asChild>
+                    <Link to={`/store?scrollTo=${activeFunnel.products[0].id}`} onClick={() => enterFunnel(activeIntent)}>{activeFunnel.cta}<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  </Button>
+                </div>
+
+                <div className="grid gap-3">
+                  {activeFunnel.products.map((product) => (
+                    <Link key={`${activeIntent}-${product.id}-${product.name}`} to={`/store?scrollTo=${product.id}`} onClick={() => enterFunnel(activeIntent)} className={`rounded-2xl border p-4 transition-all hover:border-primary/35 active:scale-[0.99] ${product.best ? 'border-primary/35 bg-primary/10' : 'border-border bg-muted/20'}`}>
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <div className="mb-2 flex flex-wrap items-center gap-2">
+                            {product.best && <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold text-primary">Best choice</span>}
+                            {product.best && <span className="text-[11px] font-medium text-muted-foreground">Most users like you choose this</span>}
+                          </div>
+                          <h4 className="truncate font-display text-lg font-bold text-foreground">{product.name}</h4>
+                        </div>
+                        <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Start</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </section>
 
         <section className="md:hidden py-10 relative" aria-label="Mobile conversion shortcuts">
