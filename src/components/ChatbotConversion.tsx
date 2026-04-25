@@ -327,13 +327,14 @@ export const ChatbotSalesFlow = () => {
     const userMessage: Message = { id: Date.now(), role: 'user', text: value };
     setMessages((current) => [...current, userMessage]);
     setSending(true);
+    const messageLanguage = detectMessageLanguage(value);
 
     try {
       const { data, error } = await supabase.functions.invoke(N8N_CHAT_FUNCTION, {
         body: {
           message: value,
-          language: lang,
-          instruction: `${t('chatbot.directionInstruction', { lng: lang })} ${t('store.noSensitiveBeforePayment', { lng: lang })} ${t('store.safeActivationMessage', { lng: lang })}`,
+          language: messageLanguage,
+          instruction: salesAssistantInstructions[messageLanguage],
         },
       });
 
