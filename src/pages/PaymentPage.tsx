@@ -369,9 +369,11 @@ const PaymentPage = () => {
                         <>
                           <p className="text-lg font-bold text-sky-400 mt-1">
                             €{selectedPlan.monthly_price}
+                            <span className="text-xs text-muted-foreground font-semibold"> (excl. VAT)</span>
                             <span className="text-xs text-muted-foreground font-normal"> / month</span>
                           </p>
-                          {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-[10px] text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
+                          <p className="text-xs font-medium text-muted-foreground mt-1">{TAX_NOTE}</p>
+                          {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-xs text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
                         </>
                       )}
                       <p className="text-[10px] text-muted-foreground mt-1">Billed every month</p>
@@ -394,10 +396,12 @@ const PaymentPage = () => {
                         <>
                           <p className="text-lg font-bold text-orange-400 mt-1">
                             €{(selectedPlan.monthly_price * 12 * 0.8).toFixed(2)}
+                            <span className="text-xs text-muted-foreground font-semibold"> (excl. VAT)</span>
                             <span className="text-xs text-muted-foreground font-normal"> / year</span>
                           </p>
-                          {formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8) && <p className="text-[10px] text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8)}</p>}
-                          <p className="text-[10px] text-muted-foreground mt-1">
+                          <p className="text-xs font-medium text-muted-foreground mt-1">{TAX_NOTE}</p>
+                          {formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8) && <p className="text-xs text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8)}</p>}
+                          <p className="text-xs text-muted-foreground mt-1">
                             €{(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · Billed annually
                           </p>
                         </>
@@ -421,9 +425,11 @@ const PaymentPage = () => {
                       <>
                         <p className={`text-lg font-bold mt-1 ${periodStyle.textClass}`}>
                           €{selectedPlan.monthly_price}
+                          <span className="text-xs text-muted-foreground font-semibold"> (excl. VAT)</span>
                           <span className="text-xs text-muted-foreground font-normal"> {periodStyle.suffix}</span>
                         </p>
-                        {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-[10px] text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
+                        <p className="text-xs font-medium text-muted-foreground mt-1">{TAX_NOTE}</p>
+                        {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-xs text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
                       </>
                     )}
                     <p className="text-[10px] text-muted-foreground mt-1">
