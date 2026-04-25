@@ -5,7 +5,8 @@ import { Facebook, Instagram, Mail, Shield, Lock, Globe, Zap, Youtube } from 'lu
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
-import { FACEBOOK_URL, INSTAGRAM_URL, openSocialUrl, WhatsAppIcon, WHATSAPP_URL, YOUTUBE_URL } from '@/components/ChatbotConversion';
+import { openSocialUrl, WhatsAppIcon } from '@/components/ChatbotConversion';
+import { socialLinks } from '@/lib/socialLinks';
 import logo from '@/assets/logo.png';
 
 type FlagKey = 'eu' | 'us' | 'sa' | 'ae' | 'tr' | 'iq' | 'lb';
@@ -103,10 +104,10 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: WhatsAppIcon, href: WHATSAPP_URL, label: 'WhatsApp', tone: 'social-whatsapp-3d' },
-    { icon: Facebook, href: FACEBOOK_URL, label: 'Facebook', tone: 'social-facebook-3d' },
-    { icon: Instagram, href: INSTAGRAM_URL, label: 'Instagram', tone: 'social-instagram-3d' },
-    { icon: Youtube, href: YOUTUBE_URL, label: 'YouTube', tone: 'social-youtube-3d' },
+    { icon: WhatsAppIcon, href: socialLinks.whatsapp, label: 'WhatsApp', tone: 'social-whatsapp-3d' },
+    { icon: Facebook, href: socialLinks.facebook, label: 'Facebook', tone: 'social-facebook-3d' },
+    { icon: Instagram, href: socialLinks.instagram, label: 'Instagram', tone: 'social-instagram-3d' },
+    { icon: Youtube, href: socialLinks.youtube, label: 'YouTube', tone: 'social-youtube-3d' },
     { icon: Mail, href: 'mailto:info@aideals.be', label: 'Email info@aideals.be', tone: 'social-mail-3d' },
   ].filter((social) => Boolean(social.href));
 
