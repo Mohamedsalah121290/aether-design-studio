@@ -33,9 +33,9 @@ const emailSchema = z.string().trim().email('Please enter a valid email').max(25
 /* ── Payment method config ─────────────────────────────────────── */
 const PAYMENT_METHODS = [
   {
-    id: 'card',
-    label: 'Credit / Debit Card',
-    description: 'Visa, Mastercard, Amex',
+    id: 'stripe',
+    label: 'Stripe Checkout',
+    description: 'Visa, Mastercard, Amex via Stripe',
     icon: CreditCard,
     stripeTypes: ['card'],
   },
@@ -90,7 +90,7 @@ const PaymentPage = () => {
   const [plans, setPlans] = useState<ToolPlan[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<ToolPlan | null>(null);
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('monthly');
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('stripe');
   const [email, setEmail] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

@@ -328,6 +328,12 @@ serve(async (req) => {
       mode: billing.mode, // "payment" or "subscription"
       payment_method_types: pmTypes as Stripe.Checkout.SessionCreateParams.PaymentMethodType[],
       adaptive_pricing: { enabled: false },
+      branding_settings: {
+        background_color: "#05050D",
+        button_color: "#7C5DD6",
+        border_style: "rounded",
+        font_family: "inter",
+      },
       success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/payment/cancelled`,
       metadata,
