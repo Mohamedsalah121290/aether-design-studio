@@ -11,7 +11,7 @@ import { getPeriodStyle, formatEuro, type PricePeriod } from '@/lib/pricePeriod'
 import { formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewPreview } from '@/components/ProductReviews';
-import { openSocialUrl } from '@/components/ChatbotConversion';
+import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
 
 /* ── Category labels ──────────────────────────────────────────── */
@@ -358,12 +358,10 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             {/* CTA */}
             {isContactOnly ? (
               <div className="mt-1 sm:mt-2 space-y-1">
-                {supportLinks.whatsapp && (
-                  <a href={supportLinks.whatsapp} onClick={(event) => openSocialUrl(event, supportLinks.whatsapp)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(145_75%_48%/0.35)]" style={{ background: 'linear-gradient(135deg, hsl(142 72% 50%), hsl(145 70% 34%))', boxShadow: '0 0 14px hsl(145 75% 48% / 0.20)' }}>
-                    Contact WhatsApp
-                    <Sparkles className="w-3.5 h-3.5" />
-                  </a>
-                )}
+                <div className="flex gap-3">
+                  {supportLinks.whatsapp && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
+                  {supportLinks.telegram && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
+                </div>
               </div>
             ) : isComingSoon ? (
               <div className="mt-1 sm:mt-2 space-y-2">
