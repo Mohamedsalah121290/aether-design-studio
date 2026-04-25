@@ -208,7 +208,7 @@ const Storefront = () => {
                   href="#tools-grid"
                   className="min-h-11 inline-flex items-center px-8 py-3 rounded-xl font-medium text-sm text-white bg-white/10 border border-white/15 transition-all duration-300 hover:bg-white/15 hover:border-white/25"
                 >
-                  {t('store.ctaPrimary', 'Browse Deals')}
+                  {t('store.buyNow', 'Get Instant Access')}
                 </a>
                 <a
                   href="#trust-faq"
@@ -220,7 +220,7 @@ const Storefront = () => {
 
               {/* Payment + delivery trust note (no design change, inline copy) */}
               <p className="text-[11px] text-white/40 mb-6">
-                {t('store.regionalTrust')} · {t('store.finalPaymentNote')} · 24h
+                {t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment')} · {t('store.regionalTrust')} · {t('store.finalPaymentNote')}
               </p>
 
               {/* Social proof */}
@@ -363,7 +363,7 @@ const Storefront = () => {
                         </div>
                         {sectionIndex < activeSections.length - 1 && section.tools[0] && (
                           <Link to={`/store?scrollTo=${section.tools[0].tool_id}`} className="md:hidden mt-6 min-h-[52px] relative z-10 inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">
-                             {t('store.getAccess')}
+                             {t('store.buyNow', 'Get Instant Access')}
                           </Link>
                         )}
                         {section.key === 'microsoft' && (
