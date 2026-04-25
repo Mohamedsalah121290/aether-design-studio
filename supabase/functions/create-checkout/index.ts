@@ -116,9 +116,11 @@ serve(async (req) => {
       ? paymentMethodTypes
       : ['card'];
     const euMethods = ['ideal', 'bancontact', 'sepa_debit'];
+    const walletMethods = ['paypal'];
     const hasEuMethods = requestedPmTypes.some((pm: string) => euMethods.includes(pm));
+    const hasWalletMethods = requestedPmTypes.some((pm: string) => walletMethods.includes(pm));
     const currency = 'eur'; // كل الأسعار في DB باليورو
-    const pmTypes = hasEuMethods
+    const pmTypes = hasEuMethods || hasWalletMethods
       ? ['card', ...requestedPmTypes.filter((pm: string) => pm !== 'card')]
       : requestedPmTypes.includes('card') ? requestedPmTypes : ['card', ...requestedPmTypes];
 
