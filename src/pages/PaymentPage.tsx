@@ -71,17 +71,25 @@ const LOVABLE_PLAN_DETAILS: Record<string, { badge: string; duration: string; cr
 
 const getMonthlyPlanValue = (plan: ToolPlan) => {
   const details = LOVABLE_PLAN_DETAILS[plan.plan_id];
-  if (!details || !plan.monthly_price) return null;
-  const monthly = Number(plan.monthly_price) / details.months;
+  if (!plan.monthly_price) return null;
+  const monthly = Number(plan.monthly_price) / (details?.months || getPlanDurationMonths(plan.plan_name));
   return `≈ €${Number.isInteger(monthly) ? monthly : monthly.toFixed(1)} / month`;
 };
 
+const getPlanDurationMonths = (planName: string) => {
+  const name = planName.toLowerCase();
+  const monthMatch = name.match(/\b(\d+)\s*months?\b/) || name.match(/\b(\d+)m\b/);
+  if (monthMatch) return Number(monthMatch[1]);
+  if (name.includes('year') || name.includes('annual') || /\b1\s*y\b/.test(name)) return 12;
+  return 1;
+};
+
 const getBestValuePlan = (plans: ToolPlan[]) => {
-  const pricedPlans = plans.filter(plan => plan.monthly_price && LOVABLE_PLAN_DETAILS[plan.plan_id]);
+  const pricedPlans = plans.filter(plan => plan.monthly_price && plan.monthly_price > 0);
   return pricedPlans.reduce<ToolPlan | null>((best, plan) => {
     if (!best) return plan;
-    const currentValue = Number(plan.monthly_price) / LOVABLE_PLAN_DETAILS[plan.plan_id].months;
-    const bestValue = Number(best.monthly_price) / LOVABLE_PLAN_DETAILS[best.plan_id].months;
+    const currentValue = Number(plan.monthly_price) / (LOVABLE_PLAN_DETAILS[plan.plan_id]?.months || getPlanDurationMonths(plan.plan_name));
+    const bestValue = Number(best.monthly_price) / (LOVABLE_PLAN_DETAILS[best.plan_id]?.months || getPlanDurationMonths(best.plan_name));
     return currentValue < bestValue ? plan : best;
   }, null);
 };
