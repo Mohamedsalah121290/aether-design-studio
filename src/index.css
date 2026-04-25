@@ -320,11 +320,6 @@
   filter: drop-shadow(0 4px 7px hsl(240 40% 2% / 0.35));
 }
 
-.chatbot-telegram-3d {
-  background: radial-gradient(circle at 34% 28%, hsl(0 0% 100% / 0.38), transparent 24%), linear-gradient(145deg, hsl(198 85% 65%), #229ED9 52%, hsl(204 76% 38%));
-  box-shadow: 0 14px 26px hsl(198 80% 45% / 0.26), 0 0 28px hsl(198 90% 58% / 0.55), inset 0 2px 5px hsl(0 0% 100% / 0.24), inset 0 -7px 14px hsl(204 80% 22% / 0.26);
-}
-
 .chatbot-whatsapp-3d {
   background: radial-gradient(circle at 34% 28%, hsl(0 0% 100% / 0.38), transparent 24%), linear-gradient(145deg, hsl(142 72% 62%), #25D366 52%, hsl(145 70% 34%));
   box-shadow: 0 14px 26px hsl(145 80% 35% / 0.28), 0 0 28px hsl(145 75% 48% / 0.55), inset 0 2px 5px hsl(0 0% 100% / 0.24), inset 0 -7px 14px hsl(145 80% 22% / 0.26);
@@ -362,10 +357,8 @@
 
 .social-facebook-3d { background: linear-gradient(145deg, hsl(214 89% 64%), hsl(214 89% 52%) 55%, hsl(214 84% 36%)); }
 .social-instagram-3d { background: radial-gradient(circle at 28% 108%, hsl(45 100% 60%) 0 26%, transparent 27%), radial-gradient(circle at 18% 92%, hsl(24 96% 53%) 0 24%, transparent 25%), linear-gradient(145deg, hsl(281 86% 58%), hsl(340 75% 54%) 56%, hsl(225 73% 57%)); }
-.social-tiktok-3d { background: linear-gradient(145deg, hsl(0 0% 18%), hsl(0 0% 3%) 58%, hsl(0 0% 0%)); box-shadow: 0 10px 22px hsl(240 40% 2% / 0.38), 4px 0 14px hsl(348 100% 59% / 0.30), -4px 0 14px hsl(178 100% 44% / 0.30), inset 0 1px 3px hsl(0 0% 100% / 0.20); }
 .social-youtube-3d { background: linear-gradient(145deg, hsl(0 100% 64%), hsl(0 100% 50%) 58%, hsl(0 100% 34%)); }
 .social-whatsapp-3d { background: linear-gradient(145deg, hsl(142 70% 62%), hsl(142 70% 49%) 56%, hsl(145 70% 32%)); }
-.social-telegram-3d { background: linear-gradient(145deg, hsl(200 73% 65%), hsl(200 73% 49%) 56%, hsl(204 76% 36%)); }
 .social-x-3d { background: linear-gradient(145deg, hsl(0 0% 20%), hsl(0 0% 4%) 58%, hsl(0 0% 0%)); }
 .social-mail-3d { background: linear-gradient(145deg, hsl(var(--primary) / 0.88), hsl(var(--secondary) / 0.82)); }
 
