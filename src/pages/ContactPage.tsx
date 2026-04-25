@@ -47,7 +47,7 @@ const ContactPage = () => {
     { label: 'TikTok', href: TIKTOK_URL, icon: TikTokIcon },
     { label: 'YouTube', href: YOUTUBE_URL, icon: Youtube },
     { label: 'X', href: X_URL, icon: Twitter },
-  ];
+  ].filter((link) => Boolean(link.href));
 
   return (
     <div className="min-h-screen bg-background">

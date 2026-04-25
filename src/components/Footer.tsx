@@ -103,13 +103,15 @@ const Footer = () => {
   };
 
   const socialLinks = [
+    { icon: WhatsAppIcon, href: WHATSAPP_URL, label: 'WhatsApp' },
+    { icon: TelegramIcon, href: TELEGRAM_URL, label: 'Telegram' },
     { icon: Facebook, href: FACEBOOK_URL, label: 'Facebook' },
     { icon: Instagram, href: INSTAGRAM_URL, label: 'Instagram' },
     { icon: TikTokIcon, href: TIKTOK_URL, label: 'TikTok' },
     { icon: Youtube, href: YOUTUBE_URL, label: 'YouTube' },
     { icon: Twitter, href: X_URL, label: 'X' },
     { icon: Mail, href: 'mailto:info@aideals.be', label: 'Email info@aideals.be' },
-  ];
+  ].filter((social) => Boolean(social.href));
 
   const trustBadges = [
     { icon: Shield, label: t('footer.trust.gdpr') },
@@ -173,26 +175,6 @@ const Footer = () => {
               {t('footer.description')}
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <motion.a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, y: -2 }}
-                className="w-10 h-10 rounded-xl glass flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
-                aria-label="WhatsApp"
-              >
-                <WhatsAppIcon />
-              </motion.a>
-              <motion.a
-                href={TELEGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, y: -2 }}
-                className="w-10 h-10 rounded-xl glass flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
-                aria-label="Telegram"
-              >
-                <TelegramIcon />
-              </motion.a>
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
