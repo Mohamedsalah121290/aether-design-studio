@@ -26,7 +26,7 @@ import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
-import { openSocialUrl, TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
+import { openSocialUrl, WHATSAPP_URL, WhatsAppIcon } from '@/components/ChatbotConversion';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -304,7 +304,7 @@ const PaymentPage = () => {
             <CheckCircle className="w-10 h-10 text-white" />
           </motion.div>
           <h3 className="text-2xl font-bold mb-2 text-white">Thank you for your purchase.</h3>
-          <p className="max-w-md text-muted-foreground mb-4 leading-relaxed">Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp or Telegram. You can also contact us directly for faster support.</p>
+          <p className="max-w-md text-muted-foreground mb-4 leading-relaxed">Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp. You can also contact us directly for faster support.</p>
           <div className="flex items-center gap-2 text-sm text-green-400 mb-6">
             <Clock className="w-4 h-4" />
             <span>Activating within {activationTime} hours</span>
@@ -686,7 +686,7 @@ const PaymentPage = () => {
                   </div>
                   <div className="rounded-xl border border-primary/20 bg-primary/10 p-3 text-xs leading-relaxed text-muted-foreground">
                     <p className="font-semibold text-white">Important information:</p>
-                    <p className="mt-1">For some services, activation can be done on your personal account. If you choose this option, you will be contacted via WhatsApp or Telegram and guided step-by-step through a secure process.</p>
+                    <p className="mt-1">For some services, activation can be done on your personal account. If you choose this option, you will be contacted via WhatsApp and guided step-by-step through a secure process.</p>
                     <p className="mt-1 font-semibold text-primary">We do NOT ask for your personal passwords directly on the website.</p>
                     <p className="mt-1">We may use a secure method such as temporary access, guided activation, or alternative safe methods.</p>
                   </div>
@@ -697,7 +697,6 @@ const PaymentPage = () => {
                     <p className="mb-2 text-xs font-semibold text-white">Need help? Contact us instantly:</p>
                     <div className="grid grid-cols-2 gap-2">
                       {WHATSAPP_URL && <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
-                      {TELEGRAM_URL && <a href={TELEGRAM_URL} onClick={(event) => openSocialUrl(event, TELEGRAM_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><TelegramIcon />Telegram</a>}
                     </div>
                   </div>
                 </div>

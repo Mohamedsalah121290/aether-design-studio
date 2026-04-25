@@ -14,7 +14,7 @@ import TrustAndFAQ from './TrustAndFAQ';
 import AIRecommendations from './AIRecommendations';
 import { supabase } from '@/integrations/supabase/client';
 import SocialProofCarousel from './SocialProofCarousel';
-import { openSocialUrl, TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
+import { openSocialUrl, WHATSAPP_URL, WhatsAppIcon } from './ChatbotConversion';
 
 /* ── Section config ─────────────────────────────────────────────── */
 const SECTION_ORDER: {
@@ -350,7 +350,6 @@ const Storefront = () => {
                              <p className="mb-3 text-sm font-semibold text-white">{t('store.needHelp')}</p>
                              <div className="grid grid-cols-2 gap-3">
                                {WHATSAPP_URL && <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
-                               {TELEGRAM_URL && <a href={TELEGRAM_URL} onClick={(event) => openSocialUrl(event, TELEGRAM_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><TelegramIcon />Telegram</a>}
                             </div>
                           </div>
                         </div>

@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Clock, ArrowRight, ShieldCheck, Package } from 'lucide-react';
-import { openSocialUrl, TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
+import { openSocialUrl, WHATSAPP_URL, WhatsAppIcon } from '@/components/ChatbotConversion';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -35,7 +35,7 @@ const PaymentSuccess = () => {
           >
             <h1 className="text-3xl font-bold text-white mb-3">Payment Successful!</h1>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              Thank you for your purchase. Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp or Telegram. You can also contact us directly for faster support.
+              Thank you for your purchase. Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp. You can also contact us directly for faster support.
             </p>
           </motion.div>
 
@@ -80,7 +80,6 @@ const PaymentSuccess = () => {
               <p className="text-sm font-semibold text-white">Need help? Contact us instantly:</p>
               <div className="mt-3 grid grid-cols-2 gap-2">
                 {WHATSAPP_URL && <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
-                {TELEGRAM_URL && <a href={TELEGRAM_URL} onClick={(event) => openSocialUrl(event, TELEGRAM_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><TelegramIcon />Telegram</a>}
               </div>
             </div>
           </motion.div>
