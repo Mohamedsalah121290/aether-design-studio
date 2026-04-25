@@ -22,6 +22,7 @@ import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
+import { TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -38,6 +39,8 @@ const WHAT_YOU_GET = [
   'Dedicated support channel',
   'Cancel anytime, no lock-in',
 ];
+
+const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
 export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: CheckoutDialogProps) => {
   const { t } = useTranslation();
