@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { Facebook, Instagram, Mail, Clock, MessageSquare, Send, Globe, Shield, Youtube, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,27 +15,28 @@ import KeywordCluster from '@/components/KeywordCluster';
 import { ChatbotPromoSection, FACEBOOK_URL, INSTAGRAM_URL, TelegramIcon, TELEGRAM_URL, TikTokIcon, TIKTOK_URL, WhatsAppIcon, WHATSAPP_URL, X_URL, YOUTUBE_URL } from '@/components/ChatbotConversion';
 
 const ContactPage = () => {
+  const { t } = useTranslation();
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [sending, setSending] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
-      toast({ title: 'Missing fields', description: 'Please fill in all required fields.', variant: 'destructive' });
+      toast({ title: t('contact.toastMissingTitle'), description: t('contact.toastMissingDescription'), variant: 'destructive' });
       return;
     }
     setSending(true);
-    const mailtoLink = `mailto:info@aideals.be?subject=${encodeURIComponent(form.subject || 'Contact from AI DEALS')}&body=${encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)}`;
+    const mailtoLink = `mailto:info@aideals.be?subject=${encodeURIComponent(form.subject || t('contact.mailSubject'))}&body=${encodeURIComponent(`${t('contact.mailName')}: ${form.name}\n${t('contact.mailEmail')}: ${form.email}\n\n${form.message}`)}`;
     window.open(mailtoLink, '_blank');
-    toast({ title: '✉️ Message Ready', description: 'Your email client has been opened with the message.' });
+    toast({ title: t('contact.toastReadyTitle'), description: t('contact.toastReadyDescription') });
     setSending(false);
   };
 
   const supportInfo = [
-    { icon: Mail, title: 'Email Us', value: 'info@aideals.be', description: 'Direct line to our team' },
-    { icon: Clock, title: 'Response Time', value: 'Within 24 Hours', description: 'We guarantee a reply within one business day' },
-    { icon: Shield, title: 'Privacy First', value: 'GDPR Principled', description: 'Your data is never shared or sold' },
-    { icon: Globe, title: 'Global Support', value: 'Worldwide Access', description: 'We serve students and creators globally' },
+    { icon: Mail, title: t('contact.support.emailTitle'), value: t('contact.support.emailValue'), description: t('contact.support.emailDesc') },
+    { icon: Clock, title: t('contact.support.timeTitle'), value: t('contact.support.timeValue'), description: t('contact.support.timeDesc') },
+    { icon: Shield, title: t('contact.support.privacyTitle'), value: t('contact.support.privacyValue'), description: t('contact.support.privacyDesc') },
+    { icon: Globe, title: t('contact.support.globalTitle'), value: t('contact.support.globalValue'), description: t('contact.support.globalDesc') },
   ];
 
   const contactLinks = [
@@ -63,14 +65,14 @@ const ContactPage = () => {
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 text-primary text-sm font-medium mb-6 glass">
               <MessageSquare className="w-4 h-4" />
-              Get in Touch
+              {t('contact.badge')}
             </span>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              Contact <span className="gradient-text">Us</span>
+              {t('contact.title')} <span className="gradient-text">{t('contact.titleHighlight')}</span>
             </h1>
             <p className="text-muted-foreground text-lg">
-              Have a question, suggestion, or need help? We'd love to hear from you — wherever you are in the world.
-              We respond to every message <span className="text-primary font-medium">within 24 hours</span>.
+              {t('contact.description')}
+              {' '}{t('contact.response')} <span className="text-primary font-medium">{t('contact.responseTime')}</span>.
             </p>
           </motion.div>
         </section>
@@ -87,51 +89,51 @@ const ContactPage = () => {
               <form onSubmit={handleSubmit} className="glass rounded-2xl p-6 md:p-8 space-y-5">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name *</Label>
+                    <Label htmlFor="name">{t('contact.name')}</Label>
                     <Input
                       id="name"
                       value={form.name}
                       onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      placeholder="Your name"
+                      placeholder={t('contact.namePlaceholder')}
                       className="bg-muted/50 border-border"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
+                    <Label htmlFor="email">{t('contact.email')}</Label>
                     <Input
                       id="email"
                       type="email"
                       value={form.email}
                       onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                      placeholder="you@example.com"
+                      placeholder={t('contact.emailPlaceholder')}
                       className="bg-muted/50 border-border"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="subject">Subject</Label>
+                  <Label htmlFor="subject">{t('contact.subject')}</Label>
                   <Input
                     id="subject"
                     value={form.subject}
                     onChange={e => setForm(f => ({ ...f, subject: e.target.value }))}
-                    placeholder="What's this about?"
+                    placeholder={t('contact.subjectPlaceholder')}
                     className="bg-muted/50 border-border"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="message">Message *</Label>
+                  <Label htmlFor="message">{t('contact.message')}</Label>
                   <Textarea
                     id="message"
                     value={form.message}
                     onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                    placeholder="Tell us how we can help..."
+                    placeholder={t('contact.messagePlaceholder')}
                     rows={5}
                     className="bg-muted/50 border-border resize-none"
                   />
                 </div>
                 <Button type="submit" variant="hero" size="lg" className="w-full" disabled={sending}>
                   <Send className="w-4 h-4 mr-2" />
-                  {sending ? 'Sending...' : 'Send Message'}
+                  {sending ? t('contact.sending') : t('contact.send')}
                 </Button>
               </form>
             </motion.div>
@@ -144,7 +146,7 @@ const ContactPage = () => {
               className="md:col-span-2 space-y-4"
             >
               <div className="glass rounded-2xl p-5">
-                <h3 className="font-display font-bold text-sm mb-3">Contact us instantly</h3>
+                <h3 className="font-display font-bold text-sm mb-3">{t('contact.instant')}</h3>
                 <div className="flex flex-wrap gap-3">
                   {contactLinks.map(({ label, href, icon: Icon }) => (
                     <a
@@ -153,7 +155,7 @@ const ContactPage = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-12 h-12 rounded-xl glass flex items-center justify-center hover:border-primary/30 transition-all duration-300 hover:scale-105"
-                      aria-label={`Contact on ${label}`}
+                      aria-label={t('contact.socialAria', { platform: label })}
                     >
                       <Icon />
                     </a>

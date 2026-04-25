@@ -89,12 +89,12 @@ const Footer = () => {
     product: [
       { label: t('nav.store'), href: '/store' },
       { label: t('nav.academy'), href: '/academy' },
-      { label: 'Blog', href: '/blog' },
+      { label: t('footer.links.blog'), href: '/blog' },
       { label: t('nav.dashboard'), href: '/dashboard' },
     ],
     company: [
       { label: t('nav.about'), href: '/about' },
-      { label: 'Contact', href: '/contact' },
+      { label: t('footer.links.contact'), href: '/contact' },
     ],
     legal: [
       { label: t('footer.links.privacy'), href: '/privacy' },
@@ -112,10 +112,10 @@ const Footer = () => {
   ];
 
   const trustBadges = [
-    { icon: Shield, label: 'GDPR-Friendly' },
-    { icon: Lock, label: 'Secure Checkout' },
-    { icon: Zap, label: 'Fast Activation' },
-    { icon: Globe, label: 'Built in Europe · Global Access' },
+    { icon: Shield, label: t('footer.trust.gdpr') },
+    { icon: Lock, label: t('footer.trust.checkout') },
+    { icon: Zap, label: t('footer.trust.activation') },
+    { icon: Globe, label: t('footer.trust.global') },
   ];
 
   return (
@@ -261,15 +261,15 @@ const Footer = () => {
 
           {/* Newsletter Mini */}
           <div>
-            <h4 className="font-display font-bold mb-4">Stay Updated</h4>
-            <p className="text-muted-foreground text-xs mb-3">Weekly AI tips for students & creators.</p>
+            <h4 className="font-display font-bold mb-4">{t('footer.newsletterTitle')}</h4>
+            <p className="text-muted-foreground text-xs mb-3">{t('footer.newsletterText')}</p>
             <form
               onSubmit={newsletter.subscribe}
               className="flex flex-col gap-2"
             >
               <Input
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t('footer.emailPlaceholder')}
                 required
                 value={newsletter.email}
                 onChange={(e) => newsletter.setEmail(e.target.value)}
@@ -277,7 +277,7 @@ const Footer = () => {
               />
               <Button variant="default" size="sm" type="submit" disabled={newsletter.loading} className="w-full h-9 rounded-lg text-xs">
                 <Mail className="w-3 h-3 mr-1.5" />
-                {newsletter.loading ? 'Subscribing...' : 'Subscribe'}
+                {newsletter.loading ? t('footer.subscribing') : t('footer.subscribe')}
               </Button>
             </form>
           </div>
@@ -293,11 +293,11 @@ const Footer = () => {
           </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <Link to="/privacy" className="hover:text-foreground transition-colors">
-              Privacy
+              {t('footer.links.privacy')}
             </Link>
             <span>•</span>
             <Link to="/terms" className="hover:text-foreground transition-colors">
-              Terms
+              {t('footer.links.terms')}
             </Link>
           </div>
         </div>

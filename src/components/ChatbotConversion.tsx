@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import ReactMarkdown from 'react-markdown';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getStoredRegion } from '@/lib/geo';
@@ -101,7 +102,6 @@ const productLocale: Record<LangKey, Record<string, Pick<Product, 'desc' | 'bene
   ar: { chatgpt: { desc: 'مساعد ذكاء اصطناعي للاستخدام اليومي.', benefits: ['مساعدة في الكتابة', 'بحث أسرع', 'أفكار لسير العمل'] }, perplexity: { desc: 'بحث سريع مع مصادر.', benefits: ['مصادر واضحة', 'إجابات سريعة', 'مناسب لاتخاذ القرار'] }, elevenlabs: { desc: 'إنشاء الصوت والمحتوى الصوتي.', benefits: ['أصوات طبيعية', 'لغات متعددة', 'صوت جاهز للمحتوى'] }, canva: { desc: 'صمّم المنشورات والمواد أسرع.', benefits: ['قوالب جاهزة', 'تعديلات سريعة', 'يعمل على الموبايل'] }, capcut: { desc: 'تعديل الفيديوهات القصيرة.', benefits: ['مونتاج سريع', 'أدوات للمبدعين', 'تصدير سهل'] }, microsoft_365: { desc: 'مستندات وأدوات عمل سحابية.', benefits: ['تطبيقات Office', 'سير عمل سحابي', 'مناسب للأعمال'] }, notion: { desc: 'خطّط واكتب ونظّم.', benefits: ['مساحة عمل واضحة', 'تنظيم أفضل', 'مناسب للفِرق'] }, zoom: { desc: 'اجتماعات موثوقة.', benefits: ['مكالمات مستقرة', 'أدوات اجتماعات', 'إعداد احترافي'] } },
 };
 
-const bullets = ['Instant replies', 'Works in multiple languages', '24/7 availability', 'Works across all platforms', 'Increases conversions'];
 const langTint: Record<LangKey, string> = { en: 'hsl(var(--primary))', fr: 'hsl(var(--secondary))', nl: '#25D366', de: 'hsl(var(--accent))', es: '#F5C542', it: '#25D366', ar: 'hsl(var(--secondary))' };
 const fallbackText: Record<LangKey, { received: string; error: string; assistant: string; online: string; soundOff: string; soundOn: string; close: string; play: string; mic: string; send: string; open: string }> = {
   en: { received: 'Bot response received.', error: 'Unable to connect right now. Please try again.', assistant: 'AI Deals Assistant', online: 'Online', soundOff: 'Turn sound off', soundOn: 'Turn sound on', close: 'Close chatbot', play: 'Play message', mic: 'Press to talk', send: 'Send message', open: 'Open AI Deals chatbot' },
@@ -129,30 +129,37 @@ const RobotAvatar = ({ className = 'w-9 h-9', lang = 'en', speaking = false, rou
   </span>
 );
 
-export const ChatbotPromoSection = () => (
-  <section className="py-24 relative overflow-hidden" id="chatbot-promo">
-    <div className="container mx-auto px-4">
-      <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="glass rounded-3xl p-8 md:p-12 max-w-5xl mx-auto">
-        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 items-center">
-          <div>
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 text-primary text-sm font-medium mb-6 glass"><RobotAvatar className="w-5 h-5" />AI Chatbot</span>
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-5 leading-tight">Your AI Assistant That <span className="gradient-text">Never Sleeps</span></h2>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-7">Reply to customers instantly, 24/7, on your website, WhatsApp, and Telegram.</p>
-            <div className="grid sm:grid-cols-2 gap-3 mb-8">{bullets.map((item) => <div key={item} className="flex items-center gap-3 text-sm text-foreground"><CheckCircle className="w-4 h-4 text-primary shrink-0" />{item}</div>)}</div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:items-center"><Button variant="hero" size="lg" asChild><Link to="/store">Activate Chatbot</Link></Button><p className="text-xs text-muted-foreground">No missed messages. No lost customers.</p></div>
+export const ChatbotPromoSection = () => {
+  const { t } = useTranslation();
+  const bullets = t('chatbot.bullets', { returnObjects: true }) as string[];
+  const preview = t('chatbot.preview', { returnObjects: true }) as string[];
+
+  return (
+    <section className="py-24 relative overflow-hidden" id="chatbot-promo">
+      <div className="container mx-auto px-4">
+        <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="glass rounded-3xl p-8 md:p-12 max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 text-primary text-sm font-medium mb-6 glass"><RobotAvatar className="w-5 h-5" />{t('chatbot.promoBadge')}</span>
+              <h2 className="text-3xl md:text-5xl font-display font-bold mb-5 leading-tight">{t('chatbot.promoTitle')} <span className="gradient-text">{t('chatbot.promoHighlight')}</span></h2>
+              <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-7">{t('chatbot.promoDescription')}</p>
+              <div className="grid sm:grid-cols-2 gap-3 mb-8">{bullets.map((item) => <div key={item} className="flex items-center gap-3 text-sm text-foreground"><CheckCircle className="w-4 h-4 text-primary shrink-0" />{item}</div>)}</div>
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center"><Button variant="hero" size="lg" asChild><Link to="/store">{t('chatbot.promoButton')}</Link></Button><p className="text-xs text-muted-foreground">{t('chatbot.promoNote')}</p></div>
+            </div>
+            <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15, duration: 0.5 }} className="rounded-2xl border border-border bg-muted/20 p-5 space-y-3">
+              <div className="flex items-center gap-2 text-sm font-semibold"><MessageCircle className="w-4 h-4 text-primary" />{t('chatbot.previewTitle')}</div>
+              {preview.map((line, index) => <div key={line} className={`rounded-xl px-4 py-3 text-sm ${index % 2 ? 'bg-primary/10 text-foreground ms-8' : 'bg-white/[0.04] text-muted-foreground me-8'}`}>{line}</div>)}
+            </motion.div>
           </div>
-          <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15, duration: 0.5 }} className="rounded-2xl border border-border bg-muted/20 p-5 space-y-3">
-            <div className="flex items-center gap-2 text-sm font-semibold"><MessageCircle className="w-4 h-4 text-primary" />Live sales flow preview</div>
-            {['What are you looking for?', 'AI tools', 'Best start: ChatGPT Plus for daily writing and workflows.', 'Do you want the access link?'].map((line, index) => <div key={line} className={`rounded-xl px-4 py-3 text-sm ${index % 2 ? 'bg-primary/10 text-foreground ms-8' : 'bg-white/[0.04] text-muted-foreground me-8'}`}>{line}</div>)}
-          </motion.div>
-        </div>
-      </motion.div>
-    </div>
-  </section>
-);
+        </motion.div>
+      </div>
+    </section>
+  );
+};
 
 export const ChatbotSalesFlow = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   const lang = useLang();
   const text = copy[lang];
   const [ready, setReady] = useState(false);
@@ -177,6 +184,17 @@ export const ChatbotSalesFlow = () => {
     window.addEventListener('scroll', update, { passive: true });
     return () => window.removeEventListener('scroll', update);
   }, [location.pathname]);
+  useEffect(() => {
+    window.speechSynthesis?.cancel?.();
+    setSpeakingId(null);
+    setListening(false);
+    setSending(false);
+    setInput('');
+    localStorage.removeItem('aiDealsActiveChatFlow');
+    localStorage.removeItem('aiDealsActiveFunnel');
+    setMessages([initialMessage]);
+    setSelected(null);
+  }, [lang, initialMessage]);
   useEffect(() => {
     const storedFlow = localStorage.getItem('aiDealsActiveChatFlow') as FlowKey | null;
     if (storedFlow && products[storedFlow]) {
@@ -263,7 +281,7 @@ export const ChatbotSalesFlow = () => {
       const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: value, language: lang, locale: text.voice[0], region: getStoredRegion(), instruction: `Reply only in ${lang}. Do not mix languages.` }),
+        body: JSON.stringify({ message: value, language: lang, locale: text.voice[0], region: getStoredRegion(), instruction: t('chatbot.directionInstruction') }),
       });
 
       if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
@@ -316,7 +334,7 @@ export const ChatbotSalesFlow = () => {
                   {message.role === 'bot' && <RobotAvatar className="w-8 h-8" lang={lang} speaking={speakingId === message.id} />}
                   <div className={`max-w-[84%] break-words ${message.role === 'user' ? 'bg-primary/20 text-foreground' : 'bg-white/[0.04] text-foreground'} rounded-xl px-3 sm:px-4 py-3 text-sm leading-relaxed`}>
                     <div className="flex items-start gap-2">
-                      <p className="flex-1">{message.text}</p>
+                      <div className="flex-1 prose prose-sm prose-invert max-w-none prose-p:my-0 prose-ul:my-1 prose-li:my-0"><ReactMarkdown>{message.text}</ReactMarkdown></div>
                       {message.role === 'bot' && <button onClick={() => speak(message)} className="shrink-0 text-muted-foreground hover:text-primary transition-colors" aria-label={fallbackText[lang].play}><Volume2 className="w-3.5 h-3.5" /></button>}
                     </div>
                     {message.products && <div className="mt-3 space-y-2">{message.products.map((product) => <div key={product.id} className="rounded-xl border border-border bg-muted/20 p-3"><div className="flex items-start justify-between gap-3 mb-2"><div><h4 className="text-sm font-semibold text-foreground">{product.name}</h4><p className="text-xs text-muted-foreground mt-1">{product.desc}</p></div><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)} className="text-primary hover:text-foreground transition-colors" aria-label={`Open ${product.name}`}><ChevronRight className="w-4 h-4" /></Link></div><ul className="space-y-1 mb-3">{product.benefits.map((benefit) => <li key={benefit} className="flex items-center gap-2 text-[11px] text-muted-foreground"><CheckCircle className="w-3 h-3 text-primary shrink-0" />{benefit}</li>)}</ul><p className="text-[11px] text-muted-foreground mb-3">{text.price}</p><Button variant="heroOutline" size="sm" asChild className="w-full"><Link to={`/store?scrollTo=${product.id}`} onClick={() => setOpen(false)}>{text.access}</Link></Button></div>)}</div>}
