@@ -8,7 +8,7 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const N8N_CHAT_WEBHOOK_URL = "https://asd202.app.n8n.cloud/webhook-test/e01e2727-e586-4b51-be17-ed1fb782b9c6";
+const N8N_CHAT_WEBHOOK_URL = "https://asd202.app.n8n.cloud/webhook-test/54b9fa98-ba47-49c4-a089-406b8d3028f2";
 
 const BodySchema = z.object({
   message: z.string().trim().min(1).max(1000),
@@ -74,12 +74,12 @@ serve(async (req) => {
       });
     }
 
-    const { message, language, instruction } = parsed.data;
+    const { message, language } = parsed.data;
 
     const n8nResponse = await fetch(N8N_CHAT_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, language, instruction }),
+      body: JSON.stringify({ message }),
     });
 
     const body = await readResponseBody(n8nResponse);
