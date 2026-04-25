@@ -440,6 +440,7 @@ const Index = () => {
                     <span className="inline-flex mb-2 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-muted-foreground">{tool.badge}</span>
                     <h3 className="text-base font-display font-bold text-foreground truncate">{tool.name}</h3>
                     <p className="text-sm font-semibold text-primary mt-1">{tool.price}</p>
+                    <p className="mt-1 text-xs font-medium text-muted-foreground">Taxes (if applicable) are calculated at checkout.</p>
                   </div>
                   <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Buy Now</span>
                 </Link>
