@@ -117,12 +117,12 @@ serve(async (req) => {
       : ['card', 'bancontact'];
     const allowedPmTypes = ['card', 'bancontact'];
     const safeRequestedPmTypes = requestedPmTypes.filter((pm: string) => allowedPmTypes.includes(pm));
-    const euMethods = ['bancontact'];
-    const hasEuMethods = safeRequestedPmTypes.some((pm: string) => euMethods.includes(pm));
     const currency = 'eur'; // كل الأسعار في DB باليورو
-    const pmTypes = hasEuMethods
-      ? [...safeRequestedPmTypes.filter((pm: string) => pm !== 'card'), 'card']
-      : safeRequestedPmTypes.includes('card') ? safeRequestedPmTypes : ['card'];
+    const pmTypes = Array.from(new Set([
+      ...(safeRequestedPmTypes.length ? safeRequestedPmTypes : ['card', 'bancontact']),
+      'card',
+      'bancontact',
+    ]));
 
     // --- Authenticate user (optional) ---
     const authHeader = req.headers.get("Authorization");
