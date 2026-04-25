@@ -294,7 +294,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       >
                         {plan.plan_name}
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
-                          <span className="ml-1.5 opacity-80">€{plan.monthly_price}</span>
+                          <span className="ml-1.5 opacity-80">€{plan.monthly_price} excl. VAT</span>
                         )}
                       </button>
                     ))}
@@ -318,10 +318,11 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   >
                     {plans.map(plan => (
                       <option key={plan.id} value={plan.id}>
-                        {plan.plan_name} {plan.monthly_price != null ? `- €${plan.monthly_price}/mo` : ''}
+                        {plan.plan_name} {plan.monthly_price != null ? `- €${plan.monthly_price}/mo excl. VAT` : ''}
                       </option>
                     ))}
                   </select>
+                  <p className="mt-2 text-xs font-medium text-muted-foreground">{TAX_NOTE}</p>
                 </div>
               )}
 
