@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { socialLinks, supportLinks } from '@/lib/socialLinks';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
-const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook/e01e2727-e586-4b51-be17-ed1fb782b9c6';
+const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook-test/e01e2727-e586-4b51-be17-ed1fb782b9c6';
 
 export const openSocialUrl = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
   event.preventDefault();
