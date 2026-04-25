@@ -114,13 +114,15 @@ serve(async (req) => {
     // --- Payment method & currency config ---
     const requestedPmTypes = Array.isArray(paymentMethodTypes) && paymentMethodTypes.length > 0
       ? paymentMethodTypes
-      : ['card'];
-    const euMethods = ['ideal', 'bancontact', 'sepa_debit'];
-    const hasEuMethods = requestedPmTypes.some((pm: string) => euMethods.includes(pm));
+      : ['card', 'bancontact'];
+    const allowedPmTypes = ['card', 'bancontact'];
+    const safeRequestedPmTypes = requestedPmTypes.filter((pm: string) => allowedPmTypes.includes(pm));
+    const euMethods = ['bancontact'];
+    const hasEuMethods = safeRequestedPmTypes.some((pm: string) => euMethods.includes(pm));
     const currency = 'eur'; // كل الأسعار في DB باليورو
     const pmTypes = hasEuMethods
-      ? ['card', ...requestedPmTypes.filter((pm: string) => pm !== 'card')]
-      : requestedPmTypes.includes('card') ? requestedPmTypes : ['card', ...requestedPmTypes];
+      ? [...safeRequestedPmTypes.filter((pm: string) => pm !== 'card'), 'card']
+      : safeRequestedPmTypes.includes('card') ? safeRequestedPmTypes : ['card'];
 
     // --- Authenticate user (optional) ---
     const authHeader = req.headers.get("Authorization");
