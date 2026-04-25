@@ -37,10 +37,10 @@ const trustBadges = [
 ];
 
 const mobilePopularTools = [
-  { name: 'ChatGPT Plus', id: 'chatgpt', price: 'From €9.99', badge: 'Best choice' },
-  { name: 'Canva Pro', id: 'canva', price: 'From €7.99', badge: 'Most popular' },
-  { name: 'Perplexity Pro', id: 'perplexity', price: 'From €9.99', badge: 'Starter option' },
-  { name: 'CapCut Pro', id: 'capcut', price: 'From €7.99', badge: 'Popular choice' },
+  { name: 'ChatGPT Plus', id: 'chatgpt', price: 'From €9.99 (excl. VAT)', badge: 'Best choice' },
+  { name: 'Canva Pro', id: 'canva', price: 'From €7.99 (excl. VAT)', badge: 'Most popular' },
+  { name: 'Perplexity Pro', id: 'perplexity', price: 'From €9.99 (excl. VAT)', badge: 'Starter option' },
+  { name: 'CapCut Pro', id: 'capcut', price: 'From €7.99 (excl. VAT)', badge: 'Popular choice' },
 ];
 
 const intentFunnels = {
