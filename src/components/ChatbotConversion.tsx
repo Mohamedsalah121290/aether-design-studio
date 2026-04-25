@@ -154,7 +154,8 @@ export const ChatbotSalesFlow = () => {
       const key = (event as CustomEvent<IntentKey>).detail;
       const funnel = funnelMessages[key];
       if (!funnel) return;
-      const next: Message = { id: Date.now(), role: 'bot', text: funnel.text[lang], products: products[funnel.flow] };
+      const localizedProducts = products[funnel.flow].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
+      const next: Message = { id: Date.now(), role: 'bot', text: funnel.text[lang], products: localizedProducts };
       setSelected(funnel.flow);
       setMessages([next]);
       setOpen(true);
@@ -164,8 +165,9 @@ export const ChatbotSalesFlow = () => {
     const stored = localStorage.getItem('aiDealsActiveFunnel') as IntentKey | null;
     if (stored && funnelMessages[stored]) {
       const funnel = funnelMessages[stored];
+      const localizedProducts = products[funnel.flow].map((product) => ({ ...product, ...(productLocale[lang][product.id] || {}) }));
       setSelected(funnel.flow);
-      setMessages([{ id: Date.now(), role: 'bot', text: funnel.text[lang], products: products[funnel.flow] }]);
+      setMessages([{ id: Date.now(), role: 'bot', text: funnel.text[lang], products: localizedProducts }]);
     }
     return () => window.removeEventListener('aiDeals:funnel', adaptToFunnel as EventListener);
   }, [lang, soundOn, text.voice]);
