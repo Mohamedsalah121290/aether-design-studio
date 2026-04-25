@@ -64,9 +64,26 @@ const WHAT_YOU_GET = [
 
 const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
-const LOVABLE_PLAN_DETAILS: Record<string, { badge: string; duration: string; credits: string }> = {
-  lovable_2_months: { badge: 'Best Starter', duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month' },
-  lovable_3_months: { badge: 'Best Value', duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month' },
+const LOVABLE_PLAN_DETAILS: Record<string, { badge: string; duration: string; credits: string; months: number }> = {
+  lovable_2_months: { badge: 'Best Starter', duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', months: 2 },
+  lovable_3_months: { badge: '⭐ Best Value', duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', months: 3 },
+};
+
+const getMonthlyPlanValue = (plan: ToolPlan) => {
+  const details = LOVABLE_PLAN_DETAILS[plan.plan_id];
+  if (!details || !plan.monthly_price) return null;
+  const monthly = Number(plan.monthly_price) / details.months;
+  return `≈ €${Number.isInteger(monthly) ? monthly : monthly.toFixed(1)} / month`;
+};
+
+const getBestValuePlan = (plans: ToolPlan[]) => {
+  const pricedPlans = plans.filter(plan => plan.monthly_price && LOVABLE_PLAN_DETAILS[plan.plan_id]);
+  return pricedPlans.reduce<ToolPlan | null>((best, plan) => {
+    if (!best) return plan;
+    const currentValue = Number(plan.monthly_price) / LOVABLE_PLAN_DETAILS[plan.plan_id].months;
+    const bestValue = Number(best.monthly_price) / LOVABLE_PLAN_DETAILS[best.plan_id].months;
+    return currentValue < bestValue ? plan : best;
+  }, null);
 };
 
 const tierLabel = (index: number, total: number) => {
@@ -150,12 +167,15 @@ const PaymentPage = () => {
         activation_time: p.activation_time,
         is_active: p.is_active,
       }));
-      setPlans(mapped);
+      const displayPlans = id === 'lovable'
+        ? [...mapped].sort((a, b) => (b.plan_id === 'lovable_3_months' ? 1 : 0) - (a.plan_id === 'lovable_3_months' ? 1 : 0))
+        : mapped;
+      setPlans(displayPlans);
       const requestedPlan = searchParams.get('plan');
       const defaultPlan = id === 'lovable'
-        ? mapped.find(plan => plan.plan_id === (requestedPlan || 'lovable_3_months')) || mapped.find(plan => plan.plan_id === 'lovable_3_months')
+        ? displayPlans.find(plan => plan.plan_id === requestedPlan) || getBestValuePlan(displayPlans)
         : null;
-      if (mapped.length > 0) setSelectedPlan(defaultPlan || mapped[0]);
+      if (displayPlans.length > 0) setSelectedPlan(defaultPlan || displayPlans[0]);
     } catch (err) {
       console.error(err);
     } finally {
