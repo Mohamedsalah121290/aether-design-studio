@@ -14,7 +14,7 @@ import TrustAndFAQ from './TrustAndFAQ';
 import AIRecommendations from './AIRecommendations';
 import { supabase } from '@/integrations/supabase/client';
 import SocialProofCarousel from './SocialProofCarousel';
-import { openSocialUrl, WhatsAppIcon } from './ChatbotConversion';
+import { Social3DLink, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
 
 /* ── Section config ─────────────────────────────────────────────── */
@@ -349,8 +349,9 @@ const Storefront = () => {
                           </div>
                           <div>
                              <p className="mb-3 text-sm font-semibold text-white">{t('store.needHelp')}</p>
-                             <div className="grid grid-cols-2 gap-3">
-                               {supportLinks.whatsapp && <a href={supportLinks.whatsapp} onClick={(event) => openSocialUrl(event, supportLinks.whatsapp)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
+                              <div className="flex flex-wrap gap-3">
+                               {supportLinks.whatsapp && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
+                               {supportLinks.telegram && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
                             </div>
                           </div>
                         </div>

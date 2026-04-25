@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Clock, ArrowRight, ShieldCheck, Package } from 'lucide-react';
-import { openSocialUrl, WhatsAppIcon } from '@/components/ChatbotConversion';
+import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
 
 const PaymentSuccess = () => {
@@ -79,8 +79,9 @@ const PaymentSuccess = () => {
 
             <div className="p-4 rounded-2xl border border-primary/20 bg-primary/10 text-left">
               <p className="text-sm font-semibold text-white">Need help? Contact us instantly:</p>
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {supportLinks.whatsapp && <a href={supportLinks.whatsapp} onClick={(event) => openSocialUrl(event, supportLinks.whatsapp)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
+              <div className="mt-3 flex flex-wrap gap-3">
+                {supportLinks.whatsapp && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
+                {supportLinks.telegram && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
               </div>
             </div>
           </motion.div>
