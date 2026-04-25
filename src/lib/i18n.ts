@@ -6198,6 +6198,32 @@ Object.entries(launchI18nPatches).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
 
+Object.entries(professionalI18nPatches).forEach(([lng, bundle]) => {
+  i18n.addResourceBundle(lng, 'translation', bundle, true, true);
+});
+
+const runInternalI18nQa = () => {
+  if (typeof window === 'undefined' || !new URLSearchParams(window.location.search).has('i18nQa')) return;
+  const flatten = (value: unknown, prefix = '', out: Record<string, string> = {}) => {
+    if (typeof value === 'string') out[prefix] = value;
+    else if (Array.isArray(value)) value.forEach((item, index) => flatten(item, `${prefix}[${index}]`, out));
+    else if (value && typeof value === 'object') Object.entries(value as Record<string, unknown>).forEach(([key, item]) => flatten(item, prefix ? `${prefix}.${key}` : key, out));
+    return out;
+  };
+  const english = flatten(i18n.getResourceBundle('en', 'translation'));
+  const brandSafe = /^(AI DEALS|AI Academy|ChatGPT|Canva|CapCut|Perplexity|Grok|ElevenLabs|Lovable|Office|Windows|ESET|Notion|Coursera|LinkedIn|Zoom|Stripe|Bancontact|EUR|GDPR|WhatsApp|Telegram|email@example\.com|you@example\.com|your@email\.com)$/i;
+  const report = languages.filter(({ code }) => code !== 'en').map(({ code }) => {
+    const bundle = flatten(i18n.getResourceBundle(code, 'translation'));
+    const missing = Object.keys(english).filter((key) => !(key in bundle));
+    const englishFallback = Object.entries(bundle).filter(([key, value]) => english[key] === value && !brandSafe.test(value)).map(([key]) => key);
+    return { language: code, missingKeys: missing.length, englishFallbacks: englishFallback.length, sampleMissing: missing.slice(0, 12), sampleFallbacks: englishFallback.slice(0, 12) };
+  });
+  console.table(report);
+  window.__AI_DEALS_I18N_QA__ = report;
+};
+
+runInternalI18nQa();
+
 // Apply initial settings
 applyLanguageSettings(getResolvedAppLanguage());
 
