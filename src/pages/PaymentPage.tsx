@@ -26,6 +26,7 @@ import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
+import { TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -60,6 +61,8 @@ const WHAT_YOU_GET = [
   'Dedicated support channel',
   'Cancel anytime, no lock-in',
 ];
+
+const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
 const dailyEquivalent = (price: number | null | undefined, period: ReturnType<typeof inferPeriodFromPlan>) => {
   if (!price || price <= 0) return null;
