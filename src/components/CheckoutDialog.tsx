@@ -294,7 +294,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       >
                         {plan.plan_name}
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
-                          <span className="ml-1.5 opacity-80">€{plan.monthly_price} excl. VAT</span>
+                          <span className="ml-1.5 opacity-80">€{plan.monthly_price} (excl. VAT)</span>
                         )}
                       </button>
                     ))}
@@ -318,7 +318,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   >
                     {plans.map(plan => (
                       <option key={plan.id} value={plan.id}>
-                        {plan.plan_name} {plan.monthly_price != null ? `- €${plan.monthly_price}/mo excl. VAT` : ''}
+                        {plan.plan_name} {plan.monthly_price != null ? `- €${plan.monthly_price}/mo (excl. VAT)` : ''}
                       </option>
                     ))}
                   </select>
@@ -381,8 +381,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                 <div>
                   <p className="mb-2 text-xs font-semibold text-white">Need help? Contact us instantly:</p>
                   <div className="grid grid-cols-2 gap-2">
-                    <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>
-                    <a href={TELEGRAM_URL} onClick={(event) => openSocialUrl(event, TELEGRAM_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><TelegramIcon />Telegram</a>
+                    {WHATSAPP_URL && <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
+                    {TELEGRAM_URL && <a href={TELEGRAM_URL} onClick={(event) => openSocialUrl(event, TELEGRAM_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><TelegramIcon />Telegram</a>}
                   </div>
                 </div>
               </div>
@@ -428,7 +428,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     <div className="mt-3 pt-3 border-t border-white/10 space-y-1">
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Original price</span>
-                        <span>€{displayPrice?.toFixed(2)}/mo excl. VAT</span>
+                        <span>€{displayPrice?.toFixed(2)}/mo (excl. VAT)</span>
                       </div>
                       <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
                         <span>Wallet credit</span>
@@ -436,7 +436,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-white">
                         <span>You pay</span>
-                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `€${effectivePrice?.toFixed(2)}/mo excl. VAT`}</span>
+                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `€${effectivePrice?.toFixed(2)}/mo (excl. VAT)`}</span>
                       </div>
                       <p className="text-xs font-medium text-muted-foreground text-right">{TAX_NOTE}</p>
                     </div>

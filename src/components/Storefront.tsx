@@ -40,9 +40,9 @@ const PRICING_TIERS = [
 ];
 
 const BUNDLES = [
-  { key: 'aiStarter', original: '€45/month', price: '€29/month', daily: '≈ €0.97/day', toolId: 'chatgpt' },
-  { key: 'creator', original: '€54/month', price: '€35/month', daily: '≈ €1.17/day', toolId: 'canva' },
-  { key: 'business', original: '€59/month', price: '€39/month', daily: '≈ €1.30/day', toolId: 'microsoft_365' },
+  { key: 'aiStarter', original: '€45/month', price: '€29', period: '/month', daily: '≈ €0.97/day', toolId: 'chatgpt' },
+  { key: 'creator', original: '€54/month', price: '€35', period: '/month', daily: '≈ €1.17/day', toolId: 'canva' },
+  { key: 'business', original: '€59/month', price: '€39', period: '/month', daily: '≈ €1.30/day', toolId: 'microsoft_365' },
 ];
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
@@ -300,8 +300,9 @@ const Storefront = () => {
                           <div className="flex items-end gap-2">
                             <span className="text-sm text-white/35 line-through">{bundle.original}</span>
                             <span className="text-2xl font-black text-white">{bundle.price}</span>
+                            <span className="text-sm font-semibold text-white/70">{bundle.period}</span>
                           </div>
-                          <p className="mt-1 text-sm font-semibold text-white/70">(excl. VAT)</p>
+                          <p className="mt-1 text-sm font-semibold text-white/70">{bundle.price} (excl. VAT)</p>
                           <p className="mt-1 text-xs font-medium text-muted-foreground">{t('store.taxNote')}</p>
                           <p className="mt-1 text-xs font-semibold text-primary/80">{bundle.daily}</p>
                           <div className="mt-4 space-y-2 text-sm text-white/55">
@@ -347,9 +348,9 @@ const Storefront = () => {
                           </div>
                           <div>
                              <p className="mb-3 text-sm font-semibold text-white">{t('store.needHelp')}</p>
-                            <div className="grid grid-cols-2 gap-3">
-                              <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><WhatsAppIcon />WhatsApp</a>
-                              <a href={TELEGRAM_URL} onClick={(event) => openSocialUrl(event, TELEGRAM_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><TelegramIcon />Telegram</a>
+                             <div className="grid grid-cols-2 gap-3">
+                               {WHATSAPP_URL && <a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><WhatsAppIcon />WhatsApp</a>}
+                               {TELEGRAM_URL && <a href={TELEGRAM_URL} onClick={(event) => openSocialUrl(event, TELEGRAM_URL)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><TelegramIcon />Telegram</a>}
                             </div>
                           </div>
                         </div>
