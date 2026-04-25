@@ -303,13 +303,13 @@ const Index = () => {
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 md:mb-10">
                 <Button variant="hero" size="xl" className="group min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] shadow-2xl" asChild>
                   <Link to="/store">
-                    <span className="sm:hidden">Get Access Now</span><span className="hidden sm:inline">Explore Tools</span>
+                    <span>Get Instant Access</span>
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
                 <Button variant="heroOutline" size="xl" className="hidden sm:inline-flex backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
                   <a href="#how-it-works">
-                    Learn How It Works
+                    Get Instant Access
                   </a>
                 </Button>
               </motion.div>
@@ -858,13 +858,13 @@ const Index = () => {
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Button variant="hero" size="xl" className="group" asChild>
                       <Link to="/store">
-                        Explore Tools
+                        Get Instant Access
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
                     <Button variant="heroOutline" size="xl" asChild>
-                      <Link to="/academy">
-                        Start Learning
+                      <Link to="/store">
+                        Get Instant Access
                         <ChevronRight className="w-5 h-5" />
                       </Link>
                     </Button>
