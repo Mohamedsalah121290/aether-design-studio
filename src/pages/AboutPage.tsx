@@ -20,7 +20,7 @@ const values = [
   {
     icon: Heart,
     title: 'Accessibility',
-    description: 'Premium AI tools at student-friendly prices. No bundles, no commitments — pay only for what you need.',
+    description: 'Premium AI tools with clear monthly pricing, simple access, and no confusing offers.',
   },
   {
     icon: Eye,
