@@ -24,7 +24,8 @@ const SocialProofCarousel = () => {
 
   const orderedReviews = useMemo(() => {
     const region = getStoredRegion();
-    const country = ({ belgium: 'Belgium', germany: 'Germany', france: 'France', netherlands: 'Netherlands', italy: 'Italy', spain: 'Spain' } as const)[region as keyof typeof import('@/lib/geo').RegionCategory];
+    const countryByRegion = { belgium: 'Belgium', germany: 'Germany', france: 'France', netherlands: 'Netherlands', italy: 'Italy', spain: 'Spain' } as const;
+    const country = countryByRegion[region as keyof typeof countryByRegion];
     return country ? [...socialProofReviews].sort((a, b) => Number(b.country === country) - Number(a.country === country)) : socialProofReviews;
   }, []);
 
