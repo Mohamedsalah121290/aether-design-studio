@@ -11,6 +11,7 @@ import { getPeriodStyle, formatEuro, type PricePeriod } from '@/lib/pricePeriod'
 import { formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewPreview } from '@/components/ProductReviews';
+import { WHATSAPP_URL } from '@/components/ChatbotConversion';
 
 /* ── Category labels ──────────────────────────────────────────── */
 const CATEGORY_LABELS: Record<string, string> = {
@@ -353,10 +354,12 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             {/* CTA */}
             {isContactOnly ? (
               <div className="mt-1 sm:mt-2 space-y-1">
-                <a href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(145_75%_48%/0.35)]" style={{ background: 'linear-gradient(135deg, hsl(142 72% 50%), hsl(145 70% 34%))', boxShadow: '0 0 14px hsl(145 75% 48% / 0.20)' }}>
-                  Contact WhatsApp
-                  <Sparkles className="w-3.5 h-3.5" />
-                </a>
+                {WHATSAPP_URL && (
+                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-white transition-all duration-300 hover:shadow-[0_0_28px_hsl(145_75%_48%/0.35)]" style={{ background: 'linear-gradient(135deg, hsl(142 72% 50%), hsl(145 70% 34%))', boxShadow: '0 0 14px hsl(145 75% 48% / 0.20)' }}>
+                    Contact WhatsApp
+                    <Sparkles className="w-3.5 h-3.5" />
+                  </a>
+                )}
               </div>
             ) : isComingSoon ? (
               <div className="mt-1 sm:mt-2 space-y-2">
