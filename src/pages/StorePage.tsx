@@ -19,7 +19,7 @@ const StorePage = () => {
               <MailCheck className="h-5 w-5" aria-hidden="true" />
             </div>
             <p className="text-sm leading-6 text-muted-foreground sm:text-base">
-              {t('store.activationNotice', 'Activation details are sent by email. If activation is requested on a personal account, please provide the personal email and password required for that activation at checkout.')}
+              {t('store.activationNotice', 'Activation is handled securely by our team after purchase. No sensitive information is required before payment.')}
             </p>
           </div>
         </section>
