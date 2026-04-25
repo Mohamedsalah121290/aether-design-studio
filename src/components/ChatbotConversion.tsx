@@ -6,11 +6,10 @@ import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getStoredRegion } from '@/lib/geo';
 import { socialLinks, supportLinks } from '@/lib/socialLinks';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
-const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook-test/514c0774-7002-4ec6-a91f-3bcde6d932b0';
+const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook/514c0774-7002-4ec6-a91f-3bcde6d932b0';
 
 export const openSocialUrl = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
   event.preventDefault();
@@ -185,7 +184,6 @@ export const ChatbotPromoSection = () => {
 
 export const ChatbotSalesFlow = () => {
   const location = useLocation();
-  const { t } = useTranslation();
   const lang = useLang();
   const text = copy[lang];
   const [ready, setReady] = useState(false);
@@ -307,7 +305,7 @@ export const ChatbotSalesFlow = () => {
       const response = await fetch(N8N_CHAT_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: value, language: lang, locale: text.voice[0], region: getStoredRegion(), instruction: t('chatbot.directionInstruction') }),
+        body: JSON.stringify({ message: value }),
       });
 
       if (!response.ok) throw new Error(`Chat webhook failed: ${response.status}`);
