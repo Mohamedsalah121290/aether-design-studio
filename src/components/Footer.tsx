@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Mail, Shield, Lock, Globe, Zap, Youtube, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Mail, Shield, Lock, Globe, Zap, Youtube } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
-import { FACEBOOK_URL, INSTAGRAM_URL, openSocialUrl, TELEGRAM_URL, TikTokIcon, TIKTOK_URL, WhatsAppIcon, WHATSAPP_URL, X_URL, YOUTUBE_URL, TelegramIcon } from '@/components/ChatbotConversion';
+import { FACEBOOK_URL, INSTAGRAM_URL, openSocialUrl, WhatsAppIcon, WHATSAPP_URL, YOUTUBE_URL } from '@/components/ChatbotConversion';
 import logo from '@/assets/logo.png';
 
 type FlagKey = 'eu' | 'us' | 'sa' | 'ae' | 'tr' | 'iq' | 'lb';
@@ -104,12 +104,9 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: WhatsAppIcon, href: WHATSAPP_URL, label: 'WhatsApp', tone: 'social-whatsapp-3d' },
-    { icon: TelegramIcon, href: TELEGRAM_URL, label: 'Telegram', tone: 'social-telegram-3d' },
     { icon: Facebook, href: FACEBOOK_URL, label: 'Facebook', tone: 'social-facebook-3d' },
     { icon: Instagram, href: INSTAGRAM_URL, label: 'Instagram', tone: 'social-instagram-3d' },
-    { icon: TikTokIcon, href: TIKTOK_URL, label: 'TikTok', tone: 'social-tiktok-3d' },
     { icon: Youtube, href: YOUTUBE_URL, label: 'YouTube', tone: 'social-youtube-3d' },
-    { icon: Twitter, href: X_URL, label: 'X', tone: 'social-x-3d' },
     { icon: Mail, href: 'mailto:info@aideals.be', label: 'Email info@aideals.be', tone: 'social-mail-3d' },
   ].filter((social) => Boolean(social.href));
 
