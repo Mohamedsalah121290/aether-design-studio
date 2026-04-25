@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  Sparkles, Search, Loader2, Palette,
+  Sparkles, Search, Loader2, Palette, Zap,
   Code, Briefcase, Monitor, Users, Clock, CheckCircle,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
