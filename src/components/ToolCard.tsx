@@ -307,13 +307,14 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                           </Tooltip>
                         </TooltipProvider>
                       </div>
-                      <div className="flex items-baseline flex-wrap gap-x-1.5 gap-y-0.5">
+                       <div className="flex items-baseline flex-wrap gap-x-1.5 gap-y-0.5">
                         <span
                           className={`text-lg sm:text-xl font-bold ${style.textClass}`}
                           style={{ textShadow: style.textShadow }}
                         >
                           {formatEuro(price)}
                         </span>
+                        <span className="text-xs font-semibold text-muted-foreground">(excl. VAT)</span>
                         <span className={`text-xs font-medium ${style.textClass} opacity-80`}>
                           {style.suffix}
                         </span>
@@ -327,8 +328,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                       {dailyPrice && <p className="text-[11px] font-semibold text-primary/80">{dailyPrice}</p>}
                       <p className="inline-flex w-fit rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[9px] font-semibold text-primary">Limited price today</p>
                       {approxPrice && <p className="text-[11px] font-medium text-muted-foreground/80">{approxPrice}</p>}
-                      <p className="text-[9px] text-muted-foreground/60">Excl. VAT · Access-based pricing model</p>
-                      <p className="text-[9px] text-muted-foreground/60">{FINAL_PAYMENT_EUR_NOTE}</p>
+                      <p className="text-[11px] font-medium leading-snug text-muted-foreground">Taxes (if applicable) are calculated at checkout.</p>
+                      <p className="text-[11px] text-muted-foreground/80">Access-based pricing model · {FINAL_PAYMENT_EUR_NOTE}</p>
                     </>
                   );
                 })()
