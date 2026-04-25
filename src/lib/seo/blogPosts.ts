@@ -2,6 +2,7 @@
 // Each language is an editorial localization, not a literal translation.
 // Falls back to English when a language entry is missing.
 import type { SeoLang } from './seoMap';
+import { socialLinks } from '@/lib/socialLinks';
 
 export interface BlogSection {
   heading: string;
