@@ -103,7 +103,7 @@ const Footer = () => {
     ],
   };
 
-  const socialLinks = [
+  const footerSocialLinks = [
     { icon: WhatsAppIcon, href: socialLinks.whatsapp, label: 'WhatsApp', tone: 'social-whatsapp-3d' },
     { icon: Facebook, href: socialLinks.facebook, label: 'Facebook', tone: 'social-facebook-3d' },
     { icon: Instagram, href: socialLinks.instagram, label: 'Instagram', tone: 'social-instagram-3d' },
@@ -173,7 +173,7 @@ const Footer = () => {
               {t('footer.description')}
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              {socialLinks.map((social) => {
+              {footerSocialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
                   <motion.a
