@@ -298,8 +298,8 @@ const PaymentPage = () => {
           >
             <CheckCircle className="w-10 h-10 text-white" />
           </motion.div>
-          <h3 className="text-2xl font-bold mb-2 text-white">Order Placed Successfully!</h3>
-          <p className="text-muted-foreground mb-4">Check your dashboard for activation updates.</p>
+          <h3 className="text-2xl font-bold mb-2 text-white">Thank you for your purchase.</h3>
+          <p className="max-w-md text-muted-foreground mb-4 leading-relaxed">Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp or Telegram. You can also contact us directly for faster support.</p>
           <div className="flex items-center gap-2 text-sm text-green-400 mb-6">
             <Clock className="w-4 h-4" />
             <span>Activating within {activationTime} hours</span>
