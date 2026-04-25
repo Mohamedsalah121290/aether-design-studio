@@ -149,8 +149,8 @@ const audiences = [
 const steps = [
   { num: '01', title: 'Choose your tool', desc: 'Browse our curated selection of premium AI tools.' },
   { num: '02', title: 'Complete checkout', desc: 'Simple, secure payment — no hidden fees.' },
-  { num: '03', title: 'We activate your access', desc: 'Our team sets up your dedicated account.' },
-  { num: '04', title: 'View login details', desc: 'Access your credentials in your dashboard.' },
+  { num: '03', title: 'We activate your access', desc: 'Activation is handled securely by our team after purchase.' },
+  { num: '04', title: 'Start using it', desc: 'No sensitive information is required before payment.' },
 ];
 
 const academyPoints = [
@@ -160,8 +160,8 @@ const academyPoints = [
 ];
 
 const faqs = [
-  { q: 'Do I need to share my passwords?', a: 'No. We provide secure access after activation. Your personal passwords are never involved.' },
-  { q: 'When do I receive login details?', a: 'Usually within a few hours after payment confirmation. You\'ll see them in your dashboard.' },
+  { q: 'Is payment safe?', a: 'Yes. Secure payment is handled by Stripe and Bancontact.' },
+  { q: 'When do I receive access?', a: 'Access delivered within minutes after payment.' },
   { q: 'Is this only for students?', a: 'No. It\'s for anyone serious about growth with AI — students, creators, professionals, and more.' },
   { q: 'Is it monthly?', a: 'Yes. Flexible. Cancel anytime. No annual lock-ins, no questions asked.' },
 ];
@@ -603,7 +603,7 @@ const Index = () => {
               className="text-center text-xs text-muted-foreground flex items-center justify-center gap-2"
             >
               <Lock className="w-3.5 h-3.5 text-primary" />
-              We never ask for your passwords.
+              No sensitive information is required before payment.
             </motion.p>
           </div>
         </section>
