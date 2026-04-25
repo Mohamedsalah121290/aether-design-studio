@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Sparkles, Search, Loader2, Palette,
-  Code, Briefcase, Monitor, Users, Clock,
+  Code, Briefcase, Monitor, Users, Clock, CheckCircle,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
 import { inferPeriodFromPlan, type PricePeriod } from '@/lib/pricePeriod';
@@ -33,6 +33,18 @@ const ALLOWED_TOOL_IDS = new Set(SECTION_ORDER.flatMap(section => section.toolId
 
 const FEATURED_TOOL_IDS = ['chatgpt', 'perplexity', 'grok', 'elevenlabs', 'lovable', 'canva'];
 const POPULAR_TOOL_IDS  = ['capcut', 'windows', 'windows_home', 'microsoft_365', 'microsoft_office', 'coursera'];
+
+const PRICING_TIERS = [
+  { name: 'Starter', text: 'Best for trying one premium tool', cta: 'Start simple', toolId: 'perplexity' },
+  { name: 'Most Popular', text: 'Best balance for daily AI access', cta: 'Choose popular', toolId: 'chatgpt', featured: true },
+  { name: 'Pro', text: 'Best for creators and power users', cta: 'Go pro', toolId: 'canva' },
+];
+
+const BUNDLES = [
+  { name: 'AI Starter Pack', products: 'ChatGPT + Perplexity + Notion', original: '€45/month', price: '€29/month', daily: '≈ €0.97/day', toolId: 'chatgpt' },
+  { name: 'Creator Pack', products: 'Canva + CapCut + ElevenLabs', original: '€54/month', price: '€35/month', daily: '≈ €1.17/day', toolId: 'canva' },
+  { name: 'Business Pack', products: 'ChatGPT + Office 365 + Notion', original: '€59/month', price: '€39/month', daily: '≈ €1.30/day', toolId: 'microsoft_365' },
+];
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   'licenses-productivity': ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'],
@@ -248,6 +260,59 @@ const Storefront = () => {
               <>
                 {/* Featured carousel */}
                 <FeaturedCarousel tools={tools} />
+
+                <section className="py-12" aria-label="Pricing options">
+                  <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+                    <div className="mb-6 text-center">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">Pricing made simple</p>
+                      <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">Choose your access level</h2>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-3 items-stretch">
+                      {PRICING_TIERS.map((tier) => (
+                        <Link key={tier.name} to={`/store?scrollTo=${tier.toolId}`} className={`relative rounded-2xl border p-5 transition-all hover:border-primary/35 ${tier.featured ? 'md:-mt-3 md:mb-0 border-primary/40 bg-primary/10 shadow-lg shadow-primary/10' : 'border-white/10 bg-white/[0.03]'}`}>
+                          {tier.featured && <span className="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">Most Popular</span>}
+                          <h3 className="text-xl font-bold text-white">{tier.name}</h3>
+                          <p className="mt-2 text-sm text-white/50">{tier.text}</p>
+                          <p className="mt-4 text-[11px] font-semibold text-primary">Limited price today</p>
+                          <span className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{tier.cta}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+
+                <section className="py-12" aria-label="Bundles">
+                  <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+                    <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-primary">Bundles</p>
+                        <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">Upgrade for better results</h2>
+                      </div>
+                      <p className="text-sm text-white/45">More value, fewer decisions.</p>
+                    </div>
+                    <div className="grid gap-4 md:grid-cols-3">
+                      {BUNDLES.map((bundle, index) => (
+                        <Link key={bundle.name} to={`/store?scrollTo=${bundle.toolId}`} className={`rounded-2xl border p-5 transition-all hover:border-primary/35 ${index === 1 ? 'border-primary/40 bg-primary/10 md:scale-[1.03]' : 'border-white/10 bg-white/[0.03]'}`}>
+                          <div className="mb-4 flex items-center justify-between gap-3">
+                            <h3 className="text-lg font-bold text-white">{bundle.name}</h3>
+                            {index === 1 && <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-bold text-primary">Most Popular</span>}
+                          </div>
+                          <p className="mb-4 text-sm text-white/50">{bundle.products}</p>
+                          <div className="flex items-end gap-2">
+                            <span className="text-sm text-white/35 line-through">{bundle.original}</span>
+                            <span className="text-2xl font-black text-white">{bundle.price}</span>
+                          </div>
+                          <p className="mt-1 text-xs font-semibold text-primary/80">{bundle.daily}</p>
+                          <div className="mt-4 space-y-2 text-sm text-white/55">
+                            <p className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-primary" />Upgrade for better results</p>
+                            <p className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-primary" />Limited price today</p>
+                          </div>
+                          <span className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Get Bundle</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </section>
 
                 {/* AI Recommendations */}
                 <AIRecommendations tools={tools} />
