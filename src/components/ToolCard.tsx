@@ -390,7 +390,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   })}
                 </div>
                 <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-semibold text-muted-foreground">
-                  <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support available</span>
+                  <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support included</span>
                 </div>
               </div>
             )}
