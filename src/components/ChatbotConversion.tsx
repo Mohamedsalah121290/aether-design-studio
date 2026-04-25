@@ -55,6 +55,21 @@ export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) 
   </svg>
 );
 
+export const Social3DLink = ({ href, label, children, tone = 'social-whatsapp-3d', className = 'w-12 h-12' }: { href: string; label: string; children: React.ReactNode; tone?: string; className?: string }) => (
+  <motion.a
+    href={href}
+    onClick={(event) => openSocialUrl(event, href)}
+    target="_blank"
+    rel="noopener noreferrer"
+    whileHover={{ scale: 1.1, y: -3, rotateX: 8, rotateY: -8 }}
+    whileTap={{ scale: 0.95 }}
+    className={`social-link-3d social-link-movie ${tone} ${className} rounded-full flex items-center justify-center transition-all duration-300`}
+    aria-label={label}
+  >
+    {children}
+  </motion.a>
+);
+
 const supported = ['en', 'fr', 'nl', 'de', 'es', 'it', 'ar'] as const;
 type LangKey = typeof supported[number];
 type FlowKey = 'ai' | 'design' | 'productivity' | 'unsure';
@@ -369,8 +384,8 @@ export const ChatbotSalesFlow = () => {
 
       <div className="flex flex-col items-end gap-1.5 sm:gap-3 translate-y-2 sm:translate-y-0">
         <div className="flex flex-col items-end gap-2 sm:gap-3">
-          {socialLinks.whatsapp && <motion.a href={socialLinks.whatsapp} onClick={(event) => openSocialUrl(event, socialLinks.whatsapp)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
-          {supportLinks.telegram && <motion.a href={supportLinks.telegram} onClick={(event) => openSocialUrl(event, supportLinks.telegram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
+          {socialLinks.whatsapp && <motion.a href={socialLinks.whatsapp} onClick={(event) => openSocialUrl(event, socialLinks.whatsapp)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d social-link-movie" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
+          {supportLinks.telegram && <motion.a href={supportLinks.telegram} onClick={(event) => openSocialUrl(event, supportLinks.telegram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d social-link-movie" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
         </div>
         <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label={fallbackText[lang].open}><RobotAvatar className="w-[64px] h-[64px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
