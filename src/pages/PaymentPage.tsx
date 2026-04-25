@@ -670,6 +670,33 @@ const PaymentPage = () => {
                 </div>
                 <TrustBadges compact />
 
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 space-y-3">
+                  <h4 className="text-sm font-bold text-white">How you receive your access</h4>
+                  <p className="text-sm leading-relaxed text-muted-foreground">After payment, you will receive your access quickly.</p>
+                  <div className="space-y-1.5 text-xs leading-relaxed text-muted-foreground">
+                    <p>We provide one of the following depending on the product:</p>
+                    <p>✔ Account access (username + password)</p>
+                    <p>✔ Activation key</p>
+                    <p>✔ Direct activation on your account (on request)</p>
+                  </div>
+                  <div className="rounded-xl border border-primary/20 bg-primary/10 p-3 text-xs leading-relaxed text-muted-foreground">
+                    <p className="font-semibold text-white">Important information:</p>
+                    <p className="mt-1">For some services, activation can be done on your personal account. If you choose this option, you will be contacted via WhatsApp or Telegram and guided step-by-step through a secure process.</p>
+                    <p className="mt-1 font-semibold text-primary">We do NOT ask for your personal passwords directly on the website.</p>
+                    <p className="mt-1">We may use a secure method such as temporary access, guided activation, or alternative safe methods.</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted-foreground">
+                    <span>✔ Fast delivery</span><span>✔ Secure process</span><span>✔ Real support</span>
+                  </div>
+                  <div>
+                    <p className="mb-2 text-xs font-semibold text-white">Need help? Contact us instantly:</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>
+                      <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><TelegramIcon />Telegram</a>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {tool && <ProductReviewsCarousel toolId={tool.tool_id} productName={tool.name} />}
