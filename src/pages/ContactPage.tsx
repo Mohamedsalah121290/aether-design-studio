@@ -12,7 +12,8 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
-import { ChatbotPromoSection, FACEBOOK_URL, INSTAGRAM_URL, openSocialUrl, WhatsAppIcon, WHATSAPP_URL, YOUTUBE_URL } from '@/components/ChatbotConversion';
+import { ChatbotPromoSection, openSocialUrl, WhatsAppIcon } from '@/components/ChatbotConversion';
+import { socialLinks } from '@/lib/socialLinks';
 
 const ContactPage = () => {
   const { t } = useTranslation();
@@ -40,10 +41,10 @@ const ContactPage = () => {
   ];
 
   const contactLinks = [
-    { label: 'WhatsApp', href: WHATSAPP_URL, icon: WhatsAppIcon, tone: 'social-whatsapp-3d' },
-    { label: 'Facebook', href: FACEBOOK_URL, icon: Facebook, tone: 'social-facebook-3d' },
-    { label: 'Instagram', href: INSTAGRAM_URL, icon: Instagram, tone: 'social-instagram-3d' },
-    { label: 'YouTube', href: YOUTUBE_URL, icon: Youtube, tone: 'social-youtube-3d' },
+    { label: 'WhatsApp', href: socialLinks.whatsapp, icon: WhatsAppIcon, tone: 'social-whatsapp-3d' },
+    { label: 'Facebook', href: socialLinks.facebook, icon: Facebook, tone: 'social-facebook-3d' },
+    { label: 'Instagram', href: socialLinks.instagram, icon: Instagram, tone: 'social-instagram-3d' },
+    { label: 'YouTube', href: socialLinks.youtube, icon: Youtube, tone: 'social-youtube-3d' },
   ].filter((link) => Boolean(link.href));
 
   return (
