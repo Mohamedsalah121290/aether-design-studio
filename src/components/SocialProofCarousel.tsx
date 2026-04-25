@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Star, ShieldCheck } from 'lucide-react';
 import { socialProofReviews } from '@/lib/socialProof';
+import { getStoredRegion } from '@/lib/geo';
 
 const Stars = ({ rating }: { rating: 4 | 5 }) => (
   <span className="flex gap-1">
@@ -11,6 +13,7 @@ const Stars = ({ rating }: { rating: 4 | 5 }) => (
 );
 
 const SocialProofCarousel = () => {
+  const { t } = useTranslation();
   const [page, setPage] = useState(0);
   const visibleCount = 6;
 
@@ -19,9 +22,15 @@ const SocialProofCarousel = () => {
     return () => window.clearInterval(timer);
   }, []);
 
+  const orderedReviews = useMemo(() => {
+    const region = getStoredRegion();
+    const country = ({ belgium: 'Belgium', germany: 'Germany', france: 'France', netherlands: 'Netherlands', italy: 'Italy', spain: 'Spain' } as const)[region as keyof typeof import('@/lib/geo').RegionCategory];
+    return country ? [...socialProofReviews].sort((a, b) => Number(b.country === country) - Number(a.country === country)) : socialProofReviews;
+  }, []);
+
   const visible = useMemo(
-    () => Array.from({ length: visibleCount }, (_, index) => socialProofReviews[(page + index) % socialProofReviews.length]),
-    [page]
+    () => Array.from({ length: visibleCount }, (_, index) => orderedReviews[(page + index) % orderedReviews.length]),
+    [page, orderedReviews]
   );
 
   return (
@@ -43,7 +52,7 @@ const SocialProofCarousel = () => {
           <p className="text-[11px] text-primary font-semibold mb-2">{item.product}</p>
           <p className="text-sm leading-relaxed text-muted-foreground">“{item.quote}”</p>
           <div className="mt-4 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-            <ShieldCheck className="w-3 h-3" /> Verified access
+            <ShieldCheck className="w-3 h-3" /> {t('social.verifiedAccess', 'Verified access')}
           </div>
         </div>
       ))}
