@@ -410,21 +410,18 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
 
               <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 space-y-3">
                 <h4 className="text-sm font-bold text-white">How you receive your access</h4>
-                <p className="text-sm leading-relaxed text-muted-foreground">After payment, you will receive your access quickly.</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">Access delivered within minutes after payment.</p>
                 <div className="space-y-1.5 text-sm leading-relaxed text-muted-foreground">
-                  <p>We provide one of the following depending on the product:</p>
-                  <p>✔ Account access (username + password)</p>
-                  <p>✔ Activation key</p>
-                  <p>✔ Direct activation on your account (on request)</p>
+                  <p>Activation is handled securely by our team after purchase.</p>
+                  <p className="font-semibold text-primary">No sensitive information is required before payment.</p>
                 </div>
                 <div className="rounded-xl border border-primary/20 bg-primary/10 p-3 text-sm leading-relaxed text-muted-foreground">
                   <p className="font-semibold text-white">Important information:</p>
-                  <p className="mt-1">For some services, activation can be done on your personal account. If you choose this option, you will be contacted via WhatsApp and guided step-by-step through a secure process.</p>
-                  <p className="mt-1 font-semibold text-primary">We do NOT ask for your personal passwords directly on the website.</p>
-                  <p className="mt-1">We may use a secure method such as temporary access, guided activation, or alternative safe methods.</p>
+                  <p className="mt-1">Activation is handled securely by our team after purchase.</p>
+                  <p className="mt-1 font-semibold text-primary">No sensitive information is required before payment.</p>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted-foreground">
-                  <span>✔ Fast delivery</span><span>✔ Secure process</span><span>✔ Real support</span>
+                  <span>✔ Instant delivery</span><span>✔ Secure payment</span><span>✔ Support available</span>
                 </div>
                 <div>
                   <p className="mb-2 text-xs font-semibold text-white">Need help? Contact us instantly:</p>
@@ -573,8 +570,9 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     </span>
                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Button>
+                  <p className="text-xs font-medium text-primary text-center">Access delivered within minutes after payment</p>
                   <p className="text-xs font-medium text-muted-foreground text-center">{TAX_NOTE}</p>
-                  <p className="text-[11px] text-muted-foreground text-center">Secure checkout via Stripe. Final payment in EUR.</p>
+                  <p className="text-[11px] text-muted-foreground text-center">Secure payment via Stripe & Bancontact. Final payment in EUR.</p>
 
                   {/* Cancel anytime + activation time */}
                   <div className="space-y-3 text-center">
