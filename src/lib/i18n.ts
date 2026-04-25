@@ -4037,6 +4037,1959 @@ const chatContactTranslations = {
   ar: { footer: { links: { blog: 'المدونة', contact: 'التواصل' }, newsletterTitle: 'ابقَ على اطلاع', newsletterText: 'نصائح ذكاء اصطناعي أسبوعية للطلاب وصناع المحتوى.', emailPlaceholder: 'email@example.com', subscribing: 'جاري الاشتراك...', subscribe: 'اشترك', trust: { gdpr: 'متوافق مع GDPR', checkout: 'دفع آمن', activation: 'تفعيل سريع', global: 'مبني في أوروبا · وصول عالمي' } }, contact: { badge: 'تواصل معنا', title: 'تواصل', titleHighlight: 'معنا', description: 'لديك سؤال أو اقتراح أو تحتاج مساعدة؟ يسعدنا التواصل معك أينما كنت.', response: 'نرد على كل رسالة', responseTime: 'خلال 24 ساعة', name: 'الاسم *', namePlaceholder: 'اسمك', email: 'البريد الإلكتروني *', emailPlaceholder: 'you@example.com', subject: 'الموضوع', subjectPlaceholder: 'ما موضوع الرسالة؟', message: 'الرسالة *', messagePlaceholder: 'أخبرنا كيف يمكننا مساعدتك...', sending: 'جاري الإرسال...', send: 'إرسال الرسالة', instant: 'تواصل معنا فوراً', socialAria: 'تواصل عبر {{platform}}', toastMissingTitle: 'حقول ناقصة', toastMissingDescription: 'يرجى تعبئة جميع الحقول المطلوبة.', mailSubject: 'تواصل من AI DEALS', mailName: 'الاسم', mailEmail: 'البريد الإلكتروني', toastReadyTitle: '✉️ الرسالة جاهزة', toastReadyDescription: 'تم فتح تطبيق البريد مع الرسالة.', support: { emailTitle: 'راسلنا', emailValue: '', emailDesc: 'خط مباشر مع فريقنا', timeTitle: 'وقت الرد', timeValue: 'خلال 24 ساعة', timeDesc: 'نضمن الرد خلال يوم عمل واحد', privacyTitle: 'الخصوصية أولاً', privacyValue: 'مبادئ GDPR', privacyDesc: 'لا تتم مشاركة بياناتك أو بيعها أبداً', globalTitle: 'دعم عالمي', globalValue: 'وصول عالمي', globalDesc: 'نخدم الطلاب وصناع المحتوى عالمياً' } }, chatbot: { promoBadge: 'روبوت دردشة ذكي', promoTitle: 'مساعدك الذكي الذي', promoHighlight: 'لا ينام', promoDescription: 'رد على العملاء فوراً على مدار الساعة عبر موقعك وWhatsApp.', promoButton: 'فعّل روبوت الدردشة', promoNote: 'لا رسائل فائتة. لا عملاء ضائعون.', previewTitle: 'معاينة مسار البيع المباشر', preview: ['ما الذي تبحث عنه؟', 'أدوات ذكاء اصطناعي', 'أفضل بداية: ChatGPT Plus للكتابة اليومية وسير العمل.', 'هل تريد رابط الوصول؟'], bullets: ['ردود فورية', 'يعمل بعدة لغات', 'متاح 24/7', 'يعمل على كل المنصات', 'يزيد التحويلات'], directionInstruction: 'أجب باللغة العربية فقط. لا تخلط اللغات.' } },
 };
 
+const finalI18nPatches = {
+  "en": {
+    "nav": {
+      "home": "Home",
+      "signOut": "Sign Out",
+      "adminPanel": "Admin Panel",
+      "currencySelector": "Currency selector"
+    },
+    "home": {
+      "tagline": "Access. Learn. Scale.",
+      "heroTitle": "Get instant access to premium AI tools — no setup needed.",
+      "heroHighlight": "Every Month.",
+      "heroSubtitle": "Buy faster, start easier, and get real support when you need it.",
+      "heroTrust": "Simple access. Fast delivery. Secure checkout.",
+      "instantAccess": "Instant access",
+      "worksWorldwide": "Works worldwide",
+      "securePayment": "Secure payment",
+      "secureCheckoutEur": "Secure checkout via Stripe. Final payment in EUR.",
+      "scroll": "Scroll",
+      "chooseFits": "Choose what fits you",
+      "start": "Start",
+      "bestChoice": "Best choice",
+      "usersLikeYou": "Most users like you choose this",
+      "mobilePopularTools": "Most Popular Tools",
+      "buyFasterMobile": "Buy faster on mobile",
+      "viewingNowShort": "23 viewing now",
+      "taxNote": "Taxes (if applicable) are calculated at checkout.",
+      "mobileTrustLine": "Limited availability today · secure checkout · activation support",
+      "problemTitle": "The problem:",
+      "problemLines": [
+        "Too many tools.",
+        "Too many subscriptions.",
+        "Too much noise."
+      ],
+      "solutionTitle": "The solution:",
+      "solutionLead": "AI DEALS simplifies everything.",
+      "solutionLines": [
+        "Curated tools — not a random marketplace",
+        "Clear activation — no guesswork",
+        "Structured learning — use AI effectively",
+        "One platform. Zero friction."
+      ],
+      "builtForYou": "Built For You",
+      "whoUses": "Who Uses",
+      "responsiblePrivacy": "Built with responsible use and privacy-first principles.",
+      "howItWorks": "How It Works",
+      "simpleClearDone": "Simple. Clear. Done.",
+      "noSensitive": "No sensitive information is required before payment.",
+      "trustedUsers": "Trusted by 1000+ users",
+      "verifiedAccess": "Secure payment, EUR checkout, and verified digital access.",
+      "protected": "Protected",
+      "fastActivation": "Fast activation",
+      "seeMoreReviews": "See more reviews →",
+      "academyLabel": "Academy",
+      "academyTitle": "Don’t Just Use AI. Master It.",
+      "academyText": "Access is one thing. Knowing how to use it properly is another.",
+      "enterAcademy": "Enter Academy",
+      "toolGuides": "Tool Guides",
+      "practical": "Practical",
+      "videoLessons": "Video Lessons",
+      "stepByStep": "Step-by-step",
+      "bestPractices": "Best Practices",
+      "responsible": "Responsible",
+      "newsletterTitle": "Stay Ahead. Not Overwhelmed.",
+      "newsletterText": "Weekly AI tips, smart workflows, and tool updates.",
+      "joining": "Joining...",
+      "joinFree": "Join Free",
+      "noSpam": "No spam. Ever.",
+      "whyBuyFromUs": "Why buy from us",
+      "clearSimpleSafe": "Clear. Simple. Safe.",
+      "whyText1": "Get the AI tool you need without setup, installation, or technical steps.",
+      "whyText2": "We prepare your access quickly and keep support available if you need help.",
+      "readyTitle": "Ready to Use AI the Smart Way?",
+      "readyText": "Join thousands of students, creators, and professionals who trust AI DEALS.",
+      "sessionViewing": "🔥 17 people are viewing this now",
+      "sessionLimited": "⏳ Limited-time access for this session",
+      "offerExpired": "Offer expired — new deals available",
+      "sessionTrust": "✔ Real-time demand   ✔ Limited daily access   ✔ Secure checkout"
+    },
+    "funnels": {
+      "student": {
+        "title": "Student",
+        "description": "Study faster with the right AI stack.",
+        "headline": "Study smarter with AI tools",
+        "reasons": [
+          "faster answers",
+          "better understanding",
+          "save time"
+        ],
+        "cta": "Start Learning Now"
+      },
+      "creator": {
+        "title": "Content Creator",
+        "description": "Create, edit, and publish with less friction.",
+        "headline": "Create content faster with AI",
+        "reasons": [
+          "design faster",
+          "edit videos",
+          "create voice content"
+        ],
+        "cta": "Start Creating"
+      },
+      "business": {
+        "title": "Business",
+        "description": "Automate daily work and move faster.",
+        "headline": "Automate and grow your business",
+        "reasons": [
+          "automate tasks",
+          "increase productivity",
+          "save hours daily"
+        ],
+        "cta": "Start Growing"
+      }
+    },
+    "audiences": {
+      "students": {
+        "title": "Students",
+        "headline": "Study Smarter.",
+        "lines": [
+          "Research faster.",
+          "Structure essays better.",
+          "Use AI responsibly."
+        ]
+      },
+      "creators": {
+        "title": "Creators",
+        "headline": "Create Faster.",
+        "lines": [
+          "Generate ideas.",
+          "Design content.",
+          "Automate repetitive tasks."
+        ]
+      },
+      "professionals": {
+        "title": "Ambitious Professionals",
+        "headline": "Work Smarter.",
+        "lines": [
+          "Boost productivity.",
+          "Save time.",
+          "Stay competitive."
+        ]
+      }
+    },
+    "howSteps": [
+      {
+        "title": "Choose your tool",
+        "desc": "Browse our curated selection of premium AI tools."
+      },
+      {
+        "title": "Complete checkout",
+        "desc": "Simple, secure payment — no hidden fees."
+      },
+      {
+        "title": "We activate your access",
+        "desc": "Activation is handled securely by our team after purchase."
+      },
+      {
+        "title": "Start using it",
+        "desc": "No sensitive information is required before payment."
+      }
+    ],
+    "faq": {
+      "items": [
+        {
+          "q": "Is payment safe?",
+          "a": "Yes. Secure payment is handled by Stripe and Bancontact."
+        },
+        {
+          "q": "When do I receive access?",
+          "a": "Access delivered within minutes after payment."
+        },
+        {
+          "q": "Is this only for students?",
+          "a": "No. It is for students, creators, professionals, and anyone serious about growth with AI."
+        },
+        {
+          "q": "Is it monthly?",
+          "a": "Yes. Flexible. Cancel anytime. No annual lock-ins."
+        }
+      ]
+    },
+    "store": {
+      "premium": "Premium",
+      "trending": "Trending",
+      "instant": "Instant",
+      "unavailable": "Unavailable",
+      "visitTool": "Visit {{tool}}",
+      "category": {
+        "text": "AI Writing",
+        "image": "AI Design",
+        "video": "AI Video",
+        "audio": "AI Audio",
+        "coding": "Dev Tools",
+        "automation": "Automation",
+        "productivity": "Productivity",
+        "security": "Security",
+        "licenses": "Licenses"
+      },
+      "oneMonthPlan": "1 Month Plan",
+      "twoMonthsPlan": "2 Months Plan",
+      "threeMonthsPlan": "3 Months Plan",
+      "durationOneMonth": "Duration: 1 month",
+      "durationTwoMonths": "Duration: 2 months",
+      "durationThreeMonths": "Duration: 3 months",
+      "creditsMonthly": "Includes: 100 credits per month",
+      "creditsRenewed": "100 credits are renewed monthly",
+      "bestStarter": "Best Starter",
+      "bestValue": "⭐ Best Value",
+      "monthlyApprox": "≈ €{{price}} / month",
+      "saveMorePlan": "Save more with this plan",
+      "mostUsersChoose": "Most users choose this option",
+      "notifyPlaceholder": "your@email.com",
+      "notifyConsent": "We’ll only email you about this tool’s availability.",
+      "saving": "Saving...",
+      "getEarlyAccess": "Get Early Access",
+      "notifyMe": "Notify Me",
+      "validEmail": "Please enter a valid email address.",
+      "agreeNotify": "Please agree to be notified.",
+      "alreadyWaitlist": "You’re already on the waitlist for this tool!",
+      "genericError": "Something went wrong.",
+      "notifySuccess": "We’ll notify you when {{tool}} is available! 🎉"
+    },
+    "checkout": {
+      "selectPlan": "Select Plan",
+      "bestValue": "⭐ Best Value",
+      "activationEmail": "Activation Email",
+      "safeNote": "Secure — no sensitive information is required before payment.",
+      "accessEmailNote": "We’ll send activation details to this email.",
+      "accessEmailNoteFull": "We’ll send activation and access details to this email.",
+      "thankYou": "Thank you for your purchase.",
+      "accessPreparing": "Your access is being prepared. You will receive it shortly.",
+      "goToDashboard": "Go to Dashboard",
+      "howReceiveAccess": "How you receive your access",
+      "accountProvidedBadge": "Access Provided",
+      "activationWithinHours": "Activation within {{hours}} hours",
+      "activationWithinShort": "Within {{hours}}h",
+      "whatYouGet": "What you get",
+      "applyWalletCredit": "Apply Wallet Credit",
+      "available": "Available:",
+      "originalPrice": "Original price",
+      "walletCredit": "Wallet credit",
+      "youPay": "You pay",
+      "freeCovered": "Free (covered by credit)",
+      "orderSummary": "Order Summary",
+      "standard": "Standard",
+      "total": "Total",
+      "monthlySubscription": "Monthly subscription",
+      "annualSubscription": "Annual subscription",
+      "yearlySubscription": "Yearly subscription",
+      "subscription": "Subscription",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "billingPeriod": "Billing Period",
+      "billedMonthly": "Billed every month",
+      "billedAnnually": "Billed annually",
+      "save20": "Save 20%",
+      "monthlyEquivalent": "Monthly equivalent",
+      "singlePayment": "Single payment — no recurring charges",
+      "chargedYearly": "Charged once per year",
+      "selectPayment": "Payment Method",
+      "card": "Card",
+      "cardDescription": "Visa, Mastercard, Amex — paid in EUR",
+      "bancontactDescription": "Belgian bank payment — paid in EUR",
+      "recommendedBelgium": "Recommended in Belgium",
+      "choosePlanPayment": "Choose your plan and payment method",
+      "backToStore": "Back to Store",
+      "agreeLegal": "I agree to the",
+      "privacyPolicy": "Privacy Policy",
+      "paymentTrust": "Secure payment via Stripe & Bancontact. Final payment in EUR.",
+      "cancelAnytime": "Cancel anytime. No commitment.",
+      "activationGuaranteeIncluded": "Activation Guarantee included",
+      "contactSupport": "Contact support",
+      "toolNotFound": "Tool not found"
+    },
+    "validation": {
+      "invalidEmail": "Please enter a valid email",
+      "agreeTerms": "You must agree to the terms"
+    }
+  },
+  "fr": {
+    "nav": {
+      "home": "Accueil",
+      "signOut": "Se déconnecter",
+      "adminPanel": "Panneau admin",
+      "currencySelector": "Sélecteur de devise"
+    },
+    "home": {
+      "tagline": "Accédez. Apprenez. Évoluez.",
+      "heroTitle": "Accès instantané aux outils IA premium — sans configuration.",
+      "heroHighlight": "Chaque mois.",
+      "heroSubtitle": "Achetez plus vite, démarrez plus simplement et obtenez une vraie aide si besoin.",
+      "heroTrust": "Accès simple. Livraison rapide. Paiement sécurisé.",
+      "instantAccess": "Accès instantané",
+      "worksWorldwide": "Fonctionne partout",
+      "securePayment": "Paiement sécurisé",
+      "secureCheckoutEur": "Paiement sécurisé via Stripe. Paiement final en EUR.",
+      "scroll": "Défiler",
+      "chooseFits": "Choisissez ce qui vous convient",
+      "start": "Démarrer",
+      "bestChoice": "Meilleur choix",
+      "usersLikeYou": "La plupart des utilisateurs comme vous choisissent ceci",
+      "mobilePopularTools": "Outils les plus populaires",
+      "buyFasterMobile": "Achetez plus vite sur mobile",
+      "viewingNowShort": "23 regardent maintenant",
+      "taxNote": "Les taxes éventuelles sont calculées au paiement.",
+      "mobileTrustLine": "Disponibilité limitée aujourd’hui · paiement sécurisé · support d’activation",
+      "problemTitle": "Le problème :",
+      "problemLines": [
+        "Trop d’outils.",
+        "Trop d’abonnements.",
+        "Trop de bruit."
+      ],
+      "solutionTitle": "La solution :",
+      "solutionLead": "AI DEALS simplifie tout.",
+      "solutionLines": [
+        "Curated tools — not a random marketplace",
+        "Clear activation — no guesswork",
+        "Structured learning — use AI effectively",
+        "One platform. Zero friction."
+      ],
+      "builtForYou": "Conçu pour vous",
+      "whoUses": "Qui utilise",
+      "responsiblePrivacy": "Built with responsible use and privacy-first principles.",
+      "howItWorks": "Comment ça marche",
+      "simpleClearDone": "Simple. Clair. Terminé.",
+      "noSensitive": "Aucune information sensible n’est requise avant le paiement.",
+      "trustedUsers": "Approuvé par 1000+ utilisateurs",
+      "verifiedAccess": "Secure payment, EUR checkout, and verified digital access.",
+      "protected": "Protégé",
+      "fastActivation": "Activation rapide",
+      "seeMoreReviews": "Voir plus d’avis →",
+      "academyLabel": "Academy",
+      "academyTitle": "Don’t Just Use AI. Master It.",
+      "academyText": "Access is one thing. Knowing how to use it properly is another.",
+      "enterAcademy": "Entrer dans l’Academy",
+      "toolGuides": "Tool Guides",
+      "practical": "Practical",
+      "videoLessons": "Video Lessons",
+      "stepByStep": "Step-by-step",
+      "bestPractices": "Best Practices",
+      "responsible": "Responsible",
+      "newsletterTitle": "Stay Ahead. Not Overwhelmed.",
+      "newsletterText": "Weekly AI tips, smart workflows, and tool updates.",
+      "joining": "Inscription...",
+      "joinFree": "Rejoindre gratuitement",
+      "noSpam": "Jamais de spam.",
+      "whyBuyFromUs": "Pourquoi acheter chez nous",
+      "clearSimpleSafe": "Clair. Simple. Sûr.",
+      "whyText1": "Get the AI tool you need without setup, installation, or technical steps.",
+      "whyText2": "We prepare your access quickly and keep support available if you need help.",
+      "readyTitle": "Prêt à utiliser l’IA intelligemment ?",
+      "readyText": "Join thousands of students, creators, and professionals who trust AI DEALS.",
+      "sessionViewing": "🔥 17 people are viewing this now",
+      "sessionLimited": "⏳ Limited-time access for this session",
+      "offerExpired": "Offer expired — new deals available",
+      "sessionTrust": "✔ Real-time demand   ✔ Limited daily access   ✔ Secure checkout"
+    },
+    "funnels": {
+      "student": {
+        "title": "Student",
+        "description": "Study faster with the right AI stack.",
+        "headline": "Study smarter with AI tools",
+        "reasons": [
+          "faster answers",
+          "better understanding",
+          "save time"
+        ],
+        "cta": "Start Learning Now"
+      },
+      "creator": {
+        "title": "Content Creator",
+        "description": "Create, edit, and publish with less friction.",
+        "headline": "Create content faster with AI",
+        "reasons": [
+          "design faster",
+          "edit videos",
+          "create voice content"
+        ],
+        "cta": "Start Creating"
+      },
+      "business": {
+        "title": "Business",
+        "description": "Automate daily work and move faster.",
+        "headline": "Automate and grow your business",
+        "reasons": [
+          "automate tasks",
+          "increase productivity",
+          "save hours daily"
+        ],
+        "cta": "Start Growing"
+      }
+    },
+    "audiences": {
+      "students": {
+        "title": "Students",
+        "headline": "Study Smarter.",
+        "lines": [
+          "Research faster.",
+          "Structure essays better.",
+          "Use AI responsibly."
+        ]
+      },
+      "creators": {
+        "title": "Creators",
+        "headline": "Create Faster.",
+        "lines": [
+          "Generate ideas.",
+          "Design content.",
+          "Automate repetitive tasks."
+        ]
+      },
+      "professionals": {
+        "title": "Ambitious Professionals",
+        "headline": "Work Smarter.",
+        "lines": [
+          "Boost productivity.",
+          "Save time.",
+          "Stay competitive."
+        ]
+      }
+    },
+    "howSteps": [
+      {
+        "title": "Choose your tool",
+        "desc": "Browse our curated selection of premium AI tools."
+      },
+      {
+        "title": "Complete checkout",
+        "desc": "Simple, secure payment — no hidden fees."
+      },
+      {
+        "title": "We activate your access",
+        "desc": "Activation is handled securely by our team after purchase."
+      },
+      {
+        "title": "Start using it",
+        "desc": "Aucune information sensible n’est requise avant le paiement."
+      }
+    ],
+    "faq": {
+      "items": [
+        {
+          "q": "Is payment safe?",
+          "a": "Yes. Secure payment is handled by Stripe and Bancontact."
+        },
+        {
+          "q": "When do I receive access?",
+          "a": "Access delivered within minutes after payment."
+        },
+        {
+          "q": "Is this only for students?",
+          "a": "No. It is for students, creators, professionals, and anyone serious about growth with AI."
+        },
+        {
+          "q": "Is it monthly?",
+          "a": "Yes. Flexible. Cancel anytime. No annual lock-ins."
+        }
+      ]
+    },
+    "store": {
+      "premium": "Premium",
+      "trending": "Tendance",
+      "instant": "Instantané",
+      "unavailable": "Indisponible",
+      "visitTool": "Visit {{tool}}",
+      "category": {
+        "text": "AI Writing",
+        "image": "AI Design",
+        "video": "AI Video",
+        "audio": "AI Audio",
+        "coding": "Dev Tools",
+        "automation": "Automation",
+        "productivity": "Productivity",
+        "security": "Security",
+        "licenses": "Licenses"
+      },
+      "oneMonthPlan": "1 Month Plan",
+      "twoMonthsPlan": "2 Months Plan",
+      "threeMonthsPlan": "3 Months Plan",
+      "durationOneMonth": "Duration: 1 month",
+      "durationTwoMonths": "Duration: 2 months",
+      "durationThreeMonths": "Duration: 3 months",
+      "creditsMonthly": "Includes: 100 credits per month",
+      "creditsRenewed": "100 credits are renewed monthly",
+      "bestStarter": "Best Starter",
+      "bestValue": "⭐ Best Value",
+      "monthlyApprox": "≈ €{{price}} / month",
+      "saveMorePlan": "Save more with this plan",
+      "mostUsersChoose": "Most users choose this option",
+      "notifyPlaceholder": "your@email.com",
+      "notifyConsent": "We’ll only email you about this tool’s availability.",
+      "saving": "Enregistrement...",
+      "getEarlyAccess": "Obtenir un accès anticipé",
+      "notifyMe": "Me prévenir",
+      "validEmail": "Please enter a valid email address.",
+      "agreeNotify": "Please agree to be notified.",
+      "alreadyWaitlist": "You’re already on the waitlist for this tool!",
+      "genericError": "Something went wrong.",
+      "notifySuccess": "We’ll notify you when {{tool}} is available! 🎉"
+    },
+    "checkout": {
+      "selectPlan": "Choisir un plan",
+      "bestValue": "⭐ Best Value",
+      "activationEmail": "Email d’activation",
+      "safeNote": "Secure — no sensitive information is required before payment.",
+      "accessEmailNote": "We’ll send activation details to this email.",
+      "accessEmailNoteFull": "We’ll send activation and access details to this email.",
+      "thankYou": "Merci pour votre achat.",
+      "accessPreparing": "Your access is being prepared. You will receive it shortly.",
+      "goToDashboard": "Aller au tableau de bord",
+      "howReceiveAccess": "Comment vous recevez votre accès",
+      "accountProvidedBadge": "Access Provided",
+      "activationWithinHours": "Activation within {{hours}} hours",
+      "activationWithinShort": "Within {{hours}}h",
+      "whatYouGet": "Ce que vous obtenez",
+      "applyWalletCredit": "Apply Wallet Credit",
+      "available": "Available:",
+      "originalPrice": "Original price",
+      "walletCredit": "Wallet credit",
+      "youPay": "You pay",
+      "freeCovered": "Free (covered by credit)",
+      "orderSummary": "Résumé de commande",
+      "standard": "Standard",
+      "total": "Total",
+      "monthlySubscription": "Monthly subscription",
+      "annualSubscription": "Annual subscription",
+      "yearlySubscription": "Yearly subscription",
+      "subscription": "Subscription",
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "billingPeriod": "Billing Period",
+      "billedMonthly": "Billed every month",
+      "billedAnnually": "Billed annually",
+      "save20": "Save 20%",
+      "monthlyEquivalent": "Monthly equivalent",
+      "singlePayment": "Single payment — no recurring charges",
+      "chargedYearly": "Charged once per year",
+      "selectPayment": "Méthode de paiement",
+      "card": "Card",
+      "cardDescription": "Visa, Mastercard, Amex — paid in EUR",
+      "bancontactDescription": "Belgian bank payment — paid in EUR",
+      "recommendedBelgium": "Recommended in Belgium",
+      "choosePlanPayment": "Choose your plan and payment method",
+      "backToStore": "Retour à la boutique",
+      "agreeLegal": "I agree to the",
+      "privacyPolicy": "Privacy Policy",
+      "paymentTrust": "Secure payment via Stripe & Bancontact. Final payment in EUR.",
+      "cancelAnytime": "Cancel anytime. No commitment.",
+      "activationGuaranteeIncluded": "Activation Guarantee included",
+      "contactSupport": "Contacter le support",
+      "toolNotFound": "Tool not found"
+    },
+    "validation": {
+      "invalidEmail": "Please enter a valid email",
+      "agreeTerms": "You must agree to the terms"
+    }
+  },
+  "nl": {
+    "nav": {
+      "home": "Home",
+      "signOut": "Uitloggen",
+      "adminPanel": "Adminpaneel",
+      "currencySelector": "Valutakiezer"
+    },
+    "home": {
+      "tagline": "Toegang. Leer. Groei.",
+      "heroTitle": "Direct toegang tot premium AI-tools — geen setup nodig.",
+      "heroHighlight": "Elke maand.",
+      "heroSubtitle": "Koop sneller, start eenvoudiger en krijg echte support wanneer nodig.",
+      "heroTrust": "Simpele toegang. Snelle levering. Veilige checkout.",
+      "instantAccess": "Directe toegang",
+      "worksWorldwide": "Werkt wereldwijd",
+      "securePayment": "Veilige betaling",
+      "secureCheckoutEur": "Veilige checkout via Stripe. Eindbetaling in EUR.",
+      "scroll": "Scroll",
+      "chooseFits": "Kies wat bij je past",
+      "start": "Start",
+      "bestChoice": "Beste keuze",
+      "usersLikeYou": "De meeste gebruikers zoals jij kiezen dit",
+      "mobilePopularTools": "Populairste tools",
+      "buyFasterMobile": "Sneller kopen op mobiel",
+      "viewingNowShort": "23 kijken nu",
+      "taxNote": "Belastingen worden indien nodig berekend bij checkout.",
+      "mobileTrustLine": "Limited availability today · secure checkout · activation support",
+      "problemTitle": "Het probleem:",
+      "problemLines": [
+        "Te veel tools.",
+        "Te veel abonnementen.",
+        "Te veel ruis."
+      ],
+      "solutionTitle": "De oplossing:",
+      "solutionLead": "AI DEALS maakt alles eenvoudiger.",
+      "solutionLines": [
+        "Curated tools — not a random marketplace",
+        "Clear activation — no guesswork",
+        "Structured learning — use AI effectively",
+        "One platform. Zero friction."
+      ],
+      "builtForYou": "Gemaakt voor jou",
+      "whoUses": "Wie gebruikt",
+      "responsiblePrivacy": "Built with responsible use and privacy-first principles.",
+      "howItWorks": "Hoe het werkt",
+      "simpleClearDone": "Simpel. Duidelijk. Geregeld.",
+      "noSensitive": "Geen gevoelige informatie vereist vóór betaling.",
+      "trustedUsers": "Vertrouwd door 1000+ gebruikers",
+      "verifiedAccess": "Secure payment, EUR checkout, and verified digital access.",
+      "protected": "Beschermd",
+      "fastActivation": "Snelle activatie",
+      "seeMoreReviews": "Meer reviews bekijken →",
+      "academyLabel": "Academy",
+      "academyTitle": "Don’t Just Use AI. Master It.",
+      "academyText": "Access is one thing. Knowing how to use it properly is another.",
+      "enterAcademy": "Academy openen",
+      "toolGuides": "Tool Guides",
+      "practical": "Practical",
+      "videoLessons": "Video Lessons",
+      "stepByStep": "Step-by-step",
+      "bestPractices": "Best Practices",
+      "responsible": "Responsible",
+      "newsletterTitle": "Stay Ahead. Not Overwhelmed.",
+      "newsletterText": "Weekly AI tips, smart workflows, and tool updates.",
+      "joining": "Aanmelden...",
+      "joinFree": "Gratis aanmelden",
+      "noSpam": "Nooit spam.",
+      "whyBuyFromUs": "Waarom bij ons kopen",
+      "clearSimpleSafe": "Duidelijk. Simpel. Veilig.",
+      "whyText1": "Get the AI tool you need without setup, installation, or technical steps.",
+      "whyText2": "We prepare your access quickly and keep support available if you need help.",
+      "readyTitle": "Klaar om AI slim te gebruiken?",
+      "readyText": "Join thousands of students, creators, and professionals who trust AI DEALS.",
+      "sessionViewing": "🔥 17 people are viewing this now",
+      "sessionLimited": "⏳ Limited-time access for this session",
+      "offerExpired": "Offer expired — new deals available",
+      "sessionTrust": "✔ Real-time demand   ✔ Limited daily access   ✔ Secure checkout"
+    },
+    "funnels": {
+      "student": {
+        "title": "Student",
+        "description": "Study faster with the right AI stack.",
+        "headline": "Study smarter with AI tools",
+        "reasons": [
+          "faster answers",
+          "better understanding",
+          "save time"
+        ],
+        "cta": "Start Learning Now"
+      },
+      "creator": {
+        "title": "Content Creator",
+        "description": "Create, edit, and publish with less friction.",
+        "headline": "Create content faster with AI",
+        "reasons": [
+          "design faster",
+          "edit videos",
+          "create voice content"
+        ],
+        "cta": "Start Creating"
+      },
+      "business": {
+        "title": "Business",
+        "description": "Automate daily work and move faster.",
+        "headline": "Automate and grow your business",
+        "reasons": [
+          "automate tasks",
+          "increase productivity",
+          "save hours daily"
+        ],
+        "cta": "Start Growing"
+      }
+    },
+    "audiences": {
+      "students": {
+        "title": "Students",
+        "headline": "Study Smarter.",
+        "lines": [
+          "Research faster.",
+          "Structure essays better.",
+          "Use AI responsibly."
+        ]
+      },
+      "creators": {
+        "title": "Creators",
+        "headline": "Create Faster.",
+        "lines": [
+          "Generate ideas.",
+          "Design content.",
+          "Automate repetitive tasks."
+        ]
+      },
+      "professionals": {
+        "title": "Ambitious Professionals",
+        "headline": "Work Smarter.",
+        "lines": [
+          "Boost productivity.",
+          "Save time.",
+          "Stay competitive."
+        ]
+      }
+    },
+    "howSteps": [
+      {
+        "title": "Choose your tool",
+        "desc": "Browse our curated selection of premium AI tools."
+      },
+      {
+        "title": "Complete checkout",
+        "desc": "Simple, secure payment — no hidden fees."
+      },
+      {
+        "title": "We activate your access",
+        "desc": "Activation is handled securely by our team after purchase."
+      },
+      {
+        "title": "Start using it",
+        "desc": "Geen gevoelige informatie vereist vóór betaling."
+      }
+    ],
+    "faq": {
+      "items": [
+        {
+          "q": "Is payment safe?",
+          "a": "Yes. Secure payment is handled by Stripe and Bancontact."
+        },
+        {
+          "q": "When do I receive access?",
+          "a": "Access delivered within minutes after payment."
+        },
+        {
+          "q": "Is this only for students?",
+          "a": "No. It is for students, creators, professionals, and anyone serious about growth with AI."
+        },
+        {
+          "q": "Is it monthly?",
+          "a": "Yes. Flexible. Cancel anytime. No annual lock-ins."
+        }
+      ]
+    },
+    "store": {
+      "premium": "Premium",
+      "trending": "Trending",
+      "instant": "Direct",
+      "unavailable": "Niet beschikbaar",
+      "visitTool": "Visit {{tool}}",
+      "category": {
+        "text": "AI Writing",
+        "image": "AI Design",
+        "video": "AI Video",
+        "audio": "AI Audio",
+        "coding": "Dev Tools",
+        "automation": "Automation",
+        "productivity": "Productivity",
+        "security": "Security",
+        "licenses": "Licenses"
+      },
+      "oneMonthPlan": "1 Month Plan",
+      "twoMonthsPlan": "2 Months Plan",
+      "threeMonthsPlan": "3 Months Plan",
+      "durationOneMonth": "Duration: 1 month",
+      "durationTwoMonths": "Duration: 2 months",
+      "durationThreeMonths": "Duration: 3 months",
+      "creditsMonthly": "Includes: 100 credits per month",
+      "creditsRenewed": "100 credits are renewed monthly",
+      "bestStarter": "Best Starter",
+      "bestValue": "⭐ Best Value",
+      "monthlyApprox": "≈ €{{price}} / month",
+      "saveMorePlan": "Save more with this plan",
+      "mostUsersChoose": "Most users choose this option",
+      "notifyPlaceholder": "your@email.com",
+      "notifyConsent": "We’ll only email you about this tool’s availability.",
+      "saving": "Opslaan...",
+      "getEarlyAccess": "Krijg vroege toegang",
+      "notifyMe": "Houd mij op de hoogte",
+      "validEmail": "Please enter a valid email address.",
+      "agreeNotify": "Please agree to be notified.",
+      "alreadyWaitlist": "You’re already on the waitlist for this tool!",
+      "genericError": "Something went wrong.",
+      "notifySuccess": "We’ll notify you when {{tool}} is available! 🎉"
+    },
+    "checkout": {
+      "selectPlan": "Kies plan",
+      "bestValue": "⭐ Best Value",
+      "activationEmail": "Activatie-e-mail",
+      "safeNote": "Secure — no sensitive information is required before payment.",
+      "accessEmailNote": "We’ll send activation details to this email.",
+      "accessEmailNoteFull": "We’ll send activation and access details to this email.",
+      "thankYou": "Bedankt voor je aankoop.",
+      "accessPreparing": "Your access is being prepared. You will receive it shortly.",
+      "goToDashboard": "Naar dashboard",
+      "howReceiveAccess": "Hoe je toegang ontvangt",
+      "accountProvidedBadge": "Access Provided",
+      "activationWithinHours": "Activation within {{hours}} hours",
+      "activationWithinShort": "Within {{hours}}h",
+      "whatYouGet": "Wat je krijgt",
+      "applyWalletCredit": "Apply Wallet Credit",
+      "available": "Available:",
+      "originalPrice": "Original price",
+      "walletCredit": "Wallet credit",
+      "youPay": "You pay",
+      "freeCovered": "Free (covered by credit)",
+      "orderSummary": "Besteloverzicht",
+      "standard": "Standard",
+      "total": "Totaal",
+      "monthlySubscription": "Monthly subscription",
+      "annualSubscription": "Annual subscription",
+      "yearlySubscription": "Yearly subscription",
+      "subscription": "Subscription",
+      "monthly": "Maandelijks",
+      "annual": "Jaarlijks",
+      "billingPeriod": "Billing Period",
+      "billedMonthly": "Billed every month",
+      "billedAnnually": "Billed annually",
+      "save20": "Save 20%",
+      "monthlyEquivalent": "Monthly equivalent",
+      "singlePayment": "Single payment — no recurring charges",
+      "chargedYearly": "Charged once per year",
+      "selectPayment": "Betaalmethode",
+      "card": "Card",
+      "cardDescription": "Visa, Mastercard, Amex — paid in EUR",
+      "bancontactDescription": "Belgian bank payment — paid in EUR",
+      "recommendedBelgium": "Recommended in Belgium",
+      "choosePlanPayment": "Choose your plan and payment method",
+      "backToStore": "Terug naar store",
+      "agreeLegal": "I agree to the",
+      "privacyPolicy": "Privacy Policy",
+      "paymentTrust": "Secure payment via Stripe & Bancontact. Final payment in EUR.",
+      "cancelAnytime": "Cancel anytime. No commitment.",
+      "activationGuaranteeIncluded": "Activation Guarantee included",
+      "contactSupport": "Contacteer support",
+      "toolNotFound": "Tool not found"
+    },
+    "validation": {
+      "invalidEmail": "Please enter a valid email",
+      "agreeTerms": "You must agree to the terms"
+    }
+  },
+  "de": {
+    "nav": {
+      "home": "Startseite",
+      "signOut": "Abmelden",
+      "adminPanel": "Adminbereich",
+      "currencySelector": "Währungsauswahl"
+    },
+    "home": {
+      "tagline": "Zugang. Lernen. Wachsen.",
+      "heroTitle": "Sofortzugang zu Premium-KI-Tools — keine Einrichtung nötig.",
+      "heroHighlight": "Jeden Monat.",
+      "heroSubtitle": "Buy faster, start easier, and get real support when you need it.",
+      "heroTrust": "Simple access. Fast delivery. Secure checkout.",
+      "instantAccess": "Sofortzugang",
+      "worksWorldwide": "Weltweit nutzbar",
+      "securePayment": "Sichere Zahlung",
+      "secureCheckoutEur": "Secure checkout via Stripe. Final payment in EUR.",
+      "scroll": "Scrollen",
+      "chooseFits": "Choose what fits you",
+      "start": "Starten",
+      "bestChoice": "Beste Wahl",
+      "usersLikeYou": "Most users like you choose this",
+      "mobilePopularTools": "Most Popular Tools",
+      "buyFasterMobile": "Buy faster on mobile",
+      "viewingNowShort": "23 viewing now",
+      "taxNote": "Steuern werden ggf. im Checkout berechnet.",
+      "mobileTrustLine": "Limited availability today · secure checkout · activation support",
+      "problemTitle": "The problem:",
+      "problemLines": [
+        "Too many tools.",
+        "Too many subscriptions.",
+        "Too much noise."
+      ],
+      "solutionTitle": "The solution:",
+      "solutionLead": "AI DEALS simplifies everything.",
+      "solutionLines": [
+        "Curated tools — not a random marketplace",
+        "Clear activation — no guesswork",
+        "Structured learning — use AI effectively",
+        "One platform. Zero friction."
+      ],
+      "builtForYou": "Built For You",
+      "whoUses": "Who Uses",
+      "responsiblePrivacy": "Built with responsible use and privacy-first principles.",
+      "howItWorks": "How It Works",
+      "simpleClearDone": "Simple. Clear. Done.",
+      "noSensitive": "Vor der Zahlung sind keine sensiblen Informationen erforderlich.",
+      "trustedUsers": "Vertraut von 1000+ Nutzern",
+      "verifiedAccess": "Secure payment, EUR checkout, and verified digital access.",
+      "protected": "Geschützt",
+      "fastActivation": "Schnelle Aktivierung",
+      "seeMoreReviews": "Mehr Bewertungen ansehen →",
+      "academyLabel": "Academy",
+      "academyTitle": "Don’t Just Use AI. Master It.",
+      "academyText": "Access is one thing. Knowing how to use it properly is another.",
+      "enterAcademy": "Enter Academy",
+      "toolGuides": "Tool Guides",
+      "practical": "Practical",
+      "videoLessons": "Video Lessons",
+      "stepByStep": "Step-by-step",
+      "bestPractices": "Best Practices",
+      "responsible": "Responsible",
+      "newsletterTitle": "Stay Ahead. Not Overwhelmed.",
+      "newsletterText": "Weekly AI tips, smart workflows, and tool updates.",
+      "joining": "Beitritt...",
+      "joinFree": "Kostenlos beitreten",
+      "noSpam": "Kein Spam. Niemals.",
+      "whyBuyFromUs": "Warum bei uns kaufen",
+      "clearSimpleSafe": "Klar. Einfach. Sicher.",
+      "whyText1": "Get the AI tool you need without setup, installation, or technical steps.",
+      "whyText2": "We prepare your access quickly and keep support available if you need help.",
+      "readyTitle": "Ready to Use AI the Smart Way?",
+      "readyText": "Join thousands of students, creators, and professionals who trust AI DEALS.",
+      "sessionViewing": "🔥 17 people are viewing this now",
+      "sessionLimited": "⏳ Limited-time access for this session",
+      "offerExpired": "Offer expired — new deals available",
+      "sessionTrust": "✔ Real-time demand   ✔ Limited daily access   ✔ Secure checkout"
+    },
+    "funnels": {
+      "student": {
+        "title": "Student",
+        "description": "Study faster with the right AI stack.",
+        "headline": "Study smarter with AI tools",
+        "reasons": [
+          "faster answers",
+          "better understanding",
+          "save time"
+        ],
+        "cta": "Start Learning Now"
+      },
+      "creator": {
+        "title": "Content Creator",
+        "description": "Create, edit, and publish with less friction.",
+        "headline": "Create content faster with AI",
+        "reasons": [
+          "design faster",
+          "edit videos",
+          "create voice content"
+        ],
+        "cta": "Start Creating"
+      },
+      "business": {
+        "title": "Business",
+        "description": "Automate daily work and move faster.",
+        "headline": "Automate and grow your business",
+        "reasons": [
+          "automate tasks",
+          "increase productivity",
+          "save hours daily"
+        ],
+        "cta": "Start Growing"
+      }
+    },
+    "audiences": {
+      "students": {
+        "title": "Students",
+        "headline": "Study Smarter.",
+        "lines": [
+          "Research faster.",
+          "Structure essays better.",
+          "Use AI responsibly."
+        ]
+      },
+      "creators": {
+        "title": "Creators",
+        "headline": "Create Faster.",
+        "lines": [
+          "Generate ideas.",
+          "Design content.",
+          "Automate repetitive tasks."
+        ]
+      },
+      "professionals": {
+        "title": "Ambitious Professionals",
+        "headline": "Work Smarter.",
+        "lines": [
+          "Boost productivity.",
+          "Save time.",
+          "Stay competitive."
+        ]
+      }
+    },
+    "howSteps": [
+      {
+        "title": "Choose your tool",
+        "desc": "Browse our curated selection of premium AI tools."
+      },
+      {
+        "title": "Complete checkout",
+        "desc": "Simple, secure payment — no hidden fees."
+      },
+      {
+        "title": "We activate your access",
+        "desc": "Activation is handled securely by our team after purchase."
+      },
+      {
+        "title": "Start using it",
+        "desc": "Vor der Zahlung sind keine sensiblen Informationen erforderlich."
+      }
+    ],
+    "faq": {
+      "items": [
+        {
+          "q": "Is payment safe?",
+          "a": "Yes. Secure payment is handled by Stripe and Bancontact."
+        },
+        {
+          "q": "When do I receive access?",
+          "a": "Access delivered within minutes after payment."
+        },
+        {
+          "q": "Is this only for students?",
+          "a": "No. It is for students, creators, professionals, and anyone serious about growth with AI."
+        },
+        {
+          "q": "Is it monthly?",
+          "a": "Yes. Flexible. Cancel anytime. No annual lock-ins."
+        }
+      ]
+    },
+    "store": {
+      "premium": "Premium",
+      "trending": "Im Trend",
+      "instant": "Sofort",
+      "unavailable": "Nicht verfügbar",
+      "visitTool": "Visit {{tool}}",
+      "category": {
+        "text": "AI Writing",
+        "image": "AI Design",
+        "video": "AI Video",
+        "audio": "AI Audio",
+        "coding": "Dev Tools",
+        "automation": "Automation",
+        "productivity": "Productivity",
+        "security": "Security",
+        "licenses": "Licenses"
+      },
+      "oneMonthPlan": "1 Month Plan",
+      "twoMonthsPlan": "2 Months Plan",
+      "threeMonthsPlan": "3 Months Plan",
+      "durationOneMonth": "Duration: 1 month",
+      "durationTwoMonths": "Duration: 2 months",
+      "durationThreeMonths": "Duration: 3 months",
+      "creditsMonthly": "Includes: 100 credits per month",
+      "creditsRenewed": "100 credits are renewed monthly",
+      "bestStarter": "Best Starter",
+      "bestValue": "⭐ Best Value",
+      "monthlyApprox": "≈ €{{price}} / month",
+      "saveMorePlan": "Save more with this plan",
+      "mostUsersChoose": "Most users choose this option",
+      "notifyPlaceholder": "your@email.com",
+      "notifyConsent": "We’ll only email you about this tool’s availability.",
+      "saving": "Speichern...",
+      "getEarlyAccess": "Frühen Zugang erhalten",
+      "notifyMe": "Benachrichtigen",
+      "validEmail": "Please enter a valid email address.",
+      "agreeNotify": "Please agree to be notified.",
+      "alreadyWaitlist": "You’re already on the waitlist for this tool!",
+      "genericError": "Something went wrong.",
+      "notifySuccess": "We’ll notify you when {{tool}} is available! 🎉"
+    },
+    "checkout": {
+      "selectPlan": "Plan wählen",
+      "bestValue": "⭐ Best Value",
+      "activationEmail": "Aktivierungs-E-Mail",
+      "safeNote": "Secure — no sensitive information is required before payment.",
+      "accessEmailNote": "We’ll send activation details to this email.",
+      "accessEmailNoteFull": "We’ll send activation and access details to this email.",
+      "thankYou": "Danke für deinen Kauf.",
+      "accessPreparing": "Your access is being prepared. You will receive it shortly.",
+      "goToDashboard": "Zum Dashboard",
+      "howReceiveAccess": "So erhältst du deinen Zugang",
+      "accountProvidedBadge": "Access Provided",
+      "activationWithinHours": "Activation within {{hours}} hours",
+      "activationWithinShort": "Within {{hours}}h",
+      "whatYouGet": "Was du bekommst",
+      "applyWalletCredit": "Apply Wallet Credit",
+      "available": "Available:",
+      "originalPrice": "Original price",
+      "walletCredit": "Wallet credit",
+      "youPay": "You pay",
+      "freeCovered": "Free (covered by credit)",
+      "orderSummary": "Bestellübersicht",
+      "standard": "Standard",
+      "total": "Gesamt",
+      "monthlySubscription": "Monthly subscription",
+      "annualSubscription": "Annual subscription",
+      "yearlySubscription": "Yearly subscription",
+      "subscription": "Subscription",
+      "monthly": "Monatlich",
+      "annual": "Jährlich",
+      "billingPeriod": "Billing Period",
+      "billedMonthly": "Billed every month",
+      "billedAnnually": "Billed annually",
+      "save20": "Save 20%",
+      "monthlyEquivalent": "Monthly equivalent",
+      "singlePayment": "Single payment — no recurring charges",
+      "chargedYearly": "Charged once per year",
+      "selectPayment": "Zahlungsmethode",
+      "card": "Card",
+      "cardDescription": "Visa, Mastercard, Amex — paid in EUR",
+      "bancontactDescription": "Belgian bank payment — paid in EUR",
+      "recommendedBelgium": "Recommended in Belgium",
+      "choosePlanPayment": "Choose your plan and payment method",
+      "backToStore": "Zurück zum Store",
+      "agreeLegal": "I agree to the",
+      "privacyPolicy": "Privacy Policy",
+      "paymentTrust": "Secure payment via Stripe & Bancontact. Final payment in EUR.",
+      "cancelAnytime": "Cancel anytime. No commitment.",
+      "activationGuaranteeIncluded": "Activation Guarantee included",
+      "contactSupport": "Support kontaktieren",
+      "toolNotFound": "Tool not found"
+    },
+    "validation": {
+      "invalidEmail": "Please enter a valid email",
+      "agreeTerms": "You must agree to the terms"
+    }
+  },
+  "es": {
+    "nav": {
+      "home": "Inicio",
+      "signOut": "Cerrar sesión",
+      "adminPanel": "Panel admin",
+      "currencySelector": "Selector de moneda"
+    },
+    "home": {
+      "tagline": "Accede. Aprende. Escala.",
+      "heroTitle": "Acceso instantáneo a herramientas IA premium — sin configuración.",
+      "heroHighlight": "Cada mes.",
+      "heroSubtitle": "Buy faster, start easier, and get real support when you need it.",
+      "heroTrust": "Simple access. Fast delivery. Secure checkout.",
+      "instantAccess": "Acceso instantáneo",
+      "worksWorldwide": "Funciona en todo el mundo",
+      "securePayment": "Pago seguro",
+      "secureCheckoutEur": "Secure checkout via Stripe. Final payment in EUR.",
+      "scroll": "Desplazar",
+      "chooseFits": "Choose what fits you",
+      "start": "Empezar",
+      "bestChoice": "Mejor elección",
+      "usersLikeYou": "Most users like you choose this",
+      "mobilePopularTools": "Most Popular Tools",
+      "buyFasterMobile": "Buy faster on mobile",
+      "viewingNowShort": "23 viewing now",
+      "taxNote": "Los impuestos, si aplican, se calculan al pagar.",
+      "mobileTrustLine": "Limited availability today · secure checkout · activation support",
+      "problemTitle": "The problem:",
+      "problemLines": [
+        "Too many tools.",
+        "Too many subscriptions.",
+        "Too much noise."
+      ],
+      "solutionTitle": "The solution:",
+      "solutionLead": "AI DEALS simplifies everything.",
+      "solutionLines": [
+        "Curated tools — not a random marketplace",
+        "Clear activation — no guesswork",
+        "Structured learning — use AI effectively",
+        "One platform. Zero friction."
+      ],
+      "builtForYou": "Built For You",
+      "whoUses": "Who Uses",
+      "responsiblePrivacy": "Built with responsible use and privacy-first principles.",
+      "howItWorks": "How It Works",
+      "simpleClearDone": "Simple. Clear. Done.",
+      "noSensitive": "No se requiere información sensible antes del pago.",
+      "trustedUsers": "Con la confianza de 1000+ usuarios",
+      "verifiedAccess": "Secure payment, EUR checkout, and verified digital access.",
+      "protected": "Protegido",
+      "fastActivation": "Activación rápida",
+      "seeMoreReviews": "Ver más reseñas →",
+      "academyLabel": "Academy",
+      "academyTitle": "Don’t Just Use AI. Master It.",
+      "academyText": "Access is one thing. Knowing how to use it properly is another.",
+      "enterAcademy": "Enter Academy",
+      "toolGuides": "Tool Guides",
+      "practical": "Practical",
+      "videoLessons": "Video Lessons",
+      "stepByStep": "Step-by-step",
+      "bestPractices": "Best Practices",
+      "responsible": "Responsible",
+      "newsletterTitle": "Stay Ahead. Not Overwhelmed.",
+      "newsletterText": "Weekly AI tips, smart workflows, and tool updates.",
+      "joining": "Uniendo...",
+      "joinFree": "Unirse gratis",
+      "noSpam": "Sin spam. Nunca.",
+      "whyBuyFromUs": "Por qué comprarnos",
+      "clearSimpleSafe": "Claro. Simple. Seguro.",
+      "whyText1": "Get the AI tool you need without setup, installation, or technical steps.",
+      "whyText2": "We prepare your access quickly and keep support available if you need help.",
+      "readyTitle": "Ready to Use AI the Smart Way?",
+      "readyText": "Join thousands of students, creators, and professionals who trust AI DEALS.",
+      "sessionViewing": "🔥 17 people are viewing this now",
+      "sessionLimited": "⏳ Limited-time access for this session",
+      "offerExpired": "Offer expired — new deals available",
+      "sessionTrust": "✔ Real-time demand   ✔ Limited daily access   ✔ Secure checkout"
+    },
+    "funnels": {
+      "student": {
+        "title": "Student",
+        "description": "Study faster with the right AI stack.",
+        "headline": "Study smarter with AI tools",
+        "reasons": [
+          "faster answers",
+          "better understanding",
+          "save time"
+        ],
+        "cta": "Start Learning Now"
+      },
+      "creator": {
+        "title": "Content Creator",
+        "description": "Create, edit, and publish with less friction.",
+        "headline": "Create content faster with AI",
+        "reasons": [
+          "design faster",
+          "edit videos",
+          "create voice content"
+        ],
+        "cta": "Start Creating"
+      },
+      "business": {
+        "title": "Business",
+        "description": "Automate daily work and move faster.",
+        "headline": "Automate and grow your business",
+        "reasons": [
+          "automate tasks",
+          "increase productivity",
+          "save hours daily"
+        ],
+        "cta": "Start Growing"
+      }
+    },
+    "audiences": {
+      "students": {
+        "title": "Students",
+        "headline": "Study Smarter.",
+        "lines": [
+          "Research faster.",
+          "Structure essays better.",
+          "Use AI responsibly."
+        ]
+      },
+      "creators": {
+        "title": "Creators",
+        "headline": "Create Faster.",
+        "lines": [
+          "Generate ideas.",
+          "Design content.",
+          "Automate repetitive tasks."
+        ]
+      },
+      "professionals": {
+        "title": "Ambitious Professionals",
+        "headline": "Work Smarter.",
+        "lines": [
+          "Boost productivity.",
+          "Save time.",
+          "Stay competitive."
+        ]
+      }
+    },
+    "howSteps": [
+      {
+        "title": "Choose your tool",
+        "desc": "Browse our curated selection of premium AI tools."
+      },
+      {
+        "title": "Complete checkout",
+        "desc": "Simple, secure payment — no hidden fees."
+      },
+      {
+        "title": "We activate your access",
+        "desc": "Activation is handled securely by our team after purchase."
+      },
+      {
+        "title": "Start using it",
+        "desc": "No se requiere información sensible antes del pago."
+      }
+    ],
+    "faq": {
+      "items": [
+        {
+          "q": "Is payment safe?",
+          "a": "Yes. Secure payment is handled by Stripe and Bancontact."
+        },
+        {
+          "q": "When do I receive access?",
+          "a": "Access delivered within minutes after payment."
+        },
+        {
+          "q": "Is this only for students?",
+          "a": "No. It is for students, creators, professionals, and anyone serious about growth with AI."
+        },
+        {
+          "q": "Is it monthly?",
+          "a": "Yes. Flexible. Cancel anytime. No annual lock-ins."
+        }
+      ]
+    },
+    "store": {
+      "premium": "Premium",
+      "trending": "Tendencia",
+      "instant": "Instantáneo",
+      "unavailable": "No disponible",
+      "visitTool": "Visit {{tool}}",
+      "category": {
+        "text": "AI Writing",
+        "image": "AI Design",
+        "video": "AI Video",
+        "audio": "AI Audio",
+        "coding": "Dev Tools",
+        "automation": "Automation",
+        "productivity": "Productivity",
+        "security": "Security",
+        "licenses": "Licenses"
+      },
+      "oneMonthPlan": "1 Month Plan",
+      "twoMonthsPlan": "2 Months Plan",
+      "threeMonthsPlan": "3 Months Plan",
+      "durationOneMonth": "Duration: 1 month",
+      "durationTwoMonths": "Duration: 2 months",
+      "durationThreeMonths": "Duration: 3 months",
+      "creditsMonthly": "Includes: 100 credits per month",
+      "creditsRenewed": "100 credits are renewed monthly",
+      "bestStarter": "Best Starter",
+      "bestValue": "⭐ Best Value",
+      "monthlyApprox": "≈ €{{price}} / month",
+      "saveMorePlan": "Save more with this plan",
+      "mostUsersChoose": "Most users choose this option",
+      "notifyPlaceholder": "your@email.com",
+      "notifyConsent": "We’ll only email you about this tool’s availability.",
+      "saving": "Guardando...",
+      "getEarlyAccess": "Obtener acceso anticipado",
+      "notifyMe": "Avisarme",
+      "validEmail": "Please enter a valid email address.",
+      "agreeNotify": "Please agree to be notified.",
+      "alreadyWaitlist": "You’re already on the waitlist for this tool!",
+      "genericError": "Something went wrong.",
+      "notifySuccess": "We’ll notify you when {{tool}} is available! 🎉"
+    },
+    "checkout": {
+      "selectPlan": "Seleccionar plan",
+      "bestValue": "⭐ Best Value",
+      "activationEmail": "Email de activación",
+      "safeNote": "Secure — no sensitive information is required before payment.",
+      "accessEmailNote": "We’ll send activation details to this email.",
+      "accessEmailNoteFull": "We’ll send activation and access details to this email.",
+      "thankYou": "Gracias por tu compra.",
+      "accessPreparing": "Your access is being prepared. You will receive it shortly.",
+      "goToDashboard": "Ir al panel",
+      "howReceiveAccess": "Cómo recibes tu acceso",
+      "accountProvidedBadge": "Access Provided",
+      "activationWithinHours": "Activation within {{hours}} hours",
+      "activationWithinShort": "Within {{hours}}h",
+      "whatYouGet": "Qué obtienes",
+      "applyWalletCredit": "Apply Wallet Credit",
+      "available": "Available:",
+      "originalPrice": "Original price",
+      "walletCredit": "Wallet credit",
+      "youPay": "You pay",
+      "freeCovered": "Free (covered by credit)",
+      "orderSummary": "Resumen del pedido",
+      "standard": "Standard",
+      "total": "Total",
+      "monthlySubscription": "Monthly subscription",
+      "annualSubscription": "Annual subscription",
+      "yearlySubscription": "Yearly subscription",
+      "subscription": "Subscription",
+      "monthly": "Mensual",
+      "annual": "Anual",
+      "billingPeriod": "Billing Period",
+      "billedMonthly": "Billed every month",
+      "billedAnnually": "Billed annually",
+      "save20": "Save 20%",
+      "monthlyEquivalent": "Monthly equivalent",
+      "singlePayment": "Single payment — no recurring charges",
+      "chargedYearly": "Charged once per year",
+      "selectPayment": "Método de pago",
+      "card": "Card",
+      "cardDescription": "Visa, Mastercard, Amex — paid in EUR",
+      "bancontactDescription": "Belgian bank payment — paid in EUR",
+      "recommendedBelgium": "Recommended in Belgium",
+      "choosePlanPayment": "Choose your plan and payment method",
+      "backToStore": "Volver a la tienda",
+      "agreeLegal": "I agree to the",
+      "privacyPolicy": "Privacy Policy",
+      "paymentTrust": "Secure payment via Stripe & Bancontact. Final payment in EUR.",
+      "cancelAnytime": "Cancel anytime. No commitment.",
+      "activationGuaranteeIncluded": "Activation Guarantee included",
+      "contactSupport": "Contactar soporte",
+      "toolNotFound": "Tool not found"
+    },
+    "validation": {
+      "invalidEmail": "Please enter a valid email",
+      "agreeTerms": "You must agree to the terms"
+    }
+  },
+  "it": {
+    "nav": {
+      "home": "Home",
+      "signOut": "Esci",
+      "adminPanel": "Pannello admin",
+      "currencySelector": "Selettore valuta"
+    },
+    "home": {
+      "tagline": "Accedi. Impara. Cresci.",
+      "heroTitle": "Accesso immediato agli strumenti AI premium — senza configurazione.",
+      "heroHighlight": "Ogni mese.",
+      "heroSubtitle": "Buy faster, start easier, and get real support when you need it.",
+      "heroTrust": "Simple access. Fast delivery. Secure checkout.",
+      "instantAccess": "Accesso immediato",
+      "worksWorldwide": "Funziona ovunque",
+      "securePayment": "Pagamento sicuro",
+      "secureCheckoutEur": "Secure checkout via Stripe. Final payment in EUR.",
+      "scroll": "Scorri",
+      "chooseFits": "Choose what fits you",
+      "start": "Inizia",
+      "bestChoice": "Scelta migliore",
+      "usersLikeYou": "Most users like you choose this",
+      "mobilePopularTools": "Most Popular Tools",
+      "buyFasterMobile": "Buy faster on mobile",
+      "viewingNowShort": "23 viewing now",
+      "taxNote": "Le tasse, se applicabili, sono calcolate al checkout.",
+      "mobileTrustLine": "Limited availability today · secure checkout · activation support",
+      "problemTitle": "The problem:",
+      "problemLines": [
+        "Too many tools.",
+        "Too many subscriptions.",
+        "Too much noise."
+      ],
+      "solutionTitle": "The solution:",
+      "solutionLead": "AI DEALS simplifies everything.",
+      "solutionLines": [
+        "Curated tools — not a random marketplace",
+        "Clear activation — no guesswork",
+        "Structured learning — use AI effectively",
+        "One platform. Zero friction."
+      ],
+      "builtForYou": "Built For You",
+      "whoUses": "Who Uses",
+      "responsiblePrivacy": "Built with responsible use and privacy-first principles.",
+      "howItWorks": "How It Works",
+      "simpleClearDone": "Simple. Clear. Done.",
+      "noSensitive": "Non sono richieste informazioni sensibili prima del pagamento.",
+      "trustedUsers": "Scelto da oltre 1000 utenti",
+      "verifiedAccess": "Secure payment, EUR checkout, and verified digital access.",
+      "protected": "Protetto",
+      "fastActivation": "Attivazione rapida",
+      "seeMoreReviews": "Vedi altre recensioni →",
+      "academyLabel": "Academy",
+      "academyTitle": "Don’t Just Use AI. Master It.",
+      "academyText": "Access is one thing. Knowing how to use it properly is another.",
+      "enterAcademy": "Enter Academy",
+      "toolGuides": "Tool Guides",
+      "practical": "Practical",
+      "videoLessons": "Video Lessons",
+      "stepByStep": "Step-by-step",
+      "bestPractices": "Best Practices",
+      "responsible": "Responsible",
+      "newsletterTitle": "Stay Ahead. Not Overwhelmed.",
+      "newsletterText": "Weekly AI tips, smart workflows, and tool updates.",
+      "joining": "Iscrizione...",
+      "joinFree": "Unisciti gratis",
+      "noSpam": "Niente spam. Mai.",
+      "whyBuyFromUs": "Perché comprare da noi",
+      "clearSimpleSafe": "Chiaro. Semplice. Sicuro.",
+      "whyText1": "Get the AI tool you need without setup, installation, or technical steps.",
+      "whyText2": "We prepare your access quickly and keep support available if you need help.",
+      "readyTitle": "Ready to Use AI the Smart Way?",
+      "readyText": "Join thousands of students, creators, and professionals who trust AI DEALS.",
+      "sessionViewing": "🔥 17 people are viewing this now",
+      "sessionLimited": "⏳ Limited-time access for this session",
+      "offerExpired": "Offer expired — new deals available",
+      "sessionTrust": "✔ Real-time demand   ✔ Limited daily access   ✔ Secure checkout"
+    },
+    "funnels": {
+      "student": {
+        "title": "Student",
+        "description": "Study faster with the right AI stack.",
+        "headline": "Study smarter with AI tools",
+        "reasons": [
+          "faster answers",
+          "better understanding",
+          "save time"
+        ],
+        "cta": "Start Learning Now"
+      },
+      "creator": {
+        "title": "Content Creator",
+        "description": "Create, edit, and publish with less friction.",
+        "headline": "Create content faster with AI",
+        "reasons": [
+          "design faster",
+          "edit videos",
+          "create voice content"
+        ],
+        "cta": "Start Creating"
+      },
+      "business": {
+        "title": "Business",
+        "description": "Automate daily work and move faster.",
+        "headline": "Automate and grow your business",
+        "reasons": [
+          "automate tasks",
+          "increase productivity",
+          "save hours daily"
+        ],
+        "cta": "Start Growing"
+      }
+    },
+    "audiences": {
+      "students": {
+        "title": "Students",
+        "headline": "Study Smarter.",
+        "lines": [
+          "Research faster.",
+          "Structure essays better.",
+          "Use AI responsibly."
+        ]
+      },
+      "creators": {
+        "title": "Creators",
+        "headline": "Create Faster.",
+        "lines": [
+          "Generate ideas.",
+          "Design content.",
+          "Automate repetitive tasks."
+        ]
+      },
+      "professionals": {
+        "title": "Ambitious Professionals",
+        "headline": "Work Smarter.",
+        "lines": [
+          "Boost productivity.",
+          "Save time.",
+          "Stay competitive."
+        ]
+      }
+    },
+    "howSteps": [
+      {
+        "title": "Choose your tool",
+        "desc": "Browse our curated selection of premium AI tools."
+      },
+      {
+        "title": "Complete checkout",
+        "desc": "Simple, secure payment — no hidden fees."
+      },
+      {
+        "title": "We activate your access",
+        "desc": "Activation is handled securely by our team after purchase."
+      },
+      {
+        "title": "Start using it",
+        "desc": "Non sono richieste informazioni sensibili prima del pagamento."
+      }
+    ],
+    "faq": {
+      "items": [
+        {
+          "q": "Is payment safe?",
+          "a": "Yes. Secure payment is handled by Stripe and Bancontact."
+        },
+        {
+          "q": "When do I receive access?",
+          "a": "Access delivered within minutes after payment."
+        },
+        {
+          "q": "Is this only for students?",
+          "a": "No. It is for students, creators, professionals, and anyone serious about growth with AI."
+        },
+        {
+          "q": "Is it monthly?",
+          "a": "Yes. Flexible. Cancel anytime. No annual lock-ins."
+        }
+      ]
+    },
+    "store": {
+      "premium": "Premium",
+      "trending": "Di tendenza",
+      "instant": "Immediato",
+      "unavailable": "Non disponibile",
+      "visitTool": "Visit {{tool}}",
+      "category": {
+        "text": "AI Writing",
+        "image": "AI Design",
+        "video": "AI Video",
+        "audio": "AI Audio",
+        "coding": "Dev Tools",
+        "automation": "Automation",
+        "productivity": "Productivity",
+        "security": "Security",
+        "licenses": "Licenses"
+      },
+      "oneMonthPlan": "1 Month Plan",
+      "twoMonthsPlan": "2 Months Plan",
+      "threeMonthsPlan": "3 Months Plan",
+      "durationOneMonth": "Duration: 1 month",
+      "durationTwoMonths": "Duration: 2 months",
+      "durationThreeMonths": "Duration: 3 months",
+      "creditsMonthly": "Includes: 100 credits per month",
+      "creditsRenewed": "100 credits are renewed monthly",
+      "bestStarter": "Best Starter",
+      "bestValue": "⭐ Best Value",
+      "monthlyApprox": "≈ €{{price}} / month",
+      "saveMorePlan": "Save more with this plan",
+      "mostUsersChoose": "Most users choose this option",
+      "notifyPlaceholder": "your@email.com",
+      "notifyConsent": "We’ll only email you about this tool’s availability.",
+      "saving": "Salvataggio...",
+      "getEarlyAccess": "Ottieni accesso anticipato",
+      "notifyMe": "Avvisami",
+      "validEmail": "Please enter a valid email address.",
+      "agreeNotify": "Please agree to be notified.",
+      "alreadyWaitlist": "You’re already on the waitlist for this tool!",
+      "genericError": "Something went wrong.",
+      "notifySuccess": "We’ll notify you when {{tool}} is available! 🎉"
+    },
+    "checkout": {
+      "selectPlan": "Seleziona piano",
+      "bestValue": "⭐ Best Value",
+      "activationEmail": "Email di attivazione",
+      "safeNote": "Secure — no sensitive information is required before payment.",
+      "accessEmailNote": "We’ll send activation details to this email.",
+      "accessEmailNoteFull": "We’ll send activation and access details to this email.",
+      "thankYou": "Grazie per il tuo acquisto.",
+      "accessPreparing": "Your access is being prepared. You will receive it shortly.",
+      "goToDashboard": "Vai alla dashboard",
+      "howReceiveAccess": "Come ricevi l’accesso",
+      "accountProvidedBadge": "Access Provided",
+      "activationWithinHours": "Activation within {{hours}} hours",
+      "activationWithinShort": "Within {{hours}}h",
+      "whatYouGet": "Cosa ottieni",
+      "applyWalletCredit": "Apply Wallet Credit",
+      "available": "Available:",
+      "originalPrice": "Original price",
+      "walletCredit": "Wallet credit",
+      "youPay": "You pay",
+      "freeCovered": "Free (covered by credit)",
+      "orderSummary": "Riepilogo ordine",
+      "standard": "Standard",
+      "total": "Totale",
+      "monthlySubscription": "Monthly subscription",
+      "annualSubscription": "Annual subscription",
+      "yearlySubscription": "Yearly subscription",
+      "subscription": "Subscription",
+      "monthly": "Mensile",
+      "annual": "Annuale",
+      "billingPeriod": "Billing Period",
+      "billedMonthly": "Billed every month",
+      "billedAnnually": "Billed annually",
+      "save20": "Save 20%",
+      "monthlyEquivalent": "Monthly equivalent",
+      "singlePayment": "Single payment — no recurring charges",
+      "chargedYearly": "Charged once per year",
+      "selectPayment": "Metodo di pagamento",
+      "card": "Card",
+      "cardDescription": "Visa, Mastercard, Amex — paid in EUR",
+      "bancontactDescription": "Belgian bank payment — paid in EUR",
+      "recommendedBelgium": "Recommended in Belgium",
+      "choosePlanPayment": "Choose your plan and payment method",
+      "backToStore": "Torna allo store",
+      "agreeLegal": "I agree to the",
+      "privacyPolicy": "Privacy Policy",
+      "paymentTrust": "Secure payment via Stripe & Bancontact. Final payment in EUR.",
+      "cancelAnytime": "Cancel anytime. No commitment.",
+      "activationGuaranteeIncluded": "Activation Guarantee included",
+      "contactSupport": "Contatta supporto",
+      "toolNotFound": "Tool not found"
+    },
+    "validation": {
+      "invalidEmail": "Please enter a valid email",
+      "agreeTerms": "You must agree to the terms"
+    }
+  },
+  "ar": {
+    "nav": {
+      "home": "الرئيسية",
+      "signOut": "تسجيل الخروج",
+      "adminPanel": "لوحة الإدارة",
+      "currencySelector": "اختيار العملة"
+    },
+    "home": {
+      "tagline": "ادخل. تعلّم. توسّع.",
+      "heroTitle": "وصول فوري إلى أدوات الذكاء الاصطناعي المميزة — بدون إعداد.",
+      "heroHighlight": "كل شهر.",
+      "heroSubtitle": "اشترِ أسرع وابدأ أسهل واحصل على دعم حقيقي عند الحاجة.",
+      "heroTrust": "وصول بسيط. تسليم سريع. دفع آمن.",
+      "instantAccess": "وصول فوري",
+      "worksWorldwide": "يعمل عالمياً",
+      "securePayment": "دفع آمن",
+      "secureCheckoutEur": "Secure checkout via Stripe. Final payment in EUR.",
+      "scroll": "مرّر",
+      "chooseFits": "اختر ما يناسبك",
+      "start": "ابدأ",
+      "bestChoice": "أفضل خيار",
+      "usersLikeYou": "معظم المستخدمين مثلك يختارون هذا",
+      "mobilePopularTools": "الأدوات الأكثر شعبية",
+      "buyFasterMobile": "اشترِ أسرع على الهاتف",
+      "viewingNowShort": "23 يشاهدون الآن",
+      "taxNote": "يتم احتساب الضرائب عند الدفع إذا كانت مطبقة.",
+      "mobileTrustLine": "توفر محدود اليوم · دفع آمن · دعم التفعيل",
+      "problemTitle": "المشكلة:",
+      "problemLines": [
+        "أدوات كثيرة جداً.",
+        "اشتراكات كثيرة جداً.",
+        "تشتيت كثير جداً."
+      ],
+      "solutionTitle": "الحل:",
+      "solutionLead": "AI DEALS يبسّط كل شيء.",
+      "solutionLines": [
+        "Curated tools — not a random marketplace",
+        "Clear activation — no guesswork",
+        "Structured learning — use AI effectively",
+        "One platform. Zero friction."
+      ],
+      "builtForYou": "مصمم لك",
+      "whoUses": "من يستخدم",
+      "responsiblePrivacy": "Built with responsible use and privacy-first principles.",
+      "howItWorks": "كيف يعمل",
+      "simpleClearDone": "بسيط. واضح. جاهز.",
+      "noSensitive": "لا توجد معلومات حساسة مطلوبة قبل الدفع.",
+      "trustedUsers": "موثوق من أكثر من 1000 مستخدم",
+      "verifiedAccess": "Secure payment, EUR checkout, and verified digital access.",
+      "protected": "محمي",
+      "fastActivation": "تفعيل سريع",
+      "seeMoreReviews": "شاهد المزيد من التقييمات ←",
+      "academyLabel": "Academy",
+      "academyTitle": "Don’t Just Use AI. Master It.",
+      "academyText": "Access is one thing. Knowing how to use it properly is another.",
+      "enterAcademy": "ادخل الأكاديمية",
+      "toolGuides": "Tool Guides",
+      "practical": "Practical",
+      "videoLessons": "Video Lessons",
+      "stepByStep": "Step-by-step",
+      "bestPractices": "Best Practices",
+      "responsible": "Responsible",
+      "newsletterTitle": "Stay Ahead. Not Overwhelmed.",
+      "newsletterText": "Weekly AI tips, smart workflows, and tool updates.",
+      "joining": "جارٍ الانضمام...",
+      "joinFree": "انضم مجاناً",
+      "noSpam": "لا رسائل مزعجة أبداً.",
+      "whyBuyFromUs": "لماذا تشتري منا",
+      "clearSimpleSafe": "واضح. بسيط. آمن.",
+      "whyText1": "Get the AI tool you need without setup, installation, or technical steps.",
+      "whyText2": "We prepare your access quickly and keep support available if you need help.",
+      "readyTitle": "جاهز لاستخدام الذكاء الاصطناعي بذكاء؟",
+      "readyText": "Join thousands of students, creators, and professionals who trust AI DEALS.",
+      "sessionViewing": "🔥 17 people are viewing this now",
+      "sessionLimited": "⏳ Limited-time access for this session",
+      "offerExpired": "Offer expired — new deals available",
+      "sessionTrust": "✔ Real-time demand   ✔ Limited daily access   ✔ Secure checkout"
+    },
+    "funnels": {
+      "student": {
+        "title": "Student",
+        "description": "Study faster with the right AI stack.",
+        "headline": "Study smarter with AI tools",
+        "reasons": [
+          "faster answers",
+          "better understanding",
+          "save time"
+        ],
+        "cta": "Start Learning Now"
+      },
+      "creator": {
+        "title": "Content Creator",
+        "description": "Create, edit, and publish with less friction.",
+        "headline": "Create content faster with AI",
+        "reasons": [
+          "design faster",
+          "edit videos",
+          "create voice content"
+        ],
+        "cta": "Start Creating"
+      },
+      "business": {
+        "title": "Business",
+        "description": "Automate daily work and move faster.",
+        "headline": "Automate and grow your business",
+        "reasons": [
+          "automate tasks",
+          "increase productivity",
+          "save hours daily"
+        ],
+        "cta": "Start Growing"
+      }
+    },
+    "audiences": {
+      "students": {
+        "title": "Students",
+        "headline": "Study Smarter.",
+        "lines": [
+          "Research faster.",
+          "Structure essays better.",
+          "Use AI responsibly."
+        ]
+      },
+      "creators": {
+        "title": "Creators",
+        "headline": "Create Faster.",
+        "lines": [
+          "Generate ideas.",
+          "Design content.",
+          "Automate repetitive tasks."
+        ]
+      },
+      "professionals": {
+        "title": "Ambitious Professionals",
+        "headline": "Work Smarter.",
+        "lines": [
+          "Boost productivity.",
+          "Save time.",
+          "Stay competitive."
+        ]
+      }
+    },
+    "howSteps": [
+      {
+        "title": "Choose your tool",
+        "desc": "Browse our curated selection of premium AI tools."
+      },
+      {
+        "title": "Complete checkout",
+        "desc": "Simple, secure payment — no hidden fees."
+      },
+      {
+        "title": "We activate your access",
+        "desc": "Activation is handled securely by our team after purchase."
+      },
+      {
+        "title": "Start using it",
+        "desc": "لا توجد معلومات حساسة مطلوبة قبل الدفع."
+      }
+    ],
+    "faq": {
+      "items": [
+        {
+          "q": "Is payment safe?",
+          "a": "Yes. Secure payment is handled by Stripe and Bancontact."
+        },
+        {
+          "q": "When do I receive access?",
+          "a": "Access delivered within minutes after payment."
+        },
+        {
+          "q": "Is this only for students?",
+          "a": "No. It is for students, creators, professionals, and anyone serious about growth with AI."
+        },
+        {
+          "q": "Is it monthly?",
+          "a": "Yes. Flexible. Cancel anytime. No annual lock-ins."
+        }
+      ]
+    },
+    "store": {
+      "premium": "مميز",
+      "trending": "رائج",
+      "instant": "فوري",
+      "unavailable": "غير متاح",
+      "visitTool": "Visit {{tool}}",
+      "category": {
+        "text": "AI Writing",
+        "image": "AI Design",
+        "video": "AI Video",
+        "audio": "AI Audio",
+        "coding": "Dev Tools",
+        "automation": "Automation",
+        "productivity": "Productivity",
+        "security": "Security",
+        "licenses": "Licenses"
+      },
+      "oneMonthPlan": "1 Month Plan",
+      "twoMonthsPlan": "2 Months Plan",
+      "threeMonthsPlan": "3 Months Plan",
+      "durationOneMonth": "Duration: 1 month",
+      "durationTwoMonths": "Duration: 2 months",
+      "durationThreeMonths": "Duration: 3 months",
+      "creditsMonthly": "Includes: 100 credits per month",
+      "creditsRenewed": "100 credits are renewed monthly",
+      "bestStarter": "Best Starter",
+      "bestValue": "⭐ Best Value",
+      "monthlyApprox": "≈ €{{price}} / month",
+      "saveMorePlan": "Save more with this plan",
+      "mostUsersChoose": "Most users choose this option",
+      "notifyPlaceholder": "your@email.com",
+      "notifyConsent": "We’ll only email you about this tool’s availability.",
+      "saving": "جارٍ الحفظ...",
+      "getEarlyAccess": "احصل على وصول مبكر",
+      "notifyMe": "أخبرني",
+      "validEmail": "Please enter a valid email address.",
+      "agreeNotify": "Please agree to be notified.",
+      "alreadyWaitlist": "You’re already on the waitlist for this tool!",
+      "genericError": "Something went wrong.",
+      "notifySuccess": "We’ll notify you when {{tool}} is available! 🎉"
+    },
+    "checkout": {
+      "selectPlan": "اختر الخطة",
+      "bestValue": "⭐ Best Value",
+      "activationEmail": "بريد التفعيل",
+      "safeNote": "Secure — no sensitive information is required before payment.",
+      "accessEmailNote": "We’ll send activation details to this email.",
+      "accessEmailNoteFull": "We’ll send activation and access details to this email.",
+      "thankYou": "شكراً لشرائك.",
+      "accessPreparing": "Your access is being prepared. You will receive it shortly.",
+      "goToDashboard": "اذهب إلى لوحة التحكم",
+      "howReceiveAccess": "كيف تستلم الوصول",
+      "accountProvidedBadge": "Access Provided",
+      "activationWithinHours": "Activation within {{hours}} hours",
+      "activationWithinShort": "Within {{hours}}h",
+      "whatYouGet": "ما الذي تحصل عليه",
+      "applyWalletCredit": "Apply Wallet Credit",
+      "available": "Available:",
+      "originalPrice": "Original price",
+      "walletCredit": "Wallet credit",
+      "youPay": "You pay",
+      "freeCovered": "Free (covered by credit)",
+      "orderSummary": "ملخص الطلب",
+      "standard": "Standard",
+      "total": "الإجمالي",
+      "monthlySubscription": "Monthly subscription",
+      "annualSubscription": "Annual subscription",
+      "yearlySubscription": "Yearly subscription",
+      "subscription": "Subscription",
+      "monthly": "شهري",
+      "annual": "سنوي",
+      "billingPeriod": "Billing Period",
+      "billedMonthly": "Billed every month",
+      "billedAnnually": "Billed annually",
+      "save20": "Save 20%",
+      "monthlyEquivalent": "Monthly equivalent",
+      "singlePayment": "Single payment — no recurring charges",
+      "chargedYearly": "Charged once per year",
+      "selectPayment": "طريقة الدفع",
+      "card": "Card",
+      "cardDescription": "Visa, Mastercard, Amex — paid in EUR",
+      "bancontactDescription": "Belgian bank payment — paid in EUR",
+      "recommendedBelgium": "Recommended in Belgium",
+      "choosePlanPayment": "Choose your plan and payment method",
+      "backToStore": "العودة إلى المتجر",
+      "agreeLegal": "I agree to the",
+      "privacyPolicy": "Privacy Policy",
+      "paymentTrust": "Secure payment via Stripe & Bancontact. Final payment in EUR.",
+      "cancelAnytime": "Cancel anytime. No commitment.",
+      "activationGuaranteeIncluded": "Activation Guarantee included",
+      "contactSupport": "تواصل مع الدعم",
+      "toolNotFound": "Tool not found"
+    },
+    "validation": {
+      "invalidEmail": "Please enter a valid email",
+      "agreeTerms": "You must agree to the terms"
+    }
+  }
+};
+
+Object.entries(finalI18nPatches).forEach(([lng, bundle]) => {
+  i18n.addResourceBundle(lng, 'translation', bundle, true, true);
+});
+
 Object.entries(chatContactTranslations).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
