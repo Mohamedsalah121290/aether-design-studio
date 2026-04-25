@@ -309,7 +309,11 @@ export const ChatbotSalesFlow = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke(N8N_CHAT_FUNCTION, {
-        body: { message: value },
+        body: {
+          message: value,
+          language: lang,
+          instruction: `${t('chatbot.directionInstruction', { lng: lang })} ${t('store.noSensitiveBeforePayment', { lng: lang })} ${t('store.safeActivationMessage', { lng: lang })}`,
+        },
       });
 
       if (error) throw error;
@@ -356,7 +360,7 @@ export const ChatbotSalesFlow = () => {
 
             <div className="p-3 sm:p-4 space-y-3 sm:space-y-4 max-h-[43dvh] sm:max-h-[62vh] overflow-y-auto overscroll-contain">
               {messages.map((message) => (
-                <div key={message.id} className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div key={message.id} className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'} ${text.dir === 'rtl' ? 'text-right' : 'text-left'}`}>
                   {message.role === 'bot' && <RobotAvatar className="w-8 h-8" lang={lang} speaking={speakingId === message.id} />}
                   <div className={`max-w-[84%] break-words ${message.role === 'user' ? 'bg-primary/20 text-foreground' : 'bg-white/[0.04] text-foreground'} rounded-xl px-3 sm:px-4 py-3 text-sm leading-relaxed`}>
                     <div className="flex items-start gap-2">
