@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Mail, Shield, Lock, Globe, Zap, Youtube } from 'lucide-react';
