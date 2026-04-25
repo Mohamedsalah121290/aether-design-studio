@@ -8,6 +8,79 @@ import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import { TelegramIcon, TELEGRAM_URL, WhatsAppIcon, WHATSAPP_URL } from '@/components/ChatbotConversion';
 import logo from '@/assets/logo.png';
 
+type FlagKey = 'eu' | 'us' | 'sa' | 'ae' | 'tr' | 'iq' | 'lb';
+
+const flagKeys: FlagKey[] = ['eu', 'us', 'sa', 'ae', 'tr', 'iq', 'lb'];
+
+const FlagIcon = ({ flag }: { flag: FlagKey }) => {
+  const base = 'h-full w-full rounded-[6px] shadow-[0_8px_24px_hsl(240_40%_5%/0.28)]';
+
+  if (flag === 'eu') return (
+    <svg viewBox="0 0 60 40" className={base} aria-hidden="true" focusable="false">
+      <rect width="60" height="40" fill="#003399" />
+      {Array.from({ length: 12 }).map((_, i) => {
+        const angle = (i * 30 - 90) * Math.PI / 180;
+        return <text key={i} x={30 + 10.8 * Math.cos(angle)} y={20 + 10.8 * Math.sin(angle) + 2.3} fill="#FFCC00" fontSize="5.6" textAnchor="middle">★</text>;
+      })}
+    </svg>
+  );
+
+  if (flag === 'us') return (
+    <svg viewBox="0 0 60 40" className={base} aria-hidden="true" focusable="false">
+      <rect width="60" height="40" fill="#B22234" />
+      {Array.from({ length: 6 }).map((_, i) => <rect key={i} y={3.08 + i * 6.15} width="60" height="3.08" fill="#fff" />)}
+      <rect width="24" height="21.54" fill="#3C3B6E" />
+      {Array.from({ length: 30 }).map((_, i) => <circle key={i} cx={2.6 + (i % 6) * 3.8} cy={2.4 + Math.floor(i / 6) * 3.8} r="0.55" fill="#fff" />)}
+    </svg>
+  );
+
+  if (flag === 'sa') return (
+    <svg viewBox="0 0 60 40" className={base} aria-hidden="true" focusable="false">
+      <rect width="60" height="40" fill="#006C35" />
+      <path d="M17 25h25c2.5 0 4.5-1 5.8-2.6-1.2 4-4.2 6.2-8.7 6.2H17z" fill="#fff" />
+      <rect x="18" y="28.1" width="25" height="1.7" fill="#fff" />
+      <text x="30" y="18.5" fill="#fff" fontSize="7" textAnchor="middle" fontFamily="serif">لا إله إلا الله</text>
+    </svg>
+  );
+
+  if (flag === 'ae') return (
+    <svg viewBox="0 0 60 40" className={base} aria-hidden="true" focusable="false">
+      <rect width="60" height="40" fill="#fff" />
+      <rect width="60" height="13.33" fill="#009A44" />
+      <rect y="26.67" width="60" height="13.33" fill="#000" />
+      <rect width="16" height="40" fill="#FF0000" />
+    </svg>
+  );
+
+  if (flag === 'tr') return (
+    <svg viewBox="0 0 60 40" className={base} aria-hidden="true" focusable="false">
+      <rect width="60" height="40" fill="#E30A17" />
+      <circle cx="25" cy="20" r="9" fill="#fff" />
+      <circle cx="28" cy="20" r="7.2" fill="#E30A17" />
+      <text x="38" y="24.4" fill="#fff" fontSize="13" textAnchor="middle">★</text>
+    </svg>
+  );
+
+  if (flag === 'iq') return (
+    <svg viewBox="0 0 60 40" className={base} aria-hidden="true" focusable="false">
+      <rect width="60" height="13.33" fill="#CE1126" />
+      <rect y="13.33" width="60" height="13.34" fill="#fff" />
+      <rect y="26.67" width="60" height="13.33" fill="#000" />
+      <text x="30" y="23.4" fill="#007A3D" fontSize="8" textAnchor="middle" fontFamily="serif">الله أكبر</text>
+    </svg>
+  );
+
+  return (
+    <svg viewBox="0 0 60 40" className={base} aria-hidden="true" focusable="false">
+      <rect width="60" height="13.33" fill="#ED1C24" />
+      <rect y="13.33" width="60" height="13.34" fill="#fff" />
+      <rect y="26.67" width="60" height="13.33" fill="#ED1C24" />
+      <path d="M30 13.6l-3.6 7.2h2.4l-4.7 6.1h11.8l-4.7-6.1h2.4z" fill="#00A651" />
+      <rect x="29.1" y="25.6" width="1.8" height="3.3" fill="#7B4B20" />
+    </svg>
+  );
+};
+
 const Footer = () => {
   const { t } = useTranslation();
   const newsletter = useNewsletterSubscribe();
@@ -199,6 +272,16 @@ const Footer = () => {
                 {newsletter.loading ? 'Subscribing...' : 'Subscribe'}
               </Button>
             </form>
+          </div>
+        </div>
+
+        <div className="pb-8">
+          <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-3 sm:gap-4" aria-label="Supported regions">
+            {flagKeys.map((flag) => (
+              <div key={flag} className="h-8 w-12 overflow-hidden rounded-[6px] ring-1 ring-white/10 sm:h-10 sm:w-15">
+                <FlagIcon flag={flag} />
+              </div>
+            ))}
           </div>
         </div>
 
