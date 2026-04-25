@@ -428,7 +428,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     <div className="mt-3 pt-3 border-t border-white/10 space-y-1">
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Original price</span>
-                        <span>€{displayPrice?.toFixed(2)}/mo</span>
+                        <span>€{displayPrice?.toFixed(2)}/mo excl. VAT</span>
                       </div>
                       <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
                         <span>Wallet credit</span>
@@ -436,8 +436,9 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-white">
                         <span>You pay</span>
-                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `€${effectivePrice?.toFixed(2)}/mo`}</span>
+                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `€${effectivePrice?.toFixed(2)}/mo excl. VAT`}</span>
                       </div>
+                      <p className="text-xs font-medium text-muted-foreground text-right">{TAX_NOTE}</p>
                     </div>
                   )}
                 </div>
@@ -524,6 +525,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     </span>
                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Button>
+                  <p className="text-xs font-medium text-muted-foreground text-center">{TAX_NOTE}</p>
                   <p className="text-[11px] text-muted-foreground text-center">Secure checkout via Stripe. Final payment in EUR.</p>
 
                   {/* Cancel anytime + activation time */}
