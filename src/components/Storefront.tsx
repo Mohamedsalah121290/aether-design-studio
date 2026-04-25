@@ -14,6 +14,7 @@ import TrustAndFAQ from './TrustAndFAQ';
 import AIRecommendations from './AIRecommendations';
 import { supabase } from '@/integrations/supabase/client';
 import SocialProofCarousel from './SocialProofCarousel';
+import { TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
 
 /* ── Section config ─────────────────────────────────────────────── */
 const SECTION_ORDER: {
@@ -45,6 +46,8 @@ const BUNDLES = [
   { name: 'Creator Pack', products: 'Canva + CapCut + ElevenLabs', original: '€54/month', price: '€35/month', daily: '≈ €1.17/day', toolId: 'canva' },
   { name: 'Business Pack', products: 'ChatGPT + Office 365 + Notion', original: '€59/month', price: '€39/month', daily: '≈ €1.30/day', toolId: 'microsoft_365' },
 ];
+
+const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
 const FILTER_CATEGORY_MAP: Record<string, string[]> = {
   'licenses-productivity': ['windows', 'windows_home', 'windows_server', 'microsoft_office', 'microsoft_365'],
@@ -302,6 +305,8 @@ const Storefront = () => {
                             <span className="text-sm text-white/35 line-through">{bundle.original}</span>
                             <span className="text-2xl font-black text-white">{bundle.price}</span>
                           </div>
+                          <p className="mt-1 text-sm font-semibold text-white/70">(excl. VAT)</p>
+                          <p className="mt-1 text-xs font-medium text-muted-foreground">{TAX_NOTE}</p>
                           <p className="mt-1 text-xs font-semibold text-primary/80">{bundle.daily}</p>
                           <div className="mt-4 space-y-2 text-sm text-white/55">
                             <p className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-primary" />Upgrade for better results</p>
@@ -310,6 +315,49 @@ const Storefront = () => {
                           <span className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">Get Bundle</span>
                         </Link>
                       ))}
+                    </div>
+                  </div>
+                </section>
+
+                <section className="py-10" aria-label="How you receive your access">
+                  <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 md:p-6">
+                      <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-start">
+                        <div className="space-y-4">
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-primary">Delivery & activation</p>
+                            <h2 className="mt-2 text-2xl md:text-3xl font-bold text-white heading-glow">How you receive your access</h2>
+                          </div>
+                          <p className="text-base leading-relaxed text-white/70">After payment, you will receive your access quickly.</p>
+                          <div className="space-y-2 text-sm leading-relaxed text-white/65">
+                            <p>We provide one of the following depending on the product:</p>
+                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Account access (username + password)</p>
+                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Activation key</p>
+                            <p className="flex gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Direct activation on your account (on request)</p>
+                          </div>
+                          <div className="flex flex-wrap gap-2 text-sm font-semibold text-white/75">
+                            <span>✔ Fast delivery</span><span>✔ Secure process</span><span>✔ Real support</span>
+                          </div>
+                        </div>
+                        <div className="space-y-4">
+                          <div className="rounded-2xl border border-primary/25 bg-primary/10 p-4">
+                            <h3 className="text-base font-bold text-white">Important information:</h3>
+                            <div className="mt-3 space-y-2 text-sm leading-relaxed text-white/70">
+                              <p>For some services, activation can be done on your personal account.</p>
+                              <p>If you choose this option, you will be contacted via WhatsApp or Telegram and guided step-by-step through a secure process.</p>
+                              <p className="font-semibold text-primary">We do NOT ask for your personal passwords directly on the website.</p>
+                              <p>If you want activation on your own account, we may use a secure method such as temporary access, guided activation, or alternative safe methods.</p>
+                            </div>
+                          </div>
+                          <div>
+                            <p className="mb-3 text-sm font-semibold text-white">Need help? Contact us instantly:</p>
+                            <div className="grid grid-cols-2 gap-3">
+                              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><WhatsAppIcon />WhatsApp</a>
+                              <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-bold text-white"><TelegramIcon />Telegram</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </section>

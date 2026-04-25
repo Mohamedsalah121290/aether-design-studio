@@ -22,6 +22,7 @@ import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
+import { TELEGRAM_URL, WHATSAPP_URL, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -38,6 +39,8 @@ const WHAT_YOU_GET = [
   'Dedicated support channel',
   'Cancel anytime, no lock-in',
 ];
+
+const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
 export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: CheckoutDialogProps) => {
   const { t } = useTranslation();
@@ -229,8 +232,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
             >
               <CheckCircle className="w-10 h-10 text-white" />
             </motion.div>
-            <h3 className="text-2xl font-display font-bold mb-2 text-white">{t('checkout.orderPlaced')}</h3>
-            <p className="text-muted-foreground mb-4">{t('checkout.checkVault')}</p>
+            <h3 className="text-2xl font-display font-bold mb-2 text-white">Thank you for your purchase.</h3>
+            <p className="text-muted-foreground mb-4 leading-relaxed">Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp or Telegram. You can also contact us directly for faster support.</p>
             <div className="flex items-center gap-2 text-sm text-green-400">
               <Clock className="w-4 h-4" />
               <span>{t('checkout.activatingIn', { hours: activationTime })}</span>
@@ -254,6 +257,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       <>
                         <span className="text-muted-foreground"> &mdash; </span>
                         <span className={`font-bold ${style.textClass}`}>€{displayPrice}</span>
+                        <span className="text-muted-foreground text-xs font-semibold"> (excl. VAT)</span>
                         <span className={`${style.textClass} opacity-80`}> {style.suffix}</span>
                         <span className={`ml-1.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-[1px] rounded-md border ${style.textClass}`} style={{ borderColor: 'currentColor', opacity: 0.85 }}>
                           {style.label}
@@ -263,7 +267,8 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     );
                   })()}
                 </SheetDescription>
-                <p className="text-[10px] text-muted-foreground mt-1">{FINAL_PAYMENT_EUR_NOTE}</p>
+                <p className="text-xs font-medium text-muted-foreground mt-2">{TAX_NOTE}</p>
+                <p className="text-xs text-muted-foreground mt-1">{FINAL_PAYMENT_EUR_NOTE}</p>
               </SheetHeader>
             </div>
 
@@ -289,7 +294,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       >
                         {plan.plan_name}
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
-                          <span className="ml-1.5 opacity-80">€{plan.monthly_price}</span>
+                          <span className="ml-1.5 opacity-80">€{plan.monthly_price} excl. VAT</span>
                         )}
                       </button>
                     ))}
@@ -313,10 +318,11 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   >
                     {plans.map(plan => (
                       <option key={plan.id} value={plan.id}>
-                        {plan.plan_name} {plan.monthly_price != null ? `- €${plan.monthly_price}/mo` : ''}
+                        {plan.plan_name} {plan.monthly_price != null ? `- €${plan.monthly_price}/mo excl. VAT` : ''}
                       </option>
                     ))}
                   </select>
+                  <p className="mt-2 text-xs font-medium text-muted-foreground">{TAX_NOTE}</p>
                 </div>
               )}
 
@@ -353,6 +359,33 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   </div>
                 </div>
               )}
+
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 space-y-3">
+                <h4 className="text-sm font-bold text-white">How you receive your access</h4>
+                <p className="text-sm leading-relaxed text-muted-foreground">After payment, you will receive your access quickly.</p>
+                <div className="space-y-1.5 text-sm leading-relaxed text-muted-foreground">
+                  <p>We provide one of the following depending on the product:</p>
+                  <p>✔ Account access (username + password)</p>
+                  <p>✔ Activation key</p>
+                  <p>✔ Direct activation on your account (on request)</p>
+                </div>
+                <div className="rounded-xl border border-primary/20 bg-primary/10 p-3 text-sm leading-relaxed text-muted-foreground">
+                  <p className="font-semibold text-white">Important information:</p>
+                  <p className="mt-1">For some services, activation can be done on your personal account. If you choose this option, you will be contacted via WhatsApp or Telegram and guided step-by-step through a secure process.</p>
+                  <p className="mt-1 font-semibold text-primary">We do NOT ask for your personal passwords directly on the website.</p>
+                  <p className="mt-1">We may use a secure method such as temporary access, guided activation, or alternative safe methods.</p>
+                </div>
+                <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted-foreground">
+                  <span>✔ Fast delivery</span><span>✔ Secure process</span><span>✔ Real support</span>
+                </div>
+                <div>
+                  <p className="mb-2 text-xs font-semibold text-white">Need help? Contact us instantly:</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><WhatsAppIcon />WhatsApp</a>
+                    <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs font-bold text-white"><TelegramIcon />Telegram</a>
+                  </div>
+                </div>
+              </div>
 
               {/* What you get */}
               <div className="space-y-2.5">
@@ -395,7 +428,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     <div className="mt-3 pt-3 border-t border-white/10 space-y-1">
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Original price</span>
-                        <span>€{displayPrice?.toFixed(2)}/mo</span>
+                        <span>€{displayPrice?.toFixed(2)}/mo excl. VAT</span>
                       </div>
                       <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
                         <span>Wallet credit</span>
@@ -403,8 +436,9 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-white">
                         <span>You pay</span>
-                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `€${effectivePrice?.toFixed(2)}/mo`}</span>
+                        <span>{effectivePrice === 0 ? 'Free (covered by credit)' : `€${effectivePrice?.toFixed(2)}/mo excl. VAT`}</span>
                       </div>
+                      <p className="text-xs font-medium text-muted-foreground text-right">{TAX_NOTE}</p>
                     </div>
                   )}
                 </div>
@@ -491,6 +525,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     </span>
                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Button>
+                  <p className="text-xs font-medium text-muted-foreground text-center">{TAX_NOTE}</p>
                   <p className="text-[11px] text-muted-foreground text-center">Secure checkout via Stripe. Final payment in EUR.</p>
 
                   {/* Cancel anytime + activation time */}
