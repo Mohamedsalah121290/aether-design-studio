@@ -7,12 +7,9 @@ import ReactMarkdown from 'react-markdown';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getStoredRegion } from '@/lib/geo';
+import { socialLinks } from '@/lib/socialLinks';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
-export const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61586111130045';
-export const INSTAGRAM_URL = 'https://www.instagram.com/aideals.be/';
-export const YOUTUBE_URL = 'https://www.youtube.com/@AiDeals.belgie';
-export const WHATSAPP_URL = 'https://wa.me/32494311190';
 const N8N_CHAT_WEBHOOK_URL = 'https://asd202.app.n8n.cloud/webhook-test/514c0774-7002-4ec6-a91f-3bcde6d932b0';
 
 export const openSocialUrl = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -364,7 +361,7 @@ export const ChatbotSalesFlow = () => {
 
       <div className="flex flex-col items-end gap-1.5 sm:gap-3 translate-y-2 sm:translate-y-0">
         <div className="flex flex-col items-end gap-2 sm:gap-3">
-          {WHATSAPP_URL && <motion.a href={WHATSAPP_URL} onClick={(event) => openSocialUrl(event, WHATSAPP_URL)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
+          {socialLinks.whatsapp && <motion.a href={socialLinks.whatsapp} onClick={(event) => openSocialUrl(event, socialLinks.whatsapp)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
         </div>
         <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label={fallbackText[lang].open}><RobotAvatar className="w-[64px] h-[64px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
