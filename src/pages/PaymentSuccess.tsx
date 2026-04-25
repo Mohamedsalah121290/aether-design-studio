@@ -36,7 +36,7 @@ const PaymentSuccess = () => {
           >
             <h1 className="text-3xl font-bold text-white mb-3">Payment Successful!</h1>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              Thank you for your purchase. Your access is being prepared and will be delivered shortly. If activation is required, our team will contact you via WhatsApp. You can also contact us directly for faster support.
+              Your access is being prepared. You will receive it shortly.
             </p>
           </motion.div>
 
