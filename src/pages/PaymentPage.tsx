@@ -30,6 +30,7 @@ import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotCo
 import { supportLinks } from '@/lib/socialLinks';
 import { getRegionCategory } from '@/lib/geo';
 import { getStripeLink } from '@/lib/stripeLinks';
+import { getProductLogoUrl } from '@/lib/productLogos';
 
 const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
 
@@ -123,6 +124,7 @@ const PaymentPage = () => {
 
   const [walletBalance, setWalletBalance] = useState(0);
   const [applyWalletCredit, setApplyWalletCredit] = useState(false);
+  const logoUrl = getProductLogoUrl(tool?.tool_id, tool?.logo_url);
 
   useEffect(() => {
     if (toolId) {
@@ -377,9 +379,9 @@ const PaymentPage = () => {
             <div className="lg:col-span-3 space-y-6">
               {/* Tool header */}
               <div className="flex items-center gap-4 mb-2">
-                {tool?.logo_url && (
+                {logoUrl && (
                   <div className="h-16 w-16 rounded-2xl grid place-items-center border border-white/10 bg-white/5">
-                    <img src={tool.logo_url} alt={tool.name} className="h-10 w-10 object-contain" />
+                    <img src={logoUrl} alt={tool.name} className="h-10 w-10 object-contain p-0.5" />
                   </div>
                 )}
                 <div>
@@ -643,8 +645,10 @@ const PaymentPage = () => {
 
                 {/* Tool info */}
                 <div className="flex items-center gap-3 pb-4 border-b border-white/10">
-                  {tool?.logo_url && (
-                    <img src={tool.logo_url} alt={tool.name} className="h-10 w-10 object-contain rounded-lg" />
+                  {logoUrl && (
+                    <span className="h-10 w-10 rounded-lg grid place-items-center bg-white/5 border border-white/10 shrink-0">
+                      <img src={logoUrl} alt={tool.name} className="h-7 w-7 object-contain p-0.5" />
+                    </span>
                   )}
                   <div>
                     <p className="font-semibold text-white text-sm">{tool?.name}</p>
