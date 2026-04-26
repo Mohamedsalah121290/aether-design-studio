@@ -6,21 +6,18 @@ import { useTranslation } from 'react-i18next';
 const trustCards = [
   {
     icon: RefreshCw,
-    title: '30-Day Refund Policy',
-    description:
-      'Not satisfied? Get a full refund within 30 days of purchase, no questions asked.',
+    titleKey: 'storeFaq.refundTitle',
+    descriptionKey: 'storeFaq.refundDescription',
   },
   {
     icon: Layers,
-    title: 'How It Works',
-    description:
-      'Pick a tool → choose a plan → checkout securely → receive access within hours.',
+    titleKey: 'storeFaq.howTitle',
+    descriptionKey: 'storeFaq.howDescription',
   },
   {
     icon: Headphones,
-    title: 'Priority Support',
-    description:
-      'Our dedicated team is available 24/7 via chat and email to help you with anything.',
+    titleKey: 'storeFaq.supportTitle',
+    descriptionKey: 'storeFaq.supportDescription',
   },
 ];
 
@@ -58,9 +55,9 @@ const TrustAndFAQ = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {trustCards.map(({ icon: Icon, title, description }, i) => (
+          {trustCards.map(({ icon: Icon, titleKey, descriptionKey }, i) => (
             <motion.div
-              key={title}
+              key={titleKey}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -76,8 +73,8 @@ const TrustAndFAQ = () => {
               >
                 <Icon className="w-6 h-6 text-primary" />
               </div>
-              <h4 className="font-display font-bold text-lg mb-2 text-foreground">{title}</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+              <h4 className="font-display font-bold text-lg mb-2 text-foreground">{t(titleKey)}</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t(descriptionKey)}</p>
             </motion.div>
           ))}
         </div>
