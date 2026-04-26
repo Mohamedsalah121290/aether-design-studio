@@ -6210,6 +6210,70 @@ const professionalI18nPatches = {
   },
 };
 
+const uxStructurePatches = {
+  en: {
+    nav: { login: 'Login' },
+    auth: {
+      returningBuyerTitle: 'Buying again?',
+      returningBuyerPrompt: 'Create or log in to an account to keep your order history and purchased products in one place.',
+      signupDescription: 'Create an account to keep your order history and purchased products.',
+      loginDescription: 'Sign in to view your order history and purchased products.',
+    },
+    store: {
+      activationAccessDelivery: 'After payment, your account access (username and password) will be delivered securely via email or WhatsApp.',
+      neverAskPersonalCredentials: 'We never ask for your personal account credentials before payment.',
+      safeActivationMessage: 'After payment, your account access (username and password) will be delivered securely via email or WhatsApp.',
+      noSensitiveBeforePayment: 'We never ask for your personal account credentials before payment.',
+      categories: { all: 'All Products' },
+    },
+    checkout: {
+      accessEmailNote: 'We will send your access details to this email after payment.',
+      secureNoPasswords: 'We never ask for your personal account credentials before payment.',
+    },
+    sort: { popular: 'Popular', newest: 'Newest', priceAsc: 'Lowest price' },
+  },
+  tr: {
+    nav: { login: 'Giriş' },
+    auth: {
+      returningBuyerTitle: 'Tekrar mı satın alıyorsun?',
+      returningBuyerPrompt: 'Sipariş geçmişini ve satın aldığın ürünleri tek yerde görmek için hesap oluştur veya giriş yap.',
+      signupDescription: 'Sipariş geçmişini ve satın aldığın ürünleri saklamak için hesap oluştur.',
+      loginDescription: 'Sipariş geçmişini ve satın aldığın ürünleri görmek için giriş yap.',
+    },
+    store: {
+      activationAccessDelivery: 'Ödemeden sonra hesap erişiminiz (kullanıcı adı ve şifre) e-posta veya WhatsApp üzerinden güvenli şekilde teslim edilir.',
+      neverAskPersonalCredentials: 'Ödeme öncesinde kişisel hesap giriş bilgilerinizi asla istemeyiz.',
+      safeActivationMessage: 'Ödemeden sonra hesap erişiminiz (kullanıcı adı ve şifre) e-posta veya WhatsApp üzerinden güvenli şekilde teslim edilir.',
+      noSensitiveBeforePayment: 'Ödeme öncesinde kişisel hesap giriş bilgilerinizi asla istemeyiz.',
+      categories: { all: 'Tüm Ürünler' },
+    },
+    checkout: {
+      accessEmailNote: 'Erişim bilgilerini ödemeden sonra bu e-posta adresine göndereceğiz.',
+      secureNoPasswords: 'Ödeme öncesinde kişisel hesap giriş bilgilerinizi asla istemeyiz.',
+    },
+    sort: { popular: 'Popüler', newest: 'En yeni', priceAsc: 'En düşük fiyat' },
+  },
+  ar: {
+    nav: { login: 'تسجيل الدخول' },
+    auth: {
+      returningBuyerTitle: 'تشتري مرة أخرى؟',
+      returningBuyerPrompt: 'أنشئ حسابًا أو سجّل الدخول للاحتفاظ بسجل الطلبات والمنتجات المشتراة في مكان واحد.',
+    },
+    store: {
+      activationAccessDelivery: 'بعد الدفع، سيتم تسليم وصول حسابك (اسم المستخدم وكلمة المرور) بأمان عبر البريد الإلكتروني أو WhatsApp.',
+      neverAskPersonalCredentials: 'لا نطلب أبدًا بيانات دخول حسابك الشخصي قبل الدفع.',
+      safeActivationMessage: 'بعد الدفع، سيتم تسليم وصول حسابك (اسم المستخدم وكلمة المرور) بأمان عبر البريد الإلكتروني أو WhatsApp.',
+      noSensitiveBeforePayment: 'لا نطلب أبدًا بيانات دخول حسابك الشخصي قبل الدفع.',
+      categories: { all: 'كل المنتجات' },
+    },
+    checkout: {
+      accessEmailNote: 'سنرسل تفاصيل الوصول إلى هذا البريد الإلكتروني بعد الدفع.',
+      secureNoPasswords: 'لا نطلب أبدًا بيانات دخول حسابك الشخصي قبل الدفع.',
+    },
+    sort: { popular: 'الأكثر شيوعًا', newest: 'الأحدث', priceAsc: 'الأقل سعرًا' },
+  },
+};
+
 Object.entries(finalI18nPatches).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
@@ -6223,6 +6287,10 @@ Object.entries(launchI18nPatches).forEach(([lng, bundle]) => {
 });
 
 Object.entries(professionalI18nPatches).forEach(([lng, bundle]) => {
+  i18n.addResourceBundle(lng, 'translation', bundle, true, true);
+});
+
+Object.entries(uxStructurePatches).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
 

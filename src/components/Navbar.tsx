@@ -70,9 +70,10 @@ const Navbar = () => {
 
   const navLinks = [
     { href: '/', label: t('nav.home', 'Home') },
-    { href: '/store', label: t('nav.store') },
-    { href: '/academy', label: `${t('nav.academy')} · ${t('nav.comingSoon', 'Coming Soon')}` },
-    ...(user ? [{ href: '/dashboard', label: t('nav.dashboard') }] : []),
+    { href: '/store', label: t('nav.store', 'Store') },
+    { href: '/academy', label: t('nav.academy', 'AI Academy') },
+    { href: '/blog', label: t('footer.links.blog', 'Blog') },
+    { href: '/contact', label: t('footer.links.contact', 'Contact') },
   ];
 
   return (
@@ -312,7 +313,7 @@ const Navbar = () => {
               ) : (
                 <Button variant="hero" size="sm" onClick={() => setShowAuthDialog(true)}>
                   <LogIn className="w-4 h-4 mr-2" />
-                  {t('nav.getStarted')}
+                  {t('nav.login', 'Login')}
                 </Button>
               )
             )}
@@ -417,7 +418,7 @@ const Navbar = () => {
                     ) : (
                       <Button variant="hero" className="w-full" onClick={() => { setShowAuthDialog(true); setIsMobileMenuOpen(false); }}>
                         <LogIn className="w-4 h-4 mr-2" />
-                        {t('nav.getStarted')}
+                        {t('nav.login', 'Login')}
                       </Button>
                     )
                   )}

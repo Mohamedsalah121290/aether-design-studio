@@ -247,6 +247,7 @@ const PaymentPage = () => {
     ? [...PAYMENT_METHODS].sort((a, b) => (a.id === 'bancontact' ? -1 : 0) - (b.id === 'bancontact' ? -1 : 0))
     : PAYMENT_METHODS;
   const checkoutUrl = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name) : null;
+  const completedPurchases = Number(localStorage.getItem('aiDealsCompletedPurchases') || '0');
 
   // كل الأسعار باليورو € (no conversion)
   const formatPrice = (eur: number | null) => {
@@ -282,11 +283,6 @@ const PaymentPage = () => {
     setIsLoading(true);
     try {
       const buyerEmail = email || user?.email;
-      const directPaymentLink = getStripeLink(tool.name, selectedPlan.plan_name, buyerEmail || undefined);
-      if (directPaymentLink) {
-        window.open(directPaymentLink, '_blank', 'noopener,noreferrer');
-        return;
-      }
 
       const paymentMethod = PAYMENT_METHODS.find(m => m.id === selectedPaymentMethod);
       
@@ -308,10 +304,17 @@ const PaymentPage = () => {
       }
 
       if (!data?.url) throw new Error('No checkout URL returned');
+      localStorage.setItem('aiDealsCompletedPurchases', String(completedPurchases + 1));
       window.location.href = data.url;
     } catch (error) {
       console.error('Checkout error:', error);
-      toast({ title: t('checkout.error', 'Error'), description: t('checkout.somethingWrong', 'Something went wrong. Please try again.'), variant: 'destructive' });
+      const fallbackPaymentLink = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name, email || user?.email || undefined) : null;
+      if (fallbackPaymentLink) {
+        localStorage.setItem('aiDealsCompletedPurchases', String(completedPurchases + 1));
+        window.open(fallbackPaymentLink, '_blank', 'noopener,noreferrer');
+      } else {
+        toast({ title: t('checkout.error', 'Error'), description: t('checkout.somethingWrong', 'Something went wrong. Please try again.'), variant: 'destructive' });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -731,15 +734,14 @@ const PaymentPage = () => {
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 space-y-3">
                   <h4 className="text-sm font-bold text-white">{t('checkout.howReceiveAccess', 'How you receive your access')}</h4>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment.')}</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{t('store.activationAccessDelivery', 'After payment, your account access (username and password) will be delivered securely via email or WhatsApp.')}</p>
                   <div className="space-y-1.5 text-xs leading-relaxed text-muted-foreground">
-                    <p>{t('store.safeActivationMessage', 'Activation is handled securely by our team after purchase.')}</p>
-                    <p className="font-semibold text-primary">{t('store.noSensitiveBeforePayment', 'No sensitive information is required before payment.')}</p>
+                    <p className="font-semibold text-primary">{t('store.neverAskPersonalCredentials', 'We never ask for your personal account credentials before payment.')}</p>
                   </div>
                   <div className="rounded-xl border border-primary/20 bg-primary/10 p-3 text-xs leading-relaxed text-muted-foreground">
                     <p className="font-semibold text-white">{t('store.importantInfo', 'Important information:')}</p>
-                    <p className="mt-1">{t('store.safeActivationMessage', 'Activation is handled securely by our team after purchase.')}</p>
-                    <p className="mt-1 font-semibold text-primary">{t('store.noSensitiveBeforePayment', 'No sensitive information is required before payment.')}</p>
+                    <p className="mt-1">{t('store.activationAccessDelivery', 'After payment, your account access (username and password) will be delivered securely via email or WhatsApp.')}</p>
+                    <p className="mt-1 font-semibold text-primary">{t('store.neverAskPersonalCredentials', 'We never ask for your personal account credentials before payment.')}</p>
                   </div>
                   <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted-foreground">
                     <span>✔ {t('store.instantDelivery', 'Instant delivery')}</span><span>✔ {t('store.securePayment', 'Secure payment')}</span><span>✔ {t('store.supportAvailable', 'Support available')}</span>
@@ -776,9 +778,19 @@ const PaymentPage = () => {
                     <p className="text-[10px] text-muted-foreground">{t('checkout.accessEmailNote', "We'll send activation details to this email.")}</p>
                   </div>
 
+                  {!user && completedPurchases > 0 && (
+                    <div className="rounded-xl border border-primary/20 bg-primary/10 p-3 text-xs leading-relaxed text-muted-foreground">
+                      <p className="font-semibold text-white">{t('auth.returningBuyerTitle', 'Buying again?')}</p>
+                      <p className="mt-1">{t('auth.returningBuyerPrompt', 'Create or log in to an account to keep your order history and purchased products in one place.')}</p>
+                      <Button type="button" variant="heroOutline" size="sm" className="mt-3" onClick={() => setShowAuthDialog(true)}>
+                        {t('nav.login', 'Login')}
+                      </Button>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-2 text-xs text-green-400">
                     <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                    <span>{t('checkout.secureNoPasswords', 'Secure — we never ask for your passwords.')}</span>
+                    <span>{t('store.neverAskPersonalCredentials', 'We never ask for your personal account credentials before payment.')}</span>
                   </div>
 
                   {/* Terms */}
