@@ -303,11 +303,6 @@ const Storefront = () => {
                              {t('store.buyNow', 'Get Instant Access')}
                           </Link>
                         )}
-                        {section.key === 'microsoft' && (
-                          <div className="mt-10 relative z-10">
-                            <SocialProofCarousel />
-                          </div>
-                        )}
                       </div>
                     </section>
                   );
