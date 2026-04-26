@@ -32,7 +32,7 @@ import { getRegionCategory } from '@/lib/geo';
 import { getStripeLink } from '@/lib/stripeLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
 
-const emailSchema = z.string().trim().email('Please enter a valid email').max(255);
+const emailSchema = z.string().trim().email().max(255);
 
 /* ── Payment method config ─────────────────────────────────────── */
 const PAYMENT_METHODS = [
@@ -53,12 +53,10 @@ const PAYMENT_METHODS = [
 ] as const;
 
 const WHAT_YOU_GET = [
-  'Works instantly',
-  'No installation needed',
-  'Fast delivery',
+  'store.worksInstantly',
+  'store.noInstallationNeeded',
+  'store.fastDelivery',
 ];
-
-const TAX_NOTE = 'Taxes (if applicable) are calculated at checkout.';
 
 const LOVABLE_PLAN_DETAILS: Record<string, { badge: string; duration: string; credits: string; months: number }> = {
   pro_monthly: { badge: 'Most Popular', duration: 'Duration: 1 month', credits: 'Includes: 100 credits per month', months: 1 },
