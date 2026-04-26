@@ -479,9 +479,9 @@ const PaymentPage = () => {
                     )}
                     <p className="text-[10px] text-muted-foreground mt-1">
                       {period === 'one-time'
-                        ? '{t('checkout.singlePayment', 'Single payment — no recurring charges')}'
+                        ? t('checkout.singlePayment', 'Single payment — no recurring charges')
                         : period === 'yearly'
-                        ? '{t('checkout.chargedYearly', 'Charged once per year')}'
+                        ? t('checkout.chargedYearly', 'Charged once per year')
                         : selectedPlan?.plan_name || ''}
                     </p>
                   </div>
