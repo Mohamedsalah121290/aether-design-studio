@@ -18,14 +18,14 @@ const BodySchema = z.object({
 
 const fallbackReply = (language: string) => {
   const replies: Record<string, string> = {
-    en: "You get instant access and it’s cheaper than official pricing.\nWant me to show you the best option?",
-    fr: "Vous avez un accès instantané, moins cher que le prix officiel.\nJe vous montre la meilleure option ?",
-    nl: "Je krijgt direct toegang en het is goedkoper dan de officiële prijs.\nZal ik je de beste optie tonen?",
-    de: "Sie erhalten Sofortzugang und zahlen weniger als beim offiziellen Preis.\nSoll ich Ihnen die beste Option zeigen?",
-    es: "Tienes acceso instantáneo y es más barato que el precio oficial.\n¿Te muestro la mejor opción?",
-    it: "Hai accesso immediato ed è più economico del prezzo ufficiale.\nVuoi che ti mostri l’opzione migliore?",
-    tr: "Anlıyorum 👍 Resmi fiyatlara göre daha uygun ve hemen erişim sağlanır.\nSenin için en uygun seçeneği göstereyim mi?",
-    ar: "تحصل على وصول فوري والسعر أقل من الرسمي.\nتحب أوريك أفضل خيار لك؟",
+    en: "After payment, we send the access details you purchased, including username and password when applicable.\nYou do not need to send your personal password before payment.",
+    fr: "Après le paiement, nous envoyons les accès achetés, avec identifiant et mot de passe si nécessaire.\nVous n’avez pas besoin d’envoyer votre mot de passe personnel avant le paiement.",
+    nl: "Na betaling sturen we de gekochte toegangsgegevens, inclusief gebruikersnaam en wachtwoord waar nodig.\nJe hoeft je persoonlijke wachtwoord niet vóór betaling te sturen.",
+    de: "Nach der Zahlung senden wir die gekauften Zugangsdaten, einschließlich Benutzername und Passwort, falls zutreffend.\nDu musst uns vor der Zahlung kein persönliches Passwort senden.",
+    es: "Después del pago, enviamos los datos de acceso comprados, incluido usuario y contraseña cuando corresponda.\nNo necesitas enviarnos tu contraseña personal antes del pago.",
+    it: "Dopo il pagamento inviamo i dati di accesso acquistati, inclusi username e password quando necessario.\nNon devi inviarci la tua password personale prima del pagamento.",
+    tr: "Ödemeden sonra satın aldığın erişim bilgilerini, gerektiğinde kullanıcı adı ve şifreyle birlikte göndeririz.\nÖdeme öncesinde kişisel şifreni bize göndermen gerekmez.",
+    ar: "بعد الدفع نرسل لك تفاصيل الوصول التي اشتريتها، بما في ذلك اسم المستخدم وكلمة المرور عند الحاجة.\nلا تحتاج إلى إرسال كلمة مرورك الشخصية قبل الدفع.",
   };
   return replies[language] || replies.en;
 };
@@ -75,12 +75,12 @@ serve(async (req) => {
       });
     }
 
-    const { message, language } = parsed.data;
+    const { message, language, instruction } = parsed.data;
 
     const n8nResponse = await fetch(N8N_CHAT_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, language, instruction }),
     });
 
     const body = await readResponseBody(n8nResponse);
