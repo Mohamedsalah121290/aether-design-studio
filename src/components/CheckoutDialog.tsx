@@ -22,8 +22,6 @@ import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
-import { Social3DLink, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
-import { supportLinks } from '@/lib/socialLinks';
 import { getStripeLink } from '@/lib/stripeLinks';
 
 interface CheckoutDialogProps {
