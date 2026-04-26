@@ -1,7 +1,7 @@
 import type { CurrencyCode } from '@/lib/currency';
 
-export type SupportedAppLanguage = 'en' | 'fr' | 'nl' | 'de' | 'es' | 'it' | 'ar';
-export type RegionCategory = 'belgium' | 'netherlands' | 'france' | 'germany' | 'spain' | 'italy' | 'arabic' | 'uk' | 'usa' | 'eu' | 'other';
+export type SupportedAppLanguage = 'en' | 'fr' | 'nl' | 'de' | 'es' | 'it' | 'tr' | 'ar';
+export type RegionCategory = 'belgium' | 'netherlands' | 'france' | 'germany' | 'spain' | 'italy' | 'turkey' | 'arabic' | 'uk' | 'usa' | 'eu' | 'other';
 
 export const LANGUAGE_STORAGE_KEY = 'ai-deals-language';
 export const LANGUAGE_MANUAL_KEY = 'ai-deals-language-manual';
@@ -24,6 +24,7 @@ export const getRegionCategory = (country = getBrowserCountry(), timeZone = Intl
   if (country === 'DE') return 'germany';
   if (country === 'ES') return 'spain';
   if (country === 'IT') return 'italy';
+  if (country === 'TR') return 'turkey';
   if (country === 'GB') return 'uk';
   if (country === 'US') return 'usa';
   if (country && ARABIC_REGIONS.has(country)) return 'arabic';
@@ -39,6 +40,7 @@ export const languageForRegion = (region: RegionCategory): SupportedAppLanguage 
   if (region === 'germany') return 'de';
   if (region === 'spain') return 'es';
   if (region === 'italy') return 'it';
+  if (region === 'turkey') return 'tr';
   if (region === 'arabic') return 'ar';
   return 'en';
 };
