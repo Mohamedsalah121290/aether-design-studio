@@ -329,6 +329,7 @@ export const ChatbotSalesFlow = () => {
     setMessages((current) => [...current, userMessage]);
     setSending(true);
     const messageLanguage = lang;
+    void detectMessageLanguage;
 
     try {
       const { data, error } = await supabase.functions.invoke(N8N_CHAT_FUNCTION, {
