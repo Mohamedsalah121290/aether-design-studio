@@ -282,7 +282,7 @@ const Navbar = () => {
 
             {user && (
               <Button variant="heroOutline" size="sm" asChild>
-                <Link to="/dashboard">{t('nav.dashboard')}</Link>
+                <Link to="/dashboard">{t('nav.myAccount', 'My Account')}</Link>
               </Button>
             )}
 
@@ -300,10 +300,10 @@ const Navbar = () => {
             {!loading && (
               user ? (
                 <div className="flex items-center gap-2">
-                  <Link to="/profile" className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors">
+                  <Link to="/dashboard" className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors">
                     <User className="w-4 h-4 text-primary" />
                     <span className="text-sm text-primary truncate max-w-[120px]">
-                      {user.email?.split('@')[0]}
+                      {t('nav.myAccount', 'My Account')}
                     </span>
                   </Link>
                   <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground">
@@ -396,7 +396,7 @@ const Navbar = () => {
                 <div className="flex flex-col gap-3 pt-4">
                   {user && (
                     <Button variant="heroOutline" className="w-full" asChild>
-                      <Link to="/dashboard">{t('nav.dashboard')}</Link>
+                      <Link to="/dashboard">{t('nav.myAccount', 'My Account')}</Link>
                     </Button>
                   )}
                   

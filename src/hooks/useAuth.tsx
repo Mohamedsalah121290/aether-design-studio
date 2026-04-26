@@ -1,6 +1,7 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { lovable } from '@/integrations/lovable';
 
 interface AuthContextType {
   user: User | null;
@@ -10,6 +11,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithEmail: (email: string) => Promise<{ error: Error | null }>;
+  signInWithGoogle: () => Promise<{ error: Error | null; redirected?: boolean }>;
   signOut: () => Promise<void>;
 }
 
@@ -97,12 +99,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return { error: error as Error | null };
   };
 
+  const signInWithGoogle = async () => {
+    const result = await lovable.auth.signInWithOAuth('google', {
+      redirect_uri: window.location.origin,
+      extraParams: { prompt: 'select_account' },
+    });
+    return { error: (result.error as Error | null) ?? null, redirected: result.redirected };
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, isAdmin, signIn, signUp, signInWithEmail, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, isAdmin, signIn, signUp, signInWithEmail, signInWithGoogle, signOut }}>
       {children}
     </AuthContext.Provider>
   );

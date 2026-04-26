@@ -22,11 +22,24 @@ const emailOnlySchema = z.object({
 
 export const AuthDialog = ({ open, onOpenChange, defaultMode = 'login' }: AuthDialogProps) => {
   const { t } = useTranslation();
-  const { signInWithEmail } = useAuth();
+  const { signInWithEmail, signInWithGoogle } = useAuth();
   const [mode, setMode] = useState<'login' | 'signup'>(defaultMode);
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string }>({});
+
+  const handleGoogleLogin = async () => {
+    setGoogleLoading(true);
+    try {
+      const { error } = await signInWithGoogle();
+      if (error) {
+        toast({ title: t('auth.error'), description: error.message, variant: 'destructive' });
+      }
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,6 +121,24 @@ export const AuthDialog = ({ open, onOpenChange, defaultMode = 'login' }: AuthDi
                 {mode === 'login' ? t('auth.loginDescription') : t('auth.signupDescription')}
               </DialogDescription>
             </DialogHeader>
+
+            <div className="space-y-3 mb-5">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full h-12 rounded-2xl border-white/10 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                onClick={handleGoogleLogin}
+                disabled={isLoading || googleLoading}
+              >
+                {googleLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <span className="mr-2 grid h-5 w-5 place-items-center rounded-full bg-white text-xs font-black text-black">G</span>}
+                {t('auth.continueWithGoogle', 'Continue with Google')}
+              </Button>
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <span className="h-px flex-1 bg-white/10" />
+                {t('auth.orContinueWithEmail', 'or continue with email')}
+                <span className="h-px flex-1 bg-white/10" />
+              </div>
+            </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <motion.div
