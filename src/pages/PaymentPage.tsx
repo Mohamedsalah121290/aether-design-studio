@@ -257,7 +257,7 @@ const PaymentPage = () => {
 
   const formatVatPrice = (eur: number | null) => {
     const price = formatPrice(eur);
-    return eur && eur > 0 ? `${price} ${t('store.exclVat', '{t('store.exclVat', '(excl. VAT)')}')}` : price;
+    return eur && eur > 0 ? `${price} ${t('store.exclVat', '(excl. VAT)')}` : price;
   };
 
   const formatApproxPrice = (eur: number | null | undefined) => formatApproxCurrency(eur, currency.code);
