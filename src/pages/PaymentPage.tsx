@@ -580,7 +580,7 @@ const PaymentPage = () => {
                               <span className="ml-2 text-xs font-semibold text-primary">{t('checkout.recommendedBelgium', 'Recommended in Belgium')}</span>
                             )}
                           </p>
-                          <p className="text-xs text-muted-foreground">{method.id === 'card' ? t('checkout.cardDescription', method.description) : t('checkout.bancontactDescription', method.description)}</p>
+                          <p className="text-xs text-muted-foreground">{method.id === 'card' ? t('checkout.cardDescription', method.description as string) : t('checkout.bancontactDescription', method.description as string)}</p>
                         </div>
                         <div className={`h-5 w-5 rounded-full border-2 grid place-items-center ${
                           isSelected ? 'border-primary' : 'border-white/20'
