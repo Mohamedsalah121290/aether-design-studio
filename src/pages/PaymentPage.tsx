@@ -699,7 +699,7 @@ const PaymentPage = () => {
                       <span>{formatApproxPrice(effectivePrice)}</span>
                     </div>
                   )}
-                  <p className="text-xs text-muted-foreground text-right">{FINAL_PAYMENT_EUR_NOTE}</p>
+                  <p className="text-xs text-muted-foreground text-right">{t('store.finalPaymentNote', FINAL_PAYMENT_EUR_NOTE)}</p>
                 </div>
 
                 {/* {t('checkout.whatYouGet', 'What you get')} */}
@@ -830,7 +830,7 @@ const PaymentPage = () => {
                     </p>
                     <p className="text-[10px] flex items-center justify-center gap-1" style={{ color: '#E8D48B' }}>
                       <Shield className="w-3 h-3" />
-                      Activation Guarantee included
+                      {t('checkout.activationGuaranteeIncluded', 'Activation Guarantee included')}
                     </p>
                   </div>
                 </form>
