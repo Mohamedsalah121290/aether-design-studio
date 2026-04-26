@@ -10,3 +10,13 @@ export const supportLinks = {
   whatsapp: "https://wa.me/32494311190",
   telegram: "https://t.me/aideals2026",
 };
+
+export const isUsableSocialLink = (href?: string | null) => {
+  if (!href) return false;
+  try {
+    const url = new URL(href);
+    return url.protocol === 'https:' && Boolean(url.hostname);
+  } catch {
+    return false;
+  }
+};
