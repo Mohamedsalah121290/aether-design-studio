@@ -146,7 +146,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const [consentChecked, setConsentChecked] = useState(true);
   const [selectedLovablePlan, setSelectedLovablePlan] = useState('lovable_3_months');
 
-  const logoUrl = logoError && !fallbackAttempted ? `/logos/${tool.tool_id}.svg` : getProductLogoUrl(tool.tool_id, tool.logo_url);
+  const resolvedLogoUrl = getProductLogoUrl(tool.tool_id, tool.logo_url);
+  const logoUrl = fallbackAttempted ? null : logoError ? `/logos/${tool.tool_id}.svg` : resolvedLogoUrl;
   const showLogo = logoUrl && !(logoError && fallbackAttempted);
   const price = tool.starting_price;
   const approxPrice = formatApproxCurrency(price, currency.code);
