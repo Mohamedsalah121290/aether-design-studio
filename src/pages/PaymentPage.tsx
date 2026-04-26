@@ -148,7 +148,7 @@ const PaymentPage = () => {
         .eq('is_active', true)
         .single();
       if (toolError || !toolData) {
-        toast({ title: 'Error', description: 'Tool not found', variant: 'destructive' });
+        toast({ title: t('checkout.error', 'Error'), description: t('checkout.toolNotFound', 'Tool not found'), variant: 'destructive' });
         navigate('/store');
         return;
       }
@@ -251,13 +251,13 @@ const PaymentPage = () => {
   // كل الأسعار باليورو € (no conversion)
   const formatPrice = (eur: number | null) => {
     if (eur == null) return 'N/A';
-    if (eur === 0) return 'Free';
+    if (eur === 0) return t('common.free', 'Free');
     return formatEuro(eur);
   };
 
   const formatVatPrice = (eur: number | null) => {
     const price = formatPrice(eur);
-    return eur && eur > 0 ? `${price} (excl. VAT)` : price;
+    return eur && eur > 0 ? `${price} ${t('store.exclVat', '(excl. VAT)')}` : price;
   };
 
   const formatApproxPrice = (eur: number | null | undefined) => formatApproxCurrency(eur, currency.code);
@@ -265,7 +265,7 @@ const PaymentPage = () => {
   const validateForm = (): boolean => {
     const newErrors: { email?: string } = {};
     const emailResult = emailSchema.safeParse(email);
-    if (!emailResult.success) newErrors.email = emailResult.error.errors[0]?.message || 'Invalid email';
+    if (!emailResult.success) newErrors.email = emailResult.error.errors[0]?.message || t('checkout.validEmail', 'Please enter a valid email');
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -275,7 +275,7 @@ const PaymentPage = () => {
     if (!tool || !selectedPlan) return;
     if (!validateForm()) return;
     if (!agreedToTerms) {
-      toast({ title: 'Error', description: 'You must agree to the terms', variant: 'destructive' });
+      toast({ title: t('checkout.error', 'Error'), description: t('checkout.mustAgreeTerms', 'You must agree to the terms'), variant: 'destructive' });
       return;
     }
 
@@ -311,7 +311,7 @@ const PaymentPage = () => {
       window.location.href = data.url;
     } catch (error) {
       console.error('Checkout error:', error);
-      toast({ title: 'Error', description: 'Something went wrong. Please try again.', variant: 'destructive' });
+      toast({ title: t('checkout.error', 'Error'), description: t('checkout.somethingWrong', 'Something went wrong. Please try again.'), variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }
@@ -417,7 +417,7 @@ const PaymentPage = () => {
                             <span className="text-xs text-muted-foreground font-semibold"> (excl. VAT)</span>
                             <span className="text-xs text-muted-foreground font-normal"> / month</span>
                           </p>
-                          <p className="text-xs font-medium text-muted-foreground mt-1">{TAX_NOTE}</p>
+                          <p className="text-xs font-medium text-muted-foreground mt-1">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
                           {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-xs text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
                         </>
                       )}
@@ -444,7 +444,7 @@ const PaymentPage = () => {
                             <span className="text-xs text-muted-foreground font-semibold"> (excl. VAT)</span>
                             <span className="text-xs text-muted-foreground font-normal"> / year</span>
                           </p>
-                          <p className="text-xs font-medium text-muted-foreground mt-1">{TAX_NOTE}</p>
+                          <p className="text-xs font-medium text-muted-foreground mt-1">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
                           {formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8) && <p className="text-xs text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8)}</p>}
                           <p className="text-xs text-muted-foreground mt-1">
                             €{(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · Billed annually
@@ -473,7 +473,7 @@ const PaymentPage = () => {
                           <span className="text-xs text-muted-foreground font-semibold"> (excl. VAT)</span>
                           <span className="text-xs text-muted-foreground font-normal"> {periodStyle.suffix}</span>
                         </p>
-                        <p className="text-xs font-medium text-muted-foreground mt-1">{TAX_NOTE}</p>
+                        <p className="text-xs font-medium text-muted-foreground mt-1">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
                         {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-xs text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
                       </>
                     )}
@@ -496,7 +496,7 @@ const PaymentPage = () => {
                 >
                   <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
                     <Zap className="w-4 h-4 text-primary" />
-                    Select Plan
+                    {t('checkout.selectPlan', 'Select Plan')}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {plans.map((plan, index) => {
@@ -538,20 +538,20 @@ const PaymentPage = () => {
                   </div>
                   {tool?.tool_id === 'lovable' && (
                     <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-muted-foreground">
-                      <span>✔ Instant delivery</span><span>✔ No setup needed</span><span>✔ Support included</span>
+                      <span>✔ {t('store.instantDelivery', 'Instant delivery')}</span><span>✔ No setup needed</span><span>✔ Support included</span>
                     </div>
                   )}
                 </div>
               )}
 
-              {/* ── Payment Method ── */}
+              {/* ── {t('checkout.paymentMethod', 'Payment Method')} ── */}
               <div
                 className="p-5 rounded-2xl border border-white/10"
                 style={{ background: 'rgba(20, 20, 35, 0.5)' }}
               >
                 <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
                   <CreditCard className="w-4 h-4 text-primary" />
-                  Payment Method
+                  {t('checkout.paymentMethod', 'Payment Method')}
                 </h3>
                   <div className="space-y-3">
                   {paymentMethods.map(method => {
@@ -575,12 +575,12 @@ const PaymentPage = () => {
                         </div>
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-white">
-                            {method.label}
+                            {method.id === 'card' ? t('checkout.card', method.label) : method.label}
                             {isBelgianUser && method.id === 'bancontact' && (
-                              <span className="ml-2 text-xs font-semibold text-primary">Recommended in Belgium</span>
+                              <span className="ml-2 text-xs font-semibold text-primary">{t('checkout.recommendedBelgium', 'Recommended in Belgium')}</span>
                             )}
                           </p>
-                          <p className="text-xs text-muted-foreground">{method.description}</p>
+                          <p className="text-xs text-muted-foreground">{method.id === 'card' ? t('checkout.cardDescription', method.description) : t('checkout.bancontactDescription', method.description)}</p>
                         </div>
                         <div className={`h-5 w-5 rounded-full border-2 grid place-items-center ${
                           isSelected ? 'border-primary' : 'border-white/20'
@@ -605,9 +605,9 @@ const PaymentPage = () => {
                         <Wallet className="w-5 h-5" style={{ color: '#E8D48B' }} />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-white text-sm">Apply Wallet Credit</h4>
+                        <h4 className="font-semibold text-white text-sm">{t('checkout.applyWalletCredit', 'Apply Wallet Credit')}</h4>
                         <p className="text-xs text-muted-foreground">
-                          Available: <span style={{ color: '#E8D48B' }} className="font-semibold">€{walletBalance.toFixed(2)}</span>
+                          {t('checkout.available', 'Available')}: <span style={{ color: '#E8D48B' }} className="font-semibold">€{walletBalance.toFixed(2)}</span>
                         </p>
                       </div>
                     </div>
@@ -616,15 +616,15 @@ const PaymentPage = () => {
                   {applyWalletCredit && walletDeduction > 0 && (
                     <div className="mt-3 pt-3 border-t border-white/10 space-y-1">
                       <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Original price</span>
+                        <span>{t('checkout.originalPrice', 'Original price')}</span>
                         <span>{formatVatPrice(displayPrice)}</span>
                       </div>
                       <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
-                        <span>Wallet credit</span>
+                        <span>{t('checkout.walletCredit', 'Wallet credit')}</span>
                         <span>-€{walletDeduction.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-sm font-semibold text-white">
-                        <span>You pay</span>
+                        <span>{t('checkout.youPay', 'You pay')}</span>
                         <span>{formatVatPrice(effectivePrice)}</span>
                       </div>
                     </div>
@@ -639,7 +639,7 @@ const PaymentPage = () => {
                 className="sticky top-28 p-6 rounded-2xl border border-white/10 space-y-5"
                 style={{ background: 'rgba(20, 20, 35, 0.6)', backdropFilter: 'blur(20px)' }}
               >
-                <h3 className="text-lg font-bold text-white">Order Summary</h3>
+                <h3 className="text-lg font-bold text-white">{t('checkout.orderSummary', 'Order Summary')}</h3>
 
                 {/* Tool info */}
                 <div className="flex items-center gap-3 pb-4 border-b border-white/10">
@@ -683,17 +683,17 @@ const PaymentPage = () => {
                   )}
                   {walletDeduction > 0 && (
                     <div className="flex justify-between text-xs" style={{ color: '#E8D48B' }}>
-                      <span>Wallet credit</span>
+                      <span>{t('checkout.walletCredit', 'Wallet credit')}</span>
                       <span>-€{walletDeduction.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="pt-2 border-t border-white/10 flex justify-between text-base font-bold">
-                    <span className="text-white">Total</span>
+                    <span className="text-white">{t('checkout.total', 'Total')}</span>
                     <span className="text-primary">
                       {formatVatPrice(effectivePrice)}
                     </span>
                   </div>
-                  <p className="text-xs font-medium text-muted-foreground text-right">{TAX_NOTE}</p>
+                  <p className="text-xs font-medium text-muted-foreground text-right">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
                   {formatApproxPrice(effectivePrice) && (
                     <div className="flex justify-end text-xs text-muted-foreground">
                       <span>{formatApproxPrice(effectivePrice)}</span>
@@ -702,11 +702,11 @@ const PaymentPage = () => {
                   <p className="text-xs text-muted-foreground text-right">{FINAL_PAYMENT_EUR_NOTE}</p>
                 </div>
 
-                {/* What you get */}
+                {/* {t('checkout.whatYouGet', 'What you get')} */}
                 <div className="space-y-2 pt-2">
                   <h4 className="text-xs font-semibold text-white flex items-center gap-2">
                     <Shield className="w-3.5 h-3.5 text-primary" />
-                    What you get
+                    {t('checkout.whatYouGet', 'What you get')}
                   </h4>
                   {WHAT_YOU_GET.map((item, i) => (
                     <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -720,32 +720,32 @@ const PaymentPage = () => {
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 text-xs">
                     <UserCheck className="w-3 h-3 mr-1" />
-                    Account Provided
+                    {t('checkout.accountProvidedBadge', 'Account Provided')}
                   </Badge>
                   <Badge variant="secondary" className="bg-green-500/10 text-green-400 border-green-500/20 text-xs">
                     <Clock className="w-3 h-3 mr-1" />
-                    Within {activationTime}h
+                    {t('checkout.withinHours', { hours: activationTime })}
                   </Badge>
                 </div>
                 <TrustBadges compact />
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 space-y-3">
-                  <h4 className="text-sm font-bold text-white">How you receive your access</h4>
-                  <p className="text-sm leading-relaxed text-muted-foreground">Access delivered within minutes after payment.</p>
+                  <h4 className="text-sm font-bold text-white">{t('checkout.howReceiveAccess', 'How you receive your access')}</h4>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment.')}</p>
                   <div className="space-y-1.5 text-xs leading-relaxed text-muted-foreground">
-                    <p>Activation is handled securely by our team after purchase.</p>
-                    <p className="font-semibold text-primary">No sensitive information is required before payment.</p>
+                    <p>{t('store.safeActivationMessage', 'Activation is handled securely by our team after purchase.')}</p>
+                    <p className="font-semibold text-primary">{t('store.noSensitiveBeforePayment', 'No sensitive information is required before payment.')}</p>
                   </div>
                   <div className="rounded-xl border border-primary/20 bg-primary/10 p-3 text-xs leading-relaxed text-muted-foreground">
-                    <p className="font-semibold text-white">Important information:</p>
-                    <p className="mt-1">Activation is handled securely by our team after purchase.</p>
-                    <p className="mt-1 font-semibold text-primary">No sensitive information is required before payment.</p>
+                    <p className="font-semibold text-white">{t('store.importantInfo', 'Important information:')}</p>
+                    <p className="mt-1">{t('store.safeActivationMessage', 'Activation is handled securely by our team after purchase.')}</p>
+                    <p className="mt-1 font-semibold text-primary">{t('store.noSensitiveBeforePayment', 'No sensitive information is required before payment.')}</p>
                   </div>
                   <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted-foreground">
-                    <span>✔ Instant delivery</span><span>✔ Secure payment</span><span>✔ Support available</span>
+                    <span>✔ {t('store.instantDelivery', 'Instant delivery')}</span><span>✔ {t('store.securePayment', 'Secure payment')}</span><span>✔ {t('store.supportAvailable', 'Support available')}</span>
                   </div>
                   <div>
-                    <p className="mb-2 text-xs font-semibold text-white">Need help? Contact us instantly:</p>
+                    <p className="mb-2 text-xs font-semibold text-white">{t('store.needHelp', 'Need help? Contact us instantly:')}</p>
                     <div className="flex flex-wrap gap-3">
                       {supportLinks.whatsapp && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
                       {supportLinks.telegram && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
@@ -760,7 +760,7 @@ const PaymentPage = () => {
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-xs font-medium text-white flex items-center gap-2">
                       <Mail className="w-3.5 h-3.5 text-primary" />
-                      Activation Email
+                      {t('checkout.activationEmail', 'Activation Email')}
                     </Label>
                     <Input
                       id="email"
@@ -773,12 +773,12 @@ const PaymentPage = () => {
                       className={`h-11 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary ${errors.email ? 'border-red-500' : ''}`}
                     />
                     {errors.email && <p className="text-xs text-red-400">{errors.email}</p>}
-                    <p className="text-[10px] text-muted-foreground">We'll send activation details to this email.</p>
+                    <p className="text-[10px] text-muted-foreground">{t('checkout.accessEmailNote', "We'll send activation details to this email.")}</p>
                   </div>
 
                   <div className="flex items-center gap-2 text-xs text-green-400">
                     <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                    <span>Secure — we never ask for your passwords.</span>
+                    <span>{t('checkout.secureNoPasswords', 'Secure — we never ask for your passwords.')}</span>
                   </div>
 
                   {/* Terms */}
@@ -790,10 +790,10 @@ const PaymentPage = () => {
                       className="mt-0.5 border-white/20 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                     />
                     <Label htmlFor="terms" className="text-xs text-white cursor-pointer leading-relaxed">
-                      I agree to the{' '}
-                      <Link to="/terms" target="_blank" className="text-primary hover:underline">Terms</Link>
+                      {t('checkout.agreePrefix', 'I agree to the')}{' '}
+                      <Link to="/terms" target="_blank" className="text-primary hover:underline">{t('checkout.terms', 'Terms')}</Link>
                       {' & '}
-                      <Link to="/privacy" target="_blank" className="text-primary hover:underline">Privacy Policy</Link>
+                      <Link to="/privacy" target="_blank" className="text-primary hover:underline">{t('checkout.privacyPolicy', 'Privacy Policy')}</Link>
                     </Label>
                   </div>
 
@@ -814,12 +814,12 @@ const PaymentPage = () => {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
-                        {checkoutUrl ? 'Get Instant Access' : 'Contact support'}
+                        {checkoutUrl ? t('store.buyNow', 'Get Instant Access') : t('checkout.contactSupport', 'Contact support')}
                       </span>
                     )}
                   </Button>
                   <p className="text-xs font-medium text-primary text-center">Access delivered within minutes after payment</p>
-                  <p className="text-xs font-medium text-muted-foreground text-center">{TAX_NOTE}</p>
+                  <p className="text-xs font-medium text-muted-foreground text-center">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
                   <p className="text-[11px] text-muted-foreground text-center">Secure payment via Stripe & Bancontact. Final payment in EUR.</p>
 
                   {/* Trust microcopy */}
