@@ -264,7 +264,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   <img
                     src={logoUrl!}
                     alt={`${tool.name} logo`}
-                    className={`h-9 w-9 sm:h-12 sm:w-12 object-contain p-0.5 drop-shadow-sm transition-all duration-300 relative z-10 group-hover:scale-105 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    className={`h-9 w-9 sm:h-12 sm:w-12 object-contain p-0.5 transition-opacity duration-300 relative z-10 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
                     onError={() => {
                       if (!logoError) { setLogoError(true); setLogoLoaded(false); }
@@ -357,13 +357,12 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
 
             {tool.tool_id === 'lovable' && !isComingSoon && !isPaused && (
               <div className="space-y-3 rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
-                <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
                   {LOVABLE_PLAN_OPTIONS.map((plan) => {
                     const isSelected = selectedLovablePlan === plan.planId;
                     return (
-                      <button
+                      <div
                         key={plan.planId}
-                        type="button"
                         onClick={() => setSelectedLovablePlan(plan.planId)}
                         className={`w-full rounded-xl border p-3 text-left transition-all duration-200 ${
                           isSelected
@@ -390,11 +389,19 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                           {plan.bestValue && <p className="font-semibold text-primary">{t('store.saveMorePlan')}</p>}
                           {plan.bestValue && <p>{t('store.mostUsersChoose')}</p>}
                         </div>
-                        <span className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">
+                        <button
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            const planCheckoutUrl = getStripeLink(tool.name, t(plan.titleKey));
+                            if (planCheckoutUrl) window.open(planCheckoutUrl, '_blank', 'noopener,noreferrer');
+                          }}
+                          className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90"
+                        >
                           {t('store.buyNow', 'Get Instant Access')}
-                        </span>
+                        </button>
                         <p className="mt-2 text-center text-[11px] font-semibold text-primary">{t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment')}</p>
-                      </button>
+                      </div>
                     );
                   })}
                 </div>
