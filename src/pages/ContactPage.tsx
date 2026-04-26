@@ -13,7 +13,7 @@ import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
 import { ChatbotPromoSection, Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
-import { socialLinks, supportLinks } from '@/lib/socialLinks';
+import { isUsableSocialLink, socialLinks, supportLinks } from '@/lib/socialLinks';
 
 const CONTACT_PHONE = '+32 494 31 11 90';
 const CONTACT_EMAIL = 'info@aideals.be';
@@ -49,7 +49,7 @@ const ContactPage = () => {
     { label: 'Instagram', href: socialLinks.instagram, icon: Instagram, tone: 'social-instagram-3d' },
     { label: 'YouTube', href: socialLinks.youtube, icon: Youtube, tone: 'social-youtube-3d' },
     { label: 'Telegram', href: socialLinks.telegram, icon: TelegramIcon, tone: 'social-telegram-3d' },
-  ].filter((link) => Boolean(link.href));
+  ].filter((link) => isUsableSocialLink(link.href));
 
   return (
     <div className="min-h-screen bg-background">
