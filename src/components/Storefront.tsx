@@ -81,7 +81,7 @@ const Storefront = () => {
       // so we can derive the correct billing period (one-time / monthly / yearly).
       const minPriceMap: Record<string, { price: number; planName: string }> = {};
       (plansData || []).forEach(p => {
-        if (p.tool_id === 'lovable' && !['lovable_2_months', 'lovable_3_months'].includes((p as any).plan_id || '')) return;
+        if (p.tool_id === 'lovable' && !['pro_monthly', 'lovable_2_months', 'lovable_3_months'].includes((p as any).plan_id || '')) return;
         const price = p.monthly_price != null ? Number(p.monthly_price) : null;
         if (price != null && price > 0) {
           const existing = minPriceMap[p.tool_id];
@@ -269,7 +269,9 @@ const Storefront = () => {
                     />
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 relative z-10">
                       {orderedTools.map((tool, index) => (
-                        <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
+                        <div key={tool.id} className={tool.tool_id === 'lovable' ? 'lg:col-span-4' : undefined}>
+                          <ToolCard tool={tool} index={index} tier={getTier(tool.tool_id)} />
+                        </div>
                       ))}
                     </div>
                   </div>
