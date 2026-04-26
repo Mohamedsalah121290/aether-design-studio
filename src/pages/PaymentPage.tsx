@@ -310,6 +310,7 @@ const PaymentPage = () => {
       }
 
       if (!data?.url) throw new Error('No checkout URL returned');
+      localStorage.setItem('aiDealsCompletedPurchases', String(completedPurchases + 1));
       window.location.href = data.url;
     } catch (error) {
       console.error('Checkout error:', error);
