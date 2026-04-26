@@ -2,8 +2,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  Sparkles, Search, Loader2, Palette, Zap,
-  Code, Briefcase, Monitor, Users, CheckCircle,
+  Sparkles, Search, Loader2, Palette,
+  Code, Briefcase, Monitor, Users,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
 import { inferPeriodFromPlan, type PricePeriod } from '@/lib/pricePeriod';
