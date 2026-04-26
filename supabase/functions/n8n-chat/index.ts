@@ -12,7 +12,7 @@ const N8N_CHAT_WEBHOOK_URL = "https://asd202.app.n8n.cloud/webhook/f5507dd5-c620
 
 const BodySchema = z.object({
   message: z.string().trim().min(1).max(1000),
-  language: z.enum(["en", "fr", "nl", "de", "es", "it", "ar"]).optional().default("en"),
+  language: z.enum(["en", "fr", "nl", "de", "es", "it", "tr", "ar"]).optional().default("en"),
   instruction: z.string().max(2000).optional(),
 });
 
@@ -24,6 +24,7 @@ const fallbackReply = (language: string) => {
     de: "Sie erhalten Sofortzugang und zahlen weniger als beim offiziellen Preis.\nSoll ich Ihnen die beste Option zeigen?",
     es: "Tienes acceso instantáneo y es más barato que el precio oficial.\n¿Te muestro la mejor opción?",
     it: "Hai accesso immediato ed è più economico del prezzo ufficiale.\nVuoi che ti mostri l’opzione migliore?",
+    tr: "Anlıyorum 👍 Resmi fiyatlara göre daha uygun ve hemen erişim sağlanır.\nSenin için en uygun seçeneği göstereyim mi?",
     ar: "تحصل على وصول فوري والسعر أقل من الرسمي.\nتحب أوريك أفضل خيار لك؟",
   };
   return replies[language] || replies.en;
