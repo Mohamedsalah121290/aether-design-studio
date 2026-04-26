@@ -16,31 +16,28 @@ interface AuthDialogProps {
   defaultMode?: 'login' | 'signup';
 }
 
-const authSchema = z.object({
+const emailOnlySchema = z.object({
   email: z.string().trim().email('Please enter a valid email').max(255),
-  password: z.string().min(6, 'Password must be at least 6 characters').max(100),
 });
 
 export const AuthDialog = ({ open, onOpenChange, defaultMode = 'login' }: AuthDialogProps) => {
   const { t } = useTranslation();
-  const { signIn, signUp } = useAuth();
+  const { signInWithEmail } = useAuth();
   const [mode, setMode] = useState<'login' | 'signup'>(defaultMode);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
     // Validate with Zod
-    const result = authSchema.safeParse({ email, password });
+    const result = emailOnlySchema.safeParse({ email });
     if (!result.success) {
-      const fieldErrors: { email?: string; password?: string } = {};
+      const fieldErrors: { email?: string } = {};
       result.error.errors.forEach((err) => {
         if (err.path[0] === 'email') fieldErrors.email = err.message;
-        if (err.path[0] === 'password') fieldErrors.password = err.message;
       });
       setErrors(fieldErrors);
       return;
@@ -48,9 +45,7 @@ export const AuthDialog = ({ open, onOpenChange, defaultMode = 'login' }: AuthDi
 
     setIsLoading(true);
     try {
-      const { error } = mode === 'login' 
-        ? await signIn(email, password)
-        : await signUp(email, password);
+      const { error } = await signInWithEmail(email);
 
       if (error) {
         toast({
@@ -61,11 +56,10 @@ export const AuthDialog = ({ open, onOpenChange, defaultMode = 'login' }: AuthDi
       } else {
         toast({
           title: mode === 'login' ? t('auth.welcomeBack') : t('auth.accountCreated'),
-          description: mode === 'login' ? t('auth.loginSuccess') : t('auth.signupSuccess'),
+          description: t('auth.emailLinkSent', 'Check your email to complete login.'),
         });
         onOpenChange(false);
         setEmail('');
-        setPassword('');
       }
     } finally {
       setIsLoading(false);
@@ -75,7 +69,6 @@ export const AuthDialog = ({ open, onOpenChange, defaultMode = 'login' }: AuthDi
   const handleClose = () => {
     if (!isLoading) {
       setEmail('');
-      setPassword('');
       setErrors({});
       onOpenChange(false);
     }
@@ -105,11 +98,7 @@ export const AuthDialog = ({ open, onOpenChange, defaultMode = 'login' }: AuthDi
                 className="flex justify-center mb-4"
               >
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  {mode === 'login' ? (
-                    <LogIn className="w-8 h-8 text-white" />
-                  ) : (
-                    <UserPlus className="w-8 h-8 text-white" />
-                  )}
+                  {mode === 'login' ? <LogIn className="w-8 h-8 text-white" /> : <UserPlus className="w-8 h-8 text-white" />}
                 </div>
               </motion.div>
               <DialogTitle className="text-2xl font-display font-bold text-white">
@@ -144,32 +133,6 @@ export const AuthDialog = ({ open, onOpenChange, defaultMode = 'login' }: AuthDi
                 />
                 {errors.email && (
                   <p className="text-xs text-red-400">{errors.email}</p>
-                )}
-              </motion.div>
-
-              <motion.div
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.15 }}
-                className="space-y-2"
-              >
-                <Label htmlFor="auth-password" className="text-sm font-medium text-white flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-primary" />
-                  {t('auth.password')}
-                </Label>
-                <Input
-                  id="auth-password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={isLoading}
-                  className={`h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 ${
-                    errors.password ? 'border-red-500' : ''
-                  }`}
-                />
-                {errors.password && (
-                  <p className="text-xs text-red-400">{errors.password}</p>
                 )}
               </motion.div>
 
