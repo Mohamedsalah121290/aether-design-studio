@@ -6345,6 +6345,10 @@ Object.entries(uxStructurePatches).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
 
+Object.entries(launchQaPatches).forEach(([lng, bundle]) => {
+  i18n.addResourceBundle(lng, 'translation', bundle, true, true);
+});
+
 const runInternalI18nQa = () => {
   if (typeof window === 'undefined' || !new URLSearchParams(window.location.search).has('i18nQa')) return;
   const flatten = (value: unknown, prefix = '', out: Record<string, string> = {}) => {
