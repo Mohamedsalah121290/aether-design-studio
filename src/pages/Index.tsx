@@ -16,7 +16,6 @@ import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
 import TrustBadges from '@/components/TrustBadges';
-import { ChatbotPromoSection } from '@/components/ChatbotConversion';
 import { socialProofReviews } from '@/lib/socialProof';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
@@ -798,9 +797,6 @@ const Index = () => {
             </div>
           </div>
         </section>
-
-        <ChatbotPromoSection />
-
 
         {/* ═══════════════ 9) FAQ ═══════════════ */}
         <section className="py-24 relative">
