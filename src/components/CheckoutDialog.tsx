@@ -406,25 +406,17 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
 
               <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 space-y-3">
                 <h4 className="text-sm font-bold text-white">{t('checkout.howReceiveAccess')}</h4>
-                <p className="text-sm leading-relaxed text-muted-foreground">{t('store.accessDeliveredWithinMinutes')}</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">{t('store.activationAccessDelivery', 'After payment, your account access (username and password) will be delivered securely via email or WhatsApp.')}</p>
                 <div className="space-y-1.5 text-sm leading-relaxed text-muted-foreground">
-                  <p>{t('store.safeActivationMessage')}</p>
-                  <p className="font-semibold text-primary">{t('store.noSensitiveBeforePayment')}</p>
+                  <p className="font-semibold text-primary">{t('store.neverAskPersonalCredentials', 'We never ask for your personal account credentials before payment.')}</p>
                 </div>
                 <div className="rounded-xl border border-primary/20 bg-primary/10 p-3 text-sm leading-relaxed text-muted-foreground">
                   <p className="font-semibold text-white">{t('store.importantInfo')}</p>
-                  <p className="mt-1">{t('store.safeActivationMessage')}</p>
-                  <p className="mt-1 font-semibold text-primary">{t('store.noSensitiveBeforePayment')}</p>
+                  <p className="mt-1">{t('store.activationAccessDelivery', 'After payment, your account access (username and password) will be delivered securely via email or WhatsApp.')}</p>
+                  <p className="mt-1 font-semibold text-primary">{t('store.neverAskPersonalCredentials', 'We never ask for your personal account credentials before payment.')}</p>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted-foreground">
                   <span>✔ {t('store.instantDelivery')}</span><span>✔ {t('store.securePayment')}</span><span>✔ {t('store.supportAvailable')}</span>
-                </div>
-                <div>
-                  <p className="mb-2 text-xs font-semibold text-white">{t('store.needHelp')}</p>
-                  <div className="flex flex-wrap gap-3">
-                    {supportLinks.whatsapp && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
-                    {supportLinks.telegram && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
-                  </div>
                 </div>
               </div>
 
@@ -519,7 +511,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     {/* Trust note */}
                     <div className="flex items-center gap-2 text-xs text-green-400">
                       <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-                      <span>{t('checkout.safeNote')}</span>
+                      <span>{t('store.neverAskPersonalCredentials', 'We never ask for your personal account credentials before payment.')}</span>
                     </div>
                   </AnimatePresence>
 
@@ -566,7 +558,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     </span>
                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Button>
-                  <p className="text-xs font-medium text-primary text-center">{t('store.accessDeliveredWithinMinutes')}</p>
+                  <p className="text-xs font-medium text-primary text-center">{t('store.activationAccessDelivery', 'After payment, your account access (username and password) will be delivered securely via email or WhatsApp.')}</p>
                   <p className="text-xs font-medium text-muted-foreground text-center">{t(TAX_NOTE_KEY)}</p>
                   <p className="text-[11px] text-muted-foreground text-center">Secure payment via Stripe & Bancontact. Final payment in EUR.</p>
 
