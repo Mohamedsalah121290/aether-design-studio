@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
-import { socialLinks, supportLinks } from '@/lib/socialLinks';
+import { isUsableSocialLink, socialLinks, supportLinks } from '@/lib/socialLinks';
 import robotAvatar from '@/assets/ai-deals-robot-avatar.webp';
 
 const N8N_CHAT_FUNCTION = 'n8n-chat';
@@ -329,7 +329,6 @@ export const ChatbotSalesFlow = () => {
     setMessages((current) => [...current, userMessage]);
     setSending(true);
     const messageLanguage = lang;
-    void detectMessageLanguage;
 
     try {
       const { data, error } = await supabase.functions.invoke(N8N_CHAT_FUNCTION, {
@@ -370,7 +369,7 @@ export const ChatbotSalesFlow = () => {
   if (!ready) return null;
 
   return (
-    <div className={`fixed right-2 z-40 flex-col items-end gap-2 sm:bottom-6 sm:right-6 sm:flex sm:gap-3 ${location.pathname === '/store' || location.pathname.startsWith('/payment') ? 'hidden' : 'flex'} ${liftForMobileCta ? 'bottom-[calc(5.75rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1rem+env(safe-area-inset-bottom))]'}`}>
+    <div className={`fixed right-3 z-40 flex-col items-end gap-3 sm:bottom-6 sm:right-6 sm:flex sm:gap-3 ${location.pathname === '/store' || location.pathname.startsWith('/payment') ? 'hidden' : 'flex'} ${liftForMobileCta ? 'bottom-[calc(6.5rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1.25rem+env(safe-area-inset-bottom))]'}`}>
       <AnimatePresence>
         {open && (
           <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[68dvh] sm:max-h-none">
@@ -410,12 +409,12 @@ export const ChatbotSalesFlow = () => {
         )}
       </AnimatePresence>
 
-      <div className="flex flex-col items-end gap-1.5 sm:gap-3 translate-y-2 sm:translate-y-0">
+      <div className="flex flex-col items-end gap-3 translate-y-0">
         <div className="hidden sm:flex flex-col items-end gap-2 sm:gap-3">
-          {socialLinks.whatsapp && <motion.a href={socialLinks.whatsapp} onClick={(event) => openSocialUrl(event, socialLinks.whatsapp)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d social-link-movie" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
-          {supportLinks.telegram && <motion.a href={supportLinks.telegram} onClick={(event) => openSocialUrl(event, supportLinks.telegram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d social-link-movie" aria-label="Contact on Telegram"><TelegramIcon className="w-7 h-7 sm:w-9 sm:h-9" /></motion.a>}
+          {isUsableSocialLink(socialLinks.whatsapp) && <motion.a href={socialLinks.whatsapp} onClick={(event) => openSocialUrl(event, socialLinks.whatsapp)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d social-link-movie" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-8 h-8" /></motion.a>}
+          {isUsableSocialLink(supportLinks.telegram) && <motion.a href={supportLinks.telegram} onClick={(event) => openSocialUrl(event, supportLinks.telegram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d social-link-movie" aria-label="Contact on Telegram"><TelegramIcon className="w-8 h-8" /></motion.a>}
         </div>
-        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label={fallbackText[lang].open}><RobotAvatar className="w-[64px] h-[64px] sm:w-[88px] sm:h-[88px]" lang={lang} speaking={speakingId !== null} /></motion.button>
+        <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label={fallbackText[lang].open}><RobotAvatar className="w-14 h-14 sm:w-16 sm:h-16" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
     </div>
   );
