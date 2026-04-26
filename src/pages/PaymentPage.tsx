@@ -283,12 +283,6 @@ const PaymentPage = () => {
     setIsLoading(true);
     try {
       const buyerEmail = email || user?.email;
-      const directPaymentLink = getStripeLink(tool.name, selectedPlan.plan_name, buyerEmail || undefined);
-      if (directPaymentLink) {
-        localStorage.setItem('aiDealsCompletedPurchases', String(completedPurchases + 1));
-        window.open(directPaymentLink, '_blank', 'noopener,noreferrer');
-        return;
-      }
 
       const paymentMethod = PAYMENT_METHODS.find(m => m.id === selectedPaymentMethod);
       
@@ -314,7 +308,13 @@ const PaymentPage = () => {
       window.location.href = data.url;
     } catch (error) {
       console.error('Checkout error:', error);
-      toast({ title: t('checkout.error', 'Error'), description: t('checkout.somethingWrong', 'Something went wrong. Please try again.'), variant: 'destructive' });
+      const fallbackPaymentLink = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name, email || user?.email || undefined) : null;
+      if (fallbackPaymentLink) {
+        localStorage.setItem('aiDealsCompletedPurchases', String(completedPurchases + 1));
+        window.open(fallbackPaymentLink, '_blank', 'noopener,noreferrer');
+      } else {
+        toast({ title: t('checkout.error', 'Error'), description: t('checkout.somethingWrong', 'Something went wrong. Please try again.'), variant: 'destructive' });
+      }
     } finally {
       setIsLoading(false);
     }
