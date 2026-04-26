@@ -556,7 +556,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                     </span>
                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Button>
-                  <p className="text-xs font-medium text-primary text-center">{t('store.activationAccessDelivery', 'After payment, your account access (username and password) will be delivered securely via email or WhatsApp.')}</p>
+                  <p className="text-xs font-medium text-primary text-center">{t('store.activationAccessDelivery', 'After payment, we will send you the access details you purchased, including username and password when applicable.')}</p>
                   <p className="text-xs font-medium text-muted-foreground text-center">{t(TAX_NOTE_KEY)}</p>
                   <p className="text-[11px] text-muted-foreground text-center">Secure payment via Stripe & Bancontact. Final payment in EUR.</p>
 
