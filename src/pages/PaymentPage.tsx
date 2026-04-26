@@ -59,9 +59,9 @@ const WHAT_YOU_GET = [
 ];
 
 const LOVABLE_PLAN_DETAILS: Record<string, { badge: string; duration: string; credits: string; months: number }> = {
-  pro_monthly: { badge: 'Most Popular', duration: 'Duration: 1 month', credits: 'Includes: 100 credits per month', months: 1 },
-  lovable_2_months: { badge: 'Best Starter', duration: 'Duration: 2 months', credits: 'Includes: 100 credits per month', months: 2 },
-  lovable_3_months: { badge: '⭐ Best Value', duration: 'Duration: 3 months', credits: 'Includes: 100 credits per month', months: 3 },
+  pro_monthly: { badge: 'store.mostPopular', duration: 'store.durationOneMonth', credits: 'store.creditsMonthly', months: 1 },
+  lovable_2_months: { badge: 'store.bestStarter', duration: 'store.durationTwoMonths', credits: 'store.creditsMonthly', months: 2 },
+  lovable_3_months: { badge: 'store.bestValue', duration: 'store.durationThreeMonths', credits: 'store.creditsMonthly', months: 3 },
 };
 
 const getMonthlyPlanValue = (plan: ToolPlan) => {
@@ -90,10 +90,10 @@ const getBestValuePlan = (plans: ToolPlan[]) => {
 };
 
 const tierLabel = (index: number, total: number) => {
-  if (total <= 1) return 'Most Popular';
-  if (index === 0) return 'Starter';
-  if (index === Math.min(1, total - 1)) return 'Most Popular';
-  return 'Pro';
+  if (total <= 1) return 'store.mostPopular';
+  if (index === 0) return 'store.pricingTiers.starter.name';
+  if (index === Math.min(1, total - 1)) return 'store.mostPopular';
+  return 'store.pricingTiers.pro.name';
 };
 
 type BillingInterval = 'monthly' | 'annual';
