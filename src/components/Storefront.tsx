@@ -186,6 +186,10 @@ const Storefront = () => {
               <p className="text-sm font-semibold text-primary mb-4">
                 {t('store.saveVsOfficial', 'Save up to 60% vs official subscriptions')}
               </p>
+              <div className="mx-auto mb-6 max-w-2xl rounded-2xl border border-primary/20 bg-primary/10 p-4 text-sm leading-relaxed text-muted-foreground">
+                <p className="font-semibold text-foreground">{t('store.activationAccessDelivery', 'After payment, we will send you the access details you purchased, including username and password when applicable.')}</p>
+                <p className="mt-1 font-semibold text-primary">{t('store.neverAskPersonalCredentials', 'You do not need to send us your personal password before payment.')}</p>
+              </div>
 
               {/* CTAs */}
               <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-3">

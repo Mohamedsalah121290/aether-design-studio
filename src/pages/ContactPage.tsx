@@ -13,7 +13,10 @@ import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
 import { ChatbotPromoSection, Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
-import { socialLinks } from '@/lib/socialLinks';
+import { isUsableSocialLink, socialLinks, supportLinks } from '@/lib/socialLinks';
+
+const CONTACT_PHONE = '+32 494 31 11 90';
+const CONTACT_EMAIL = 'info@aideals.be';
 
 const ContactPage = () => {
   const { t } = useTranslation();
@@ -27,26 +30,26 @@ const ContactPage = () => {
       return;
     }
     setSending(true);
-    const mailtoLink = `mailto:info@aideals.be?subject=${encodeURIComponent(form.subject || t('contact.mailSubject'))}&body=${encodeURIComponent(`${t('contact.mailName')}: ${form.name}\n${t('contact.mailEmail')}: ${form.email}\n\n${form.message}`)}`;
+    const mailtoLink = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(form.subject || t('contact.mailSubject'))}&body=${encodeURIComponent(`${t('contact.mailName')}: ${form.name}\n${t('contact.mailEmail')}: ${form.email}\n\n${form.message}`)}`;
     window.open(mailtoLink, '_blank');
     toast({ title: t('contact.toastReadyTitle'), description: t('contact.toastReadyDescription') });
     setSending(false);
   };
 
   const supportInfo = [
-    { icon: Mail, title: t('contact.support.emailTitle'), value: t('contact.support.emailValue'), description: t('contact.support.emailDesc') },
+    { icon: Mail, title: t('contact.support.emailTitle'), value: CONTACT_EMAIL, description: t('contact.support.emailDesc') },
     { icon: Clock, title: t('contact.support.timeTitle'), value: t('contact.support.timeValue'), description: t('contact.support.timeDesc') },
     { icon: Shield, title: t('contact.support.privacyTitle'), value: t('contact.support.privacyValue'), description: t('contact.support.privacyDesc') },
     { icon: Globe, title: t('contact.support.globalTitle'), value: t('contact.support.globalValue'), description: t('contact.support.globalDesc') },
   ];
 
   const contactLinks = [
-    { label: 'WhatsApp', href: socialLinks.whatsapp, icon: WhatsAppIcon, tone: 'social-whatsapp-3d' },
+    { label: 'WhatsApp', href: supportLinks.whatsapp, icon: WhatsAppIcon, tone: 'social-whatsapp-3d' },
     { label: 'Facebook', href: socialLinks.facebook, icon: Facebook, tone: 'social-facebook-3d' },
     { label: 'Instagram', href: socialLinks.instagram, icon: Instagram, tone: 'social-instagram-3d' },
     { label: 'YouTube', href: socialLinks.youtube, icon: Youtube, tone: 'social-youtube-3d' },
     { label: 'Telegram', href: socialLinks.telegram, icon: TelegramIcon, tone: 'social-telegram-3d' },
-  ].filter((link) => Boolean(link.href));
+  ].filter((link) => isUsableSocialLink(link.href));
 
   return (
     <div className="min-h-screen bg-background">
@@ -145,6 +148,20 @@ const ContactPage = () => {
               className="md:col-span-2 space-y-4"
             >
               <div className="glass rounded-2xl p-5">
+                <div className="mb-5 space-y-3 text-sm">
+                  <p className="flex flex-col gap-1 rounded-xl border border-border/60 bg-muted/20 p-3 sm:flex-row sm:items-center sm:justify-between">
+                    <span className="font-bold text-foreground">{t('contact.phoneLabel', 'Phone:')}</span>
+                    <a href="tel:+32494311190" className="font-semibold text-primary">{CONTACT_PHONE}</a>
+                  </p>
+                  <p className="flex flex-col gap-1 rounded-xl border border-border/60 bg-muted/20 p-3 sm:flex-row sm:items-center sm:justify-between">
+                    <span className="font-bold text-foreground">{t('contact.emailLabel', 'Email:')}</span>
+                    <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold text-primary">{CONTACT_EMAIL}</a>
+                  </p>
+                  <p className="flex flex-col gap-1 rounded-xl border border-border/60 bg-muted/20 p-3 sm:flex-row sm:items-center sm:justify-between">
+                    <span className="font-bold text-foreground">{t('contact.whatsappLabel', 'WhatsApp:')}</span>
+                    <a href={supportLinks.whatsapp} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary">{CONTACT_PHONE}</a>
+                  </p>
+                </div>
                 <h3 className="font-display font-bold text-sm mb-3">{t('contact.instant')}</h3>
                 <div className="flex flex-wrap gap-3">
                   {contactLinks.map(({ label, href, icon: Icon, tone }) => (
