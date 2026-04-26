@@ -136,19 +136,10 @@ const Storefront = () => {
     return result;
   }, [tools, searchQuery, activeFilter, sortBy]);
 
-  /* Split into active vs coming_soon */
-  const activeTools = useMemo(() => processedTools.filter(t => t.status !== 'coming_soon'), [processedTools]);
-  const comingSoonTools = useMemo(() => processedTools.filter(t => t.status === 'coming_soon'), [processedTools]);
-
-  const activeSections = SECTION_ORDER.map(section => ({
-    ...section,
-    tools: section.toolIds.map(toolId => activeTools.find(t => t.tool_id === toolId)).filter(Boolean) as Tool[],
-  })).filter(s => s.tools.length > 0);
-
-  const comingSoonSections = SECTION_ORDER.map(section => ({
-    ...section,
-    tools: section.toolIds.map(toolId => comingSoonTools.find(t => t.tool_id === toolId)).filter(Boolean) as Tool[],
-  })).filter(s => s.tools.length > 0);
+  const orderedTools = useMemo(() => {
+    const order = new Map(SECTION_ORDER.flatMap(section => section.toolIds).map((toolId, index) => [toolId, index]));
+    return [...processedTools].sort((a, b) => (order.get(a.tool_id) ?? 999) - (order.get(b.tool_id) ?? 999));
+  }, [processedTools]);
 
   return (
     <>
@@ -270,46 +261,22 @@ const Storefront = () => {
                   />
                 </div>
 
-                {/* ═══ AVAILABLE NOW ═══ */}
-                {activeSections.map((section, sectionIndex) => {
-                  const Icon = section.icon;
-                  return (
-                    <section key={section.key} className="py-12">
-                      <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 relative">
-                        <div
-                          className="absolute -top-16 left-1/2 -translate-x-1/2 w-[600px] h-[250px] rounded-full blur-3xl pointer-events-none opacity-[0.03]"
-                          style={{ background: 'rgba(139,92,246,1)' }}
-                        />
-                        <div className="flex items-center gap-3 relative z-10">
-                          <div className="h-9 w-9 rounded-lg grid place-items-center bg-white/5 border border-white/10">
-                            <Icon className="w-4 h-4 text-white/40" />
-                          </div>
-                          <div className="space-y-0.5">
-                             <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">{t(`store.categoriesDetailed.${section.key}.label`)}</h2>
-                             <p className="text-white/50 text-sm">{t(`store.categoriesDetailed.${section.key}.subtitle`)}</p>
-                          </div>
-                          <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-medium bg-white/5 text-white/40 border border-white/10">
-                            {section.tools.length}
-                          </span>
-                        </div>
-                        <div className="h-px mt-4 mb-6 bg-gradient-to-r from-white/10 via-white/5 to-transparent relative z-10" />
-                        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 relative z-10">
-                          {section.tools.map((tool, index) => (
-                            <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
-                          ))}
-                        </div>
-                        {sectionIndex < activeSections.length - 1 && section.tools[0] && (
-                          <Link to={`/store?scrollTo=${section.tools[0].tool_id}`} className="md:hidden mt-6 min-h-[52px] relative z-10 inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">
-                             {t('store.buyNow', 'Get Instant Access')}
-                          </Link>
-                        )}
-                      </div>
-                    </section>
-                  );
-                })}
+                <section className="py-12" aria-label="Products">
+                  <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 relative">
+                    <div
+                      className="absolute -top-16 left-1/2 -translate-x-1/2 w-[600px] h-[250px] rounded-full blur-3xl pointer-events-none opacity-[0.03]"
+                      style={{ background: 'rgba(139,92,246,1)' }}
+                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 relative z-10">
+                      {orderedTools.map((tool, index) => (
+                        <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
+                      ))}
+                    </div>
+                  </div>
+                </section>
 
                 {/* Empty state */}
-                {activeSections.length === 0 && comingSoonTools.length === 0 && (
+                {orderedTools.length === 0 && (
                   <div className="text-center py-20">
                     <Search className="w-12 h-12 text-white/10 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-white/60 mb-2">{t('store.noResults')}</h3>
