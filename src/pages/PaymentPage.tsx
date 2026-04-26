@@ -68,7 +68,7 @@ const getMonthlyPlanValue = (plan: ToolPlan) => {
   const details = LOVABLE_PLAN_DETAILS[plan.plan_id];
   if (!plan.monthly_price) return null;
   const monthly = Number(plan.monthly_price) / (details?.months || getPlanDurationMonths(plan.plan_name));
-  return `≈ €${Number.isInteger(monthly) ? monthly : monthly.toFixed(1)} / month`;
+  return `≈ €${Number.isInteger(monthly) ? monthly : monthly.toFixed(1)} {t('store.period.monthly', '/ month')}`;
 };
 
 const getPlanDurationMonths = (planName: string) => {
@@ -257,7 +257,7 @@ const PaymentPage = () => {
 
   const formatVatPrice = (eur: number | null) => {
     const price = formatPrice(eur);
-    return eur && eur > 0 ? `${price} ${t('store.exclVat', '(excl. VAT)')}` : price;
+    return eur && eur > 0 ? `${price} ${t('store.exclVat', '{t('store.exclVat', '(excl. VAT)')}')}` : price;
   };
 
   const formatApproxPrice = (eur: number | null | undefined) => formatApproxCurrency(eur, currency.code);
@@ -369,7 +369,7 @@ const PaymentPage = () => {
             className="inline-flex min-h-11 items-center gap-2 text-sm text-muted-foreground hover:text-white transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Store
+            {t('checkout.backToStore', 'Back to Store')}
           </button>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -384,7 +384,7 @@ const PaymentPage = () => {
                 )}
                 <div>
                   <h1 className="text-2xl font-bold text-white">{tool?.name}</h1>
-                  <p className="text-sm text-muted-foreground">Choose your plan and payment method</p>
+                  <p className="text-sm text-muted-foreground">{t('checkout.choosePlanPayment', 'Choose your plan and payment method')}</p>
                   {tool && <ProductRatingInline toolId={tool.tool_id} productName={tool.name} />}
                 </div>
               </div>
@@ -397,7 +397,7 @@ const PaymentPage = () => {
                 >
                   <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
                     <Crown className="w-4 h-4 text-primary" />
-                    Billing Period
+                    {t('checkout.billingPeriod', 'Billing Period')}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
@@ -409,19 +409,19 @@ const PaymentPage = () => {
                           : 'border-white/10 bg-white/5 hover:border-white/20'
                       }`}
                     >
-                      <p className="text-sm font-semibold text-white">Monthly</p>
+                      <p className="text-sm font-semibold text-white">{t('checkout.monthly', 'Monthly')}</p>
                       {selectedPlan?.monthly_price != null && (
                         <>
                           <p className="text-lg font-bold text-sky-400 mt-1">
                             €{selectedPlan.monthly_price}
-                            <span className="text-xs text-muted-foreground font-semibold"> (excl. VAT)</span>
-                            <span className="text-xs text-muted-foreground font-normal"> / month</span>
+                            <span className="text-xs text-muted-foreground font-semibold"> {t('store.exclVat', '(excl. VAT)')}</span>
+                            <span className="text-xs text-muted-foreground font-normal"> {t('store.period.monthly', '/ month')}</span>
                           </p>
                           <p className="text-xs font-medium text-muted-foreground mt-1">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
                           {formatApproxPrice(selectedPlan.monthly_price) && <p className="text-xs text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price)}</p>}
                         </>
                       )}
-                      <p className="text-[10px] text-muted-foreground mt-1">Billed every month</p>
+                      <p className="text-[10px] text-muted-foreground mt-1">{t('checkout.billedMonthly', 'Billed every month')}</p>
                     </button>
 
                     <button
@@ -434,20 +434,20 @@ const PaymentPage = () => {
                       }`}
                     >
                       <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400 border border-green-500/30">
-                        Save 20%
+                        {t('checkout.savePercent', 'Save 20%')}
                       </span>
-                      <p className="text-sm font-semibold text-white">Annual</p>
+                      <p className="text-sm font-semibold text-white">{t('checkout.annual', 'Annual')}</p>
                       {selectedPlan?.monthly_price != null && (
                         <>
                           <p className="text-lg font-bold text-orange-400 mt-1">
                             €{(selectedPlan.monthly_price * 12 * 0.8).toFixed(2)}
-                            <span className="text-xs text-muted-foreground font-semibold"> (excl. VAT)</span>
-                            <span className="text-xs text-muted-foreground font-normal"> / year</span>
+                            <span className="text-xs text-muted-foreground font-semibold"> {t('store.exclVat', '(excl. VAT)')}</span>
+                            <span className="text-xs text-muted-foreground font-normal"> {t('store.period.yearly', '/ year')}</span>
                           </p>
                           <p className="text-xs font-medium text-muted-foreground mt-1">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
                           {formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8) && <p className="text-xs text-muted-foreground mt-0.5">{formatApproxPrice(selectedPlan.monthly_price * 12 * 0.8)}</p>}
                           <p className="text-xs text-muted-foreground mt-1">
-                            €{(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · Billed annually
+                            €{(selectedPlan.monthly_price * 0.8).toFixed(2)}/mo · {t('checkout.billedAnnually', 'Billed annually')}
                           </p>
                         </>
                       )}
@@ -462,7 +462,7 @@ const PaymentPage = () => {
                 >
                   <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
                     <Crown className="w-4 h-4 text-primary" />
-                    Billing Period
+                    {t('checkout.billingPeriod', 'Billing Period')}
                   </h3>
                   <div className={`p-4 rounded-xl border-2 border-primary bg-primary/10`}>
                     <p className="text-sm font-semibold text-white">{periodStyle.label}</p>
@@ -470,7 +470,7 @@ const PaymentPage = () => {
                       <>
                         <p className={`text-lg font-bold mt-1 ${periodStyle.textClass}`}>
                           €{selectedPlan.monthly_price}
-                          <span className="text-xs text-muted-foreground font-semibold"> (excl. VAT)</span>
+                          <span className="text-xs text-muted-foreground font-semibold"> {t('store.exclVat', '(excl. VAT)')}</span>
                           <span className="text-xs text-muted-foreground font-normal"> {periodStyle.suffix}</span>
                         </p>
                         <p className="text-xs font-medium text-muted-foreground mt-1">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
@@ -479,9 +479,9 @@ const PaymentPage = () => {
                     )}
                     <p className="text-[10px] text-muted-foreground mt-1">
                       {period === 'one-time'
-                        ? 'Single payment — no recurring charges'
+                        ? '{t('checkout.singlePayment', 'Single payment — no recurring charges')}'
                         : period === 'yearly'
-                        ? 'Charged once per year'
+                        ? '{t('checkout.chargedYearly', 'Charged once per year')}'
                         : selectedPlan?.plan_name || ''}
                     </p>
                   </div>
@@ -516,7 +516,7 @@ const PaymentPage = () => {
                         }`}
                       >
                         <span className="mb-1 block text-[9px] font-bold uppercase tracking-wider opacity-80">
-                          {tool?.tool_id === 'lovable' && LOVABLE_PLAN_DETAILS[plan.plan_id] ? LOVABLE_PLAN_DETAILS[plan.plan_id].badge : tierLabel(index, plans.length)}
+                          {t(tool?.tool_id === 'lovable' && LOVABLE_PLAN_DETAILS[plan.plan_id] ? LOVABLE_PLAN_DETAILS[plan.plan_id].badge : tierLabel(index, plans.length))}
                         </span>
                         <span className="block text-white">{plan.plan_name}</span>
                         {plan.monthly_price != null && plan.monthly_price > 0 && (
@@ -525,12 +525,12 @@ const PaymentPage = () => {
                         {monthlyPlanValue && <span className="mt-0.5 block text-xs font-semibold opacity-80">{monthlyPlanValue}</span>}
                         {tool?.tool_id === 'lovable' && LOVABLE_PLAN_DETAILS[plan.plan_id] && (
                           <span className="mt-2 block space-y-1 text-xs font-medium opacity-80">
-                            <span className="block">{LOVABLE_PLAN_DETAILS[plan.plan_id].duration}</span>
-                            <span className="block">{LOVABLE_PLAN_DETAILS[plan.plan_id].credits}</span>
-                            <span className="block">100 credits are renewed monthly</span>
-                            {isLovableBestValue && <span className="block font-semibold text-primary">Save more with this plan</span>}
-                            {isLovableBestValue && <span className="block">Most users choose this option</span>}
-                            <span className="mt-3 flex min-h-11 items-center justify-center rounded-xl bg-primary/20 px-3 py-2 font-bold">Get Instant Access</span>
+                            <span className="block">{t(LOVABLE_PLAN_DETAILS[plan.plan_id].duration)}</span>
+                            <span className="block">{t(LOVABLE_PLAN_DETAILS[plan.plan_id].credits)}</span>
+                            <span className="block">{t('store.creditsRenewed', '100 credits are renewed monthly')}</span>
+                            {isLovableBestValue && <span className="block font-semibold text-primary">{t('store.saveMorePlan', 'Save more with this plan')}</span>}
+                            {isLovableBestValue && <span className="block">{t('store.mostUsersChoose', 'Most users choose this option')}</span>}
+                            <span className="mt-3 flex min-h-11 items-center justify-center rounded-xl bg-primary/20 px-3 py-2 font-bold">{t('store.buyNow', 'Get Instant Access')}</span>
                           </span>
                         )}
                       </button>
@@ -538,7 +538,7 @@ const PaymentPage = () => {
                   </div>
                   {tool?.tool_id === 'lovable' && (
                     <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-muted-foreground">
-                      <span>✔ {t('store.instantDelivery', 'Instant delivery')}</span><span>✔ No setup needed</span><span>✔ Support included</span>
+                      <span>✔ {t('store.instantDelivery', 'Instant delivery')}</span><span>✔ {t('store.noSetupNeeded', 'No setup needed')}</span><span>✔ {t('store.supportAvailable', 'Support available')}</span>
                     </div>
                   )}
                 </div>
@@ -650,7 +650,7 @@ const PaymentPage = () => {
                   )}
                   <div>
                     <p className="font-semibold text-white text-sm">{tool?.name}</p>
-                    <p className="text-xs text-muted-foreground">{selectedPlan?.plan_name || 'Standard'}</p>
+                    <p className="text-xs text-muted-foreground">{selectedPlan?.plan_name || t('checkout.standard', 'Standard')}</p>
                   </div>
                 </div>
 
@@ -659,12 +659,12 @@ const PaymentPage = () => {
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">
                       {showBillingToggle
-                        ? (billingInterval === 'annual' ? 'Annual subscription' : 'Monthly subscription')
+                        ? (billingInterval === 'annual' ? t('checkout.annualSubscription', 'Annual subscription') : t('checkout.monthlySubscription', 'Monthly subscription'))
                         : period === 'one-time'
-                        ? 'One-time purchase'
+                        ? t('checkout.oneTimePurchase', 'One-time purchase')
                         : period === 'yearly'
-                        ? 'Yearly subscription'
-                        : selectedPlan?.plan_name || 'Subscription'}
+                        ? t('checkout.yearlySubscription', 'Yearly subscription')
+                        : selectedPlan?.plan_name || t('checkout.subscription', 'Subscription')}
                     </span>
                     <span className="text-white font-semibold">
                       {formatVatPrice(displayPrice)}
@@ -677,7 +677,7 @@ const PaymentPage = () => {
                   )}
                   {showBillingToggle && billingInterval === 'annual' && monthlyEquivalent && (
                     <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">Monthly equivalent</span>
+                      <span className="text-muted-foreground">{t('checkout.monthlyEquivalent', 'Monthly equivalent')}</span>
                       <span className="text-green-400">€{monthlyEquivalent.toFixed(2)}/mo</span>
                     </div>
                   )}
@@ -711,7 +711,7 @@ const PaymentPage = () => {
                   {WHAT_YOU_GET.map((item, i) => (
                     <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
                       <CheckCircle className="w-3 h-3 text-green-500 shrink-0" />
-                      {item}
+                      {t(item)}
                     </div>
                   ))}
                 </div>
@@ -809,7 +809,7 @@ const PaymentPage = () => {
                     {isLoading ? (
                       <span className="flex items-center gap-2">
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        Processing...
+                        {t('checkout.processing', 'Processing...')}
                       </span>
                     ) : (
                       <span className="flex items-center gap-2">
@@ -818,15 +818,15 @@ const PaymentPage = () => {
                       </span>
                     )}
                   </Button>
-                  <p className="text-xs font-medium text-primary text-center">Access delivered within minutes after payment</p>
+                  <p className="text-xs font-medium text-primary text-center">{t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment')}</p>
                   <p className="text-xs font-medium text-muted-foreground text-center">{t('store.taxNote', 'Taxes (if applicable) are calculated at checkout.')}</p>
-                  <p className="text-[11px] text-muted-foreground text-center">Secure payment via Stripe & Bancontact. Final payment in EUR.</p>
+                  <p className="text-[11px] text-muted-foreground text-center">{t('checkout.securePaymentFinal', 'Secure payment via Stripe & Bancontact. Final payment in EUR.')}</p>
 
                   {/* Trust microcopy */}
                   <div className="space-y-2 text-center">
                     <p className="text-[10px] text-muted-foreground flex items-center justify-center gap-1">
                       <Zap className="w-3 h-3" />
-                      Cancel anytime. No commitment.
+                      {t('checkout.cancelAnytime', 'Cancel anytime. No commitment.')}
                     </p>
                     <p className="text-[10px] flex items-center justify-center gap-1" style={{ color: '#E8D48B' }}>
                       <Shield className="w-3 h-3" />
