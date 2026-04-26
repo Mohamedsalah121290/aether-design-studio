@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
-import { Loader2, Mail, Lock, UserPlus, LogIn, Sparkles } from 'lucide-react';
+import { Loader2, Mail, UserPlus, LogIn, Sparkles } from 'lucide-react';
 import { z } from 'zod';
 
 interface AuthDialogProps {
