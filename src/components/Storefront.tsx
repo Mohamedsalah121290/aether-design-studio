@@ -3,19 +3,13 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Sparkles, Search, Loader2, Palette, Zap,
-  Code, Briefcase, Monitor, Users, Clock, CheckCircle,
+  Code, Briefcase, Monitor, Users, CheckCircle,
 } from 'lucide-react';
 import { ToolCard, Tool, CardTier } from './ToolCard';
 import { inferPeriodFromPlan, type PricePeriod } from '@/lib/pricePeriod';
-import TrustStrip from './TrustStrip';
-import FeaturedCarousel from './FeaturedCarousel';
 import FiltersBar, { FilterChip, SortOption } from './FiltersBar';
 import TrustAndFAQ from './TrustAndFAQ';
-import AIRecommendations from './AIRecommendations';
 import { supabase } from '@/integrations/supabase/client';
-import SocialProofCarousel from './SocialProofCarousel';
-import { Social3DLink, TelegramIcon, WhatsAppIcon } from './ChatbotConversion';
-import { supportLinks } from '@/lib/socialLinks';
 
 /* ── Section config ─────────────────────────────────────────────── */
 const SECTION_ORDER: {
@@ -158,9 +152,6 @@ const Storefront = () => {
 
   return (
     <>
-      {/* ═══ TRUST STRIP ═══ */}
-      <TrustStrip />
-
       <section id="store" className="relative overflow-hidden">
         {/* ═══ HERO ═══ */}
         <div className="relative py-12 lg:py-24 overflow-hidden">
@@ -267,75 +258,6 @@ const Storefront = () => {
               </div>
             ) : (
               <>
-                {/* Featured carousel */}
-                <FeaturedCarousel tools={tools} />
-
-                <section className="py-12" aria-label="Why buy from us">
-                  <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
-                    <div className="mb-6 text-center">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.whyBuyFromUs')}</p>
-                      <h2 className="mt-2 text-2xl md:text-4xl font-bold text-white heading-glow">{t('store.clearSimpleSafe')}</h2>
-                    </div>
-                    <div className="grid gap-4 md:grid-cols-4 items-stretch">
-                      {[
-                        { key: 'instantAccess', icon: Zap, title: 'Instant access', text: 'Start faster without waiting through setup steps.' },
-                        { key: 'noSetupRequired', icon: Sparkles, title: 'No setup required', text: 'We keep access simple so you can use your tool quickly.' },
-                        { key: 'supportIncluded', icon: Users, title: 'Support included', text: 'Real help is available when you need it.' },
-                        { key: 'worksImmediately', icon: CheckCircle, title: 'Works immediately', text: 'Everything is prepared so access feels easy and safe.' },
-                      ].map(({ key, icon: Icon, title, text }) => (
-                        <div key={key} className="relative rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-all hover:border-primary/35">
-                          <div className="mb-4 h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                            <Icon className="h-4 w-4 text-primary" />
-                          </div>
-                          <h3 className="text-xl font-bold text-white">{t(`store.trustReasons.${key}.title`, title)}</h3>
-                          <p className="mt-2 text-sm text-white/50">{t(`store.trustReasons.${key}.text`, text)}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </section>
-
-                <section className="py-10" aria-label="How you receive your access">
-                  <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 md:p-6">
-                      <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-start">
-                        <div className="space-y-4">
-                          <div>
-                            <p className="text-xs font-semibold uppercase tracking-wider text-primary">{t('store.deliveryActivation')}</p>
-                            <h2 className="mt-2 text-2xl md:text-3xl font-bold text-white heading-glow">{t('store.receiveAccessTitle')}</h2>
-                          </div>
-                          <div className="space-y-2 text-sm leading-relaxed text-white/65">
-                            <p>{t('store.safeActivationMessage', 'Activation is handled securely by our team after purchase.')}</p>
-                            <p className="font-semibold text-primary">{t('store.noSensitiveBeforePayment', 'No sensitive information is required before payment.')}</p>
-                          </div>
-                          <div className="flex flex-wrap gap-2 text-sm font-semibold text-white/75">
-                            <span>✔ {t('store.fastDelivery')}</span><span>✔ {t('store.secureProcess')}</span><span>✔ {t('store.realSupport')}</span>
-                          </div>
-                        </div>
-                        <div className="space-y-4">
-                          <div className="rounded-2xl border border-primary/25 bg-primary/10 p-4">
-                             <h3 className="text-base font-bold text-white">{t('store.importantInfo')}</h3>
-                            <div className="mt-3 space-y-2 text-sm leading-relaxed text-white/70">
-                               <p>{t('store.safeActivationMessage', 'Activation is handled securely by our team after purchase.')}</p>
-                               <p className="font-semibold text-primary">{t('store.noSensitiveBeforePayment', 'No sensitive information is required before payment.')}</p>
-                            </div>
-                          </div>
-                          <div>
-                             <p className="mb-3 text-sm font-semibold text-white">{t('store.needHelp')}</p>
-                              <div className="flex flex-wrap gap-3">
-                               {supportLinks.whatsapp && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
-                               {supportLinks.telegram && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                {/* AI Recommendations */}
-                <AIRecommendations tools={tools} />
-
                 {/* Search + Filters */}
                 <div id="tools-grid">
                   <FiltersBar
@@ -390,36 +312,6 @@ const Storefront = () => {
                     </section>
                   );
                 })}
-
-                {/* ═══ COMING SOON SECTION ═══ */}
-                {comingSoonTools.length > 0 && (
-                  <section className="py-16">
-                    <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
-                      {/* Section header */}
-                      <div className="flex items-center gap-3 mb-2">
-                        <div
-                          className="h-9 w-9 rounded-lg grid place-items-center border border-amber-500/20"
-                          style={{ background: 'rgba(251,191,36,0.08)' }}
-                        >
-                          <Clock className="w-4 h-4 text-amber-400/60" />
-                        </div>
-                        <div className="space-y-0.5">
-                           <h2 className="text-white text-xl font-semibold tracking-tight heading-glow">{t('store.comingSoon')}</h2>
-                           <p className="text-white/50 text-sm">{t('store.comingSoonSubtitle')}</p>
-                        </div>
-                        <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400/60 border border-amber-500/15">
-                          {comingSoonTools.length}
-                        </span>
-                      </div>
-                      <div className="h-px mt-4 mb-6 bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent" />
-                      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
-                        {comingSoonTools.map((tool, index) => (
-                          <ToolCard key={tool.id} tool={tool} index={index} tier={getTier(tool.tool_id)} />
-                        ))}
-                      </div>
-                    </div>
-                  </section>
-                )}
 
                 {/* Empty state */}
                 {activeSections.length === 0 && comingSoonTools.length === 0 && (
