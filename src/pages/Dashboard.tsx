@@ -1009,6 +1009,10 @@ const Dashboard = () => {
                     <Shield className="w-4 h-4" />
                     <span>Activation Guarantee — protected within 24h</span>
                   </div>
+                  <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Support contact is available from every purchased product card.</span>
+                  </div>
                 </motion.div>
               </div>
             </div>
