@@ -133,9 +133,9 @@ const products: Record<FlowKey, Product[]> = {
 };
 
 const funnelMessages: Record<IntentKey, { flow: FlowKey; text: Record<LangKey, string> }> = {
-  student: { flow: 'ai', text: { en: 'Want help with studying tools?', fr: 'Besoin d’aide pour choisir des outils d’étude ?', nl: 'Hulp nodig met studietools?', de: 'Brauchst du Hilfe mit Lern-Tools?', es: '¿Quieres ayuda con herramientas de estudio?', it: 'Vuoi aiuto con gli strumenti per studiare?', ar: 'هل تريد مساعدة في اختيار أدوات الدراسة؟' } },
-  creator: { flow: 'design', text: { en: 'Need help creating content?', fr: 'Besoin d’aide pour créer du contenu ?', nl: 'Hulp nodig bij content maken?', de: 'Brauchst du Hilfe beim Erstellen von Content?', es: '¿Necesitas ayuda para crear contenido?', it: 'Ti serve aiuto per creare contenuti?', ar: 'هل تحتاج مساعدة في إنشاء المحتوى؟' } },
-  business: { flow: 'productivity', text: { en: 'Want to automate your workflow?', fr: 'Vous voulez automatiser votre workflow ?', nl: 'Wil je je workflow automatiseren?', de: 'Möchtest du deinen Workflow automatisieren?', es: '¿Quieres automatizar tu flujo de trabajo?', it: 'Vuoi automatizzare il tuo workflow?', ar: 'هل تريد أتمتة سير عملك؟' } },
+  student: { flow: 'ai', text: { en: 'Want help with studying tools?', fr: 'Besoin d’aide pour choisir des outils d’étude ?', nl: 'Hulp nodig met studietools?', de: 'Brauchst du Hilfe mit Lern-Tools?', es: '¿Quieres ayuda con herramientas de estudio?', it: 'Vuoi aiuto con gli strumenti per studiare?', tr: 'Ders çalışmak için uygun aracı seçmeme izin ver.', ar: 'هل تريد مساعدة في اختيار أدوات الدراسة؟' } },
+  creator: { flow: 'design', text: { en: 'Need help creating content?', fr: 'Besoin d’aide pour créer du contenu ?', nl: 'Hulp nodig bij content maken?', de: 'Brauchst du Hilfe beim Erstellen von Content?', es: '¿Necesitas ayuda para crear contenido?', it: 'Ti serve aiuto per creare contenuti?', tr: 'İçerik üretimi için en uygun seçeneği göstereyim mi?', ar: 'هل تحتاج مساعدة في إنشاء المحتوى؟' } },
+  business: { flow: 'productivity', text: { en: 'Want to automate your workflow?', fr: 'Vous voulez automatiser votre workflow ?', nl: 'Wil je je workflow automatiseren?', de: 'Möchtest du deinen Workflow automatisieren?', es: '¿Quieres automatizar tu flujo de trabajo?', it: 'Vuoi automatizzare il tuo workflow?', tr: 'İş akışını hızlandıracak seçenekleri göstereyim mi?', ar: 'هل تريد أتمتة سير عملك؟' } },
 };
 
 const productLocale: Record<LangKey, Record<string, Pick<Product, 'desc' | 'benefits'>>> = {
