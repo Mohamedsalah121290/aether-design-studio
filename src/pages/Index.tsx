@@ -6,7 +6,7 @@ import {
   ArrowRight, UserCheck, Lock,
   Zap, CheckCircle, Shield,
   Plus, Minus, Mail,
-  ChevronRight, Star, MessageCircle, ShoppingBag, PackageCheck, Headphones,
+  ChevronRight, Star, MessageCircle, PackageCheck, Headphones,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
