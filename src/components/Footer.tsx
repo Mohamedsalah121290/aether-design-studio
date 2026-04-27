@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import { Instagram, Mail, Shield, Lock, Globe, Zap } from 'lucide-react';
+import { Facebook, Instagram, Mail, Shield, Lock, Globe, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
-import { PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, XSocialIcon } from '@/components/ChatbotConversion';
+import { PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, WhatsAppIcon, XSocialIcon } from '@/components/ChatbotConversion';
 import { isUsableSocialLink, socialLinks } from '@/lib/socialLinks';
 import logo from '@/assets/logo.png';
 
@@ -62,8 +62,10 @@ const Footer = () => {
   };
 
   const footerSocialLinks = [
-    { icon: Instagram, href: socialLinks.instagram, label: 'Instagram', tone: 'social-instagram-3d' },
+    { icon: WhatsAppIcon, href: socialLinks.whatsapp, label: 'WhatsApp', tone: 'social-whatsapp-3d' },
     { icon: TelegramIcon, href: socialLinks.telegram, label: 'Telegram', tone: 'social-telegram-3d' },
+    { icon: Instagram, href: socialLinks.instagram, label: 'Instagram', tone: 'social-instagram-3d' },
+    { icon: Facebook, href: socialLinks.facebook, label: 'Facebook', tone: 'social-facebook-3d' },
     { icon: XSocialIcon, href: socialLinks.twitter, label: 'X', tone: 'social-x-3d' },
     { icon: TikTokIcon, href: socialLinks.tiktok, label: 'TikTok', tone: 'social-tiktok-3d' },
     { icon: PinterestIcon, href: socialLinks.pinterest, label: 'Pinterest', tone: 'social-pinterest-3d' },
