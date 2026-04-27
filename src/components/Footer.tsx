@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Mail, Shield, Lock, Globe, Zap, Youtube } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Instagram, Mail, Shield, Lock, Globe, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
-import { PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, WhatsAppIcon, XSocialIcon } from '@/components/ChatbotConversion';
+import { PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, XSocialIcon } from '@/components/ChatbotConversion';
 import { isUsableSocialLink, socialLinks } from '@/lib/socialLinks';
 import logo from '@/assets/logo.png';
 
@@ -40,7 +40,9 @@ const FlagIcon = ({ flag }: { flag: FlagKey }) => {
 
 const Footer = () => {
   const { t } = useTranslation();
+  const location = useLocation();
   const newsletter = useNewsletterSubscribe();
+  const showFooterSocialLinks = location.pathname === '/contact';
 
   const footerLinks = {
     product: [
@@ -60,16 +62,12 @@ const Footer = () => {
   };
 
   const footerSocialLinks = [
-    { icon: WhatsAppIcon, href: socialLinks.whatsapp, label: 'WhatsApp', tone: 'social-whatsapp-3d' },
-    { icon: Facebook, href: socialLinks.facebook, label: 'Facebook', tone: 'social-facebook-3d' },
     { icon: Instagram, href: socialLinks.instagram, label: 'Instagram', tone: 'social-instagram-3d' },
-    { icon: Youtube, href: socialLinks.youtube, label: 'YouTube', tone: 'social-youtube-3d' },
     { icon: TelegramIcon, href: socialLinks.telegram, label: 'Telegram', tone: 'social-telegram-3d' },
-    { icon: PinterestIcon, href: socialLinks.pinterest, label: 'Pinterest', tone: 'social-pinterest-3d' },
     { icon: XSocialIcon, href: socialLinks.twitter, label: 'X', tone: 'social-x-3d' },
     { icon: TikTokIcon, href: socialLinks.tiktok, label: 'TikTok', tone: 'social-tiktok-3d' },
-    { icon: Mail, href: 'mailto:info@aideals.be', label: 'Email info@aideals.be', tone: 'social-mail-3d' },
-  ].filter((social) => social.href.startsWith('mailto:') || isUsableSocialLink(social.href));
+    { icon: PinterestIcon, href: socialLinks.pinterest, label: 'Pinterest', tone: 'social-pinterest-3d' },
+  ].filter((social) => isUsableSocialLink(social.href));
 
   const trustBadges = [
     { icon: Shield, label: t('footer.trust.gdpr') },
@@ -133,7 +131,7 @@ const Footer = () => {
               {t('footer.description')}
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              {footerSocialLinks.map((social) => {
+              {showFooterSocialLinks && footerSocialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
                   <Social3DLink
