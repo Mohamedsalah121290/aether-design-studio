@@ -4,9 +4,9 @@ export const socialLinks = {
   instagram: "https://www.instagram.com/aideals.be/",
   whatsapp: "https://wa.me/32494311190",
   telegram: "https://t.me/aideals2026",
-  pinterest: "",
+  pinterest: "https://www.pinterest.com/aideals2026/",
   twitter: "",
-  tiktok: "",
+  tiktok: "https://www.tiktok.com/@aideals.be?lang=en",
 };
 
 export const supportLinks = {
