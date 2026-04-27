@@ -15,6 +15,14 @@ const logoAliases: Record<string, string> = {
   windows_vps: 'windows',
 };
 
+const uploadedLogoAliases: Record<string, string> = {
+  microsoft_office: 'microsoft_office_uploaded',
+  windows: 'windows_uploaded',
+  windows_home: 'windows_uploaded',
+  windows_server: 'windows_uploaded',
+  windows_vps: 'windows_uploaded',
+};
+
 const verifiedSvgLogos: Record<string, string> = {
   coursera: 'https://cdn.simpleicons.org/coursera/0056D2',
   grok: '/logos/grok.svg',
@@ -54,12 +62,17 @@ const verifiedSvgLogos: Record<string, string> = {
 
 export const getProductLogoUrl = (toolId?: string | null, fallbackUrl?: string | null) => {
   if (!toolId) return fallbackUrl || null;
-  if (verifiedSvgLogos[toolId]) return verifiedSvgLogos[toolId];
+  const uploadedLogoKey = uploadedLogoAliases[toolId];
+  const uploadedLogo = uploadedLogoKey ? localLogoModules[`/src/assets/logos/${uploadedLogoKey}.jpeg`] : null;
+  if (uploadedLogo) return uploadedLogo;
 
   const logoKey = logoAliases[toolId] || toolId;
   const localLogo = localLogoModules[`/src/assets/logos/${logoKey}.png`]
     || localLogoModules[`/src/assets/logos/${logoKey}.svg`]
     || localLogoModules[`/src/assets/logos/${logoKey}.webp`];
 
-  return localLogo || fallbackUrl || null;
+  if (localLogo) return localLogo;
+  if (verifiedSvgLogos[toolId]) return verifiedSvgLogos[toolId];
+
+  return fallbackUrl || null;
 };
