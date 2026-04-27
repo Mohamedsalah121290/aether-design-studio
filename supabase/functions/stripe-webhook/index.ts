@@ -44,17 +44,19 @@ serve(async (req) => {
         logStep("Checkout completed", { sessionId: session.id });
 
         // Update order to paid
-        const { data: order, error: orderError } = await supabaseAdmin
+        const { data: updatedOrders, error: orderError } = await supabaseAdmin
           .from("orders")
           .update({ payment_status: "paid", status: "processing" })
           .eq("stripe_session_id", session.id)
           .select("id, tool_id, user_id")
-          .single();
+;
 
         if (orderError) {
           logStep("Order update error", { error: orderError.message });
         } else {
-          logStep("Order updated to paid", { orderId: order.id });
+          const order = Array.isArray(updatedOrders) ? updatedOrders[0] : updatedOrders;
+          logStep("Order updated to paid", { orderCount: Array.isArray(updatedOrders) ? updatedOrders.length : order ? 1 : 0 });
+          if (!order) break;
 
           // Send payment confirmed email
           try {

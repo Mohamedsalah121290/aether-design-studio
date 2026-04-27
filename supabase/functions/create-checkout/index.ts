@@ -134,6 +134,83 @@ serve(async (req) => {
     }
     logStep("Auth check", { userId: user?.id, email: user?.email });
 
+    const cartItems = Array.isArray(body.items) ? body.items : [];
+    if (cartItems.length > 0) {
+      const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2025-08-27.basil" });
+      const email = customerEmail || user?.email;
+      if (!email) throw new Error("Email is required");
+
+      const customers = await stripe.customers.list({ email, limit: 1 });
+      const customerId = customers.data.length > 0 ? customers.data[0].id : undefined;
+      const origin = req.headers.get("origin") || "https://id-preview--92b6864c-4966-485c-b321-32542f78bf88.lovable.app";
+      const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+      const pendingOrders: Array<{ tool: any; planName: string; activationTime: number }> = [];
+
+      for (const item of cartItems.slice(0, 25)) {
+        if (!item?.toolId) continue;
+        const { data: tool, error: toolError } = await supabaseAdmin.from("tools").select("*").eq("id", item.toolId).single();
+        if (toolError || !tool) throw new Error("Tool not found");
+
+        let planPrice = Number(tool.price);
+        let planName = tool.name;
+        let activationTime = tool.activation_time;
+
+        if (item.planId) {
+          const { data: plan } = await supabaseAdmin
+            .from("tool_plans")
+            .select("*")
+            .eq("plan_id", item.planId)
+            .eq("tool_id", tool.tool_id)
+            .eq("is_active", true)
+            .single();
+          if (plan && plan.monthly_price != null) {
+            planPrice = Number(plan.monthly_price);
+            planName = `${tool.name} — ${plan.plan_name}`;
+            activationTime = plan.activation_time || tool.activation_time;
+          }
+        }
+
+        const productSearchKey = item.planId ? `${tool.tool_id}_${item.planId}_cart` : `${tool.tool_id}_cart`;
+        const products = await stripe.products.search({ query: `metadata["tool_id"]:"${productSearchKey}"` });
+        const product = products.data[0] || await stripe.products.create({
+          name: planName,
+          metadata: { tool_id: productSearchKey, db_id: tool.id, plan_id: item.planId || "default", billing_mode: "payment" },
+        });
+        const unitAmount = Math.round(planPrice * 100);
+        const prices = await stripe.prices.list({ product: product.id, active: true, limit: 100 });
+        const price = prices.data.find(p => p.type === "one_time" && p.unit_amount === unitAmount && p.currency === currency)
+          || await stripe.prices.create({ product: product.id, unit_amount: unitAmount, currency });
+        lineItems.push({ price: price.id, quantity: 1 });
+        pendingOrders.push({ tool, planName, activationTime });
+      }
+
+      if (lineItems.length === 0) throw new Error("Cart is empty");
+      const session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        customer_email: customerId ? undefined : email,
+        line_items: lineItems,
+        mode: "payment",
+        payment_method_types: pmTypes as Stripe.Checkout.SessionCreateParams.PaymentMethodType[],
+        adaptive_pricing: { enabled: false },
+        success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}&cart=1`,
+        cancel_url: `${origin}/payment/cancelled`,
+        metadata: { cart_checkout: "true", item_count: String(lineItems.length), ...(user?.id ? { user_id: user.id } : {}), customer_email: email },
+      });
+
+      await supabaseAdmin.from("orders").insert(pendingOrders.map(({ tool, planName, activationTime }) => ({
+        tool_id: tool.id,
+        buyer_email: email,
+        user_id: user?.id || null,
+        status: "pending",
+        payment_status: "pending",
+        stripe_session_id: session.id,
+        customer_data: { email, cart_checkout: true, item_name: planName },
+        activation_deadline: new Date(Date.now() + activationTime * 3600000).toISOString(),
+      })));
+
+      return new Response(JSON.stringify({ url: session.url }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });
+    }
+
     // --- Fetch tool ---
     const { data: tool, error: toolError } = await supabaseAdmin
       .from("tools")
