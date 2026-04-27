@@ -8,9 +8,9 @@ import { PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, WhatsAppIcon, XS
 import { isUsableSocialLink, socialLinks } from '@/lib/socialLinks';
 import logo from '@/assets/logo.png';
 
-type FlagKey = 'eu' | 'us' | 'sa' | 'ae' | 'tr' | 'iq' | 'lb';
+type FlagKey = 'eu' | 'be' | 'nl' | 'fr' | 'de' | 'es' | 'it' | 'pl' | 'ro' | 'us' | 'ca' | 'au';
 
-const flagKeys: FlagKey[] = ['eu', 'us', 'sa', 'ae', 'tr', 'iq', 'lb'];
+const flagKeys: FlagKey[] = ['eu', 'be', 'nl', 'fr', 'de', 'es', 'it', 'pl', 'ro', 'us', 'ca', 'au'];
 
 const FlagIcon = ({ flag }: { flag: FlagKey }) => {
   const base = 'h-full w-full rounded-[6px] shadow-[0_8px_24px_hsl(240_40%_5%/0.28)]';
