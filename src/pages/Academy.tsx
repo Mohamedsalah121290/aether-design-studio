@@ -26,24 +26,24 @@ import courseraLogo from '@/assets/logos/coursera.jpeg';
 
 const courseCategories = [
   {
-    name: 'AI Tools',
+    nameKey: 'academy.courseCategories.ai',
     courses: [
-      { title: 'ChatGPT Course', description: 'Learn how to use ChatGPT for writing, ideas, business tasks, and daily productivity.', logo: chatgptLogo },
-      { title: 'Microsoft Copilot Course', description: 'Learn how to use Copilot with Word, Excel, Outlook, and business workflows.', logo: microsoftCopilotLogo },
-      { title: 'Lovable Course', description: 'Learn how to build websites and apps with AI.', logo: lovableLogo },
-      { title: 'Perplexity Course', description: 'Learn AI search, research, summaries, and source-based answers.', logo: perplexityLogo },
-      { title: 'Grok Course', description: 'Learn how to use Grok for AI chat, research, and productivity.', logo: grokLogo },
-      { title: 'ElevenLabs Course', description: 'Learn AI voice generation, voiceovers, and audio content.', logo: elevenlabsLogo },
+      { key: 'chatgpt', logo: chatgptLogo },
+      { key: 'copilot', logo: microsoftCopilotLogo },
+      { key: 'lovable', logo: lovableLogo },
+      { key: 'perplexity', logo: perplexityLogo },
+      { key: 'grok', logo: grokLogo },
+      { key: 'elevenlabs', logo: elevenlabsLogo },
     ],
   },
   {
-    name: 'Microsoft & Windows',
+    nameKey: 'academy.courseCategories.microsoft',
     courses: [
-      { title: 'Microsoft Office 365 Course', description: 'Learn Word, Excel, PowerPoint, Outlook, and productivity features.', logo: microsoftOffice365Logo },
-      { title: 'Office Pro Plus Course', description: 'Learn how to install, activate, and use Office tools properly.', logo: officeProPlusLogo },
-      { title: 'Windows 10 / 11 Pro Course', description: 'Learn setup, activation, security, updates, and productivity tips.', logo: windowsLogo },
-      { title: 'Windows 10 / 11 Home Course', description: 'Learn installation, activation, and daily Windows usage.', logo: windowsLogo },
-      { title: 'Windows Server Course', description: 'Learn server basics, setup, users, security, and remote access.', logo: windowsServerLogo },
+      { key: 'office365', logo: microsoftOffice365Logo },
+      { key: 'officePro', logo: officeProPlusLogo },
+      { key: 'windowsPro', logo: windowsLogo },
+      { key: 'windowsHome', logo: windowsLogo },
+      { key: 'windowsServer', logo: windowsServerLogo },
     ],
   },
   {
