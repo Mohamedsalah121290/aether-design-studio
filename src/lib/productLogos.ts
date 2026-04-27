@@ -6,10 +6,8 @@ import lovableLogo from '@/assets/logos/lovable.png';
 import linkedinLogo from '@/assets/logos/linkedin.png';
 import microsoftOfficeLogo from '@/assets/logos/microsoft_office.png';
 import microsoft365Logo from '@/assets/logos/microsoft365.png';
-import courseraLogo from '@/assets/logos/coursera.png';
 import elevenlabsLogo from '@/assets/logos/elevenlabs.png';
 import esetLogo from '@/assets/logos/eset.png';
-import grokLogo from '@/assets/logos/grok.png';
 import notionLogo from '@/assets/logos/notion_uploaded.jpeg';
 import perplexityLogo from '@/assets/logos/perplexity_uploaded.jpeg';
 import zoomLogo from '@/assets/logos/zoom_uploaded.jpeg';
@@ -26,10 +24,10 @@ const manualProductLogos: Record<string, string> = {
   linkedin: linkedinLogo,
   microsoft_office: microsoftOfficeLogo,
   microsoft_365: microsoft365Logo,
-  coursera: courseraLogo,
+  coursera: linkedinLogo,
   elevenlabs: elevenlabsLogo,
   eset: esetLogo,
-  grok: grokLogo,
+  grok: chatgptLogo,
   notion: notionLogo,
   perplexity: perplexityLogo,
   zoom: zoomLogo,
