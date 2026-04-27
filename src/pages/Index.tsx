@@ -17,8 +17,6 @@ import SEO from '@/components/SEO';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import { languages } from '@/lib/i18n';
-import { BLOG_POSTS, getBlogLocale } from '@/lib/seo/blogPosts';
-import { resolveSeoLang } from '@/lib/seo/seoMap';
 import { supportLinks } from '@/lib/socialLinks';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
@@ -183,7 +181,6 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 const Index = () => {
   const { t, i18n } = useTranslation();
   const newsletter = useNewsletterSubscribe();
-  const [visibleBlogPosts, setVisibleBlogPosts] = useState(12);
 
   useEffect(() => {
     const lang = languages.find(l => l.code === i18n.language);
@@ -197,11 +194,6 @@ const Index = () => {
     viewport: { once: true },
     transition: { duration: 0.5 },
   };
-
-  const seoLang = resolveSeoLang(i18n.language);
-  const visiblePosts = BLOG_POSTS.slice(0, visibleBlogPosts);
-  const hasMorePosts = visibleBlogPosts < Math.min(BLOG_POSTS.length, 60);
-
 
   return (
     <div className="min-h-screen bg-background">
