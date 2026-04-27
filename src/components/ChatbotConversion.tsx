@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
-import { CheckCircle, ChevronRight, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
+import { CheckCircle, ChevronRight, Instagram, Mic, MessageCircle, Send, Volume2, VolumeX, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { isUsableSocialLink, socialLinks, supportLinks } from '@/lib/socialLinks';
@@ -245,6 +245,7 @@ export const ChatbotSalesFlow = () => {
   const [sending, setSending] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
+  const isHomePage = location.pathname === '/';
 
   const initialMessage = useMemo<Message>(() => ({ id: 1, role: 'bot', text: text.greeting }), [text.greeting]);
   const [messages, setMessages] = useState<Message[]>([initialMessage]);
@@ -435,11 +436,8 @@ export const ChatbotSalesFlow = () => {
 
       <div className="flex flex-col items-end gap-3 translate-y-0">
         <div className="flex flex-col items-end gap-2 sm:gap-3">
-          {isUsableSocialLink(socialLinks.whatsapp) && <motion.a href={socialLinks.whatsapp} onClick={(event) => openSocialUrl(event, socialLinks.whatsapp)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d social-link-movie" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-8 h-8" /></motion.a>}
-          {isUsableSocialLink(supportLinks.telegram) && <motion.a href={supportLinks.telegram} onClick={(event) => openSocialUrl(event, supportLinks.telegram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d social-link-movie" aria-label="Contact on Telegram"><TelegramIcon className="w-8 h-8" /></motion.a>}
-          {isUsableSocialLink(socialLinks.pinterest) && <motion.a href={socialLinks.pinterest} onClick={(event) => openSocialUrl(event, socialLinks.pinterest)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-pinterest-3d social-link-movie" aria-label="Follow on Pinterest"><PinterestIcon className="w-8 h-8" /></motion.a>}
-          {isUsableSocialLink(socialLinks.twitter) && <motion.a href={socialLinks.twitter} onClick={(event) => openSocialUrl(event, socialLinks.twitter)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-x-3d social-link-movie" aria-label="Follow on X"><XSocialIcon className="w-8 h-8" /></motion.a>}
-          {isUsableSocialLink(socialLinks.tiktok) && <motion.a href={socialLinks.tiktok} onClick={(event) => openSocialUrl(event, socialLinks.tiktok)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-tiktok-3d social-link-movie" aria-label="Follow on TikTok"><TikTokIcon className="w-8 h-8" /></motion.a>}
+          {isHomePage && isUsableSocialLink(supportLinks.telegram) && <motion.a href={supportLinks.telegram} onClick={(event) => openSocialUrl(event, supportLinks.telegram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d social-link-movie" aria-label="Contact on Telegram"><TelegramIcon className="w-8 h-8" /></motion.a>}
+          {isHomePage && isUsableSocialLink(socialLinks.instagram) && <motion.a href={socialLinks.instagram} onClick={(event) => openSocialUrl(event, socialLinks.instagram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-instagram-3d social-link-movie" aria-label="Follow on Instagram"><Instagram className="w-8 h-8" /></motion.a>}
         </div>
         <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label={fallbackText[lang].open}><RobotAvatar className="w-14 h-14 sm:w-16 sm:h-16" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
