@@ -16,14 +16,14 @@ const resolveLocalLogo = (logoKey: string) => {
 
 const manualLogoAliases: Record<string, string[]> = {
   chatgpt: ['chatgpt', 'chatgpt_uploaded'],
-  microsoft_office: ['office', 'microsoft_office_uploaded', 'microsoft_office', 'microsoft365'],
+  microsoft_office: ['office_uploaded', 'office', 'microsoft_office_uploaded', 'microsoft_office'],
   microsoft_365: ['copilot', 'microsoft_copilot_uploaded', 'microsoft365', 'microsoft_office'],
   copilot: ['copilot', 'microsoft_copilot_uploaded', 'microsoft365'],
   microsoft_copilot: ['copilot', 'microsoft_copilot_uploaded', 'microsoft365'],
-  windows: ['windows', 'windows_uploaded'],
-  windows_home: ['windows', 'windows_uploaded'],
-  windows_server: ['windows', 'windows_uploaded'],
-  windows_vps: ['windows', 'windows_uploaded'],
+  windows: ['windows_pro_uploaded', 'windows', 'windows_uploaded'],
+  windows_home: ['windows_home_uploaded', 'windows_pro_uploaded', 'windows', 'windows_uploaded'],
+  windows_server: ['windows_server_uploaded', 'windows', 'windows_uploaded'],
+  windows_vps: ['windows_server_uploaded', 'windows', 'windows_uploaded'],
   canva: ['canva'],
   capcut: ['capcut'],
   coursera: ['coursera'],
@@ -32,9 +32,9 @@ const manualLogoAliases: Record<string, string[]> = {
   grok: ['grok'],
   linkedin: ['linkedin'],
   lovable: ['lovable'],
-  perplexity: ['perplexity', 'chatgpt'],
-  notion: ['notion', 'taskade'],
-  zoom: ['zoom', 'microsoft365'],
+  perplexity: ['perplexity_uploaded', 'perplexity', 'chatgpt'],
+  notion: ['notion_uploaded', 'notion', 'taskade'],
+  zoom: ['zoom_uploaded', 'zoom', 'microsoft365'],
   playground_ai: ['playground'],
 };
 
