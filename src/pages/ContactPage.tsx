@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Instagram, Mail, Clock, MessageSquare, Send, Globe, Shield } from 'lucide-react';
+import { Facebook, Instagram, Mail, Clock, MessageSquare, Send, Globe, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
-import { ChatbotPromoSection, PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, XSocialIcon } from '@/components/ChatbotConversion';
+import { ChatbotPromoSection, PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, WhatsAppIcon, XSocialIcon } from '@/components/ChatbotConversion';
 import { isUsableSocialLink, socialLinks, supportLinks } from '@/lib/socialLinks';
 
 const CONTACT_PHONE = '+32 494 31 11 90';
@@ -44,8 +44,10 @@ const ContactPage = () => {
   ];
 
   const contactLinks = [
+    { label: 'WhatsApp', href: supportLinks.whatsapp, icon: WhatsAppIcon, tone: 'social-whatsapp-3d' },
+    { label: 'Telegram', href: supportLinks.telegram, icon: TelegramIcon, tone: 'social-telegram-3d' },
     { label: 'Instagram', href: socialLinks.instagram, icon: Instagram, tone: 'social-instagram-3d' },
-    { label: 'Telegram', href: socialLinks.telegram, icon: TelegramIcon, tone: 'social-telegram-3d' },
+    { label: 'Facebook', href: socialLinks.facebook, icon: Facebook, tone: 'social-facebook-3d' },
     { label: 'X', href: socialLinks.twitter, icon: XSocialIcon, tone: 'social-x-3d' },
     { label: 'TikTok', href: socialLinks.tiktok, icon: TikTokIcon, tone: 'social-tiktok-3d' },
     { label: 'Pinterest', href: socialLinks.pinterest, icon: PinterestIcon, tone: 'social-pinterest-3d' },
