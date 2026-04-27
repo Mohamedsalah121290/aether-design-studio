@@ -23,6 +23,7 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
 import { getStripeLink } from '@/lib/stripeLinks';
+import { getProductLogoUrl } from '@/lib/productLogos';
 
 interface CheckoutDialogProps {
   tool: Tool | null;
@@ -79,6 +80,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const [walletBalance, setWalletBalance] = useState(0);
   const [applyWalletCredit, setApplyWalletCredit] = useState(false);
   const checkoutUrl = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name) : null;
+  const logoUrl = getProductLogoUrl(tool?.tool_id, tool?.logo_url);
 
   // Guard: prevent checkout for non-active tools
   const isNonActive = tool && tool.status && tool.status !== 'active';
@@ -280,7 +282,10 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   {t('checkout.title')}
                 </SheetTitle>
                 <SheetDescription className="text-base">
-                  <span className="text-primary font-semibold">{tool?.name}</span>
+                  <span className="inline-flex items-center gap-2 text-primary font-semibold">
+                    {logoUrl && <img src={logoUrl} alt={`${tool?.name || 'Product'} logo`} className="h-5 w-5 object-contain" loading="lazy" />}
+                    <span>{tool?.name}</span>
+                  </span>
                   {displayPrice != null && displayPrice > 0 && (() => {
                     const period = inferPeriodFromPlan(selectedPlan?.plan_name);
                     const style = getPeriodStyle(period);
