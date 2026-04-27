@@ -67,6 +67,24 @@ const productNameLogoIds: Record<string, string> = {
   coursera: 'coursera',
 };
 
+const textProductMatchers: Array<{ id: string; label: string; patterns: RegExp[] }> = [
+  { id: 'chatgpt', label: 'ChatGPT', patterns: [/\bchatgpt\b/i] },
+  { id: 'canva', label: 'Canva', patterns: [/\bcanva\b/i] },
+  { id: 'capcut', label: 'CapCut', patterns: [/\bcapcut\b/i] },
+  { id: 'perplexity', label: 'Perplexity', patterns: [/\bperplexity\b/i] },
+  { id: 'elevenlabs', label: 'ElevenLabs', patterns: [/\belevenlabs\b/i] },
+  { id: 'lovable', label: 'Lovable', patterns: [/\blovable\b/i] },
+  { id: 'notion', label: 'Notion', patterns: [/\bnotion\b/i] },
+  { id: 'grok', label: 'Grok', patterns: [/\bgrok\b/i] },
+  { id: 'microsoft_365', label: 'Microsoft Office 365', patterns: [/\boffice\s*365\b/i, /\bmicrosoft\s*365\b/i] },
+  { id: 'microsoft_office', label: 'Office Pro Plus', patterns: [/\boffice\s*pro\s*plus\b/i] },
+  { id: 'windows', label: 'Windows', patterns: [/\bwindows\b/i] },
+  { id: 'linkedin', label: 'LinkedIn Premium', patterns: [/\blinkedin\b/i] },
+  { id: 'zoom', label: 'Zoom', patterns: [/\bzoom\b/i] },
+  { id: 'eset', label: 'ESET', patterns: [/\beset\b/i] },
+  { id: 'coursera', label: 'Coursera', patterns: [/\bcoursera\b/i] },
+];
+
 export const getProductLogoUrl = (toolId?: string | null, _fallbackUrl?: string | null) => {
   if (!toolId) return null;
   return manualProductLogos[toolId] || null;
@@ -76,3 +94,9 @@ export const getProductLogoByName = (productName?: string | null) => {
   const logoId = productNameLogoIds[normalizeProductLogoKey(productName)];
   return logoId ? getProductLogoUrl(logoId) : null;
 };
+
+export const getMentionedProductLogos = (text?: string | null) =>
+  textProductMatchers
+    .filter(({ patterns }) => patterns.some(pattern => pattern.test(text || '')))
+    .map(({ id, label }) => ({ id, label, logoUrl: getProductLogoUrl(id)! }))
+    .filter(item => Boolean(item.logoUrl));
