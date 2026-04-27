@@ -341,6 +341,19 @@ const PaymentPage = () => {
     );
   }
 
+  if (pageError) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+          <p className="mb-5 max-w-md text-muted-foreground">{pageError}</p>
+          <Button onClick={() => navigate('/store')} variant="hero">{t('checkout.backToStore', 'Back to Store')}</Button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   if (isSuccess) {
     return (
       <div className="min-h-screen bg-background">
