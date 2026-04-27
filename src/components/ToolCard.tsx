@@ -11,8 +11,8 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewPreview } from '@/components/ProductReviews';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
-import { getStripeLink } from '@/lib/stripeLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
+import { addCartItem } from '@/lib/cart';
 
 /* ── Category labels ──────────────────────────────────────────── */
 const CATEGORY_LABEL_KEYS: Record<string, string> = {
@@ -156,9 +156,23 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const isContactOnly = false;
   const isPaused = tool.status === 'paused';
   const selectedLovablePlanDetails = LOVABLE_PLAN_OPTIONS.find(plan => plan.planId === selectedLovablePlan);
-  const checkoutUrl = getStripeLink(tool.name, tool.tool_id === 'lovable' ? selectedLovablePlanDetails ? t(selectedLovablePlanDetails.titleKey) : undefined : undefined);
   const periodText = (period: PricePeriod) => t(`store.period.${period.replace('-', '')}`, period === 'one-time' ? 'one time' : period === 'yearly' ? '/ year' : '/ month');
   const periodLabel = (period: PricePeriod) => t(`store.periodLabel.${period.replace('-', '')}`, period === 'one-time' ? 'One-Time' : period === 'yearly' ? 'Yearly' : 'Monthly');
+
+  const handleAddToCart = (plan?: { planId: string; title: string; price: number }) => {
+    const itemPrice = plan?.price ?? price;
+    if (!itemPrice || itemPrice <= 0) return;
+    addCartItem({
+      toolDbId: tool.id,
+      toolId: tool.tool_id,
+      name: tool.name,
+      price: itemPrice,
+      planId: plan?.planId ?? null,
+      planName: plan?.title ?? null,
+      period: tool.starting_period ?? null,
+      logoUrl: resolvedLogoUrl,
+    });
+  };
 
   const handleNotifyMe = async () => {
     if (!showNotifyInput) { setShowNotifyInput(true); return; }
@@ -394,12 +408,11 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                           type="button"
                           onClick={(event) => {
                             event.stopPropagation();
-                            const planCheckoutUrl = getStripeLink(tool.name, t(plan.titleKey));
-                            if (planCheckoutUrl) window.open(planCheckoutUrl, '_blank', 'noopener,noreferrer');
+                            handleAddToCart({ planId: plan.planId, title: t(plan.titleKey), price: plan.price });
                           }}
                           className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90"
                         >
-                          {t('store.buyNow', 'Get Instant Access')}
+                          Buy Now
                         </button>
                         <p className="mt-2 text-center text-[11px] font-semibold text-primary">{t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment')}</p>
                       </div>
@@ -489,10 +502,10 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                     background: 'linear-gradient(135deg, hsl(210 100% 55%), hsl(270 65% 58%))',
                     boxShadow: '0 0 14px hsl(210 100% 55% / 0.20)',
                   }}
-                  onClick={() => checkoutUrl && window.open(checkoutUrl, '_blank', 'noopener,noreferrer')}
-                  disabled={!checkoutUrl}
+                  onClick={() => handleAddToCart()}
+                  disabled={!price || price <= 0}
                 >
-                  {checkoutUrl ? t('store.buyNow', 'Get Instant Access') : t('store.contactSupport', 'Contact support')}
+                  {price && price > 0 ? 'Buy Now' : t('store.contactSupport', 'Contact support')}
                   <Sparkles className="w-3.5 h-3.5" />
                 </button>
                 <p className="text-center text-[11px] font-semibold text-primary">{t('store.accessDeliveredWithinMinutes', 'Access delivered within minutes after payment')}</p>
