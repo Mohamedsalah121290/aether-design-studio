@@ -38,7 +38,6 @@ const verifiedSvgLogos: Record<string, string> = {
   envato: 'https://cdn.simpleicons.org/envato/81B441',
   expressvpn: 'https://cdn.simpleicons.org/expressvpn/DA3940',
   freepik: 'https://cdn.simpleicons.org/freepik/1273EB',
-  gemini_veo: 'https://cdn.simpleicons.org/googlegemini/8E75B2',
   github_copilot: 'https://cdn.simpleicons.org/githubcopilot/FFFFFF',
   grammarly: 'https://cdn.simpleicons.org/grammarly/15C39A',
   huggingface: 'https://cdn.simpleicons.org/huggingface/FFD21E',

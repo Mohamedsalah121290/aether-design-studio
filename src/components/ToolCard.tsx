@@ -153,8 +153,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const approxPrice = formatApproxCurrency(price, currency.code);
   const categoryLabel = CATEGORY_LABEL_KEYS[tool.category] ? t(CATEGORY_LABEL_KEYS[tool.category]) : tool.category;
   const isComingSoon = tool.status === 'coming_soon';
-  const isContactOnly = tool.tool_id === 'gemini';
-  const isPaused = tool.status === 'paused' && !isContactOnly;
+  const isContactOnly = false;
+  const isPaused = tool.status === 'paused';
   const selectedLovablePlanDetails = LOVABLE_PLAN_OPTIONS.find(plan => plan.planId === selectedLovablePlan);
   const checkoutUrl = getStripeLink(tool.name, tool.tool_id === 'lovable' ? selectedLovablePlanDetails ? t(selectedLovablePlanDetails.titleKey) : undefined : undefined);
   const periodText = (period: PricePeriod) => t(`store.period.${period.replace('-', '')}`, period === 'one-time' ? 'one time' : period === 'yearly' ? '/ year' : '/ month');
