@@ -142,8 +142,8 @@ const PaymentPage = () => {
     setPageLoading(true);
     setPageError(null);
     try {
-      const timeout = <T,>(promise: Promise<T>, message: string, timeoutMs = 20000) => Promise.race([
-        promise,
+      const timeout = <T,>(request: PromiseLike<T>, message: string, timeoutMs = 20000): Promise<T> => Promise.race([
+        Promise.resolve(request),
         new Promise<never>((_, reject) => window.setTimeout(() => reject(new Error(message)), timeoutMs)),
       ]);
       // Fetch tool by tool_id
