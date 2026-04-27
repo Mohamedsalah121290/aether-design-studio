@@ -334,6 +334,10 @@
   box-shadow: 0 14px 26px hsl(201 80% 34% / 0.3), 0 0 30px hsl(199 89% 55% / 0.58), inset 0 2px 5px hsl(0 0% 100% / 0.25), inset 0 -7px 14px hsl(201 80% 28% / 0.28);
 }
 
+.chatbot-pinterest-3d { background: radial-gradient(circle at 34% 28%, hsl(0 0% 100% / 0.36), transparent 24%), linear-gradient(145deg, hsl(351 88% 62%), hsl(351 88% 45%) 54%, hsl(351 78% 30%)); box-shadow: 0 14px 26px hsl(351 80% 34% / 0.3), 0 0 30px hsl(351 88% 52% / 0.5), inset 0 2px 5px hsl(0 0% 100% / 0.24), inset 0 -7px 14px hsl(351 80% 22% / 0.26); }
+.chatbot-x-3d { background: radial-gradient(circle at 34% 28%, hsl(0 0% 100% / 0.24), transparent 24%), linear-gradient(145deg, hsl(0 0% 22%), hsl(0 0% 5%) 58%, hsl(0 0% 0%)); box-shadow: 0 14px 26px hsl(240 40% 2% / 0.46), 0 0 26px hsl(0 0% 100% / 0.18), inset 0 2px 5px hsl(0 0% 100% / 0.18), inset 0 -7px 14px hsl(0 0% 0% / 0.34); }
+.chatbot-tiktok-3d { background: radial-gradient(circle at 34% 28%, hsl(0 0% 100% / 0.32), transparent 24%), linear-gradient(145deg, hsl(178 90% 46%), hsl(344 93% 55%) 48%, hsl(240 40% 4%)); box-shadow: 0 14px 26px hsl(344 90% 42% / 0.26), 0 0 30px hsl(178 90% 46% / 0.34), inset 0 2px 5px hsl(0 0% 100% / 0.22), inset 0 -7px 14px hsl(240 40% 2% / 0.32); }
+
 .chatbot-social-3d:hover {
   border-color: hsl(var(--primary) / 0.35);
   filter: brightness(1.08);
@@ -370,6 +374,8 @@
 .social-whatsapp-3d { background: linear-gradient(145deg, hsl(142 70% 62%), hsl(142 70% 49%) 56%, hsl(145 70% 32%)); }
 .social-telegram-3d { background: linear-gradient(145deg, hsl(199 95% 68%), hsl(199 89% 55%) 56%, hsl(201 76% 38%)); }
 .social-x-3d { background: linear-gradient(145deg, hsl(0 0% 20%), hsl(0 0% 4%) 58%, hsl(0 0% 0%)); }
+.social-pinterest-3d { background: linear-gradient(145deg, hsl(351 88% 62%), hsl(351 88% 45%) 56%, hsl(351 78% 30%)); }
+.social-tiktok-3d { background: linear-gradient(145deg, hsl(178 90% 46%), hsl(344 93% 55%) 50%, hsl(240 40% 4%)); }
 .social-mail-3d { background: linear-gradient(145deg, hsl(var(--primary) / 0.88), hsl(var(--secondary) / 0.82)); }
 
 .social-link-movie {
