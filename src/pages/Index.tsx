@@ -6,7 +6,7 @@ import {
   ArrowRight, GraduationCap, Briefcase, UserCheck, Lock,
   Zap, CheckCircle, Shield, BookOpen,
   Play, Plus, Minus, Mail,
-  ChevronRight, Eye, Rocket, Layers, Target, Star, CreditCard,
+  ChevronRight, Eye, Rocket, Layers, Target, Star, CreditCard, MessageCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +20,7 @@ import { socialProofReviews } from '@/lib/socialProof';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import { languages } from '@/lib/i18n';
+import { supportLinks } from '@/lib/socialLinks';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
 import heroImageMobile from '@/assets/hero-ai-models-mobile.webp';
@@ -30,10 +31,19 @@ import logo from '@/assets/logo.png';
    ══════════════════════════════════════════════════════════════ */
 
 const trustBadges = [
-  { icon: UserCheck, labelKey: 'store.noSensitiveBeforePayment' },
-  { icon: Lock, labelKey: 'home.securePayment' },
-  { icon: Layers, labelKey: 'store.monthlyAccess' },
-  { icon: Zap, labelKey: 'home.fastActivation' },
+  { icon: Zap, labelKey: 'home.instantDelivery' },
+  { icon: CheckCircle, labelKey: 'home.simpleActivation' },
+  { icon: HeadphonesIcon, labelKey: 'home.supportIncluded' },
+];
+
+const HeadphonesIcon = UserCheck;
+
+const bestSellerPreview = [
+  { name: 'ChatGPT', id: 'chatgpt', benefitKey: 'home.preview.chatgpt', priceKey: 'home.previewPrice' },
+  { name: 'Gemini', id: 'gemini', benefitKey: 'home.preview.gemini', priceKey: 'home.previewPrice' },
+  { name: 'Microsoft Office', id: 'microsoft_office', benefitKey: 'home.preview.office', priceKey: 'home.previewPrice' },
+  { name: 'Windows', id: 'windows', benefitKey: 'home.preview.windows', priceKey: 'home.previewPrice' },
+  { name: 'Copilot', id: 'microsoft_365', benefitKey: 'home.preview.copilot', priceKey: 'home.previewPrice' },
 ];
 
 const mobilePopularTools = [
