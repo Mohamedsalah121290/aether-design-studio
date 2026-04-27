@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Star, ShieldCheck } from 'lucide-react';
 import { socialProofReviews } from '@/lib/socialProof';
 import { getStoredRegion } from '@/lib/geo';
+import { getProductLogoByName } from '@/lib/productLogos';
 
 const Stars = ({ rating }: { rating: 4 | 5 }) => (
   <span className="flex gap-1">
@@ -50,7 +51,10 @@ const SocialProofCarousel = () => {
             </div>
             <Stars rating={item.rating} />
           </div>
-          <p className="text-[11px] text-primary font-semibold mb-2">{item.product}</p>
+          <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold text-primary">
+            {getProductLogoByName(item.product) && <img src={getProductLogoByName(item.product)!} alt={`${item.product} logo`} className="h-4 w-4 object-contain" loading="lazy" />}
+            <span>{item.product}</span>
+          </div>
           <p className="text-sm leading-relaxed text-muted-foreground">“{item.quote}”</p>
           <div className="mt-4 flex items-center gap-1.5 text-[11px] text-muted-foreground">
             <ShieldCheck className="w-3 h-3" /> {t('social.verifiedAccess', 'Verified access')}

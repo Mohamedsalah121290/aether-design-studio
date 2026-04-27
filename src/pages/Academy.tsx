@@ -70,6 +70,16 @@ const courseCategories = [
   },
 ];
 
+const academyToolStrip = [
+  { name: 'ChatGPT', logo: chatgptLogo },
+  { name: 'Perplexity AI', logo: perplexityLogo },
+  { name: 'Canva', logo: canvaLogo },
+  { name: 'CapCut', logo: capcutLogo },
+  { name: 'ElevenLabs', logo: elevenlabsLogo },
+  { name: 'Lovable', logo: lovableLogo },
+  { name: 'Notion', logo: notionLogo },
+];
+
 const Academy = () => {
   const { t } = useTranslation();
 
@@ -100,6 +110,14 @@ const Academy = () => {
             <p className="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
               {t('academy.comingSoonExplanation', 'AI Academy is a subscription-based learning platform where users will learn how to use the AI tools they buy from us, including ChatGPT, Perplexity AI, Canva, CapCut, ElevenLabs, Lovable, Notion, and other tools.')}
             </p>
+            <div className="mx-auto mt-5 flex max-w-3xl flex-wrap justify-center gap-2">
+              {academyToolStrip.map((tool) => (
+                <span key={tool.name} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-foreground">
+                  <img src={tool.logo} alt={`${tool.name} logo`} className="h-4 w-4 object-contain" loading="lazy" />
+                  {tool.name}
+                </span>
+              ))}
+            </div>
           </motion.div>
 
           <div className="mx-auto mt-14 grid max-w-5xl gap-4 md:grid-cols-2">

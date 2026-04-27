@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
 import { recentActivities } from '@/lib/socialProof';
+import { getProductLogoByName } from '@/lib/productLogos';
 
 const RecentActivityToast = () => {
   const [index, setIndex] = useState<number | null>(null);
@@ -28,6 +29,7 @@ const RecentActivityToast = () => {
   }, []);
 
   const activity = index == null ? null : recentActivities[index];
+  const logoUrl = getProductLogoByName(activity?.product);
 
   return (
     <AnimatePresence>
@@ -46,8 +48,10 @@ const RecentActivityToast = () => {
               <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                 <ShieldCheck className="w-3 h-3" /> Recent activity
               </div>
-              <p className="mt-1 text-xs leading-relaxed text-foreground">
-                {activity.name} from {activity.country} recently purchased {activity.product}
+              <p className="mt-1 flex items-center gap-1.5 text-xs leading-relaxed text-foreground">
+                <span>{activity.name} from {activity.country} recently purchased</span>
+                {logoUrl && <img src={logoUrl} alt={`${activity.product} logo`} className="h-4 w-4 shrink-0 object-contain" loading="lazy" />}
+                <span>{activity.product}</span>
               </p>
             </div>
           </div>
