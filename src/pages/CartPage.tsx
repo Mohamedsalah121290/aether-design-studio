@@ -96,12 +96,12 @@ const CartPage = () => {
               ) : (
                 <div className="space-y-3">
                   {items.map(item => {
-                    const logoUrl = item.logoUrl || getProductLogoUrl(item.toolId);
+                    const logoUrl = getProductLogoUrl(item.toolId) || item.logoUrl;
                     return (
                       <article key={item.id} className="flex flex-col gap-4 rounded-xl border border-white/10 bg-white/[0.04] p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex min-w-0 items-center gap-3">
                           <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/5">
-                            {logoUrl ? <img src={logoUrl} alt={`${item.name} logo`} className="h-8 w-8 object-contain" /> : <span className="font-bold">{item.name.charAt(0)}</span>}
+                            {logoUrl && <img src={logoUrl} alt={`${item.name} logo`} className="h-8 w-8 object-contain" />}
                           </div>
                           <div className="min-w-0">
                             <h2 className="truncate font-semibold text-foreground">{item.name}</h2>
