@@ -33,10 +33,8 @@ import logo from '@/assets/logo.png';
 const trustBadges = [
   { icon: Zap, labelKey: 'home.instantDelivery' },
   { icon: CheckCircle, labelKey: 'home.simpleActivation' },
-  { icon: HeadphonesIcon, labelKey: 'home.supportIncluded' },
+  { icon: UserCheck, labelKey: 'home.supportIncluded' },
 ];
-
-const HeadphonesIcon = UserCheck;
 
 const bestSellerPreview = [
   { name: 'ChatGPT', id: 'chatgpt', benefitKey: 'home.preview.chatgpt', priceKey: 'home.previewPrice' },
