@@ -160,10 +160,12 @@ const ContactPage = () => {
                     <span className="font-bold text-foreground">{t('contact.emailLabel', 'Email:')}</span>
                     <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold text-primary">{CONTACT_EMAIL}</a>
                   </p>
-                  <p className="flex flex-col gap-1 rounded-xl border border-border/60 bg-muted/20 p-3 sm:flex-row sm:items-center sm:justify-between">
-                    <span className="font-bold text-foreground">{t('contact.whatsappLabel', 'WhatsApp:')}</span>
-                    <a href={supportLinks.whatsapp} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary">{CONTACT_PHONE}</a>
-                  </p>
+                  {isUsableSocialLink(supportLinks.whatsapp) && (
+                    <p className="flex flex-col gap-1 rounded-xl border border-border/60 bg-muted/20 p-3 sm:flex-row sm:items-center sm:justify-between">
+                      <span className="font-bold text-foreground">{t('contact.whatsappLabel', 'WhatsApp:')}</span>
+                      <a href={supportLinks.whatsapp} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary">{CONTACT_PHONE}</a>
+                    </p>
+                  )}
                 </div>
                 <h3 className="font-display font-bold text-sm mb-3">{t('contact.instant')}</h3>
                 <div className="flex flex-wrap gap-3">
