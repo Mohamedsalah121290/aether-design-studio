@@ -777,6 +777,15 @@ const PaymentPage = () => {
                       {isUsableSocialLink(supportLinks.telegram) && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
                     </div>
                   </div>
+                  {(chatToBuyLinks.whatsapp || chatToBuyLinks.telegram) && (
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-white">Chat to Buy</p>
+                      <div className="flex flex-wrap gap-3">
+                        {chatToBuyLinks.whatsapp && <Social3DLink href={chatToBuyLinks.whatsapp} label={`Buy ${tool.name} on WhatsApp`} tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
+                        {chatToBuyLinks.telegram && <Social3DLink href={chatToBuyLinks.telegram} label={`Buy ${tool.name} on Telegram`} tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Form */}
