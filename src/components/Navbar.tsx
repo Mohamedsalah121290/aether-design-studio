@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check, CircleDollarSign } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check, CircleDollarSign, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PinterestIcon, Social3DLink, TikTokIcon, XSocialIcon } from '@/components/ChatbotConversion';
 import { getResolvedAppLanguage, languages, setAppLanguage } from '@/lib/i18n';
@@ -13,6 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { BUILD_VERSION, SHORT_BUILD } from '@/lib/buildInfo';
 import AuthDialog from '@/components/AuthDialog';
 import { isUsableSocialLink, socialLinks } from '@/lib/socialLinks';
+import { getCartItems } from '@/lib/cart';
 import logo from '@/assets/logo.png';
 
 const Navbar = () => {
@@ -25,11 +26,13 @@ const Navbar = () => {
   const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
   const [langSearch, setLangSearch] = useState('');
   const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const langMenuRef = useRef<HTMLDivElement>(null);
   const currencyMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const refreshCartCount = () => setCartCount(getCartItems().length);
     const handleClickOutside = (e: MouseEvent) => {
       if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
         setIsLangMenuOpen(false);
@@ -39,10 +42,13 @@ const Navbar = () => {
         setIsCurrencyMenuOpen(false);
       }
     };
+    refreshCartCount();
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('aiDealsCartUpdated', refreshCartCount);
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('aiDealsCartUpdated', refreshCartCount);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
@@ -83,6 +89,22 @@ const Navbar = () => {
     { icon: XSocialIcon, href: socialLinks.twitter, label: 'X', tone: 'social-x-3d' },
     { icon: TikTokIcon, href: socialLinks.tiktok, label: 'TikTok', tone: 'social-tiktok-3d' },
   ].filter((social) => isUsableSocialLink(social.href));
+
+  const CartIconLink = ({ className = '' }: { className?: string }) => (
+    <Link
+      to="/cart"
+      aria-label="Cart / Wallet"
+      onClick={() => setIsMobileMenuOpen(false)}
+      className={`relative grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-white/5 text-foreground transition-all hover:border-primary/40 hover:bg-primary/10 hover:text-primary ${className}`}
+    >
+      <ShoppingCart className="h-5 w-5" />
+      {cartCount > 0 && (
+        <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground shadow-[0_0_12px_hsl(var(--primary)/0.45)]">
+          {cartCount > 99 ? '99+' : cartCount}
+        </span>
+      )}
+    </Link>
+  );
 
   return (
     <>
@@ -303,6 +325,8 @@ const Navbar = () => {
               </Button>
             )}
 
+            <CartIconLink />
+
             {/* Admin Link - Only show if admin */}
             {isAdmin && (
               <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
@@ -350,10 +374,12 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button variant="ghost" size="icon" className="lg:hidden min-h-11 min-w-11" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X /> : <Menu />}
-          </Button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <CartIconLink />
+            <Button variant="ghost" size="icon" className="min-h-11 min-w-11" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X /> : <Menu />}
+            </Button>
+          </div>
         </nav>
 
         {/* Mobile Menu */}
