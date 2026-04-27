@@ -27,7 +27,7 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
-import { supportLinks } from '@/lib/socialLinks';
+import { isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
 import { getRegionCategory } from '@/lib/geo';
 import { getStripeLink } from '@/lib/stripeLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
@@ -749,8 +749,8 @@ const PaymentPage = () => {
                   <div>
                     <p className="mb-2 text-xs font-semibold text-white">{t('store.needHelp', 'Need help? Contact us instantly:')}</p>
                     <div className="flex flex-wrap gap-3">
-                      {supportLinks.whatsapp && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
-                      {supportLinks.telegram && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
+                      {isUsableSocialLink(supportLinks.whatsapp) && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
+                      {isUsableSocialLink(supportLinks.telegram) && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
                     </div>
                   </div>
                 </div>
