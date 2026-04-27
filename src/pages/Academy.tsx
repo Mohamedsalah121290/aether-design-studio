@@ -6,12 +6,68 @@ import Footer from '@/components/Footer';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import heroImage from '@/assets/hero-ai-models.png';
+import windowsLogo from '@/assets/logos/windows.png';
+import windowsServerLogo from '@/assets/logos/windows_server_standard.jpeg';
+import chatgptLogo from '@/assets/logos/chatgpt.png';
+import canvaLogo from '@/assets/logos/canva.png';
+import capcutLogo from '@/assets/logos/capcut.png';
+import lovableLogo from '@/assets/logos/lovable.png';
+import linkedinLogo from '@/assets/logos/linkedin.png';
+import officeProPlusLogo from '@/assets/logos/office_pro_plus.png';
+import microsoftOffice365Logo from '@/assets/logos/microsoft_office_365.png';
+import microsoftCopilotLogo from '@/assets/logos/microsoft_copilot_uploaded.jpeg';
+import elevenlabsLogo from '@/assets/logos/elevenlabs.png';
+import esetLogo from '@/assets/logos/eset.png';
+import notionLogo from '@/assets/logos/notion_uploaded.jpeg';
+import perplexityLogo from '@/assets/logos/perplexity_uploaded.jpeg';
+import zoomLogo from '@/assets/logos/zoom_uploaded.jpeg';
+import grokLogo from '@/assets/logos/grok.png';
+import courseraLogo from '@/assets/logos/coursera.jpeg';
 
-const coursePosters = [
-  { tool: 'ChatGPT Mastery', description: 'Prompting, writing, research, and daily AI workflows.' },
-  { tool: 'Microsoft Office + Copilot', description: 'Work faster in Word, Excel, PowerPoint, and Copilot.' },
-  { tool: 'Windows Productivity', description: 'Set up Windows for speed, focus, and clean workflows.' },
-  { tool: 'AI Automation Basics', description: 'Automate repetitive tasks with simple AI systems.' },
+const courseCategories = [
+  {
+    name: 'AI Tools',
+    courses: [
+      { title: 'ChatGPT Course', description: 'Learn how to use ChatGPT for writing, ideas, business tasks, and daily productivity.', logo: chatgptLogo },
+      { title: 'Microsoft Copilot Course', description: 'Learn how to use Copilot with Word, Excel, Outlook, and business workflows.', logo: microsoftCopilotLogo },
+      { title: 'Lovable Course', description: 'Learn how to build websites and apps with AI.', logo: lovableLogo },
+      { title: 'Perplexity Course', description: 'Learn AI search, research, summaries, and source-based answers.', logo: perplexityLogo },
+      { title: 'Grok Course', description: 'Learn how to use Grok for AI chat, research, and productivity.', logo: grokLogo },
+      { title: 'ElevenLabs Course', description: 'Learn AI voice generation, voiceovers, and audio content.', logo: elevenlabsLogo },
+    ],
+  },
+  {
+    name: 'Microsoft & Windows',
+    courses: [
+      { title: 'Microsoft Office 365 Course', description: 'Learn Word, Excel, PowerPoint, Outlook, and productivity features.', logo: microsoftOffice365Logo },
+      { title: 'Office Pro Plus Course', description: 'Learn how to install, activate, and use Office tools properly.', logo: officeProPlusLogo },
+      { title: 'Windows 10 / 11 Pro Course', description: 'Learn setup, activation, security, updates, and productivity tips.', logo: windowsLogo },
+      { title: 'Windows 10 / 11 Home Course', description: 'Learn installation, activation, and daily Windows usage.', logo: windowsLogo },
+      { title: 'Windows Server Course', description: 'Learn server basics, setup, users, security, and remote access.', logo: windowsServerLogo },
+    ],
+  },
+  {
+    name: 'Design & Video',
+    courses: [
+      { title: 'Canva Course', description: 'Learn design basics, social media posts, presentations, and branding.', logo: canvaLogo },
+      { title: 'CapCut Course', description: 'Learn video editing, reels, TikTok videos, captions, and templates.', logo: capcutLogo },
+    ],
+  },
+  {
+    name: 'Learning & Productivity',
+    courses: [
+      { title: 'Coursera Course', description: 'Learn how to find, follow, and complete online courses.', logo: courseraLogo },
+      { title: 'LinkedIn Premium Course', description: 'Learn job search, networking, LinkedIn Learning, and profile growth.', logo: linkedinLogo },
+      { title: 'Notion Education Plus Course', description: 'Learn notes, project management, planning, and databases.', logo: notionLogo },
+      { title: 'Zoom Pro Course', description: 'Learn online meetings, recordings, webinars, and professional calls.', logo: zoomLogo },
+    ],
+  },
+  {
+    name: 'Security',
+    courses: [
+      { title: 'ESET Internet Security Course', description: 'Learn device protection, antivirus setup, privacy, and safe browsing.', logo: esetLogo },
+    ],
+  },
 ];
 
 const Academy = () => {
@@ -72,31 +128,39 @@ const Academy = () => {
               <p className="mb-3 text-xs font-bold uppercase text-primary">Course Posters</p>
               <h2 className="text-3xl font-display font-black md:text-5xl">Learning tracks opening soon</h2>
             </motion.div>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {coursePosters.map((course, index) => (
-                <motion.article
-                  key={course.tool}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: index * 0.05 }}
-                  className="group relative min-h-[320px] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-5 shadow-2xl shadow-background/40 transition-all duration-300 hover:border-primary/35 hover:bg-primary/10"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20 opacity-70" />
-                  <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full border border-primary/20" />
-                  <div className="relative z-10 flex h-full flex-col justify-between">
-                    <div>
-                      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-background/60 text-primary shadow-lg shadow-primary/10">
-                        <span className="font-display text-xl font-black">{String(index + 1).padStart(2, '0')}</span>
-                      </div>
-                      <h3 className="font-display text-2xl font-black leading-tight text-foreground">{course.tool}</h3>
-                      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{course.description}</p>
-                    </div>
-                    <Button variant="heroOutline" className="mt-8 w-full" asChild>
-                      <a href="mailto:info@aideals.be?subject=Notify%20me%20about%20AI%20Academy">Notify Me</a>
-                    </Button>
+            <div className="space-y-12">
+              {courseCategories.map((category) => (
+                <section key={category.name} aria-label={category.name}>
+                  <h3 className="mb-5 font-display text-2xl font-black text-foreground">{category.name}</h3>
+                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {category.courses.map((course, index) => (
+                      <motion.article
+                        key={course.title}
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.45, delay: index * 0.04 }}
+                        className="group relative flex min-h-[360px] overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-5 shadow-2xl shadow-background/40 transition-all duration-300 hover:border-primary/35 hover:bg-primary/10"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20 opacity-70" />
+                        <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full border border-primary/20" />
+                        <div className="relative z-10 flex w-full flex-col justify-between">
+                          <div>
+                            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-background/70 p-3 shadow-lg shadow-primary/10">
+                              <img src={course.logo} alt={`${course.title} logo`} className="h-full w-full object-contain" loading="lazy" />
+                            </div>
+                            <p className="mb-3 text-xs font-bold uppercase text-primary">Coming Soon</p>
+                            <h4 className="font-display text-2xl font-black leading-tight text-foreground">{course.title}</h4>
+                            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{course.description}</p>
+                          </div>
+                          <Button variant="heroOutline" className="mt-8 w-full" asChild>
+                            <a href={`mailto:info@aideals.be?subject=Notify%20me%20about%20${encodeURIComponent(course.title)}`}>Notify Me</a>
+                          </Button>
+                        </div>
+                      </motion.article>
+                    ))}
                   </div>
-                </motion.article>
+                </section>
               ))}
             </div>
           </div>
