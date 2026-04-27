@@ -147,7 +147,7 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const [selectedLovablePlan, setSelectedLovablePlan] = useState('lovable_3_months');
 
   const resolvedLogoUrl = getProductLogoUrl(tool.tool_id, tool.logo_url);
-  const logoUrl = fallbackAttempted ? null : logoError ? `/logos/${tool.tool_id}.svg` : resolvedLogoUrl;
+  const logoUrl = fallbackAttempted ? resolvedLogoUrl : logoError ? resolvedLogoUrl : resolvedLogoUrl;
   const showLogo = logoUrl && !(logoError && fallbackAttempted);
   const price = tool.starting_price;
   const approxPrice = formatApproxCurrency(price, currency.code);
@@ -281,18 +281,10 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                     alt={`${tool.name} logo`}
                     className={`h-9 w-9 sm:h-12 sm:w-12 object-contain p-0.5 transition-opacity duration-300 relative z-10 ${logoLoaded ? 'opacity-100' : 'opacity-0'}`}
                     onLoad={() => { setLogoLoaded(true); setLogoError(false); }}
-                    onError={() => {
-                      if (!logoError) { setLogoError(true); setLogoLoaded(false); }
-                      else { setFallbackAttempted(true); }
-                    }}
+                    onError={() => { setLogoError(true); setFallbackAttempted(true); setLogoLoaded(false); }}
                     loading="lazy"
                   />
                 ) : null}
-                {(!showLogo || !logoLoaded) && (
-                  <span className="text-base font-semibold text-foreground/80 relative z-10">
-                    {tool.name.charAt(0)}
-                  </span>
-                )}
               </a>
               {isComingSoon ? <ComingSoonBadge /> : isPaused ? (
                 <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-[4px] text-[10px] font-semibold uppercase tracking-wider bg-gray-500/15 border border-gray-500/30 text-gray-400">
