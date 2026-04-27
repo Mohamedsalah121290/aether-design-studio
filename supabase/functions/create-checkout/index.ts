@@ -12,6 +12,24 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CREATE-CHECKOUT] ${step}${detailsStr}`);
 };
 
+const getStripeSecretKey = () => {
+  const key = Deno.env.get("STRIPE_SECRET_KEY") || "";
+  if (!key) throw new Error("Stripe is not connected. Please reconnect Stripe and try again.");
+  return key;
+};
+
+const withTimeout = async <T>(promise: Promise<T>, label: string, timeoutMs = 20000): Promise<T> => {
+  let timeoutId: number | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error(`${label} timed out. Please try again.`)), timeoutMs);
+  });
+  try {
+    return await Promise.race([promise, timeout]);
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
+};
+
 /* ────────────────────────────────────────────────────────────────────
    PERIOD DETECTION
    Mirrors src/lib/pricePeriod.ts so the SAME labels the user sees
@@ -136,7 +154,7 @@ serve(async (req) => {
     logStep("Auth check", { userId: user?.id, email: user?.email });
 
     if (cartItems.length > 0) {
-      const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2025-08-27.basil" });
+      const stripe = new Stripe(getStripeSecretKey(), { apiVersion: "2025-08-27.basil" });
       const email = customerEmail || user?.email;
       if (!email) throw new Error("Email is required");
 
@@ -148,7 +166,10 @@ serve(async (req) => {
 
       for (const item of cartItems.slice(0, 25)) {
         if (!item?.toolId) continue;
-        const { data: tool, error: toolError } = await supabaseAdmin.from("tools").select("*").eq("id", item.toolId).single();
+        const toolQuery = supabaseAdmin.from("tools").select("*").eq("is_active", true);
+        const { data: tool, error: toolError } = await (String(item.toolId).includes("-")
+          ? toolQuery.eq("id", item.toolId).single()
+          : toolQuery.eq("tool_id", item.toolId).single());
         if (toolError || !tool) throw new Error("Tool not found");
 
         let planPrice = Number(tool.price);
@@ -171,13 +192,13 @@ serve(async (req) => {
         }
 
         const productSearchKey = item.planId ? `${tool.tool_id}_${item.planId}_cart` : `${tool.tool_id}_cart`;
-        const products = await stripe.products.search({ query: `metadata["tool_id"]:"${productSearchKey}"` });
+        const products = await withTimeout(stripe.products.search({ query: `metadata["tool_id"]:"${productSearchKey}"` }), "Stripe product lookup");
         const product = products.data[0] || await stripe.products.create({
           name: planName,
           metadata: { tool_id: productSearchKey, db_id: tool.id, plan_id: item.planId || "default", billing_mode: "payment" },
         });
         const unitAmount = Math.round(planPrice * 100);
-        const prices = await stripe.prices.list({ product: product.id, active: true, limit: 100 });
+        const prices = await withTimeout(stripe.prices.list({ product: product.id, active: true, limit: 100 }), "Stripe price lookup");
         const price = prices.data.find(p => p.type === "one_time" && p.unit_amount === unitAmount && p.currency === currency)
           || await stripe.prices.create({ product: product.id, unit_amount: unitAmount, currency });
         lineItems.push({ price: price.id, quantity: 1 });
@@ -185,7 +206,7 @@ serve(async (req) => {
       }
 
       if (lineItems.length === 0) throw new Error("Cart is empty");
-      const session = await stripe.checkout.sessions.create({
+      const session = await withTimeout(stripe.checkout.sessions.create({
         customer: customerId,
         customer_email: customerId ? undefined : email,
         line_items: lineItems,
@@ -195,7 +216,7 @@ serve(async (req) => {
         success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}&cart=1`,
         cancel_url: `${origin}/payment/cancelled`,
         metadata: { cart_checkout: "true", item_count: String(lineItems.length), ...(user?.id ? { user_id: user.id } : {}), customer_email: email },
-      });
+      }), "Stripe checkout session");
 
       await supabaseAdmin.from("orders").insert(pendingOrders.map(({ tool, planName, activationTime }) => ({
         tool_id: tool.id,
@@ -248,7 +269,7 @@ serve(async (req) => {
     logStep("Billing mode detected", billing);
 
     // --- Stripe init ---
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+    const stripe = new Stripe(getStripeSecretKey(), {
       apiVersion: "2025-08-27.basil",
     });
 

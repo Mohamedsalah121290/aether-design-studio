@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CreditCard, Loader2, ShoppingCart, Trash2 } from 'lucide-react';
+import { AlertCircle, ArrowLeft, CreditCard, Loader2, ShoppingCart, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -15,9 +15,10 @@ import { getProductLogoUrl } from '@/lib/productLogos';
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const total = useMemo(() => getCartTotal(items), [items]);
 
@@ -34,26 +35,35 @@ const CartPage = () => {
   };
 
   const handleCheckout = async () => {
+    setCheckoutError(null);
+    if (authLoading) return;
     if (!user) {
       setShowAuthDialog(true);
       return;
     }
-    if (items.length === 0) return;
+    if (items.length === 0) {
+      setCheckoutError('Your cart is empty.');
+      return;
+    }
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
+      const checkoutRequest = supabase.functions.invoke('create-checkout', {
         body: {
-          items: items.map(item => ({ toolId: item.toolDbId, planId: item.planId })),
+          items: items.map(item => ({ toolId: item.toolDbId || item.toolId, planId: item.planId })),
           customerEmail: user.email,
           paymentMethodTypes: ['card', 'bancontact'],
         },
       });
+      const timeout = new Promise<never>((_, reject) => window.setTimeout(() => reject(new Error('Checkout took too long. Please try again.')), 20000));
+      const { data, error } = await Promise.race([checkoutRequest, timeout]);
       if (error) throw error;
       if (!data?.url) throw new Error('No checkout URL returned');
       window.location.href = data.url;
     } catch (error) {
       console.error('Cart checkout error:', error);
-      toast.error('Checkout could not be started. Please try again.');
+      const message = error instanceof Error ? error.message : 'Checkout could not be started. Please try again.';
+      setCheckoutError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -117,8 +127,14 @@ const CartPage = () => {
                 <span className="text-muted-foreground">Total</span>
                 <span className="text-2xl font-black text-primary">{formatEuro(total)}</span>
               </div>
-              <Button variant="hero" className="w-full" disabled={items.length === 0 || loading} onClick={handleCheckout}>
-                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
+              {checkoutError && (
+                <div className="mb-4 flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-foreground">
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+                  <span>{checkoutError}</span>
+                </div>
+              )}
+              <Button variant="hero" className="w-full" disabled={authLoading || items.length === 0 || loading} onClick={handleCheckout}>
+                {loading || authLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
                 Checkout
               </Button>
               {items.length > 0 && <Button variant="ghost" className="mt-3 w-full" onClick={() => { clearCartItems(); setItems([]); }}>Clear cart</Button>}
