@@ -137,28 +137,28 @@ const copy: Record<LangKey, {
 };
 
 const products: Record<FlowKey, Product[]> = {
-  ai: [
-    { name: 'ChatGPT Plus', id: 'chatgpt', desc: 'Everyday AI assistant.', benefits: ['Writing help', 'Research support', 'Workflow ideas'] },
-    { name: 'ElevenLabs', id: 'elevenlabs', desc: 'Voice and audio creation.', benefits: ['Natural voices', 'Multiple languages', 'Content-ready audio'] },
+  chatgpt: [
+    { name: 'ChatGPT Plus', id: 'chatgpt', desc: 'Content creation, ideas, research, and daily tasks.', benefits: ['Content creation', 'Ideas & research', 'Daily tasks'] },
   ],
-  design: [
-    { name: 'Canva Pro', id: 'canva', desc: 'Design posts and assets faster.', benefits: ['Ready templates', 'Fast edits', 'Works on devices'] },
-    { name: 'CapCut Pro', id: 'capcut', desc: 'Short video editing.', benefits: ['Quick editing', 'Creator tools', 'Easy exports'] },
+  office: [
+    { name: 'Microsoft Office 365', id: 'microsoft_365', desc: 'Documents, spreadsheets, presentations, and daily work.', benefits: ['Word, Excel, PowerPoint', 'Cloud workflow', 'Daily productivity'] },
   ],
-  productivity: [
-    { name: 'Notion', id: 'notion', desc: 'Plan, write, and organize.', benefits: ['Clear workspace', 'Better planning', 'Team-friendly'] },
-    { name: 'ChatGPT Plus', id: 'chatgpt', desc: 'Everyday AI assistant.', benefits: ['Writing help', 'Research support', 'Workflow ideas'] },
+  windows: [
+    { name: 'Windows 10 / 11 Pro', id: 'windows', desc: 'Reliable activation for your PC.', benefits: ['Fast activation', 'Windows Pro', 'Secure checkout'] },
   ],
-  unsure: [
+  copilot: [
+    { name: 'GitHub Copilot', id: 'github_copilot', desc: 'AI coding support when available.', benefits: ['Code suggestions', 'Developer workflow', 'Limited availability'] },
+  ],
+  other: [
     { name: 'ChatGPT Plus', id: 'chatgpt', desc: 'Best first AI tool.', benefits: ['Easy start', 'Many use cases', 'Daily value'] },
-    { name: 'Canva Pro', id: 'canva', desc: 'Best for visual content.', benefits: ['Simple design', 'Fast output', 'Business posts'] },
+    { name: 'Microsoft Office 365', id: 'microsoft_365', desc: 'Documents and productivity tools.', benefits: ['Office apps', 'Work faster', 'Popular choice'] },
   ],
 };
 
 const funnelMessages: Record<IntentKey, { flow: FlowKey; text: Record<LangKey, string> }> = {
-  student: { flow: 'ai', text: { en: 'Want help with studying tools?', fr: 'Besoin d’aide pour choisir des outils d’étude ?', nl: 'Hulp nodig met studietools?', de: 'Brauchst du Hilfe mit Lern-Tools?', es: '¿Quieres ayuda con herramientas de estudio?', it: 'Vuoi aiuto con gli strumenti per studiare?', tr: 'Ders çalışmak için uygun aracı seçmeme izin ver.', ar: 'هل تريد مساعدة في اختيار أدوات الدراسة؟' } },
-  creator: { flow: 'design', text: { en: 'Need help creating content?', fr: 'Besoin d’aide pour créer du contenu ?', nl: 'Hulp nodig bij content maken?', de: 'Brauchst du Hilfe beim Erstellen von Content?', es: '¿Necesitas ayuda para crear contenido?', it: 'Ti serve aiuto per creare contenuti?', tr: 'İçerik üretimi için en uygun seçeneği göstereyim mi?', ar: 'هل تحتاج مساعدة في إنشاء المحتوى؟' } },
-  business: { flow: 'productivity', text: { en: 'Want to automate your workflow?', fr: 'Vous voulez automatiser votre workflow ?', nl: 'Wil je je workflow automatiseren?', de: 'Möchtest du deinen Workflow automatisieren?', es: '¿Quieres automatizar tu flujo de trabajo?', it: 'Vuoi automatizzare il tuo workflow?', tr: 'İş akışını hızlandıracak seçenekleri göstereyim mi?', ar: 'هل تريد أتمتة سير عملك؟' } },
+  student: { flow: 'chatgpt', text: { en: 'Want help with studying tools?', fr: 'Besoin d’aide pour choisir des outils d’étude ?', nl: 'Hulp nodig met studietools?', de: 'Brauchst du Hilfe mit Lern-Tools?', es: '¿Quieres ayuda con herramientas de estudio?', it: 'Vuoi aiuto con gli strumenti per studiare?', tr: 'Ders çalışmak için uygun aracı seçmeme izin ver.', ar: 'هل تريد مساعدة في اختيار أدوات الدراسة؟' } },
+  creator: { flow: 'chatgpt', text: { en: 'Need help creating content?', fr: 'Besoin d’aide pour créer du contenu ?', nl: 'Hulp nodig bij content maken?', de: 'Brauchst du Hilfe beim Erstellen von Content?', es: '¿Necesitas ayuda para crear contenido?', it: 'Ti serve aiuto per creare contenuti?', tr: 'İçerik üretimi için en uygun seçeneği göstereyim mi?', ar: 'هل تحتاج مساعدة في إنشاء المحتوى؟' } },
+  business: { flow: 'office', text: { en: 'Want to improve your workflow?', fr: 'Vous voulez améliorer votre workflow ?', nl: 'Wil je je workflow verbeteren?', de: 'Möchtest du deinen Workflow verbessern?', es: '¿Quieres mejorar tu flujo de trabajo?', it: 'Vuoi migliorare il tuo workflow?', tr: 'İş akışını hızlandıracak seçenekleri göstereyim mi?', ar: 'هل تريد تحسين سير عملك؟' } },
 };
 
 const productLocale: Record<LangKey, Record<string, Pick<Product, 'desc' | 'benefits'>>> = {
