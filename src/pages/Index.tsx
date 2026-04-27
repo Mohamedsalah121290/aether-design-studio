@@ -6,7 +6,7 @@ import {
   ArrowRight, GraduationCap, Briefcase, UserCheck, Lock,
   Zap, CheckCircle, Shield, BookOpen,
   Play, Plus, Minus, Mail,
-  ChevronRight, Eye, Rocket, Layers, Target, Star, CreditCard,
+  ChevronRight, Eye, Rocket, Layers, Target, Star, CreditCard, MessageCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +20,7 @@ import { socialProofReviews } from '@/lib/socialProof';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import { languages } from '@/lib/i18n';
+import { supportLinks } from '@/lib/socialLinks';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
 import heroImageMobile from '@/assets/hero-ai-models-mobile.webp';
@@ -30,10 +31,17 @@ import logo from '@/assets/logo.png';
    ══════════════════════════════════════════════════════════════ */
 
 const trustBadges = [
-  { icon: UserCheck, labelKey: 'store.noSensitiveBeforePayment' },
-  { icon: Lock, labelKey: 'home.securePayment' },
-  { icon: Layers, labelKey: 'store.monthlyAccess' },
-  { icon: Zap, labelKey: 'home.fastActivation' },
+  { icon: Zap, labelKey: 'home.instantDelivery' },
+  { icon: CheckCircle, labelKey: 'home.simpleActivation' },
+  { icon: UserCheck, labelKey: 'home.supportIncluded' },
+];
+
+const bestSellerPreview = [
+  { name: 'ChatGPT', id: 'chatgpt', benefitKey: 'home.preview.chatgpt', priceKey: 'home.previewPrice' },
+  { name: 'Gemini', id: 'gemini', benefitKey: 'home.preview.gemini', priceKey: 'home.previewPrice' },
+  { name: 'Microsoft Office', id: 'microsoft_office', benefitKey: 'home.preview.office', priceKey: 'home.previewPrice' },
+  { name: 'Windows', id: 'windows', benefitKey: 'home.preview.windows', priceKey: 'home.previewPrice' },
+  { name: 'Copilot', id: 'microsoft_365', benefitKey: 'home.preview.copilot', priceKey: 'home.previewPrice' },
 ];
 
 const mobilePopularTools = [
@@ -239,7 +247,7 @@ const Index = () => {
 
       <main>
         {/* ═══════════════ 1) HERO ═══════════════ */}
-        <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[92svh] md:min-h-[94vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 w-full h-full">
             <img src={heroImageMobile} alt="AI DEALS premium AI tools" className="absolute inset-0 h-full w-full object-cover md:hidden" fetchPriority="high" />
             <video autoPlay loop muted playsInline poster={heroImage} className="absolute inset-0 hidden w-full h-full object-cover md:block">
@@ -249,10 +257,10 @@ const Index = () => {
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)' }} />
           </div>
 
-          <div className="container mx-auto px-4 relative z-10 pt-20 pb-24 md:pt-24 md:pb-0">
-            <div className="max-w-4xl mx-auto text-center">
-              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="hidden md:block mb-6">
-                <img src={logo} alt="AI DEALS" className="h-20 md:h-28 w-auto mx-auto drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]" />
+          <div className="container mx-auto px-4 relative z-10 pt-20 pb-10 md:pt-24 md:pb-12">
+            <div className="max-w-5xl mx-auto text-center rounded-[28px] border border-white/10 bg-background/55 px-4 py-6 shadow-2xl shadow-background/60 backdrop-blur-md sm:px-8 md:px-12 md:py-9">
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="mb-3 md:mb-5">
+                <img src={logo} alt="AI DEALS" className="h-14 sm:h-16 md:h-24 w-auto mx-auto drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]" />
               </motion.div>
 
               {/* Tagline */}
@@ -260,7 +268,7 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-lg sm:text-xl md:text-2xl font-display font-semibold tracking-[0.15em] uppercase mb-6"
+                className="text-xs sm:text-sm md:text-lg font-display font-semibold uppercase mb-3 md:mb-5"
                 style={{ 
                   color: 'rgba(232,212,139,0.9)',
                   textShadow: '0 0 30px rgba(232,212,139,0.3)',
@@ -274,71 +282,48 @@ const Index = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-3xl sm:text-4xl md:text-6xl font-display font-black mb-5 md:mb-7 leading-[1.05] tracking-tight"
+                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-black mb-4 md:mb-6 leading-[0.98] tracking-tight"
                 style={{ textShadow: '0 0 60px hsl(var(--primary) / 0.5), 0 4px 20px rgba(0,0,0,0.8)' }}
               >
-                <span className="gradient-text" style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))' }}>
+                <span className="gradient-text block" style={{ filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))' }}>
                   {t('home.heroTitle')}
                 </span>
-                <br />
-                <span className="text-white drop-shadow-2xl">{t('home.heroHighlight')}</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed mb-3"
+                className="text-base sm:text-lg md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-5"
               >
                 {t('home.heroSubtitle')}
               </motion.p>
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="text-xs sm:text-sm text-white/40 max-w-lg mx-auto mb-8 md:mb-10 tracking-wide"
-              >
-                {t('home.heroTrust')}
-              </motion.p>
-
-              {/* CTAs */}
-              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 md:mb-10">
-                <Button variant="hero" size="xl" className="group min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] shadow-2xl" asChild>
-                  <Link to="/store">
-                    <span>{t('store.buyNow')}</span>
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-                <Button variant="heroOutline" size="xl" className="hidden sm:inline-flex backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
-                  <a href="#how-it-works">
-                    {t('store.buyNow')}
-                  </a>
-                </Button>
-              </motion.div>
-              <div className="md:hidden mb-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-medium text-white/75">
-                <span>✔ {t('home.instantAccess')}</span><span>✔ {t('home.worksWorldwide')}</span><span>✔ {t('home.securePayment')}</span>
-              </div>
-              <SessionOfferTimer />
-              <p className="mt-3 text-[11px] text-white/45 mb-5">{t('home.secureCheckoutEur')}</p>
-
-              {/* Trust badges */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.7 }}
-                className="flex flex-wrap items-center justify-center gap-3 md:gap-4"
-              >
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.5 }} className="mb-5 md:mb-7 flex flex-wrap items-center justify-center gap-2.5 md:gap-3">
                 {trustBadges.map(({ icon: Icon, labelKey }) => (
-                  <div key={labelKey} className="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10" style={{ background: 'rgba(255,255,255,0.05)' }}>
-                    <Icon className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-xs font-medium text-white/70">{t(labelKey)}</span>
+                  <div key={labelKey} className="flex min-h-10 items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3.5 py-2 text-sm font-bold text-white/85 backdrop-blur-md">
+                    <Icon className="h-4 w-4 text-primary" />
+                    <span>{t(labelKey)}</span>
                   </div>
                 ))}
               </motion.div>
-              <div className="mt-4 hidden md:block">
-                <TrustBadges compact />
-              </div>
+
+              {/* CTAs */}
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-3 md:mb-4">
+                <Button variant="hero" size="xl" className="group min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] shadow-2xl" asChild>
+                  <Link to="/store">
+                    <span>{t('home.viewDeals')}</span>
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+                <Button variant="heroOutline" size="xl" className="min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
+                  <a href={supportLinks.whatsapp} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    {t('home.chatWhatsapp')}
+                  </a>
+                </Button>
+              </motion.div>
+              <p className="text-[11px] md:text-xs text-white/55">{t('home.secureCheckoutEur')}</p>
             </div>
           </div>
 
@@ -363,7 +348,36 @@ const Index = () => {
           </motion.div>
         </section>
 
-        <section className="py-16 md:py-20 relative" aria-label={t('home.chooseFits')}>
+        <section className="relative -mt-2 pb-10 md:pb-14" aria-label={t('home.bestSellersTitle')}>
+          <div className="container mx-auto px-4">
+            <div className="mb-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
+              <div>
+                <p className="mb-2 text-xs font-bold uppercase text-primary">{t('home.bestSellersKicker')}</p>
+                <h2 className="font-display text-2xl font-black text-foreground md:text-4xl">{t('home.bestSellersTitle')}</h2>
+              </div>
+              <Button variant="heroOutline" size="lg" className="min-h-11 w-full sm:w-auto" asChild>
+                <Link to="/store">{t('home.viewAllDeals')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {bestSellerPreview.map((product) => (
+                <motion.div key={product.name} {...fadeUp} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-background/30 backdrop-blur-md transition-all hover:border-primary/35 hover:bg-primary/10">
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Star className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-display text-lg font-black text-foreground">{product.name}</h3>
+                  <p className="mt-2 min-h-[44px] text-sm leading-relaxed text-muted-foreground">{t(product.benefitKey)}</p>
+                  <p className="mt-4 text-sm font-bold text-primary">{t(product.priceKey)}</p>
+                  <Button variant="hero" size="sm" className="mt-4 min-h-10 w-full" asChild>
+                    <Link to={`/store?scrollTo=${product.id}`}>{t('home.buyNow')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  </Button>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 md:py-16 relative" aria-label={t('home.chooseFits')}>
           <div className="container mx-auto px-4">
             <motion.div {...fadeUp} className="text-center mb-10">
               <h2 className="text-3xl md:text-5xl font-display font-bold">{t('home.chooseFits')}</h2>
