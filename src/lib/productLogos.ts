@@ -4,29 +4,38 @@ const localLogoModules = import.meta.glob('/src/assets/logos/*.{png,svg,webp,jpe
   query: '?url',
 }) as Record<string, string>;
 
-const logoAliases: Record<string, string> = {
-  adobe_cc: 'adobe_cc',
-  microsoft_365: 'microsoft365',
-  copilot: 'microsoft365',
-  microsoft_copilot: 'microsoft365',
-  microsoft_office: 'microsoft_office',
-  playground_ai: 'playground',
-  linkedin: 'linkedin',
-  windows_home: 'windows',
-  windows_server: 'windows',
-  windows_vps: 'windows',
+const logoExtensions = ['png', 'svg', 'webp', 'jpeg', 'jpg'];
+
+const resolveLocalLogo = (logoKey: string) => {
+  for (const extension of logoExtensions) {
+    const logo = localLogoModules[`/src/assets/logos/${logoKey}.${extension}`];
+    if (logo) return logo;
+  }
+  return null;
 };
 
-const uploadedLogoAliases: Record<string, string> = {
-  chatgpt: 'chatgpt_uploaded',
-  microsoft_365: 'microsoft_copilot_uploaded',
-  copilot: 'microsoft_copilot_uploaded',
-  microsoft_copilot: 'microsoft_copilot_uploaded',
-  microsoft_office: 'microsoft_office_uploaded',
-  windows: 'windows_uploaded',
-  windows_home: 'windows_uploaded',
-  windows_server: 'windows_uploaded',
-  windows_vps: 'windows_uploaded',
+const manualLogoAliases: Record<string, string[]> = {
+  chatgpt: ['chatgpt', 'chatgpt_uploaded'],
+  microsoft_office: ['office', 'microsoft_office_uploaded', 'microsoft_office', 'microsoft365'],
+  microsoft_365: ['copilot', 'microsoft_copilot_uploaded', 'microsoft365', 'microsoft_office'],
+  copilot: ['copilot', 'microsoft_copilot_uploaded', 'microsoft365'],
+  microsoft_copilot: ['copilot', 'microsoft_copilot_uploaded', 'microsoft365'],
+  windows: ['windows', 'windows_uploaded'],
+  windows_home: ['windows', 'windows_uploaded'],
+  windows_server: ['windows', 'windows_uploaded'],
+  windows_vps: ['windows', 'windows_uploaded'],
+  canva: ['canva'],
+  capcut: ['capcut'],
+  coursera: ['coursera'],
+  elevenlabs: ['elevenlabs'],
+  eset: ['eset'],
+  grok: ['grok'],
+  linkedin: ['linkedin'],
+  lovable: ['lovable'],
+  perplexity: ['perplexity', 'chatgpt'],
+  notion: ['notion', 'taskade'],
+  zoom: ['zoom', 'microsoft365'],
+  playground_ai: ['playground'],
 };
 
 const verifiedSvgLogos: Record<string, string> = {
@@ -68,16 +77,12 @@ const verifiedSvgLogos: Record<string, string> = {
 
 export const getProductLogoUrl = (toolId?: string | null, fallbackUrl?: string | null) => {
   if (!toolId) return fallbackUrl || null;
-  const uploadedLogoKey = uploadedLogoAliases[toolId];
-  const uploadedLogo = uploadedLogoKey ? localLogoModules[`/src/assets/logos/${uploadedLogoKey}.jpeg`] : null;
-  if (uploadedLogo) return uploadedLogo;
+  const logoKeys = manualLogoAliases[toolId] || [toolId];
+  for (const logoKey of logoKeys) {
+    const localLogo = resolveLocalLogo(logoKey);
+    if (localLogo) return localLogo;
+  }
 
-  const logoKey = logoAliases[toolId] || toolId;
-  const localLogo = localLogoModules[`/src/assets/logos/${logoKey}.png`]
-    || localLogoModules[`/src/assets/logos/${logoKey}.svg`]
-    || localLogoModules[`/src/assets/logos/${logoKey}.webp`];
-
-  if (localLogo) return localLogo;
   if (verifiedSvgLogos[toolId]) return verifiedSvgLogos[toolId];
 
   return fallbackUrl || null;
