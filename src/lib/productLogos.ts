@@ -16,7 +16,7 @@ const manualProductLogos: Record<string, string> = {
   linkedin: linkedinLogo,
 };
 
-export const getProductLogoUrl = (toolId?: string | null) => {
+export const getProductLogoUrl = (toolId?: string | null, _fallbackUrl?: string | null) => {
   if (!toolId) return null;
   return manualProductLogos[toolId] || null;
 };
