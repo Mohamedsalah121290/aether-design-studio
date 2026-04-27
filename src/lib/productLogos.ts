@@ -7,6 +7,8 @@ const localLogoModules = import.meta.glob('/src/assets/logos/*.{png,svg,webp,jpe
 const logoAliases: Record<string, string> = {
   adobe_cc: 'adobe_cc',
   microsoft_365: 'microsoft365',
+  copilot: 'microsoft365',
+  microsoft_copilot: 'microsoft365',
   microsoft_office: 'microsoft_office',
   playground_ai: 'playground',
   linkedin: 'linkedin',
@@ -16,6 +18,10 @@ const logoAliases: Record<string, string> = {
 };
 
 const uploadedLogoAliases: Record<string, string> = {
+  chatgpt: 'chatgpt_uploaded',
+  microsoft_365: 'microsoft_copilot_uploaded',
+  copilot: 'microsoft_copilot_uploaded',
+  microsoft_copilot: 'microsoft_copilot_uploaded',
   microsoft_office: 'microsoft_office_uploaded',
   windows: 'windows_uploaded',
   windows_home: 'windows_uploaded',
