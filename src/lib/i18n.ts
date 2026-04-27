@@ -6340,6 +6340,10 @@ Object.entries(finalI18nPatches).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
 
+Object.entries(conversionHomepagePatches).forEach(([lng, bundle]) => {
+  i18n.addResourceBundle(lng, 'translation', bundle, true, true);
+});
+
 Object.entries(chatContactTranslations).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
