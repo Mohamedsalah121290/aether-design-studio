@@ -127,8 +127,14 @@ const CartPage = () => {
                 <span className="text-muted-foreground">Total</span>
                 <span className="text-2xl font-black text-primary">{formatEuro(total)}</span>
               </div>
-              <Button variant="hero" className="w-full" disabled={items.length === 0 || loading} onClick={handleCheckout}>
-                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
+              {checkoutError && (
+                <div className="mb-4 flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-foreground">
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+                  <span>{checkoutError}</span>
+                </div>
+              )}
+              <Button variant="hero" className="w-full" disabled={authLoading || items.length === 0 || loading} onClick={handleCheckout}>
+                {loading || authLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CreditCard className="mr-2 h-4 w-4" />}
                 Checkout
               </Button>
               {items.length > 0 && <Button variant="ghost" className="mt-3 w-full" onClick={() => { clearCartItems(); setItems([]); }}>Clear cart</Button>}
