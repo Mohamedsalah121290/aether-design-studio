@@ -348,7 +348,36 @@ const Index = () => {
           </motion.div>
         </section>
 
-        <section className="py-16 md:py-20 relative" aria-label={t('home.chooseFits')}>
+        <section className="relative -mt-2 pb-10 md:pb-14" aria-label={t('home.bestSellersTitle')}>
+          <div className="container mx-auto px-4">
+            <div className="mb-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
+              <div>
+                <p className="mb-2 text-xs font-bold uppercase text-primary">{t('home.bestSellersKicker')}</p>
+                <h2 className="font-display text-2xl font-black text-foreground md:text-4xl">{t('home.bestSellersTitle')}</h2>
+              </div>
+              <Button variant="heroOutline" size="lg" className="min-h-11 w-full sm:w-auto" asChild>
+                <Link to="/store">{t('home.viewAllDeals')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {bestSellerPreview.map((product) => (
+                <motion.div key={product.name} {...fadeUp} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-background/30 backdrop-blur-md transition-all hover:border-primary/35 hover:bg-primary/10">
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Star className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-display text-lg font-black text-foreground">{product.name}</h3>
+                  <p className="mt-2 min-h-[44px] text-sm leading-relaxed text-muted-foreground">{t(product.benefitKey)}</p>
+                  <p className="mt-4 text-sm font-bold text-primary">{t(product.priceKey)}</p>
+                  <Button variant="hero" size="sm" className="mt-4 min-h-10 w-full" asChild>
+                    <Link to={`/store?scrollTo=${product.id}`}>{t('home.buyNow')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  </Button>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 md:py-16 relative" aria-label={t('home.chooseFits')}>
           <div className="container mx-auto px-4">
             <motion.div {...fadeUp} className="text-center mb-10">
               <h2 className="text-3xl md:text-5xl font-display font-bold">{t('home.chooseFits')}</h2>
