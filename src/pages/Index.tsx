@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-  ArrowRight, GraduationCap, Briefcase, UserCheck, Lock,
-  Zap, CheckCircle, Shield, BookOpen,
-  Play, Plus, Minus, Mail,
-  ChevronRight, Eye, Rocket, Layers, Target, Star, CreditCard, MessageCircle,
+  ArrowRight, UserCheck, Lock,
+  Zap, CheckCircle, Shield,
+  Plus, Minus, Mail,
+  ChevronRight, Star, MessageCircle, ShoppingBag, PackageCheck, Headphones,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,64 +36,20 @@ const trustBadges = [
   { icon: UserCheck, labelKey: 'home.supportIncluded' },
 ];
 
-const bestSellerPreview = [
-  { name: 'ChatGPT', id: 'chatgpt', benefitKey: 'home.preview.chatgpt', priceKey: 'home.previewPrice' },
-  { name: 'Gemini', id: 'gemini', benefitKey: 'home.preview.gemini', priceKey: 'home.previewPrice' },
-  { name: 'Microsoft Office', id: 'microsoft_office', benefitKey: 'home.preview.office', priceKey: 'home.previewPrice' },
-  { name: 'Windows', id: 'windows', benefitKey: 'home.preview.windows', priceKey: 'home.previewPrice' },
-  { name: 'Copilot', id: 'microsoft_365', benefitKey: 'home.preview.copilot', priceKey: 'home.previewPrice' },
+const popularTools = [
+  { name: 'ChatGPT', id: 'chatgpt', benefit: 'AI writing, research, coding, and productivity help.' },
+  { name: 'Microsoft Office', id: 'microsoft_office', benefit: 'Word, Excel, PowerPoint, and everyday work tools.' },
+  { name: 'Windows', id: 'windows', benefit: 'Reliable Windows licensing for your device.' },
+  { name: 'Microsoft Copilot', id: 'microsoft_365', benefit: 'Microsoft AI assistance for documents and workflows.' },
+  { name: 'Canva Pro', id: 'canva', benefit: 'Create designs, posts, and brand visuals faster.' },
 ];
 
-const mobilePopularTools = [
-  { name: 'ChatGPT Plus', id: 'chatgpt', price: 'From €9.99 (excl. VAT)', badge: 'Best choice' },
-  { name: 'Canva Pro', id: 'canva', price: 'From €7.99 (excl. VAT)', badge: 'Most popular' },
-  { name: 'Perplexity Pro', id: 'perplexity', price: 'From €9.99 (excl. VAT)', badge: 'Starter option' },
-  { name: 'CapCut Pro', id: 'capcut', price: 'From €7.99 (excl. VAT)', badge: 'Popular choice' },
+const whyAiDeals = [
+  { icon: Shield, title: 'Affordable', desc: 'Premium software access with clear checkout.' },
+  { icon: Zap, title: 'Instant delivery', desc: 'Fast digital delivery after purchase.' },
+  { icon: PackageCheck, title: 'Simple activation', desc: 'Clear access steps without confusion.' },
+  { icon: Headphones, title: 'Support', desc: 'Help is available when you need it.' },
 ];
-
-const intentFunnels = {
-  student: {
-    icon: GraduationCap,
-    title: 'Student',
-    description: 'Study faster with the right AI stack.',
-    headline: 'Study smarter with AI tools',
-    products: [
-      { name: 'ChatGPT Plus', id: 'chatgpt', best: true },
-      { name: 'Perplexity', id: 'perplexity' },
-      { name: 'Notion', id: 'notion' },
-    ],
-    reasons: ['faster answers', 'better understanding', 'save time'],
-    cta: 'Start Learning Now',
-  },
-  creator: {
-    icon: Play,
-    title: 'Content Creator',
-    description: 'Create, edit, and publish with less friction.',
-    headline: 'Create content faster with AI',
-    products: [
-      { name: 'Canva Pro', id: 'canva', best: true },
-      { name: 'CapCut', id: 'capcut' },
-      { name: 'ElevenLabs', id: 'elevenlabs' },
-    ],
-    reasons: ['design faster', 'edit videos', 'create voice content'],
-    cta: 'Start Creating',
-  },
-  business: {
-    icon: Briefcase,
-    title: 'Business',
-    description: 'Automate daily work and move faster.',
-    headline: 'Automate and grow your business',
-    products: [
-      { name: 'ChatGPT Business', id: 'chatgpt', best: true },
-      { name: 'Office 365', id: 'microsoft_365' },
-      { name: 'Notion', id: 'notion' },
-    ],
-    reasons: ['automate tasks', 'increase productivity', 'save hours daily'],
-    cta: 'Start Growing',
-  },
-};
-
-type IntentKey = keyof typeof intentFunnels;
 
 const SESSION_OFFER_MS = 15 * 60 * 1000;
 
@@ -129,30 +85,6 @@ const SessionOfferTimer = () => {
     </div>
   );
 };
-
-const audiences = [
-  {
-    icon: GraduationCap,
-    title: 'Students',
-    headline: 'Study Smarter.',
-    lines: ['Research faster.', 'Structure essays better.', 'Use AI responsibly.'],
-    gradient: 'from-primary/20 to-secondary/20',
-  },
-  {
-    icon: Rocket,
-    title: 'Creators',
-    headline: 'Create Faster.',
-    lines: ['Generate ideas.', 'Design content.', 'Automate repetitive tasks.'],
-    gradient: 'from-secondary/20 to-accent/20',
-  },
-  {
-    icon: Target,
-    title: 'Ambitious Professionals',
-    headline: 'Work Smarter.',
-    lines: ['Boost productivity.', 'Save time.', 'Stay competitive.'],
-    gradient: 'from-accent/20 to-primary/20',
-  },
-];
 
 const steps = [
   { num: '01', title: 'Choose your tool', desc: 'Browse our curated selection of premium AI tools.' },
