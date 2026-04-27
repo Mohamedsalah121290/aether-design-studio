@@ -78,6 +78,24 @@ export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) 
   </svg>
 );
 
+export const PinterestIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
+  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M16 3.2C8.93 3.2 3.2 8.93 3.2 16c0 5.28 3.2 9.8 7.77 11.75-.1-.98-.2-2.5.04-3.58.22-.97 1.42-6.18 1.42-6.18s-.36-.72-.36-1.78c0-1.67.97-2.92 2.18-2.92 1.03 0 1.52.77 1.52 1.7 0 1.03-.66 2.57-1 4-.28 1.2.6 2.18 1.78 2.18 2.14 0 3.78-2.26 3.78-5.52 0-2.88-2.07-4.9-5.04-4.9-3.43 0-5.44 2.57-5.44 5.23 0 1.04.4 2.15.9 2.75.1.12.11.22.08.34-.09.37-.3 1.2-.34 1.36-.05.22-.17.27-.4.16-1.5-.7-2.43-2.9-2.43-4.66 0-3.8 2.76-7.28 7.95-7.28 4.18 0 7.42 2.98 7.42 6.96 0 4.15-2.61 7.49-6.24 7.49-1.22 0-2.36-.63-2.75-1.38l-.75 2.85c-.27 1.04-1 2.34-1.49 3.13 1.12.35 2.31.54 3.56.54 7.07 0 12.8-5.73 12.8-12.8S23.07 3.2 16 3.2Z" />
+  </svg>
+);
+
+export const TikTokIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
+  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M21.6 5.2c.42 3.08 2.15 4.92 5.2 5.12v3.47c-1.76.17-3.3-.4-5.1-1.48v6.5c0 8.26-9 10.84-12.6 4.92-2.32-3.82-.9-10.54 6.55-10.81v3.66c-.58.1-1.2.25-1.76.44-1.7.57-2.66 1.64-2.4 3.52.5 3.6 7.12 4.67 6.57-2.37V5.2h3.54Z" />
+  </svg>
+);
+
+export const XSocialIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
+  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M18.56 14.08 28.57 2.4h-2.37l-8.7 10.14L10.57 2.4H2.56l10.5 15.34L2.56 30h2.37l9.18-10.72L21.45 30h8.01L18.56 14.08Zm-3.25 3.8-1.06-1.52L5.79 4.18h3.64l6.83 9.84 1.06 1.52 8.88 12.78h-3.64l-7.25-10.44Z" />
+  </svg>
+);
+
 export const Social3DLink = ({ href, label, children, tone = 'social-whatsapp-3d', className = 'w-12 h-12' }: { href: string; label: string; children: ReactNode; tone?: string; className?: string }) => (
   <motion.a
     href={href}
@@ -413,6 +431,9 @@ export const ChatbotSalesFlow = () => {
         <div className="flex flex-col items-end gap-2 sm:gap-3">
           {isUsableSocialLink(socialLinks.whatsapp) && <motion.a href={socialLinks.whatsapp} onClick={(event) => openSocialUrl(event, socialLinks.whatsapp)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d social-link-movie" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-8 h-8" /></motion.a>}
           {isUsableSocialLink(supportLinks.telegram) && <motion.a href={supportLinks.telegram} onClick={(event) => openSocialUrl(event, supportLinks.telegram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d social-link-movie" aria-label="Contact on Telegram"><TelegramIcon className="w-8 h-8" /></motion.a>}
+          {isUsableSocialLink(socialLinks.pinterest) && <motion.a href={socialLinks.pinterest} onClick={(event) => openSocialUrl(event, socialLinks.pinterest)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-pinterest-3d social-link-movie" aria-label="Follow on Pinterest"><PinterestIcon className="w-8 h-8" /></motion.a>}
+          {isUsableSocialLink(socialLinks.twitter) && <motion.a href={socialLinks.twitter} onClick={(event) => openSocialUrl(event, socialLinks.twitter)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-x-3d social-link-movie" aria-label="Follow on X"><XSocialIcon className="w-8 h-8" /></motion.a>}
+          {isUsableSocialLink(socialLinks.tiktok) && <motion.a href={socialLinks.tiktok} onClick={(event) => openSocialUrl(event, socialLinks.tiktok)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-tiktok-3d social-link-movie" aria-label="Follow on TikTok"><TikTokIcon className="w-8 h-8" /></motion.a>}
         </div>
         <motion.button onClick={() => setOpen((value) => !value)} whileHover={{ scale: 1.05, y: -3 }} whileTap={{ scale: 0.96 }} className="chatbot-main-float" aria-label={fallbackText[lang].open}><RobotAvatar className="w-14 h-14 sm:w-16 sm:h-16" lang={lang} speaking={speakingId !== null} /></motion.button>
       </div>
