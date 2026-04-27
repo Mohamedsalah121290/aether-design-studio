@@ -4,8 +4,8 @@ import canvaLogo from '@/assets/logos/canva.png';
 import capcutLogo from '@/assets/logos/capcut.png';
 import lovableLogo from '@/assets/logos/lovable.png';
 import linkedinLogo from '@/assets/logos/linkedin.png';
-import microsoftOfficeLogo from '@/assets/logos/microsoft_office.png';
-import microsoft365Logo from '@/assets/logos/microsoft365.png';
+import officeProPlusLogo from '@/assets/logos/office_pro_plus.png';
+import microsoftOffice365Logo from '@/assets/logos/microsoft_office_365.png';
 import elevenlabsLogo from '@/assets/logos/elevenlabs.png';
 import esetLogo from '@/assets/logos/eset.png';
 import notionLogo from '@/assets/logos/notion_uploaded.jpeg';
@@ -22,8 +22,8 @@ const manualProductLogos: Record<string, string> = {
   capcut: capcutLogo,
   lovable: lovableLogo,
   linkedin: linkedinLogo,
-  microsoft_office: microsoftOfficeLogo,
-  microsoft_365: microsoft365Logo,
+  microsoft_office: officeProPlusLogo,
+  microsoft_365: microsoftOffice365Logo,
   coursera: linkedinLogo,
   elevenlabs: elevenlabsLogo,
   eset: esetLogo,
