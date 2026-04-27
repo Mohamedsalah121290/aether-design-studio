@@ -125,17 +125,20 @@ const Academy = () => {
               transition={{ duration: 0.5 }}
               className="mb-8 text-center"
             >
-              <p className="mb-3 text-xs font-bold uppercase text-primary">Course Posters</p>
-              <h2 className="text-3xl font-display font-black md:text-5xl">Learning tracks opening soon</h2>
+              <p className="mb-3 text-xs font-bold uppercase text-primary">{t('academy.coursePosters')}</p>
+              <h2 className="text-3xl font-display font-black md:text-5xl">{t('academy.tracksOpeningSoon')}</h2>
             </motion.div>
             <div className="space-y-12">
               {courseCategories.map((category) => (
-                <section key={category.name} aria-label={category.name}>
-                  <h3 className="mb-5 font-display text-2xl font-black text-foreground">{category.name}</h3>
+                <section key={category.nameKey} aria-label={t(category.nameKey)}>
+                  <h3 className="mb-5 font-display text-2xl font-black text-foreground">{t(category.nameKey)}</h3>
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {category.courses.map((course, index) => (
+                    {category.courses.map((course, index) => {
+                      const title = t(`academy.courses.${course.key}.title`);
+                      const description = t(`academy.courses.${course.key}.description`);
+                      return (
                       <motion.article
-                        key={course.title}
+                        key={course.key}
                         initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -147,18 +150,18 @@ const Academy = () => {
                         <div className="relative z-10 flex w-full flex-col justify-between">
                           <div>
                             <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-background/70 p-3 shadow-lg shadow-primary/10">
-                              <img src={course.logo} alt={`${course.title} logo`} className="h-full w-full object-contain" loading="lazy" />
+                              <img src={course.logo} alt={`${title} logo`} className="h-full w-full object-contain" loading="lazy" />
                             </div>
-                            <p className="mb-3 text-xs font-bold uppercase text-primary">Coming Soon</p>
-                            <h4 className="font-display text-2xl font-black leading-tight text-foreground">{course.title}</h4>
-                            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{course.description}</p>
+                            <p className="mb-3 text-xs font-bold uppercase text-primary">{t('academy.comingSoonLabel')}</p>
+                            <h4 className="font-display text-2xl font-black leading-tight text-foreground">{title}</h4>
+                            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{description}</p>
                           </div>
                           <Button variant="heroOutline" className="mt-8 w-full" asChild>
-                            <a href={`mailto:info@aideals.be?subject=Notify%20me%20about%20${encodeURIComponent(course.title)}`}>Notify Me</a>
+                            <a href={`mailto:info@aideals.be?subject=Notify%20me%20about%20${encodeURIComponent(title)}`}>{t('academy.notifyMe')}</a>
                           </Button>
                         </div>
                       </motion.article>
-                    ))}
+                    );})}
                   </div>
                 </section>
               ))}
