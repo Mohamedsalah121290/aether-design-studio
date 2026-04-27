@@ -27,7 +27,7 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
-import { isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
+import { getChatToBuyLinks, isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
 import { getRegionCategory } from '@/lib/geo';
 import { getStripeLink } from '@/lib/stripeLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
@@ -256,6 +256,8 @@ const PaymentPage = () => {
     ? [...PAYMENT_METHODS].sort((a, b) => (a.id === 'bancontact' ? -1 : 0) - (b.id === 'bancontact' ? -1 : 0))
     : PAYMENT_METHODS;
   const checkoutUrl = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name) : null;
+  const productUrl = tool ? `${window.location.origin}/payment/${tool.tool_id}` : '';
+  const chatToBuyLinks = tool ? getChatToBuyLinks(tool.name, productUrl) : { whatsapp: '', telegram: '' };
   const completedPurchases = Number(localStorage.getItem('aiDealsCompletedPurchases') || '0');
 
   // كل الأسعار باليورو € (no conversion)
