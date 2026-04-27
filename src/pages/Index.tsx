@@ -16,7 +16,6 @@ import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
 import TrustBadges from '@/components/TrustBadges';
-import { socialProofReviews } from '@/lib/socialProof';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import { languages } from '@/lib/i18n';
@@ -93,10 +92,32 @@ const steps = [
   { num: '04', title: 'Start using it', desc: 'No sensitive information is required before payment.' },
 ];
 
-const academyPoints = [
-  'How to use each tool effectively',
-  'How to avoid common mistakes',
-  'How to stay responsible and efficient',
+const customerFeedback = [
+  'Access was clear and easy to start using.',
+  'The checkout felt simple and secure.',
+  'Support answered quickly when I needed help.',
+  'Activation instructions were easy to follow.',
+  'Everything worked without complicated setup.',
+  'The product page made the choice simple.',
+  'Delivery was fast after payment.',
+  'I liked that the process was straightforward.',
+  'The store feels focused and trustworthy.',
+  'I found the tool I needed very quickly.',
+  'The access details were explained clearly.',
+  'Support made the activation smooth.',
+  'Buying software here was easy.',
+  'The steps were clear from start to finish.',
+  'The service saved me time.',
+  'I would use AI Deals again.',
+  'The experience felt professional.',
+  'Everything was ready faster than expected.',
+];
+
+const realMessages = [
+  'Thanks, access is working now. Very clear instructions.',
+  'Payment done and activation received. Appreciate the quick support.',
+  'It works perfectly on my device. Thank you.',
+  'Fast response and simple process from checkout to access.',
 ];
 
 const faqs = [
