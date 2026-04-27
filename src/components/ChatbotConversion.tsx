@@ -396,7 +396,7 @@ export const ChatbotSalesFlow = () => {
     <div className={`fixed right-3 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6 sm:gap-3 ${liftForMobileCta ? 'bottom-[calc(6.5rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1.25rem+env(safe-area-inset-bottom))]'}`}>
       <AnimatePresence>
         {open && (
-          <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[68dvh] sm:max-h-none">
+          <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="flex w-[min(calc(100vw-1.5rem),360px)] sm:w-[360px] xl:w-[380px] max-h-[70dvh] flex-col glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl">
             <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border/60">
               <div className="flex items-center gap-3 min-w-0"><RobotAvatar lang={lang} rounded="rounded-xl" speaking={speakingId !== null} /><div><p className="text-sm font-semibold text-foreground">{fallbackText[lang].assistant}</p><p className="text-[11px] text-muted-foreground flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500" />{fallbackText[lang].online}</p></div></div>
               <div className="flex items-center gap-1">
@@ -405,7 +405,7 @@ export const ChatbotSalesFlow = () => {
               </div>
             </div>
 
-            <div className="p-3 sm:p-4 space-y-3 sm:space-y-4 max-h-[43dvh] sm:max-h-[62vh] overflow-y-auto overscroll-contain">
+            <div className="min-h-0 flex-1 p-3 sm:p-4 space-y-3 sm:space-y-4 overflow-y-auto overscroll-contain">
               {messages.map((message) => (
                 <div key={message.id} className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'} ${text.dir === 'rtl' ? 'text-right' : 'text-left'}`}>
                   {message.role === 'bot' && <RobotAvatar className="w-8 h-8" lang={lang} speaking={speakingId === message.id} />}
