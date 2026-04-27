@@ -119,7 +119,7 @@ const Storefront = () => {
 
   const processedTools = useMemo(() => {
     let result = tools.filter(t =>
-      ALLOWED_TOOL_IDS.has(t.tool_id) && (t.status !== 'paused' || t.tool_id === 'gemini') &&
+      ALLOWED_TOOL_IDS.has(t.tool_id) && t.status !== 'paused' &&
       t.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
