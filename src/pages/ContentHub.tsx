@@ -9,6 +9,7 @@ import Footer from '@/components/Footer';
 import { BLOG_POSTS, getBlogLocale } from '@/lib/seo/blogPosts';
 import { resolveSeoLang } from '@/lib/seo/seoMap';
 import { socialLinks } from '@/lib/socialLinks';
+import { getMentionedProductLogos } from '@/lib/productLogos';
 
 interface VideoItem {
   id: string;
@@ -662,7 +663,12 @@ const ContentHub = () => {
                     </div>
 
                     {/* Info */}
-                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <div className="absolute bottom-0 left-0 right-0 p-5">
+                        <div className="mb-2 flex flex-wrap gap-1.5">
+                          {getMentionedProductLogos(`${video.title} ${video.description}`).map(product => (
+                            <img key={product.id} src={product.logoUrl} alt={`${product.label} logo`} className="h-5 w-5 rounded-sm object-contain" loading="lazy" />
+                          ))}
+                        </div>
                       <h3 className="font-display font-bold text-base leading-tight line-clamp-2 mb-2 group-hover:text-primary transition-colors">
                         {video.title}
                       </h3>
@@ -792,6 +798,12 @@ const ContentHub = () => {
                           <span>{article.date}</span>
                           <span>•</span>
                           <span>{article.readTime}</span>
+                        </div>
+
+                        <div className="mb-3 flex flex-wrap gap-1.5">
+                          {getMentionedProductLogos(`${article.title} ${article.snippet} ${article.category}`).map(product => (
+                            <img key={product.id} src={product.logoUrl} alt={`${product.label} logo`} className="h-5 w-5 rounded-sm object-contain" loading="lazy" />
+                          ))}
                         </div>
 
                         {/* Title */}
