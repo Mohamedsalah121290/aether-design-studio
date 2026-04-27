@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check, CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, WhatsAppIcon, XSocialIcon } from '@/components/ChatbotConversion';
+import { PinterestIcon, Social3DLink, TikTokIcon, XSocialIcon } from '@/components/ChatbotConversion';
 import { getResolvedAppLanguage, languages, setAppLanguage } from '@/lib/i18n';
 import { CURRENCIES, type CurrencyCode } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
@@ -79,8 +79,6 @@ const Navbar = () => {
   ];
 
   const headerSocialLinks = [
-    { icon: WhatsAppIcon, href: socialLinks.whatsapp, label: 'WhatsApp', tone: 'social-whatsapp-3d' },
-    { icon: TelegramIcon, href: socialLinks.telegram, label: 'Telegram', tone: 'social-telegram-3d' },
     { icon: PinterestIcon, href: socialLinks.pinterest, label: 'Pinterest', tone: 'social-pinterest-3d' },
     { icon: XSocialIcon, href: socialLinks.twitter, label: 'X', tone: 'social-x-3d' },
     { icon: TikTokIcon, href: socialLinks.tiktok, label: 'TikTok', tone: 'social-tiktok-3d' },
