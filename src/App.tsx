@@ -27,12 +27,13 @@ import Profile from "./pages/Profile";
 import PaymentPage from "./pages/PaymentPage";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancelled from "./pages/PaymentCancelled";
+import CartPage from "./pages/CartPage";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import ErrorBoundary from "./components/ErrorBoundary";
 import RecentActivityToast from "./components/RecentActivityToast";
 import { ChatbotSalesFlow } from "./components/ChatbotConversion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShoppingCart } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import "@/lib/i18n";
 
@@ -78,6 +79,7 @@ const AppRoutes = () => {
       <Route path="/privacy" element={wrap("Privacy", <Privacy />)} />
       <Route path="/terms" element={wrap("Terms", <Terms />)} />
       <Route path="/profile" element={wrap("Profile", <ProtectedRoute><Profile /></ProtectedRoute>)} />
+      <Route path="/cart" element={wrap("CartPage", <CartPage />)} />
       <Route path="/payment/success" element={wrap("PaymentSuccess", <PaymentSuccess />)} />
       <Route path="/payment/cancelled" element={wrap("PaymentCancelled", <PaymentCancelled />)} />
       <Route path="/payment/:toolId" element={wrap("PaymentPage", <PaymentPage />)} />
