@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
+import heroImage from '@/assets/hero-ai-models.png';
 
 const coursePosters = [
   { tool: 'ChatGPT Mastery', description: 'Prompting, writing, research, and daily AI workflows.' },
@@ -21,7 +22,11 @@ const Academy = () => {
       <SEO page="academy" />
       <Navbar />
 
-      <main className="pt-32 pb-20">
+      <main className="relative overflow-hidden pt-32 pb-20">
+        <div className="absolute inset-0 -z-10 opacity-30">
+          <img src={heroImage} alt="AI Academy robot background" className="h-full w-full object-cover object-center" loading="eager" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/88 to-background" />
+        </div>
         <section className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
