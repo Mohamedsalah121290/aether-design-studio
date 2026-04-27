@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent, ReactNode } from 'react';
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -63,20 +63,22 @@ declare global {
   }
 }
 
-export const WhatsAppIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
-  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+export const WhatsAppIcon = forwardRef<SVGSVGElement, { className?: string }>(({ className = 'w-5 h-5' }, ref) => (
+  <svg ref={ref} viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
     <path fill="hsl(142 70% 49%)" d="M16.04 3.2C9.02 3.2 3.3 8.9 3.3 15.9c0 2.23.58 4.4 1.69 6.31L3.2 28.8l6.74-1.77a12.68 12.68 0 0 0 6.1 1.55h.01c7.02 0 12.73-5.7 12.73-12.7S23.07 3.2 16.04 3.2Z" />
     <path fill="hsl(0 0% 100%)" d="M23.45 19.13c-.4-.2-2.36-1.16-2.72-1.3-.37-.13-.63-.2-.9.2-.27.4-1.03 1.3-1.27 1.56-.23.27-.47.3-.86.1-.4-.2-1.68-.62-3.2-1.97-1.18-1.06-1.98-2.36-2.21-2.76-.23-.4-.03-.61.17-.81.18-.18.4-.47.6-.7.2-.24.27-.4.4-.67.14-.27.07-.5-.03-.7-.1-.2-.9-2.17-1.23-2.97-.32-.78-.65-.67-.9-.68h-.76c-.27 0-.7.1-1.06.5-.37.4-1.4 1.36-1.4 3.32s1.43 3.86 1.63 4.12c.2.27 2.81 4.3 6.82 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.12 2.36-.96 2.7-1.9.33-.93.33-1.73.23-1.9-.1-.16-.36-.26-.8-.47Z" />
   </svg>
-);
+));
+WhatsAppIcon.displayName = 'WhatsAppIcon';
 
-export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
-  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+export const TelegramIcon = forwardRef<SVGSVGElement, { className?: string }>(({ className = 'w-5 h-5' }, ref) => (
+  <svg ref={ref} viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
     <path fill="hsl(199 89% 55%)" d="M16 3.2c7.07 0 12.8 5.73 12.8 12.8S23.07 28.8 16 28.8 3.2 23.07 3.2 16 8.93 3.2 16 3.2Z" />
     <path fill="hsl(0 0% 100%)" d="M22.52 10.2c.24-.1.5.1.44.37l-2.23 10.5c-.08.39-.56.54-.86.28l-3.36-2.48-1.72 1.65c-.19.18-.51.09-.57-.17l-.62-2.91-3.26-1.02c-.38-.12-.4-.65-.03-.8l11.91-5.42Z" />
     <path fill="hsl(199 89% 55%)" d="M14.43 17.21 20.8 12.7c.12-.08.25.08.15.18l-5.26 5.1-.22 2.08-1.04-2.85Z" />
   </svg>
-);
+));
+TelegramIcon.displayName = 'TelegramIcon';
 
 export const PinterestIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
