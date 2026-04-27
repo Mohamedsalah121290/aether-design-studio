@@ -17,7 +17,7 @@ import SEO from '@/components/SEO';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import { languages } from '@/lib/i18n';
-import { supportLinks } from '@/lib/socialLinks';
+import { isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
 import heroImageMobile from '@/assets/hero-ai-models-mobile.webp';
@@ -271,12 +271,14 @@ const Index = () => {
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
-                <Button variant="heroOutline" size="xl" className="min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
-                  <a href={supportLinks.whatsapp} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="mr-2 h-5 w-5" />
-                    {t('home.chatWhatsapp')}
-                  </a>
-                </Button>
+                {isUsableSocialLink(supportLinks.whatsapp) && (
+                  <Button variant="heroOutline" size="xl" className="min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] backdrop-blur-md bg-white/5 border-white/20 hover:bg-white/10" asChild>
+                    <a href={supportLinks.whatsapp} target="_blank" rel="noopener noreferrer">
+                      <MessageCircle className="mr-2 h-5 w-5" />
+                      {t('home.chatWhatsapp')}
+                    </a>
+                  </Button>
+                )}
               </motion.div>
               <p className="text-[11px] md:text-xs text-white/55">{t('home.secureCheckoutEur')}</p>
             </div>
