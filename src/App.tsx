@@ -33,7 +33,7 @@ import SplashScreen from "./components/SplashScreen";
 import ErrorBoundary from "./components/ErrorBoundary";
 import RecentActivityToast from "./components/RecentActivityToast";
 import { ChatbotSalesFlow } from "./components/ChatbotConversion";
-import { ArrowRight, ShoppingCart } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useTranslation } from 'react-i18next';
 import "@/lib/i18n";
 
@@ -120,16 +120,6 @@ const MobileStickyCTA = () => {
   );
 };
 
-const CartFloatingLink = () => {
-  const location = useLocation();
-  if (location.pathname === '/cart') return null;
-  return (
-    <Link to="/cart" className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-3 z-50 grid h-12 w-12 place-items-center rounded-full border border-primary/25 bg-background/80 text-primary shadow-[0_0_24px_hsl(var(--primary)/0.25)] backdrop-blur-xl transition-transform hover:scale-105 md:bottom-5" aria-label="Cart">
-      <ShoppingCart className="h-5 w-5" />
-    </Link>
-  );
-};
-
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -157,7 +147,6 @@ const App = () => {
                   </ErrorBoundary>
                   <RecentActivityToast />
                   <ChatbotSalesFlow />
-                  <CartFloatingLink />
                   <MobileStickyCTA />
                 </BrowserRouter>
               </TooltipProvider>
