@@ -11,6 +11,7 @@ import esetLogo from '@/assets/logos/eset.png';
 import notionLogo from '@/assets/logos/notion_uploaded.jpeg';
 import perplexityLogo from '@/assets/logos/perplexity_uploaded.jpeg';
 import zoomLogo from '@/assets/logos/zoom_uploaded.jpeg';
+import grokLogo from '@/assets/logos/grok.png';
 
 const manualProductLogos: Record<string, string> = {
   windows: windowsLogo,
@@ -27,7 +28,7 @@ const manualProductLogos: Record<string, string> = {
   coursera: linkedinLogo,
   elevenlabs: elevenlabsLogo,
   eset: esetLogo,
-  grok: chatgptLogo,
+  grok: grokLogo,
   notion: notionLogo,
   perplexity: perplexityLogo,
   zoom: zoomLogo,
