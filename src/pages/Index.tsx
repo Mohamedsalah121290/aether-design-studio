@@ -307,11 +307,11 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
               <div>
-                <p className="mb-2 text-xs font-bold uppercase text-primary">Popular Tools</p>
-                <h2 className="font-display text-2xl font-black text-foreground md:text-4xl">Buy the tools you need faster</h2>
+                <p className="mb-2 text-xs font-bold uppercase text-primary">{t('home.popularTools')}</p>
+                <h2 className="font-display text-2xl font-black text-foreground md:text-4xl">{t('home.productsTitle')}</h2>
               </div>
               <Button variant="heroOutline" size="lg" className="min-h-11 w-full sm:w-auto" asChild>
-                <Link to="/store">View all products<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <Link to="/store">{t('home.viewAllProducts')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -323,7 +323,7 @@ const Index = () => {
                   <h3 className="font-display text-lg font-black text-foreground">{product.name}</h3>
                   <p className="mt-2 min-h-[54px] text-sm leading-relaxed text-muted-foreground">{t(product.benefitKey)}</p>
                   <Button variant="hero" size="sm" className="mt-4 min-h-10 w-full" asChild>
-                    <Link to={`/store?scrollTo=${product.id}`}>Buy Now<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    <Link to={`/store?scrollTo=${product.id}`}>{t('store.buyNow')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </motion.div>
               ))}
@@ -334,8 +334,8 @@ const Index = () => {
         <section className="py-14 md:py-20 relative" aria-label="Why AI Deals">
           <div className="container mx-auto px-4">
             <motion.div {...fadeUp} className="text-center mb-10">
-              <p className="mb-3 text-xs font-bold uppercase text-primary">Why AI Deals</p>
-              <h2 className="text-3xl md:text-5xl font-display font-bold">Simple, safe, and ready to use</h2>
+              <p className="mb-3 text-xs font-bold uppercase text-primary">{t('home.whyAiDeals')}</p>
+              <h2 className="text-3xl md:text-5xl font-display font-bold">{t('home.whyTitle')}</h2>
             </motion.div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
               {whyAiDeals.map((item) => {
