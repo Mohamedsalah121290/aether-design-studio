@@ -22,6 +22,7 @@ import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
 import heroImageMobile from '@/assets/hero-ai-models-mobile.webp';
 import logo from '@/assets/logo.png';
+import { getProductLogoUrl } from '@/lib/productLogos';
 
 /* ══════════════════════════════════════════════════════════════
    DATA
@@ -320,7 +321,7 @@ const Index = () => {
               {popularTools.map((product) => (
                 <motion.div key={product.name} {...fadeUp} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-background/30 transition-all hover:border-primary/35 hover:bg-primary/10">
                   <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <ShoppingBag className="h-5 w-5" />
+                    <img src={getProductLogoUrl(product.id)!} alt={`${product.name} logo`} className="h-7 w-7 object-contain" loading="lazy" />
                   </div>
                   <h3 className="font-display text-lg font-black text-foreground">{product.name}</h3>
                   <p className="mt-2 min-h-[54px] text-sm leading-relaxed text-muted-foreground">{t(product.benefitKey)}</p>
