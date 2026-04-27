@@ -12,11 +12,12 @@ import notionLogo from '@/assets/logos/notion_uploaded.jpeg';
 import perplexityLogo from '@/assets/logos/perplexity_uploaded.jpeg';
 import zoomLogo from '@/assets/logos/zoom_uploaded.jpeg';
 import grokLogo from '@/assets/logos/grok.png';
+import windowsServerStandardLogo from '@/assets/logos/windows_server_standard.jpeg';
 
 const manualProductLogos: Record<string, string> = {
   windows: windowsLogo,
   windows_home: windowsLogo,
-  windows_server: windowsLogo,
+  windows_server: windowsServerStandardLogo,
   windows_vps: windowsLogo,
   chatgpt: chatgptLogo,
   canva: canvaLogo,
