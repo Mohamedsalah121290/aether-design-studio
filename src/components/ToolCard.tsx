@@ -10,7 +10,7 @@ import { formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewPreview } from '@/components/ProductReviews';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
-import { isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
+import { getChatToBuyLinks, isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
 import { addCartItem } from '@/lib/cart';
 
@@ -158,6 +158,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
   const selectedLovablePlanDetails = LOVABLE_PLAN_OPTIONS.find(plan => plan.planId === selectedLovablePlan);
   const periodText = (period: PricePeriod) => t(`store.period.${period.replace('-', '')}`, period === 'one-time' ? 'one time' : period === 'yearly' ? '/ year' : '/ month');
   const periodLabel = (period: PricePeriod) => t(`store.periodLabel.${period.replace('-', '')}`, period === 'one-time' ? 'One-Time' : period === 'yearly' ? 'Yearly' : 'Monthly');
+  const productUrl = `${window.location.origin}/payment/${tool.tool_id}`;
+  const chatToBuyLinks = getChatToBuyLinks(tool.name, productUrl);
 
   const handleAddToCart = (plan?: { planId: string; title: string; price: number }) => {
     const itemPrice = plan?.price ?? price;
@@ -435,6 +437,16 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
                   {['chatgpt', 'canva', 'microsoft_365'].filter((id) => id !== tool.tool_id).slice(0, 2).map((id) => (
                     <Link key={id} to={`/store?scrollTo=${id}`} className="font-medium text-primary hover:text-primary/80 transition-colors">{id === 'microsoft_365' ? 'Microsoft 365' : id === 'chatgpt' ? 'ChatGPT' : 'Canva'}</Link>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {!isComingSoon && !isPaused && (chatToBuyLinks.whatsapp || chatToBuyLinks.telegram) && (
+              <div className="space-y-2">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Chat to Buy</p>
+                <div className="flex gap-3">
+                  {chatToBuyLinks.whatsapp && <Social3DLink href={chatToBuyLinks.whatsapp} label={`Buy ${tool.name} on WhatsApp`} tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
+                  {chatToBuyLinks.telegram && <Social3DLink href={chatToBuyLinks.telegram} label={`Buy ${tool.name} on Telegram`} tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
                 </div>
               </div>
             )}

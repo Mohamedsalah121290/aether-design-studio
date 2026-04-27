@@ -27,7 +27,7 @@ import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
-import { isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
+import { getChatToBuyLinks, isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
 import { getRegionCategory } from '@/lib/geo';
 import { getStripeLink } from '@/lib/stripeLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
@@ -256,6 +256,8 @@ const PaymentPage = () => {
     ? [...PAYMENT_METHODS].sort((a, b) => (a.id === 'bancontact' ? -1 : 0) - (b.id === 'bancontact' ? -1 : 0))
     : PAYMENT_METHODS;
   const checkoutUrl = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name) : null;
+  const productUrl = tool ? `${window.location.origin}/payment/${tool.tool_id}` : '';
+  const chatToBuyLinks = tool ? getChatToBuyLinks(tool.name, productUrl) : { whatsapp: '', telegram: '' };
   const completedPurchases = Number(localStorage.getItem('aiDealsCompletedPurchases') || '0');
 
   // كل الأسعار باليورو € (no conversion)
@@ -775,6 +777,15 @@ const PaymentPage = () => {
                       {isUsableSocialLink(supportLinks.telegram) && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
                     </div>
                   </div>
+                  {(chatToBuyLinks.whatsapp || chatToBuyLinks.telegram) && (
+                    <div>
+                      <p className="mb-2 text-xs font-semibold text-white">Chat to Buy</p>
+                      <div className="flex flex-wrap gap-3">
+                        {chatToBuyLinks.whatsapp && <Social3DLink href={chatToBuyLinks.whatsapp} label={`Buy ${tool.name} on WhatsApp`} tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
+                        {chatToBuyLinks.telegram && <Social3DLink href={chatToBuyLinks.telegram} label={`Buy ${tool.name} on Telegram`} tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Form */}

@@ -23,3 +23,10 @@ export const isUsableSocialLink = (href?: string | null) => {
     return false;
   }
 };
+
+export const getChatToBuyLinks = (productName: string, productUrl: string) => {
+  const message = encodeURIComponent(`Hi I want to buy ${productName} - ${productUrl}`);
+  const whatsapp = isUsableSocialLink(supportLinks.whatsapp) ? `${supportLinks.whatsapp}?text=${message}` : '';
+  const telegram = isUsableSocialLink(supportLinks.telegram) ? `${supportLinks.telegram}?text=${message}` : '';
+  return { whatsapp, telegram };
+};
