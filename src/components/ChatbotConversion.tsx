@@ -190,15 +190,16 @@ const useLang = () => {
   return (supported.includes(raw as LangKey) ? raw : 'en') as LangKey;
 };
 
-const RobotAvatar = ({ className = 'w-9 h-9', lang = 'en', speaking = false, rounded = 'rounded-full' }: { className?: string; lang?: LangKey; speaking?: boolean; rounded?: string }) => (
-  <span className={`relative inline-flex shrink-0 ${className}`} style={{ '--avatar-tint': langTint[lang] } as React.CSSProperties}>
+const RobotAvatar = forwardRef<HTMLSpanElement, { className?: string; lang?: LangKey; speaking?: boolean; rounded?: string }>(({ className = 'w-9 h-9', lang = 'en', speaking = false, rounded = 'rounded-full' }, ref) => (
+  <span ref={ref} className={`relative inline-flex shrink-0 ${className}`} style={{ '--avatar-tint': langTint[lang] } as CSSProperties}>
     <span className={`chatbot-avatar-shell ${speaking ? 'chatbot-avatar-speaking' : ''} ${rounded}`}>
       <img src={robotAvatar} alt="AI Deals Assistant robot avatar" width={448} height={448} loading="lazy" className={`h-full w-full object-cover ${rounded}`} />
       <span className="chatbot-avatar-blink" />
     </span>
     <span className="absolute -bottom-1 -right-1 rounded-full border border-background bg-muted px-1 text-[8px] font-bold text-foreground shadow-sm">{copy[lang].flag}</span>
   </span>
-);
+));
+RobotAvatar.displayName = 'RobotAvatar';
 
 export const ChatbotPromoSection = () => {
   const { t } = useTranslation();
