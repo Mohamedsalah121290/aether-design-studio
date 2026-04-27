@@ -116,6 +116,7 @@ const PaymentPage = () => {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
+  const [pageError, setPageError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<{ email?: string }>({});
   const [showAuthDialog, setShowAuthDialog] = useState(false);
@@ -139,14 +140,19 @@ const PaymentPage = () => {
 
   const fetchToolAndPlans = async (id: string) => {
     setPageLoading(true);
+    setPageError(null);
     try {
+      const timeout = <T,>(promise: Promise<T>, message: string, timeoutMs = 20000) => Promise.race([
+        promise,
+        new Promise<never>((_, reject) => window.setTimeout(() => reject(new Error(message)), timeoutMs)),
+      ]);
       // Fetch tool by tool_id
-      const { data: toolData, error: toolError } = await supabase
+      const { data: toolData, error: toolError } = await timeout(supabase
         .from('tools')
         .select('*')
         .eq('tool_id', id)
         .eq('is_active', true)
-        .single();
+        .single(), t('checkout.loadingTimeout', 'Checkout took too long to load. Please try again.'));
       if (toolError || !toolData) {
         toast({ title: t('checkout.error', 'Error'), description: t('checkout.toolNotFound', 'Tool not found'), variant: 'destructive' });
         navigate('/store');
@@ -155,12 +161,12 @@ const PaymentPage = () => {
       setTool(toolData);
 
       // Fetch plans
-      const { data: plansData } = await supabase
+      const { data: plansData } = await timeout(supabase
         .from('tool_plans')
         .select('*')
         .eq('tool_id', id)
         .eq('is_active', true)
-        .order('monthly_price', { ascending: true, nullsFirst: false });
+        .order('monthly_price', { ascending: true, nullsFirst: false }), t('checkout.loadingTimeout', 'Checkout took too long to load. Please try again.'));
 
       const mapped: ToolPlan[] = (plansData || []).map(p => ({
         id: p.id,
@@ -185,6 +191,9 @@ const PaymentPage = () => {
       if (displayPlans.length > 0) setSelectedPlan(defaultPlan || displayPlans[0]);
     } catch (err) {
       console.error(err);
+      const message = err instanceof Error ? err.message : t('checkout.somethingWrong', 'Something went wrong. Please try again.');
+      setPageError(message);
+      toast({ title: t('checkout.error', 'Error'), description: message, variant: 'destructive' });
     } finally {
       setPageLoading(false);
     }
