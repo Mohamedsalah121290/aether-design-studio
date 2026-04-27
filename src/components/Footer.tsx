@@ -131,7 +131,7 @@ const Footer = () => {
               {t('footer.description')}
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              {footerSocialLinks.map((social) => {
+              {showFooterSocialLinks && footerSocialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
                   <Social3DLink
