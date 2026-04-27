@@ -34,18 +34,18 @@ const trustBadges = [
 ];
 
 const popularTools = [
-  { name: 'ChatGPT', id: 'chatgpt', benefit: 'AI writing, research, coding, and productivity help.' },
-  { name: 'Microsoft Office', id: 'microsoft_office', benefit: 'Word, Excel, PowerPoint, and everyday work tools.' },
-  { name: 'Windows', id: 'windows', benefit: 'Reliable Windows licensing for your device.' },
-  { name: 'Microsoft Copilot', id: 'microsoft_365', benefit: 'Microsoft AI assistance for documents and workflows.' },
-  { name: 'Canva Pro', id: 'canva', benefit: 'Create designs, posts, and brand visuals faster.' },
+  { name: 'ChatGPT', id: 'chatgpt', benefitKey: 'home.popularBenefit.chatgpt' },
+  { name: 'Microsoft Office', id: 'microsoft_office', benefitKey: 'home.popularBenefit.office' },
+  { name: 'Windows', id: 'windows', benefitKey: 'home.popularBenefit.windows' },
+  { name: 'Microsoft Copilot', id: 'microsoft_365', benefitKey: 'home.popularBenefit.copilot' },
+  { name: 'Canva Pro', id: 'canva', benefitKey: 'home.popularBenefit.canva' },
 ];
 
 const whyAiDeals = [
-  { icon: Shield, title: 'Affordable', desc: 'Premium software access with clear checkout.' },
-  { icon: Zap, title: 'Instant delivery', desc: 'Fast digital delivery after purchase.' },
-  { icon: PackageCheck, title: 'Simple activation', desc: 'Clear access steps without confusion.' },
-  { icon: Headphones, title: 'Support', desc: 'Help is available when you need it.' },
+  { icon: Shield, titleKey: 'home.whyCards.affordableTitle', descKey: 'home.whyCards.affordableText' },
+  { icon: Zap, titleKey: 'home.whyCards.deliveryTitle', descKey: 'home.whyCards.deliveryText' },
+  { icon: PackageCheck, titleKey: 'home.whyCards.activationTitle', descKey: 'home.whyCards.activationText' },
+  { icon: Headphones, titleKey: 'home.whyCards.supportTitle', descKey: 'home.whyCards.supportText' },
 ];
 
 const SESSION_OFFER_MS = 15 * 60 * 1000;
@@ -307,11 +307,11 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
               <div>
-                <p className="mb-2 text-xs font-bold uppercase text-primary">Popular Tools</p>
-                <h2 className="font-display text-2xl font-black text-foreground md:text-4xl">Buy the tools you need faster</h2>
+                <p className="mb-2 text-xs font-bold uppercase text-primary">{t('home.popularTools')}</p>
+                <h2 className="font-display text-2xl font-black text-foreground md:text-4xl">{t('home.productsTitle')}</h2>
               </div>
               <Button variant="heroOutline" size="lg" className="min-h-11 w-full sm:w-auto" asChild>
-                <Link to="/store">View all products<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <Link to="/store">{t('home.viewAllProducts')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -321,9 +321,9 @@ const Index = () => {
                     <ShoppingBag className="h-5 w-5" />
                   </div>
                   <h3 className="font-display text-lg font-black text-foreground">{product.name}</h3>
-                  <p className="mt-2 min-h-[54px] text-sm leading-relaxed text-muted-foreground">{product.benefit}</p>
+                  <p className="mt-2 min-h-[54px] text-sm leading-relaxed text-muted-foreground">{t(product.benefitKey)}</p>
                   <Button variant="hero" size="sm" className="mt-4 min-h-10 w-full" asChild>
-                    <Link to={`/store?scrollTo=${product.id}`}>Buy Now<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    <Link to={`/store?scrollTo=${product.id}`}>{t('store.buyNow')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </motion.div>
               ))}
@@ -334,19 +334,19 @@ const Index = () => {
         <section className="py-14 md:py-20 relative" aria-label="Why AI Deals">
           <div className="container mx-auto px-4">
             <motion.div {...fadeUp} className="text-center mb-10">
-              <p className="mb-3 text-xs font-bold uppercase text-primary">Why AI Deals</p>
-              <h2 className="text-3xl md:text-5xl font-display font-bold">Simple, safe, and ready to use</h2>
+              <p className="mb-3 text-xs font-bold uppercase text-primary">{t('home.whyAiDeals')}</p>
+              <h2 className="text-3xl md:text-5xl font-display font-bold">{t('home.whyTitle')}</h2>
             </motion.div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
               {whyAiDeals.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <motion.div key={item.title} {...fadeUp} className="glass rounded-2xl p-6 text-center hover:border-primary/30 transition-all duration-300">
+                  <motion.div key={item.titleKey} {...fadeUp} className="glass rounded-2xl p-6 text-center hover:border-primary/30 transition-all duration-300">
                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                       <Icon className="w-5 h-5 text-primary" />
                     </div>
-                    <h3 className="font-display text-lg font-bold text-foreground">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
+                    <h3 className="font-display text-lg font-bold text-foreground">{t(item.titleKey)}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(item.descKey)}</p>
                   </motion.div>
                 );
               })}

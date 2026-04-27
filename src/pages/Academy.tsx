@@ -26,46 +26,46 @@ import courseraLogo from '@/assets/logos/coursera.jpeg';
 
 const courseCategories = [
   {
-    name: 'AI Tools',
+    nameKey: 'academy.courseCategories.ai',
     courses: [
-      { title: 'ChatGPT Course', description: 'Learn how to use ChatGPT for writing, ideas, business tasks, and daily productivity.', logo: chatgptLogo },
-      { title: 'Microsoft Copilot Course', description: 'Learn how to use Copilot with Word, Excel, Outlook, and business workflows.', logo: microsoftCopilotLogo },
-      { title: 'Lovable Course', description: 'Learn how to build websites and apps with AI.', logo: lovableLogo },
-      { title: 'Perplexity Course', description: 'Learn AI search, research, summaries, and source-based answers.', logo: perplexityLogo },
-      { title: 'Grok Course', description: 'Learn how to use Grok for AI chat, research, and productivity.', logo: grokLogo },
-      { title: 'ElevenLabs Course', description: 'Learn AI voice generation, voiceovers, and audio content.', logo: elevenlabsLogo },
+      { key: 'chatgpt', logo: chatgptLogo },
+      { key: 'copilot', logo: microsoftCopilotLogo },
+      { key: 'lovable', logo: lovableLogo },
+      { key: 'perplexity', logo: perplexityLogo },
+      { key: 'grok', logo: grokLogo },
+      { key: 'elevenlabs', logo: elevenlabsLogo },
     ],
   },
   {
-    name: 'Microsoft & Windows',
+    nameKey: 'academy.courseCategories.microsoft',
     courses: [
-      { title: 'Microsoft Office 365 Course', description: 'Learn Word, Excel, PowerPoint, Outlook, and productivity features.', logo: microsoftOffice365Logo },
-      { title: 'Office Pro Plus Course', description: 'Learn how to install, activate, and use Office tools properly.', logo: officeProPlusLogo },
-      { title: 'Windows 10 / 11 Pro Course', description: 'Learn setup, activation, security, updates, and productivity tips.', logo: windowsLogo },
-      { title: 'Windows 10 / 11 Home Course', description: 'Learn installation, activation, and daily Windows usage.', logo: windowsLogo },
-      { title: 'Windows Server Course', description: 'Learn server basics, setup, users, security, and remote access.', logo: windowsServerLogo },
+      { key: 'office365', logo: microsoftOffice365Logo },
+      { key: 'officePro', logo: officeProPlusLogo },
+      { key: 'windowsPro', logo: windowsLogo },
+      { key: 'windowsHome', logo: windowsLogo },
+      { key: 'windowsServer', logo: windowsServerLogo },
     ],
   },
   {
-    name: 'Design & Video',
+    nameKey: 'academy.courseCategories.design',
     courses: [
-      { title: 'Canva Course', description: 'Learn design basics, social media posts, presentations, and branding.', logo: canvaLogo },
-      { title: 'CapCut Course', description: 'Learn video editing, reels, TikTok videos, captions, and templates.', logo: capcutLogo },
+      { key: 'canva', logo: canvaLogo },
+      { key: 'capcut', logo: capcutLogo },
     ],
   },
   {
-    name: 'Learning & Productivity',
+    nameKey: 'academy.courseCategories.productivity',
     courses: [
-      { title: 'Coursera Course', description: 'Learn how to find, follow, and complete online courses.', logo: courseraLogo },
-      { title: 'LinkedIn Premium Course', description: 'Learn job search, networking, LinkedIn Learning, and profile growth.', logo: linkedinLogo },
-      { title: 'Notion Education Plus Course', description: 'Learn notes, project management, planning, and databases.', logo: notionLogo },
-      { title: 'Zoom Pro Course', description: 'Learn online meetings, recordings, webinars, and professional calls.', logo: zoomLogo },
+      { key: 'coursera', logo: courseraLogo },
+      { key: 'linkedin', logo: linkedinLogo },
+      { key: 'notion', logo: notionLogo },
+      { key: 'zoom', logo: zoomLogo },
     ],
   },
   {
-    name: 'Security',
+    nameKey: 'academy.courseCategories.security',
     courses: [
-      { title: 'ESET Internet Security Course', description: 'Learn device protection, antivirus setup, privacy, and safe browsing.', logo: esetLogo },
+      { key: 'eset', logo: esetLogo },
     ],
   },
 ];
@@ -125,17 +125,20 @@ const Academy = () => {
               transition={{ duration: 0.5 }}
               className="mb-8 text-center"
             >
-              <p className="mb-3 text-xs font-bold uppercase text-primary">Course Posters</p>
-              <h2 className="text-3xl font-display font-black md:text-5xl">Learning tracks opening soon</h2>
+              <p className="mb-3 text-xs font-bold uppercase text-primary">{t('academy.coursePosters')}</p>
+              <h2 className="text-3xl font-display font-black md:text-5xl">{t('academy.tracksOpeningSoon')}</h2>
             </motion.div>
             <div className="space-y-12">
               {courseCategories.map((category) => (
-                <section key={category.name} aria-label={category.name}>
-                  <h3 className="mb-5 font-display text-2xl font-black text-foreground">{category.name}</h3>
+                <section key={category.nameKey} aria-label={t(category.nameKey)}>
+                  <h3 className="mb-5 font-display text-2xl font-black text-foreground">{t(category.nameKey)}</h3>
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {category.courses.map((course, index) => (
+                    {category.courses.map((course, index) => {
+                      const title = t(`academy.courses.${course.key}.title`);
+                      const description = t(`academy.courses.${course.key}.description`);
+                      return (
                       <motion.article
-                        key={course.title}
+                        key={course.key}
                         initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -147,18 +150,18 @@ const Academy = () => {
                         <div className="relative z-10 flex w-full flex-col justify-between">
                           <div>
                             <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-background/70 p-3 shadow-lg shadow-primary/10">
-                              <img src={course.logo} alt={`${course.title} logo`} className="h-full w-full object-contain" loading="lazy" />
+                              <img src={course.logo} alt={`${title} logo`} className="h-full w-full object-contain" loading="lazy" />
                             </div>
-                            <p className="mb-3 text-xs font-bold uppercase text-primary">Coming Soon</p>
-                            <h4 className="font-display text-2xl font-black leading-tight text-foreground">{course.title}</h4>
-                            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{course.description}</p>
+                            <p className="mb-3 text-xs font-bold uppercase text-primary">{t('academy.comingSoonLabel')}</p>
+                            <h4 className="font-display text-2xl font-black leading-tight text-foreground">{title}</h4>
+                            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{description}</p>
                           </div>
                           <Button variant="heroOutline" className="mt-8 w-full" asChild>
-                            <a href={`mailto:info@aideals.be?subject=Notify%20me%20about%20${encodeURIComponent(course.title)}`}>Notify Me</a>
+                            <a href={`mailto:info@aideals.be?subject=Notify%20me%20about%20${encodeURIComponent(title)}`}>{t('academy.notifyMe')}</a>
                           </Button>
                         </div>
                       </motion.article>
-                    ))}
+                    );})}
                   </div>
                 </section>
               ))}
