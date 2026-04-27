@@ -321,7 +321,7 @@ const Index = () => {
                     <ShoppingBag className="h-5 w-5" />
                   </div>
                   <h3 className="font-display text-lg font-black text-foreground">{product.name}</h3>
-                  <p className="mt-2 min-h-[54px] text-sm leading-relaxed text-muted-foreground">{product.benefit}</p>
+                  <p className="mt-2 min-h-[54px] text-sm leading-relaxed text-muted-foreground">{t(product.benefitKey)}</p>
                   <Button variant="hero" size="sm" className="mt-4 min-h-10 w-full" asChild>
                     <Link to={`/store?scrollTo=${product.id}`}>Buy Now<ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
@@ -341,12 +341,12 @@ const Index = () => {
               {whyAiDeals.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <motion.div key={item.title} {...fadeUp} className="glass rounded-2xl p-6 text-center hover:border-primary/30 transition-all duration-300">
+                  <motion.div key={item.titleKey} {...fadeUp} className="glass rounded-2xl p-6 text-center hover:border-primary/30 transition-all duration-300">
                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                       <Icon className="w-5 h-5 text-primary" />
                     </div>
-                    <h3 className="font-display text-lg font-bold text-foreground">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
+                    <h3 className="font-display text-lg font-bold text-foreground">{t(item.titleKey)}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(item.descKey)}</p>
                   </motion.div>
                 );
               })}
