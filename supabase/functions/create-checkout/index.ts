@@ -108,8 +108,9 @@ serve(async (req) => {
 
     const body = await req.json();
     const { toolId, planId, customerEmail, useWalletCredit, paymentMethodTypes } = body;
-    if (!toolId) throw new Error("toolId is required");
-    logStep("Request parsed", { toolId, planId, useWalletCredit });
+    const cartItems = Array.isArray(body.items) ? body.items : [];
+    if (!toolId && cartItems.length === 0) throw new Error("toolId or cart items are required");
+    logStep("Request parsed", { toolId, planId, cartItemCount: cartItems.length, useWalletCredit });
 
     // --- Payment method & currency config ---
     const requestedPmTypes = Array.isArray(paymentMethodTypes) && paymentMethodTypes.length > 0
@@ -134,7 +135,6 @@ serve(async (req) => {
     }
     logStep("Auth check", { userId: user?.id, email: user?.email });
 
-    const cartItems = Array.isArray(body.items) ? body.items : [];
     if (cartItems.length > 0) {
       const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2025-08-27.basil" });
       const email = customerEmail || user?.email;
