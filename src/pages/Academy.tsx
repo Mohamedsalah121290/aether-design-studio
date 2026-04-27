@@ -47,25 +47,25 @@ const courseCategories = [
     ],
   },
   {
-    name: 'Design & Video',
+    nameKey: 'academy.courseCategories.design',
     courses: [
-      { title: 'Canva Course', description: 'Learn design basics, social media posts, presentations, and branding.', logo: canvaLogo },
-      { title: 'CapCut Course', description: 'Learn video editing, reels, TikTok videos, captions, and templates.', logo: capcutLogo },
+      { key: 'canva', logo: canvaLogo },
+      { key: 'capcut', logo: capcutLogo },
     ],
   },
   {
-    name: 'Learning & Productivity',
+    nameKey: 'academy.courseCategories.productivity',
     courses: [
-      { title: 'Coursera Course', description: 'Learn how to find, follow, and complete online courses.', logo: courseraLogo },
-      { title: 'LinkedIn Premium Course', description: 'Learn job search, networking, LinkedIn Learning, and profile growth.', logo: linkedinLogo },
-      { title: 'Notion Education Plus Course', description: 'Learn notes, project management, planning, and databases.', logo: notionLogo },
-      { title: 'Zoom Pro Course', description: 'Learn online meetings, recordings, webinars, and professional calls.', logo: zoomLogo },
+      { key: 'coursera', logo: courseraLogo },
+      { key: 'linkedin', logo: linkedinLogo },
+      { key: 'notion', logo: notionLogo },
+      { key: 'zoom', logo: zoomLogo },
     ],
   },
   {
-    name: 'Security',
+    nameKey: 'academy.courseCategories.security',
     courses: [
-      { title: 'ESET Internet Security Course', description: 'Learn device protection, antivirus setup, privacy, and safe browsing.', logo: esetLogo },
+      { key: 'eset', logo: esetLogo },
     ],
   },
 ];
