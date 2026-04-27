@@ -145,7 +145,6 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 const Index = () => {
   const { t, i18n } = useTranslation();
   const newsletter = useNewsletterSubscribe();
-  const [activeIntent, setActiveIntent] = useState<IntentKey>('student');
 
   useEffect(() => {
     const lang = languages.find(l => l.code === i18n.language);
@@ -160,17 +159,6 @@ const Index = () => {
     transition: { duration: 0.5 },
   };
 
-  const enterFunnel = (key: IntentKey) => {
-    setActiveIntent(key);
-    localStorage.setItem('aiDealsActiveFunnel', key);
-    window.dispatchEvent(new CustomEvent('aiDeals:funnel', { detail: key }));
-  };
-
-  const activeFunnel = intentFunnels[activeIntent];
-  const ActiveFunnelIcon = activeFunnel.icon;
-  const localizedSteps = t('howSteps', { returnObjects: true }) as { title: string; desc: string }[];
-  const localizedAudiences = t('audiences', { returnObjects: true }) as Record<string, { title: string; headline: string; lines: string[] }>;
-  const audienceKeys = ['students', 'creators', 'professionals'] as const;
 
   return (
     <div className="min-h-screen bg-background">
@@ -179,20 +167,20 @@ const Index = () => {
 
       <main>
         {/* ═══════════════ 1) HERO ═══════════════ */}
-        <section className="relative min-h-[92svh] md:min-h-[94vh] flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[92svh] md:min-h-[94vh] flex items-center justify-start overflow-hidden">
           <div className="absolute inset-0 w-full h-full">
-            <img src={heroImageMobile} alt="AI DEALS premium AI tools" className="absolute inset-0 h-full w-full object-cover md:hidden" fetchPriority="high" />
-            <video autoPlay loop muted playsInline poster={heroImage} className="absolute inset-0 hidden w-full h-full object-cover md:block">
+            <img src={heroImageMobile} alt="AI DEALS premium AI tools" className="absolute inset-0 h-full w-full object-cover object-[58%_center] md:hidden" fetchPriority="high" />
+            <video autoPlay loop muted playsInline poster={heroImage} className="absolute inset-0 hidden w-full h-full object-cover object-center md:block">
               <source src={heroVideo} type="video/mp4" />
             </video>
-            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.7) 70%, hsl(var(--background)) 100%)' }} />
-            <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)' }} />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.12) 52%, hsl(var(--background) / 0.78) 100%)' }} />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to right, hsl(var(--background) / 0.2) 0%, transparent 48%, transparent 100%)' }} />
           </div>
 
           <div className="container mx-auto px-4 relative z-10 pt-20 pb-10 md:pt-24 md:pb-12">
-            <div className="max-w-5xl mx-auto text-center rounded-[28px] border border-white/10 bg-background/55 px-4 py-6 shadow-2xl shadow-background/60 backdrop-blur-md sm:px-8 md:px-12 md:py-9">
+            <div className="max-w-3xl text-left rounded-[28px] border border-white/10 bg-background/62 px-4 py-6 shadow-2xl shadow-background/60 sm:px-8 md:px-10 md:py-8">
               <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="mb-3 md:mb-5">
-                <img src={logo} alt="AI DEALS" className="h-14 sm:h-16 md:h-24 w-auto mx-auto drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]" />
+                <img src={logo} alt="AI DEALS" className="h-14 sm:h-16 md:h-24 w-auto drop-shadow-[0_0_40px_rgba(168,85,247,0.6)]" />
               </motion.div>
 
               {/* Tagline */}
@@ -226,12 +214,12 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-base sm:text-lg md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-5"
+                className="text-base sm:text-lg md:text-2xl text-white/90 max-w-2xl leading-relaxed mb-5"
               >
                 {t('home.heroSubtitle')}
               </motion.p>
 
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.5 }} className="mb-5 md:mb-7 flex flex-wrap items-center justify-center gap-2.5 md:gap-3">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.5 }} className="mb-5 md:mb-7 flex flex-wrap items-center justify-start gap-2.5 md:gap-3">
                 {trustBadges.map(({ icon: Icon, labelKey }) => (
                   <div key={labelKey} className="flex min-h-10 items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3.5 py-2 text-sm font-bold text-white/85 backdrop-blur-md">
                     <Icon className="h-4 w-4 text-primary" />
@@ -241,7 +229,7 @@ const Index = () => {
               </motion.div>
 
               {/* CTAs */}
-              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-3 md:mb-4">
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }} className="flex flex-col sm:flex-row items-center justify-start gap-3 sm:gap-4 mb-3 md:mb-4">
                 <Button variant="hero" size="xl" className="group min-h-[56px] w-full max-w-xs sm:w-auto sm:min-w-[200px] shadow-2xl" asChild>
                   <Link to="/store">
                     <span>{t('home.viewDeals')}</span>
@@ -280,28 +268,27 @@ const Index = () => {
           </motion.div>
         </section>
 
-        <section className="relative -mt-2 pb-10 md:pb-14" aria-label={t('home.bestSellersTitle')}>
+        <section className="relative -mt-2 pb-12 pt-8 md:pb-16" aria-label="Popular Tools">
           <div className="container mx-auto px-4">
-            <div className="mb-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
+            <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
               <div>
-                <p className="mb-2 text-xs font-bold uppercase text-primary">{t('home.bestSellersKicker')}</p>
-                <h2 className="font-display text-2xl font-black text-foreground md:text-4xl">{t('home.bestSellersTitle')}</h2>
+                <p className="mb-2 text-xs font-bold uppercase text-primary">Popular Tools</p>
+                <h2 className="font-display text-2xl font-black text-foreground md:text-4xl">Buy the tools you need faster</h2>
               </div>
               <Button variant="heroOutline" size="lg" className="min-h-11 w-full sm:w-auto" asChild>
-                <Link to="/store">{t('home.viewAllDeals')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <Link to="/store">View all products<ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-              {bestSellerPreview.map((product) => (
-                <motion.div key={product.name} {...fadeUp} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-background/30 backdrop-blur-md transition-all hover:border-primary/35 hover:bg-primary/10">
+              {popularTools.map((product) => (
+                <motion.div key={product.name} {...fadeUp} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-background/30 transition-all hover:border-primary/35 hover:bg-primary/10">
                   <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Star className="h-5 w-5" />
+                    <ShoppingBag className="h-5 w-5" />
                   </div>
                   <h3 className="font-display text-lg font-black text-foreground">{product.name}</h3>
-                  <p className="mt-2 min-h-[44px] text-sm leading-relaxed text-muted-foreground">{t(product.benefitKey)}</p>
-                  <p className="mt-4 text-sm font-bold text-primary">{t(product.priceKey)}</p>
+                  <p className="mt-2 min-h-[54px] text-sm leading-relaxed text-muted-foreground">{product.benefit}</p>
                   <Button variant="hero" size="sm" className="mt-4 min-h-10 w-full" asChild>
-                    <Link to={`/store?scrollTo=${product.id}`}>{t('home.buyNow')}<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    <Link to={`/store?scrollTo=${product.id}`}>Buy Now<ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </motion.div>
               ))}
@@ -309,349 +296,91 @@ const Index = () => {
           </div>
         </section>
 
-        <section className="py-10 md:py-16 relative" aria-label={t('home.chooseFits')}>
+        <section className="py-14 md:py-20 relative" aria-label="Why AI Deals">
           <div className="container mx-auto px-4">
             <motion.div {...fadeUp} className="text-center mb-10">
-              <h2 className="text-3xl md:text-5xl font-display font-bold">{t('home.chooseFits')}</h2>
+              <p className="mb-3 text-xs font-bold uppercase text-primary">Why AI Deals</p>
+              <h2 className="text-3xl md:text-5xl font-display font-bold">Simple, safe, and ready to use</h2>
             </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto mb-8">
-              {(Object.entries(intentFunnels) as [IntentKey, typeof intentFunnels[IntentKey]][]).map(([key, funnel], index) => {
-                const Icon = funnel.icon;
-                const isActive = activeIntent === key;
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
+              {whyAiDeals.map((item) => {
+                const Icon = item.icon;
                 return (
-                  <motion.button
-                    key={key}
-                    type="button"
-                    onClick={() => enterFunnel(key)}
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.08 }}
-                    className={`glass min-h-[164px] rounded-2xl p-5 text-left transition-all duration-300 active:scale-[0.99] ${isActive ? 'border-primary/45 bg-primary/10' : 'hover:border-primary/30'}`}
-                    aria-pressed={isActive}
-                  >
-                    <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon className="h-6 w-6" /></span>
-                    <h3 className="font-display text-xl font-bold text-foreground">{t(`funnels.${key}.title`)}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`funnels.${key}.description`)}</p>
-                    <span className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground">{t('home.start')}</span>
-                  </motion.button>
-                );
-              })}
-            </div>
-
-            <motion.div key={activeIntent} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className="glass rounded-3xl p-5 md:p-8 max-w-5xl mx-auto">
-              <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-6 lg:gap-8 items-start">
-                <div>
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><ActiveFunnelIcon className="h-6 w-6" /></div>
-                  <h3 className="text-2xl md:text-4xl font-display font-bold leading-tight">{t(`funnels.${activeIntent}.headline`)}</h3>
-                  <div className="mt-5 space-y-3">
-                    {(t(`funnels.${activeIntent}.reasons`, { returnObjects: true }) as string[]).map((reason) => (
-                      <div key={reason} className="flex items-center gap-3 text-sm text-foreground"><CheckCircle className="h-4 w-4 shrink-0 text-primary" />{reason}</div>
-                    ))}
-                  </div>
-                  <Button variant="hero" size="lg" className="mt-7 min-h-[52px] w-full sm:w-auto" asChild>
-                    <Link to={`/store?scrollTo=${activeFunnel.products[0].id}`} onClick={() => enterFunnel(activeIntent)}>{t(`funnels.${activeIntent}.cta`)}<ArrowRight className="ml-2 h-4 w-4" /></Link>
-                  </Button>
-                </div>
-
-                <div className="grid gap-3">
-                  {activeFunnel.products.map((product) => (
-                    <Link key={`${activeIntent}-${product.id}-${product.name}`} to={`/store?scrollTo=${product.id}`} onClick={() => enterFunnel(activeIntent)} className={`rounded-2xl border p-4 transition-all hover:border-primary/35 active:scale-[0.99] ${product.best ? 'border-primary/35 bg-primary/10' : 'border-border bg-muted/20'}`}>
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="min-w-0">
-                          <div className="mb-2 flex flex-wrap items-center gap-2">
-                            {product.best && <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold text-primary">{t('home.bestChoice')}</span>}
-                            {product.best && <span className="text-[11px] font-medium text-muted-foreground">{t('home.usersLikeYou')}</span>}
-                          </div>
-                          <h4 className="truncate font-display text-lg font-bold text-foreground">{product.name}</h4>
-                        </div>
-                        <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{t('home.start')}</span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <section className="md:hidden py-10 relative" aria-label="Mobile conversion shortcuts">
-          <div className="container mx-auto px-4 space-y-6">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold text-primary uppercase tracking-wider">{t('home.mobilePopularTools')}</p>
-                <h2 className="text-2xl font-display font-bold">{t('home.buyFasterMobile')}</h2>
-              </div>
-              <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary">{t('home.viewingNowShort')}</span>
-            </div>
-            <div className="grid gap-3">
-              {mobilePopularTools.map((tool) => (
-                <Link key={tool.id} to={`/store?scrollTo=${tool.id}`} className="glass min-h-[104px] rounded-2xl p-4 flex items-center justify-between gap-4 active:scale-[0.99] transition-transform">
-                  <div className="min-w-0">
-                    <span className="inline-flex mb-2 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-muted-foreground">{tool.badge}</span>
-                    <h3 className="text-base font-display font-bold text-foreground truncate">{tool.name}</h3>
-                    <p className="text-sm font-semibold text-primary mt-1">{tool.price}</p>
-                    <p className="mt-1 text-xs font-medium text-muted-foreground">{t('home.taxNote')}</p>
-                  </div>
-                  <span className="min-h-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground">{t('store.buyNow')}</span>
-                </Link>
-              ))}
-            </div>
-            <p className="text-center text-xs text-muted-foreground">{t('home.mobileTrustLine')}</p>
-          </div>
-        </section>
-
-        {/* ═══════════════ 2) PROBLEM → SOLUTION ═══════════════ */}
-        <section className="py-24 relative">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <motion.div {...fadeUp} className="text-center mb-12">
-                <h2 className="text-3xl md:text-5xl font-display font-bold mb-6">
-                  {t('store.clearSimpleSafe')}
-                </h2>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="glass rounded-3xl p-8 md:p-12"
-              >
-                <div className="grid md:grid-cols-2 gap-10">
-                  <div className="space-y-4">
-                    <p className="text-lg font-semibold text-foreground">{t('home.problemTitle')}</p>
-                    <div className="space-y-2">
-                      {(t('home.problemLines', { returnObjects: true }) as string[]).map((line, i) => (
-                        <p key={i} className="text-muted-foreground text-base">{line}</p>
-                      ))}
+                  <motion.div key={item.title} {...fadeUp} className="glass rounded-2xl p-6 text-center hover:border-primary/30 transition-all duration-300">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <Icon className="w-5 h-5 text-primary" />
                     </div>
-                  </div>
-                  <div className="space-y-4">
-                    <p className="text-lg font-semibold text-foreground">{t('home.solutionTitle')}</p>
-                    <p className="text-primary font-bold text-lg mb-3">{t('home.solutionLead')}</p>
-                    <div className="space-y-3">
-                      {(t('home.solutionLines', { returnObjects: true }) as string[]).map((item, i) => (
-                        <div key={i} className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-3.5 h-3.5 text-primary" />
-                          </div>
-                          <span className="text-foreground text-sm">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════════ 3) WHO IT'S FOR ═══════════════ */}
-        <section className="py-24 relative">
-          <div className="container mx-auto px-4">
-            <motion.div {...fadeUp} className="text-center mb-16">
-              <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                {t('home.builtForYou')}
-              </span>
-              <h2 className="text-3xl md:text-5xl font-display font-bold">
-                {t('home.whoUses')} <span className="gradient-text">AI DEALS</span>?
-              </h2>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {audienceKeys.map((key, i) => {
-                const a = localizedAudiences[key];
-                const Icon = audiences[i].icon;
-                return (
-                  <motion.div
-                    key={a.title}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.12 }}
-                    className="glass rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300 group"
-                  >
-                    <div className={`bg-gradient-to-br ${audiences[i].gradient} p-6 flex items-center gap-4`}>
-                      <div className="w-12 h-12 rounded-xl bg-background/30 backdrop-blur-sm flex items-center justify-center">
-                        <Icon className="w-6 h-6 text-primary" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground font-medium">{a.title}</p>
-                        <h3 className="text-xl font-display font-bold">{a.headline}</h3>
-                      </div>
-                    </div>
-                    <div className="p-6 space-y-3">
-                      {a.lines.map((line, j) => (
-                        <div key={j} className="flex items-start gap-3">
-                          <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                          <span className="text-muted-foreground text-sm">{line}</span>
-                        </div>
-                      ))}
-                    </div>
+                    <h3 className="font-display text-lg font-bold text-foreground">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
                   </motion.div>
                 );
               })}
             </div>
-
-            <motion.p
-              {...fadeUp}
-              className="text-center text-xs text-muted-foreground mt-8 max-w-md mx-auto flex items-center justify-center gap-2"
-            >
-              <Shield className="w-3.5 h-3.5 text-primary" />
-              {t('home.responsiblePrivacy')}
-            </motion.p>
           </div>
         </section>
 
-        {/* ═══════════════ 4) HOW IT WORKS ═══════════════ */}
-        <section id="how-it-works" className="py-24 relative">
+        <section id="how-it-works" className="py-14 md:py-20 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
           <div className="container mx-auto px-4 relative z-10">
-            <motion.div {...fadeUp} className="text-center mb-16">
-              <span className="inline-block text-primary font-semibold mb-4 text-sm uppercase tracking-wider">
-                {t('home.howItWorks')}
-              </span>
-              <h2 className="text-3xl md:text-5xl font-display font-bold">
-                {t('home.simpleClearDone')}
-              </h2>
+            <motion.div {...fadeUp} className="text-center mb-10">
+              <p className="mb-3 text-xs font-bold uppercase text-primary">How It Works</p>
+              <h2 className="text-3xl md:text-5xl font-display font-bold">Four simple steps</h2>
             </motion.div>
-
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto mb-8">
-              {localizedSteps.map((step, i) => (
-                <motion.div
-                  key={steps[i].num}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="glass rounded-2xl p-6 text-center hover:border-primary/30 transition-all duration-300 relative"
-                >
-                  <span
-                    className="text-5xl font-display font-black absolute top-4 right-4 opacity-[0.06]"
-                    style={{ lineHeight: 1 }}
-                  >
-                    {steps[i].num}
-                  </span>
+              {steps.map((step, i) => (
+                <motion.div key={step.num} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="glass rounded-2xl p-6 text-center hover:border-primary/30 transition-all duration-300 relative">
+                  <span className="text-5xl font-display font-black absolute top-4 right-4 opacity-[0.06]" style={{ lineHeight: 1 }}>{step.num}</span>
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                    <span className="text-primary font-display font-bold text-sm">{steps[i].num}</span>
+                    <span className="text-primary font-display font-bold text-sm">{step.num}</span>
                   </div>
                   <h3 className="font-display font-bold text-sm mb-2">{step.title}</h3>
                   <p className="text-muted-foreground text-xs leading-relaxed">{step.desc}</p>
                 </motion.div>
               ))}
             </div>
-
-            <motion.p
-              {...fadeUp}
-              className="text-center text-xs text-muted-foreground flex items-center justify-center gap-2"
-            >
+            <motion.p {...fadeUp} className="text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
               <Lock className="w-3.5 h-3.5 text-primary" />
-              {t('home.noSensitive')}
+              No personal password is required before payment.
             </motion.p>
           </div>
         </section>
 
-        <section className="md:hidden py-10 relative" aria-label="Mobile trust and reviews">
-          <div className="container mx-auto px-4 space-y-6">
-            <div className="glass rounded-2xl p-5 text-center">
-              <div className="flex items-center justify-center gap-1 mb-2" aria-label="4.8 out of 5 rating">
-                {Array.from({ length: 5 }).map((_, index) => <Star key={index} className="h-4 w-4 fill-current text-primary" />)}
-              </div>
-              <h2 className="text-xl font-display font-bold">{t('home.trustedUsers')}</h2>
-              <p className="mt-2 text-sm text-muted-foreground">{t('home.verifiedAccess')}</p>
-              <div className="mt-4 flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
-                <span className="inline-flex items-center gap-1"><Shield className="h-3.5 w-3.5 text-primary" />{t('home.protected')}</span>
-                <span className="inline-flex items-center gap-1"><CreditCard className="h-3.5 w-3.5 text-primary" />Stripe</span>
-                <span className="inline-flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-primary" />{t('home.fastActivation')}</span>
-              </div>
+        <section className="py-14 md:py-20 relative" aria-label="Customer Feedback">
+          <div className="container mx-auto px-4">
+            <motion.div {...fadeUp} className="text-center mb-10">
+              <p className="mb-3 text-xs font-bold uppercase text-primary">Customer Feedback</p>
+              <h2 className="text-3xl md:text-5xl font-display font-bold">Short messages from buyers</h2>
+            </motion.div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+              {customerFeedback.map((line) => (
+                <motion.div key={line} {...fadeUp} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <div className="mb-2 flex gap-1 text-primary" aria-label="5 stars">{Array.from({ length: 5 }).map((_, index) => <Star key={index} className="h-3.5 w-3.5 fill-current" />)}</div>
+                  <p className="text-sm leading-relaxed text-muted-foreground">“{line}”</p>
+                </motion.div>
+              ))}
             </div>
-            <div className="overflow-x-auto -mx-4 px-4 pb-1">
-              <div className="flex gap-3 min-w-max">
-                {socialProofReviews.slice(0, 8).map((review) => (
-                  <div key={`${review.name}-${review.product}`} className="glass w-64 rounded-2xl p-4">
-                    <div className="flex items-center justify-between gap-3 mb-3">
-                      <div className="min-w-0"><p className="text-sm font-bold truncate">{review.name}</p><p className="text-xs text-muted-foreground">{review.flag} {review.country}</p></div>
-                      <span className="text-xs text-primary">★★★★★</span>
+            <motion.div {...fadeUp} className="mt-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] max-w-5xl mx-auto items-center">
+              <div>
+                <h3 className="font-display text-2xl font-bold text-foreground">Real Messages</h3>
+                <p className="mt-2 text-sm text-muted-foreground">WhatsApp-style feedback previews with personal details blurred for privacy.</p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {realMessages.map((message) => (
+                  <div key={message} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-background/30">
+                    <div className="mb-3 flex items-center gap-2">
+                      <span className="h-8 w-8 rounded-full bg-primary/20 blur-[1px]" />
+                      <span className="h-3 w-24 rounded-full bg-white/20 blur-[2px]" />
                     </div>
-                    <p className="text-[11px] font-semibold text-primary mb-2">{review.product}</p>
-                    <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">“{review.quote}”</p>
+                    <div className="rounded-2xl rounded-tl-sm bg-primary/15 p-3 text-sm text-foreground">{message}</div>
+                    <div className="mt-2 h-2 w-20 rounded-full bg-white/15 blur-[1px]" />
                   </div>
                 ))}
               </div>
-            </div>
-            <Link to="/store" className="min-h-[52px] inline-flex w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25">{t('home.seeMoreReviews')}</Link>
-          </div>
-        </section>
-
-        {/* ═══════════════ 6) ACADEMY TEASER ═══════════════ */}
-        <section className="py-24 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-4xl mx-auto glass rounded-3xl p-8 md:p-14 overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-10" style={{ background: 'hsl(var(--primary))' }} />
-
-              <div className="relative z-10 grid md:grid-cols-2 gap-10 items-center">
-                <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
-                    <GraduationCap className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-xs font-semibold text-primary uppercase tracking-wider">{t('home.academyLabel')}</span>
-                  </div>
-
-                  <h2 className="text-2xl md:text-4xl font-display font-bold mb-4">
-                    {t('home.academyTitle')}
-                  </h2>
-
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                    {t('home.academyText')}
-                  </p>
-
-                  <div className="space-y-3 mb-8">
-                    {academyPoints.map((point, i) => (
-                      <div key={i} className="flex items-center gap-3">
-                        <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span className="text-foreground text-sm">{point}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Button variant="hero" size="lg" className="group" asChild>
-                    <Link to="/academy">
-                      {t('home.enterAcademy')}
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </Button>
-                </div>
-
-                <div className="hidden md:flex flex-col items-center justify-center gap-4">
-                  {[
-                    { icon: BookOpen, title: 'Tool Guides', tag: 'Practical' },
-                    { icon: Play, title: 'Video Lessons', tag: 'Step-by-step' },
-                    { icon: Eye, title: 'Best Practices', tag: 'Responsible' },
-                  ].map((item, i) => {
-                    const Icon = item.icon;
-                    return (
-                      <motion.div
-                        key={item.title}
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
-                        className="w-full flex items-center gap-4 p-4 rounded-xl bg-background/50 border border-border/50"
-                      >
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <Icon className="w-5 h-5 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold">{item.title}</p>
-                          <p className="text-xs text-muted-foreground">{item.tag}</p>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
+            </motion.div>
+            <div className="mt-8 text-center">
+              <Button variant="heroOutline" size="lg" asChild>
+                <Link to="/contact">Share your feedback after purchase</Link>
+              </Button>
             </div>
           </div>
         </section>
