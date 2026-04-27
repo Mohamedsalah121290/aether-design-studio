@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent, ReactNode } from 'react';
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -63,38 +63,43 @@ declare global {
   }
 }
 
-export const WhatsAppIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
-  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+export const WhatsAppIcon = forwardRef<SVGSVGElement, { className?: string }>(({ className = 'w-5 h-5' }, ref) => (
+  <svg ref={ref} viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
     <path fill="hsl(142 70% 49%)" d="M16.04 3.2C9.02 3.2 3.3 8.9 3.3 15.9c0 2.23.58 4.4 1.69 6.31L3.2 28.8l6.74-1.77a12.68 12.68 0 0 0 6.1 1.55h.01c7.02 0 12.73-5.7 12.73-12.7S23.07 3.2 16.04 3.2Z" />
     <path fill="hsl(0 0% 100%)" d="M23.45 19.13c-.4-.2-2.36-1.16-2.72-1.3-.37-.13-.63-.2-.9.2-.27.4-1.03 1.3-1.27 1.56-.23.27-.47.3-.86.1-.4-.2-1.68-.62-3.2-1.97-1.18-1.06-1.98-2.36-2.21-2.76-.23-.4-.03-.61.17-.81.18-.18.4-.47.6-.7.2-.24.27-.4.4-.67.14-.27.07-.5-.03-.7-.1-.2-.9-2.17-1.23-2.97-.32-.78-.65-.67-.9-.68h-.76c-.27 0-.7.1-1.06.5-.37.4-1.4 1.36-1.4 3.32s1.43 3.86 1.63 4.12c.2.27 2.81 4.3 6.82 6.03.95.41 1.7.66 2.28.84.96.3 1.83.26 2.52.16.77-.12 2.36-.96 2.7-1.9.33-.93.33-1.73.23-1.9-.1-.16-.36-.26-.8-.47Z" />
   </svg>
-);
+));
+WhatsAppIcon.displayName = 'WhatsAppIcon';
 
-export const TelegramIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
-  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+export const TelegramIcon = forwardRef<SVGSVGElement, { className?: string }>(({ className = 'w-5 h-5' }, ref) => (
+  <svg ref={ref} viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
     <path fill="hsl(199 89% 55%)" d="M16 3.2c7.07 0 12.8 5.73 12.8 12.8S23.07 28.8 16 28.8 3.2 23.07 3.2 16 8.93 3.2 16 3.2Z" />
     <path fill="hsl(0 0% 100%)" d="M22.52 10.2c.24-.1.5.1.44.37l-2.23 10.5c-.08.39-.56.54-.86.28l-3.36-2.48-1.72 1.65c-.19.18-.51.09-.57-.17l-.62-2.91-3.26-1.02c-.38-.12-.4-.65-.03-.8l11.91-5.42Z" />
     <path fill="hsl(199 89% 55%)" d="M14.43 17.21 20.8 12.7c.12-.08.25.08.15.18l-5.26 5.1-.22 2.08-1.04-2.85Z" />
   </svg>
-);
+));
+TelegramIcon.displayName = 'TelegramIcon';
 
-export const PinterestIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
-  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+export const PinterestIcon = forwardRef<SVGSVGElement, { className?: string }>(({ className = 'w-5 h-5' }, ref) => (
+  <svg ref={ref} viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
     <path fill="currentColor" d="M16 3.2C8.93 3.2 3.2 8.93 3.2 16c0 5.28 3.2 9.8 7.77 11.75-.1-.98-.2-2.5.04-3.58.22-.97 1.42-6.18 1.42-6.18s-.36-.72-.36-1.78c0-1.67.97-2.92 2.18-2.92 1.03 0 1.52.77 1.52 1.7 0 1.03-.66 2.57-1 4-.28 1.2.6 2.18 1.78 2.18 2.14 0 3.78-2.26 3.78-5.52 0-2.88-2.07-4.9-5.04-4.9-3.43 0-5.44 2.57-5.44 5.23 0 1.04.4 2.15.9 2.75.1.12.11.22.08.34-.09.37-.3 1.2-.34 1.36-.05.22-.17.27-.4.16-1.5-.7-2.43-2.9-2.43-4.66 0-3.8 2.76-7.28 7.95-7.28 4.18 0 7.42 2.98 7.42 6.96 0 4.15-2.61 7.49-6.24 7.49-1.22 0-2.36-.63-2.75-1.38l-.75 2.85c-.27 1.04-1 2.34-1.49 3.13 1.12.35 2.31.54 3.56.54 7.07 0 12.8-5.73 12.8-12.8S23.07 3.2 16 3.2Z" />
   </svg>
-);
+));
+PinterestIcon.displayName = 'PinterestIcon';
 
-export const TikTokIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
-  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+export const TikTokIcon = forwardRef<SVGSVGElement, { className?: string }>(({ className = 'w-5 h-5' }, ref) => (
+  <svg ref={ref} viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
     <path fill="currentColor" d="M21.6 5.2c.42 3.08 2.15 4.92 5.2 5.12v3.47c-1.76.17-3.3-.4-5.1-1.48v6.5c0 8.26-9 10.84-12.6 4.92-2.32-3.82-.9-10.54 6.55-10.81v3.66c-.58.1-1.2.25-1.76.44-1.7.57-2.66 1.64-2.4 3.52.5 3.6 7.12 4.67 6.57-2.37V5.2h3.54Z" />
   </svg>
-);
+));
+TikTokIcon.displayName = 'TikTokIcon';
 
-export const XSocialIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
-  <svg viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
+export const XSocialIcon = forwardRef<SVGSVGElement, { className?: string }>(({ className = 'w-5 h-5' }, ref) => (
+  <svg ref={ref} viewBox="0 0 32 32" className={className} aria-hidden="true" focusable="false">
     <path fill="currentColor" d="M18.56 14.08 28.57 2.4h-2.37l-8.7 10.14L10.57 2.4H2.56l10.5 15.34L2.56 30h2.37l9.18-10.72L21.45 30h8.01L18.56 14.08Zm-3.25 3.8-1.06-1.52L5.79 4.18h3.64l6.83 9.84 1.06 1.52 8.88 12.78h-3.64l-7.25-10.44Z" />
   </svg>
-);
+));
+XSocialIcon.displayName = 'XSocialIcon';
 
 export const Social3DLink = ({ href, label, children, tone = 'social-whatsapp-3d', className = 'w-12 h-12' }: { href: string; label: string; children: ReactNode; tone?: string; className?: string }) => (
   <motion.a
@@ -185,15 +190,16 @@ const useLang = () => {
   return (supported.includes(raw as LangKey) ? raw : 'en') as LangKey;
 };
 
-const RobotAvatar = ({ className = 'w-9 h-9', lang = 'en', speaking = false, rounded = 'rounded-full' }: { className?: string; lang?: LangKey; speaking?: boolean; rounded?: string }) => (
-  <span className={`relative inline-flex shrink-0 ${className}`} style={{ '--avatar-tint': langTint[lang] } as React.CSSProperties}>
+const RobotAvatar = forwardRef<HTMLSpanElement, { className?: string; lang?: LangKey; speaking?: boolean; rounded?: string }>(({ className = 'w-9 h-9', lang = 'en', speaking = false, rounded = 'rounded-full' }, ref) => (
+  <span ref={ref} className={`relative inline-flex shrink-0 ${className}`} style={{ '--avatar-tint': langTint[lang] } as CSSProperties}>
     <span className={`chatbot-avatar-shell ${speaking ? 'chatbot-avatar-speaking' : ''} ${rounded}`}>
       <img src={robotAvatar} alt="AI Deals Assistant robot avatar" width={448} height={448} loading="lazy" className={`h-full w-full object-cover ${rounded}`} />
       <span className="chatbot-avatar-blink" />
     </span>
     <span className="absolute -bottom-1 -right-1 rounded-full border border-background bg-muted px-1 text-[8px] font-bold text-foreground shadow-sm">{copy[lang].flag}</span>
   </span>
-);
+));
+RobotAvatar.displayName = 'RobotAvatar';
 
 export const ChatbotPromoSection = () => {
   const { t } = useTranslation();
