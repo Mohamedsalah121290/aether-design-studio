@@ -271,11 +271,6 @@ const SubscriptionCard = ({ order, index, onViewCredentials, onReportIssue }: { 
                   loading="lazy"
                 />
               ) : null}
-              {(!logoUrl || logoError || !logoLoaded) && (
-                <span className="text-xl font-bold text-white" style={{ textShadow: `0 2px 10px ${colors.primary}` }}>
-                  {order.tool?.name?.charAt(0) || '?'}
-                </span>
-              )}
             </motion.div>
           </div>
 
@@ -851,10 +846,8 @@ const Dashboard = () => {
                       className="rounded-2xl p-4 mb-6 text-left border border-white/10" style={{ background: 'rgba(255,255,255,0.03)' }}>
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary/20">
-                          {getProductLogoUrl(latestOrder.tool?.tool_id) ? (
-                            <img src={getProductLogoUrl(latestOrder.tool?.tool_id)!} alt="" className="w-6 h-6 object-contain p-0.5" />
-                          ) : (
-                            <Sparkles className="w-5 h-5 text-primary" />
+                          {getProductLogoUrl(latestOrder.tool?.tool_id) && (
+                            <img src={getProductLogoUrl(latestOrder.tool?.tool_id)!} alt={`${latestOrder.tool?.name || 'Product'} logo`} className="w-6 h-6 object-contain p-0.5" />
                           )}
                         </div>
                         <div>
@@ -1095,11 +1088,7 @@ const Dashboard = () => {
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl flex items-center justify-center"
                               style={{ background: `linear-gradient(135deg, ${colors.primary}40, ${colors.primary}20)` }}>
-                              {logoUrl ? (
-                                <img src={logoUrl} alt="" className="w-6 h-6 object-contain p-0.5" />
-                              ) : (
-                                <CreditCard className="w-5 h-5 text-primary" />
-                              )}
+                              {logoUrl && <img src={logoUrl} alt={`${sub.tool_name || 'Product'} logo`} className="w-6 h-6 object-contain p-0.5" />}
                             </div>
                             <div>
                               <p className="font-semibold">{sub.tool_name || 'Subscription'}</p>
