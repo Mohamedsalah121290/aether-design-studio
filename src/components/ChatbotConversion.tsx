@@ -369,7 +369,7 @@ export const ChatbotSalesFlow = () => {
   if (!ready) return null;
 
   return (
-    <div className={`fixed right-3 z-40 flex-col items-end gap-3 sm:bottom-6 sm:right-6 sm:flex sm:gap-3 ${location.pathname === '/store' || location.pathname.startsWith('/payment') ? 'hidden' : 'flex'} ${liftForMobileCta ? 'bottom-[calc(6.5rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1.25rem+env(safe-area-inset-bottom))]'}`}>
+    <div className={`fixed right-3 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6 sm:gap-3 ${liftForMobileCta ? 'bottom-[calc(6.5rem+env(safe-area-inset-bottom))]' : 'bottom-[calc(1.25rem+env(safe-area-inset-bottom))]'}`}>
       <AnimatePresence>
         {open && (
           <motion.div drag="y" dragConstraints={{ top: 0, bottom: 120 }} dragElastic={0.08} onDragEnd={(_, info) => { if (info.offset.y > 80 || info.velocity.y > 500) setOpen(false); }} initial={{ opacity: 0, y: 18, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.96 }} transition={{ duration: 0.22 }} dir={text.dir} className="w-[calc(100vw-1rem)] max-w-md glass-strong rounded-2xl border border-border overflow-hidden shadow-2xl max-h-[68dvh] sm:max-h-none">
@@ -410,7 +410,7 @@ export const ChatbotSalesFlow = () => {
       </AnimatePresence>
 
       <div className="flex flex-col items-end gap-3 translate-y-0">
-        <div className="hidden sm:flex flex-col items-end gap-2 sm:gap-3">
+        <div className="flex flex-col items-end gap-2 sm:gap-3">
           {isUsableSocialLink(socialLinks.whatsapp) && <motion.a href={socialLinks.whatsapp} onClick={(event) => openSocialUrl(event, socialLinks.whatsapp)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-whatsapp-3d social-link-movie" aria-label="Contact on WhatsApp"><WhatsAppIcon className="w-8 h-8" /></motion.a>}
           {isUsableSocialLink(supportLinks.telegram) && <motion.a href={supportLinks.telegram} onClick={(event) => openSocialUrl(event, supportLinks.telegram)} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.07, y: -4 }} whileTap={{ scale: 0.96 }} className="chatbot-social-3d chatbot-telegram-3d social-link-movie" aria-label="Contact on Telegram"><TelegramIcon className="w-8 h-8" /></motion.a>}
         </div>
