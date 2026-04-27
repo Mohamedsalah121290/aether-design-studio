@@ -14,8 +14,6 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
-import KeywordCluster from '@/components/KeywordCluster';
-import TrustBadges from '@/components/TrustBadges';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import { languages } from '@/lib/i18n';
