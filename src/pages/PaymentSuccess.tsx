@@ -7,11 +7,16 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle, Clock, ArrowRight, ShieldCheck, Package } from 'lucide-react';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { supportLinks } from '@/lib/socialLinks';
+import { clearCartItems } from '@/lib/cart';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const sessionId = searchParams.get('session_id');
+
+  useEffect(() => {
+    if (searchParams.get('cart') === '1') clearCartItems();
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen bg-background">
