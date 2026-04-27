@@ -437,12 +437,6 @@ const Navbar = () => {
                 </div>
                 
                 <div className="flex flex-col gap-3 pt-4">
-                  {user && (
-                    <Button variant="heroOutline" className="w-full" asChild>
-                      <Link to="/dashboard">{t('nav.myAccount', 'My Account')}</Link>
-                    </Button>
-                  )}
-                  
                   {isAdmin && (
                     <Button variant="ghost" className="w-full text-muted-foreground" asChild>
                       <Link to="/admin" className="flex items-center justify-center gap-2">
