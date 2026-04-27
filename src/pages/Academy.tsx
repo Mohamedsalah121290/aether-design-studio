@@ -6,12 +6,68 @@ import Footer from '@/components/Footer';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import heroImage from '@/assets/hero-ai-models.png';
+import windowsLogo from '@/assets/logos/windows.png';
+import windowsServerLogo from '@/assets/logos/windows_server_standard.jpeg';
+import chatgptLogo from '@/assets/logos/chatgpt.png';
+import canvaLogo from '@/assets/logos/canva.png';
+import capcutLogo from '@/assets/logos/capcut.png';
+import lovableLogo from '@/assets/logos/lovable.png';
+import linkedinLogo from '@/assets/logos/linkedin.png';
+import officeProPlusLogo from '@/assets/logos/office_pro_plus.png';
+import microsoftOffice365Logo from '@/assets/logos/microsoft_office_365.png';
+import microsoftCopilotLogo from '@/assets/logos/microsoft_copilot_uploaded.jpeg';
+import elevenlabsLogo from '@/assets/logos/elevenlabs.png';
+import esetLogo from '@/assets/logos/eset.png';
+import notionLogo from '@/assets/logos/notion_uploaded.jpeg';
+import perplexityLogo from '@/assets/logos/perplexity_uploaded.jpeg';
+import zoomLogo from '@/assets/logos/zoom_uploaded.jpeg';
+import grokLogo from '@/assets/logos/grok.png';
+import courseraLogo from '@/assets/logos/coursera.jpeg';
 
-const coursePosters = [
-  { tool: 'ChatGPT Mastery', description: 'Prompting, writing, research, and daily AI workflows.' },
-  { tool: 'Microsoft Office + Copilot', description: 'Work faster in Word, Excel, PowerPoint, and Copilot.' },
-  { tool: 'Windows Productivity', description: 'Set up Windows for speed, focus, and clean workflows.' },
-  { tool: 'AI Automation Basics', description: 'Automate repetitive tasks with simple AI systems.' },
+const courseCategories = [
+  {
+    name: 'AI Tools',
+    courses: [
+      { title: 'ChatGPT Course', description: 'Learn how to use ChatGPT for writing, ideas, business tasks, and daily productivity.', logo: chatgptLogo },
+      { title: 'Microsoft Copilot Course', description: 'Learn how to use Copilot with Word, Excel, Outlook, and business workflows.', logo: microsoftCopilotLogo },
+      { title: 'Lovable Course', description: 'Learn how to build websites and apps with AI.', logo: lovableLogo },
+      { title: 'Perplexity Course', description: 'Learn AI search, research, summaries, and source-based answers.', logo: perplexityLogo },
+      { title: 'Grok Course', description: 'Learn how to use Grok for AI chat, research, and productivity.', logo: grokLogo },
+      { title: 'ElevenLabs Course', description: 'Learn AI voice generation, voiceovers, and audio content.', logo: elevenlabsLogo },
+    ],
+  },
+  {
+    name: 'Microsoft & Windows',
+    courses: [
+      { title: 'Microsoft Office 365 Course', description: 'Learn Word, Excel, PowerPoint, Outlook, and productivity features.', logo: microsoftOffice365Logo },
+      { title: 'Office Pro Plus Course', description: 'Learn how to install, activate, and use Office tools properly.', logo: officeProPlusLogo },
+      { title: 'Windows 10 / 11 Pro Course', description: 'Learn setup, activation, security, updates, and productivity tips.', logo: windowsLogo },
+      { title: 'Windows 10 / 11 Home Course', description: 'Learn installation, activation, and daily Windows usage.', logo: windowsLogo },
+      { title: 'Windows Server Course', description: 'Learn server basics, setup, users, security, and remote access.', logo: windowsServerLogo },
+    ],
+  },
+  {
+    name: 'Design & Video',
+    courses: [
+      { title: 'Canva Course', description: 'Learn design basics, social media posts, presentations, and branding.', logo: canvaLogo },
+      { title: 'CapCut Course', description: 'Learn video editing, reels, TikTok videos, captions, and templates.', logo: capcutLogo },
+    ],
+  },
+  {
+    name: 'Learning & Productivity',
+    courses: [
+      { title: 'Coursera Course', description: 'Learn how to find, follow, and complete online courses.', logo: courseraLogo },
+      { title: 'LinkedIn Premium Course', description: 'Learn job search, networking, LinkedIn Learning, and profile growth.', logo: linkedinLogo },
+      { title: 'Notion Education Plus Course', description: 'Learn notes, project management, planning, and databases.', logo: notionLogo },
+      { title: 'Zoom Pro Course', description: 'Learn online meetings, recordings, webinars, and professional calls.', logo: zoomLogo },
+    ],
+  },
+  {
+    name: 'Security',
+    courses: [
+      { title: 'ESET Internet Security Course', description: 'Learn device protection, antivirus setup, privacy, and safe browsing.', logo: esetLogo },
+    ],
+  },
 ];
 
 const Academy = () => {
