@@ -319,12 +319,6 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
-            {user && (
-              <Button variant="heroOutline" size="sm" asChild>
-                <Link to="/dashboard">{t('nav.myAccount', 'My Account')}</Link>
-              </Button>
-            )}
-
             <CartIconLink />
 
             {/* Admin Link - Only show if admin */}
