@@ -183,6 +183,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 const Index = () => {
   const { t, i18n } = useTranslation();
   const newsletter = useNewsletterSubscribe();
+  const [visibleBlogPosts, setVisibleBlogPosts] = useState(12);
 
   useEffect(() => {
     const lang = languages.find(l => l.code === i18n.language);
@@ -196,6 +197,10 @@ const Index = () => {
     viewport: { once: true },
     transition: { duration: 0.5 },
   };
+
+  const seoLang = resolveSeoLang(i18n.language);
+  const visiblePosts = BLOG_POSTS.slice(0, visibleBlogPosts);
+  const hasMorePosts = visibleBlogPosts < Math.min(BLOG_POSTS.length, 60);
 
 
   return (
@@ -385,11 +390,22 @@ const Index = () => {
 
         <section className="py-14 md:py-20 relative" aria-label="Customer Feedback">
           <div className="container mx-auto px-4">
+            <motion.div {...fadeUp} className="mx-auto mb-10 grid max-w-4xl gap-3 sm:grid-cols-3">
+              {trustStrip.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.label} className="flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 text-sm font-bold text-foreground">
+                    <Icon className="h-4 w-4 text-primary" />
+                    <span>{item.label}</span>
+                  </div>
+                );
+              })}
+            </motion.div>
             <motion.div {...fadeUp} className="text-center mb-10">
               <p className="mb-3 text-xs font-bold uppercase text-primary">Customer Feedback</p>
               <h2 className="text-3xl md:text-5xl font-display font-bold">Short messages from buyers</h2>
             </motion.div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto">
               {customerFeedback.map((line) => (
                 <motion.div key={line} {...fadeUp} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                   <div className="mb-2 flex gap-1 text-primary" aria-label="5 stars">{Array.from({ length: 5 }).map((_, index) => <Star key={index} className="h-3.5 w-3.5 fill-current" />)}</div>
@@ -399,10 +415,10 @@ const Index = () => {
             </div>
             <motion.div {...fadeUp} className="mt-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] max-w-5xl mx-auto items-center">
               <div>
-                <h3 className="font-display text-2xl font-bold text-foreground">Real Messages</h3>
+                <h3 className="font-display text-2xl font-bold text-foreground">Real Customer Messages</h3>
                 <p className="mt-2 text-sm text-muted-foreground">WhatsApp-style feedback previews with personal details blurred for privacy.</p>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-3">
                 {realMessages.map((message) => (
                   <div key={message} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-background/30">
                     <div className="mb-3 flex items-center gap-2">
