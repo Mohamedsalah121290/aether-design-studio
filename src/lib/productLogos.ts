@@ -1,4 +1,4 @@
-const localLogoModules = import.meta.glob('/src/assets/logos/*.{png,svg,webp}', {
+const localLogoModules = import.meta.glob('/src/assets/logos/*.{png,svg,webp,jpeg,jpg}', {
   eager: true,
   import: 'default',
   query: '?url',
@@ -13,6 +13,14 @@ const logoAliases: Record<string, string> = {
   windows_home: 'windows',
   windows_server: 'windows',
   windows_vps: 'windows',
+};
+
+const uploadedLogoAliases: Record<string, string> = {
+  microsoft_office: 'microsoft_office_uploaded',
+  windows: 'windows_uploaded',
+  windows_home: 'windows_uploaded',
+  windows_server: 'windows_uploaded',
+  windows_vps: 'windows_uploaded',
 };
 
 const verifiedSvgLogos: Record<string, string> = {
@@ -54,12 +62,17 @@ const verifiedSvgLogos: Record<string, string> = {
 
 export const getProductLogoUrl = (toolId?: string | null, fallbackUrl?: string | null) => {
   if (!toolId) return fallbackUrl || null;
-  if (verifiedSvgLogos[toolId]) return verifiedSvgLogos[toolId];
+  const uploadedLogoKey = uploadedLogoAliases[toolId];
+  const uploadedLogo = uploadedLogoKey ? localLogoModules[`/src/assets/logos/${uploadedLogoKey}.jpeg`] : null;
+  if (uploadedLogo) return uploadedLogo;
 
   const logoKey = logoAliases[toolId] || toolId;
   const localLogo = localLogoModules[`/src/assets/logos/${logoKey}.png`]
     || localLogoModules[`/src/assets/logos/${logoKey}.svg`]
     || localLogoModules[`/src/assets/logos/${logoKey}.webp`];
 
-  return localLogo || fallbackUrl || null;
+  if (localLogo) return localLogo;
+  if (verifiedSvgLogos[toolId]) return verifiedSvgLogos[toolId];
+
+  return fallbackUrl || null;
 };
