@@ -1,4 +1,4 @@
-const localLogoModules = import.meta.glob('/src/assets/logos/*.{png,svg,webp}', {
+const localLogoModules = import.meta.glob('/src/assets/logos/*.{png,svg,webp,jpeg,jpg}', {
   eager: true,
   import: 'default',
   query: '?url',
