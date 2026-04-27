@@ -3,7 +3,7 @@ export const socialLinks = {
   facebook: "https://www.facebook.com/profile.php?id=61586111130045",
   instagram: "https://www.instagram.com/aideals.be/",
   whatsapp: "",
-  telegram: "",
+  telegram: "https://t.me/aideals2026",
   pinterest: "",
   twitter: "",
   tiktok: "",
@@ -11,7 +11,7 @@ export const socialLinks = {
 
 export const supportLinks = {
   whatsapp: "",
-  telegram: "",
+  telegram: "https://t.me/aideals2026",
 };
 
 export const isUsableSocialLink = (href?: string | null) => {
