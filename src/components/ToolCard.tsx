@@ -10,7 +10,7 @@ import { formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductRatingInline, ProductReviewPreview } from '@/components/ProductReviews';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
-import { supportLinks } from '@/lib/socialLinks';
+import { isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
 import { addCartItem } from '@/lib/cart';
 
@@ -451,8 +451,8 @@ export const ToolCard = ({ tool, index, tier = 'standard' }: ToolCardProps) => {
             {isContactOnly ? (
               <div className="mt-1 sm:mt-2 space-y-1">
                 <div className="flex gap-3">
-                  {supportLinks.whatsapp && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
-                  {supportLinks.telegram && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
+                  {isUsableSocialLink(supportLinks.whatsapp) && <Social3DLink href={supportLinks.whatsapp} label="Contact on WhatsApp" tone="social-whatsapp-3d" className="w-12 h-12"><WhatsAppIcon className="w-6 h-6" /></Social3DLink>}
+                  {isUsableSocialLink(supportLinks.telegram) && <Social3DLink href={supportLinks.telegram} label="Contact on Telegram" tone="social-telegram-3d" className="w-12 h-12"><TelegramIcon className="w-6 h-6" /></Social3DLink>}
                 </div>
               </div>
             ) : isComingSoon ? (
