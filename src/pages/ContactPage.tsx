@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import SEO from '@/components/SEO';
 import KeywordCluster from '@/components/KeywordCluster';
-import { ChatbotPromoSection, Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
+import { ChatbotPromoSection, PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, WhatsAppIcon, XSocialIcon } from '@/components/ChatbotConversion';
 import { isUsableSocialLink, socialLinks, supportLinks } from '@/lib/socialLinks';
 
 const CONTACT_PHONE = '+32 494 31 11 90';
@@ -49,6 +49,9 @@ const ContactPage = () => {
     { label: 'Instagram', href: socialLinks.instagram, icon: Instagram, tone: 'social-instagram-3d' },
     { label: 'YouTube', href: socialLinks.youtube, icon: Youtube, tone: 'social-youtube-3d' },
     { label: 'Telegram', href: socialLinks.telegram, icon: TelegramIcon, tone: 'social-telegram-3d' },
+    { label: 'Pinterest', href: socialLinks.pinterest, icon: PinterestIcon, tone: 'social-pinterest-3d' },
+    { label: 'X', href: socialLinks.twitter, icon: XSocialIcon, tone: 'social-x-3d' },
+    { label: 'TikTok', href: socialLinks.tiktok, icon: TikTokIcon, tone: 'social-tiktok-3d' },
   ].filter((link) => isUsableSocialLink(link.href));
 
   return (

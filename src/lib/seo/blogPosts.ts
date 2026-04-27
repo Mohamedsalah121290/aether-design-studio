@@ -511,6 +511,65 @@ const TEMPLATED_POSTS: BlogPost[] = TOPICS.map((topic, i) => {
 
 BLOG_POSTS.push(...TEMPLATED_POSTS);
 
+const EXTRA_BLOG_TOPICS = [
+  ['best-ai-tools-for-daily-work', 'AI Tools', 'Best AI Tools for Daily Workflows', 'A quick guide to choosing AI tools that save time across writing, planning, research, and support.'],
+  ['chatgpt-prompts-for-small-business', 'ChatGPT', 'ChatGPT Prompts for Small Business', 'Use practical ChatGPT prompts to write faster replies, offers, summaries, and weekly content.'],
+  ['microsoft-copilot-office-workflows', 'Microsoft Tools', 'Microsoft Copilot Workflows for Office', 'Learn where Copilot helps most inside Word, Excel, PowerPoint, Outlook, and Teams.'],
+  ['windows-productivity-setup-guide', 'Guides', 'Windows Productivity Setup Guide', 'Set up Windows for faster focus, safer access, cleaner files, and smoother daily work.'],
+  ['chatgpt-vs-copilot-for-work', 'Comparisons', 'ChatGPT vs Microsoft Copilot for Work', 'Compare ChatGPT and Copilot by workflow, documents, research, privacy needs, and ease of use.'],
+  ['ai-tools-for-students-guide', 'AI Tools', 'AI Tools for Study and Research', 'A practical overview of AI tools for summaries, study plans, writing support, and research checks.'],
+  ['chatgpt-for-email-writing', 'ChatGPT', 'ChatGPT for Better Email Writing', 'Turn rough ideas into clear professional emails, follow-ups, support replies, and proposals.'],
+  ['office-templates-that-save-time', 'Microsoft Tools', 'Microsoft Office Templates That Save Time', 'Use Word, Excel, and PowerPoint templates to finish recurring business tasks faster.'],
+  ['beginner-guide-to-ai-subscriptions', 'Guides', 'Beginner Guide to AI Subscriptions', 'Understand what to check before buying AI tools, from access type to activation and support.'],
+  ['canva-vs-office-for-presentations', 'Comparisons', 'Canva vs Microsoft Office for Presentations', 'Choose the right presentation tool based on speed, brand control, collaboration, and output quality.'],
+  ['ai-tools-for-content-planning', 'AI Tools', 'AI Tools for Content Planning', 'Plan posts, scripts, topics, captions, and briefs with a cleaner AI-assisted workflow.'],
+  ['chatgpt-for-excel-formulas', 'ChatGPT', 'ChatGPT for Excel Formulas', 'Use ChatGPT to understand formulas, clean data, explain errors, and build simple spreadsheet logic.'],
+  ['microsoft-office-for-remote-work', 'Microsoft Tools', 'Microsoft Office for Remote Work', 'Build a smoother remote workflow with Word, Excel, PowerPoint, Outlook, and cloud collaboration.'],
+  ['how-to-choose-ai-tool', 'Guides', 'How to Choose the Right AI Tool', 'Match your goal to the right AI tool without overpaying or buying features you will not use.'],
+  ['chatgpt-vs-canva-for-creators', 'Comparisons', 'ChatGPT vs Canva for Creators', 'Compare idea generation, design creation, captions, scripts, and reusable content workflows.'],
+  ['ai-tools-for-customer-support', 'AI Tools', 'AI Tools for Customer Support', 'Improve support replies, FAQs, ticket summaries, and response consistency with AI assistance.'],
+  ['chatgpt-for-productivity-routines', 'ChatGPT', 'ChatGPT Productivity Routines', 'Create daily planning, prioritization, meeting notes, and task review routines with ChatGPT.'],
+  ['copilot-for-excel-beginners', 'Microsoft Tools', 'Copilot for Excel Beginners', 'See how Copilot can help explain data, create summaries, suggest formulas, and spot patterns.'],
+  ['safe-ai-tool-buying-checklist', 'Guides', 'Safe AI Tool Buying Checklist', 'Check payment safety, delivery clarity, support, activation steps, and renewal terms before purchase.'],
+  ['office-vs-google-workspace', 'Comparisons', 'Microsoft Office vs Google Workspace', 'Compare Office and Google Workspace for documents, spreadsheets, storage, teamwork, and business use.'],
+  ['ai-tools-for-social-media', 'AI Tools', 'AI Tools for Social Media', 'Use AI to plan content calendars, write captions, repurpose videos, and improve campaign speed.'],
+  ['chatgpt-for-research-summaries', 'ChatGPT', 'ChatGPT for Research Summaries', 'Summarize long notes, compare sources, extract key points, and prepare useful research outlines.'],
+  ['powerpoint-design-workflow', 'Microsoft Tools', 'PowerPoint Design Workflow', 'Create cleaner slides faster with templates, outlines, structure, visual hierarchy, and AI support.'],
+  ['ai-automation-first-steps', 'Guides', 'AI Automation First Steps', 'Start automating repetitive work with simple triggers, templates, summaries, and handoff checklists.'],
+  ['chatgpt-vs-perplexity-research', 'Comparisons', 'ChatGPT vs Perplexity for Research', 'Compare AI research tools for summaries, source discovery, reasoning, and practical daily use.'],
+  ['ai-tools-for-freelancers', 'AI Tools', 'AI Tools for Freelancers', 'Use AI to speed up proposals, client communication, content creation, research, and delivery.'],
+  ['chatgpt-for-sales-messages', 'ChatGPT', 'ChatGPT for Sales Messages', 'Write clearer outreach, follow-ups, offer explanations, and objection replies with ChatGPT.'],
+  ['microsoft-tools-for-small-teams', 'Microsoft Tools', 'Microsoft Tools for Small Teams', 'Use Microsoft tools to organize files, meetings, spreadsheets, presentations, and communication.'],
+  ['digital-delivery-explained', 'Guides', 'Digital Delivery Explained', 'Understand how digital access delivery works, what to expect after checkout, and how support helps.'],
+  ['copilot-vs-chatgpt-plus', 'Comparisons', 'Copilot vs ChatGPT Plus', 'Compare Copilot and ChatGPT Plus for documents, general AI help, productivity, and everyday use.'],
+] as const;
+
+BLOG_POSTS.push(...EXTRA_BLOG_TOPICS.map((topic, index): BlogPost => ({
+  slug: topic[0],
+  category: topic[1],
+  author: 'AI DEALS Editorial',
+  date: '2026-04-21',
+  readTime: '4 min',
+  thumbnail: THUMBS[index % THUMBS.length],
+  locales: {
+    en: seed([
+      topic[2],
+      topic[3],
+      topic[2],
+      ['AI tools', 'software subscriptions', 'digital productivity'],
+      topic[2],
+      topic[3],
+      [
+        ['What to know first', 'Start with the result you need, then choose the tool that removes the most friction from that workflow.'],
+        ['How to use it well', 'Keep your setup simple, reuse templates, and document the steps that give you reliable output.'],
+        ['Common mistakes', 'Avoid buying too many tools at once or choosing based only on hype instead of everyday usefulness.'],
+        ['Next step', 'Compare the tool options, check activation details, and choose the subscription that matches your actual workload.'],
+      ],
+      'Explore AI DEALS tools →',
+    ]),
+  },
+})));
+
 // ---------- Public API ----------
 export const BLOG_SLUGS: string[] = BLOG_POSTS.map((p) => p.slug);
 

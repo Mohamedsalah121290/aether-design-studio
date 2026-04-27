@@ -17,6 +17,8 @@ import SEO from '@/components/SEO';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import { languages } from '@/lib/i18n';
+import { BLOG_POSTS, getBlogLocale } from '@/lib/seo/blogPosts';
+import { resolveSeoLang } from '@/lib/seo/seoMap';
 import { supportLinks } from '@/lib/socialLinks';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
@@ -109,13 +111,30 @@ const customerFeedback = [
   'I would use AI Deals again.',
   'The experience felt professional.',
   'Everything was ready faster than expected.',
+  'The activation message was simple to understand.',
+  'I received exactly what I expected after checkout.',
+  'The website made the buying process feel safe.',
+  'The support channel was easy to find.',
+  'The instructions were short and useful.',
+  'I could compare the tools without confusion.',
+  'The mobile checkout experience was smooth.',
+  'Everything looked clean and professional.',
+  'The delivery process felt transparent.',
+  'It was easy to choose the right subscription.',
+  'The store layout helped me decide quickly.',
+  'I appreciated the clear activation steps.',
 ];
 
 const realMessages = [
   'Thanks, access is working now. Very clear instructions.',
   'Payment done and activation received. Appreciate the quick support.',
   'It works perfectly on my device. Thank you.',
-  'Fast response and simple process from checkout to access.',
+];
+
+const trustStrip = [
+  { icon: Zap, label: 'Instant delivery' },
+  { icon: CheckCircle, label: 'Simple activation' },
+  { icon: Headphones, label: 'Support available' },
 ];
 
 const faqs = [
@@ -164,6 +183,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 const Index = () => {
   const { t, i18n } = useTranslation();
   const newsletter = useNewsletterSubscribe();
+  const [visibleBlogPosts, setVisibleBlogPosts] = useState(12);
 
   useEffect(() => {
     const lang = languages.find(l => l.code === i18n.language);
@@ -177,6 +197,10 @@ const Index = () => {
     viewport: { once: true },
     transition: { duration: 0.5 },
   };
+
+  const seoLang = resolveSeoLang(i18n.language);
+  const visiblePosts = BLOG_POSTS.slice(0, visibleBlogPosts);
+  const hasMorePosts = visibleBlogPosts < Math.min(BLOG_POSTS.length, 60);
 
 
   return (
@@ -366,11 +390,22 @@ const Index = () => {
 
         <section className="py-14 md:py-20 relative" aria-label="Customer Feedback">
           <div className="container mx-auto px-4">
+            <motion.div {...fadeUp} className="mx-auto mb-10 grid max-w-4xl gap-3 sm:grid-cols-3">
+              {trustStrip.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.label} className="flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 text-sm font-bold text-foreground">
+                    <Icon className="h-4 w-4 text-primary" />
+                    <span>{item.label}</span>
+                  </div>
+                );
+              })}
+            </motion.div>
             <motion.div {...fadeUp} className="text-center mb-10">
               <p className="mb-3 text-xs font-bold uppercase text-primary">Customer Feedback</p>
               <h2 className="text-3xl md:text-5xl font-display font-bold">Short messages from buyers</h2>
             </motion.div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto">
               {customerFeedback.map((line) => (
                 <motion.div key={line} {...fadeUp} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                   <div className="mb-2 flex gap-1 text-primary" aria-label="5 stars">{Array.from({ length: 5 }).map((_, index) => <Star key={index} className="h-3.5 w-3.5 fill-current" />)}</div>
@@ -380,10 +415,10 @@ const Index = () => {
             </div>
             <motion.div {...fadeUp} className="mt-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] max-w-5xl mx-auto items-center">
               <div>
-                <h3 className="font-display text-2xl font-bold text-foreground">Real Messages</h3>
+                <h3 className="font-display text-2xl font-bold text-foreground">Real Customer Messages</h3>
                 <p className="mt-2 text-sm text-muted-foreground">WhatsApp-style feedback previews with personal details blurred for privacy.</p>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-3">
                 {realMessages.map((message) => (
                   <div key={message} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-background/30">
                     <div className="mb-3 flex items-center gap-2">
@@ -401,6 +436,52 @@ const Index = () => {
                 <Link to="/contact">Share your feedback after purchase</Link>
               </Button>
             </div>
+          </div>
+        </section>
+
+        <section className="py-14 md:py-20 relative" aria-label="Blog">
+          <div className="container mx-auto px-4">
+            <motion.div {...fadeUp} className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="mb-3 text-xs font-bold uppercase text-primary">Blog</p>
+                <h2 className="text-3xl md:text-5xl font-display font-bold">Latest AI Guides</h2>
+                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Fast, practical articles about AI tools, ChatGPT, Microsoft Tools, guides, and comparisons.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {['AI Tools', 'ChatGPT', 'Microsoft Tools', 'Guides', 'Comparisons'].map((category) => (
+                  <span key={category} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-muted-foreground">{category}</span>
+                ))}
+              </div>
+            </motion.div>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {visiblePosts.map((post) => {
+                const loc = getBlogLocale(post, seoLang);
+                return (
+                  <motion.article key={post.slug} {...fadeUp} className="group h-full">
+                    <Link to={`/blog/${post.slug}`} className="block h-full">
+                      <div className="glass h-full overflow-hidden rounded-2xl transition-all duration-300 hover:border-primary/30">
+                        <div className="relative aspect-[16/10] overflow-hidden">
+                          <img src={post.thumbnail} alt={loc.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                          <span className="absolute left-3 top-3 rounded-full bg-primary/90 px-3 py-1 text-[11px] font-bold text-primary-foreground">{post.category}</span>
+                        </div>
+                        <div className="flex min-h-[190px] flex-col p-5">
+                          <h3 className="line-clamp-2 font-display text-lg font-bold leading-tight transition-colors group-hover:text-primary">{loc.title}</h3>
+                          <p className="mt-3 line-clamp-2 flex-1 text-sm leading-relaxed text-muted-foreground">{loc.description}</p>
+                          <Button variant="heroOutline" size="sm" className="mt-4 w-full" asChild>
+                            <span>Read More<ArrowRight className="ml-2 h-4 w-4" /></span>
+                          </Button>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.article>
+                );
+              })}
+            </div>
+            {hasMorePosts && (
+              <div className="mt-10 text-center">
+                <Button variant="hero" size="lg" onClick={() => setVisibleBlogPosts((count) => Math.min(count + 12, 60))}>Load More</Button>
+              </div>
+            )}
           </div>
         </section>
 

@@ -4,8 +4,8 @@ import { Facebook, Instagram, Mail, Shield, Lock, Globe, Zap, Youtube } from 'lu
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
-import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
-import { socialLinks } from '@/lib/socialLinks';
+import { PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, WhatsAppIcon, XSocialIcon } from '@/components/ChatbotConversion';
+import { isUsableSocialLink, socialLinks } from '@/lib/socialLinks';
 import logo from '@/assets/logo.png';
 
 type FlagKey = 'eu' | 'us' | 'sa' | 'ae' | 'tr' | 'iq' | 'lb';
@@ -108,8 +108,11 @@ const Footer = () => {
     { icon: Instagram, href: socialLinks.instagram, label: 'Instagram', tone: 'social-instagram-3d' },
     { icon: Youtube, href: socialLinks.youtube, label: 'YouTube', tone: 'social-youtube-3d' },
     { icon: TelegramIcon, href: socialLinks.telegram, label: 'Telegram', tone: 'social-telegram-3d' },
+    { icon: PinterestIcon, href: socialLinks.pinterest, label: 'Pinterest', tone: 'social-pinterest-3d' },
+    { icon: XSocialIcon, href: socialLinks.twitter, label: 'X', tone: 'social-x-3d' },
+    { icon: TikTokIcon, href: socialLinks.tiktok, label: 'TikTok', tone: 'social-tiktok-3d' },
     { icon: Mail, href: 'mailto:info@aideals.be', label: 'Email info@aideals.be', tone: 'social-mail-3d' },
-  ].filter((social) => Boolean(social.href));
+  ].filter((social) => social.href.startsWith('mailto:') || isUsableSocialLink(social.href));
 
   const trustBadges = [
     { icon: Shield, label: t('footer.trust.gdpr') },

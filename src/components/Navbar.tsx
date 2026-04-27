@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, Search, Shield, LogIn, LogOut, User, Check, CircleDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PinterestIcon, Social3DLink, TelegramIcon, TikTokIcon, WhatsAppIcon, XSocialIcon } from '@/components/ChatbotConversion';
 import { getResolvedAppLanguage, languages, setAppLanguage } from '@/lib/i18n';
 import { CURRENCIES, type CurrencyCode } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
@@ -11,6 +12,7 @@ import FlagIcon from '@/components/FlagIcon';
 import { useAuth } from '@/hooks/useAuth';
 import { BUILD_VERSION, SHORT_BUILD } from '@/lib/buildInfo';
 import AuthDialog from '@/components/AuthDialog';
+import { isUsableSocialLink, socialLinks } from '@/lib/socialLinks';
 import logo from '@/assets/logo.png';
 
 const Navbar = () => {
@@ -75,6 +77,14 @@ const Navbar = () => {
     { href: '/blog', label: t('footer.links.blog', 'Blog') },
     { href: '/contact', label: t('footer.links.contact', 'Contact') },
   ];
+
+  const headerSocialLinks = [
+    { icon: WhatsAppIcon, href: socialLinks.whatsapp, label: 'WhatsApp', tone: 'social-whatsapp-3d' },
+    { icon: TelegramIcon, href: socialLinks.telegram, label: 'Telegram', tone: 'social-telegram-3d' },
+    { icon: PinterestIcon, href: socialLinks.pinterest, label: 'Pinterest', tone: 'social-pinterest-3d' },
+    { icon: XSocialIcon, href: socialLinks.twitter, label: 'X', tone: 'social-x-3d' },
+    { icon: TikTokIcon, href: socialLinks.tiktok, label: 'TikTok', tone: 'social-tiktok-3d' },
+  ].filter((social) => isUsableSocialLink(social.href));
 
   return (
     <>
@@ -144,6 +154,15 @@ const Navbar = () => {
 
           {/* Right Section */}
           <div className="hidden lg:flex items-center gap-4">
+            {headerSocialLinks.length > 0 && (
+              <div className="flex items-center gap-2">
+                {headerSocialLinks.map((social) => {
+                  const Icon = social.icon;
+                  return <Social3DLink key={social.label} href={social.href} label={social.label} tone={social.tone} className="h-9 w-9"><Icon className="h-4 w-4" /></Social3DLink>;
+                })}
+              </div>
+            )}
+
             {/* Language Selector */}
             <div className="relative" ref={langMenuRef}>
               <Button
@@ -360,6 +379,12 @@ const Navbar = () => {
                   </Link>
                 ))}
                 
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
+                  {headerSocialLinks.map((social) => {
+                    const Icon = social.icon;
+                    return <Social3DLink key={social.label} href={social.href} label={social.label} tone={social.tone} className="h-11 w-11"><Icon className="h-5 w-5" /></Social3DLink>;
+                  })}
+                </div>
                 <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
                   {languages.map(lang => (
                     <button
