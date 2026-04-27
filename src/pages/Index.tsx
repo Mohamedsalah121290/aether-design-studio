@@ -34,18 +34,18 @@ const trustBadges = [
 ];
 
 const popularTools = [
-  { name: 'ChatGPT', id: 'chatgpt', benefit: 'AI writing, research, coding, and productivity help.' },
-  { name: 'Microsoft Office', id: 'microsoft_office', benefit: 'Word, Excel, PowerPoint, and everyday work tools.' },
-  { name: 'Windows', id: 'windows', benefit: 'Reliable Windows licensing for your device.' },
-  { name: 'Microsoft Copilot', id: 'microsoft_365', benefit: 'Microsoft AI assistance for documents and workflows.' },
-  { name: 'Canva Pro', id: 'canva', benefit: 'Create designs, posts, and brand visuals faster.' },
+  { name: 'ChatGPT', id: 'chatgpt', benefitKey: 'home.popularBenefit.chatgpt' },
+  { name: 'Microsoft Office', id: 'microsoft_office', benefitKey: 'home.popularBenefit.office' },
+  { name: 'Windows', id: 'windows', benefitKey: 'home.popularBenefit.windows' },
+  { name: 'Microsoft Copilot', id: 'microsoft_365', benefitKey: 'home.popularBenefit.copilot' },
+  { name: 'Canva Pro', id: 'canva', benefitKey: 'home.popularBenefit.canva' },
 ];
 
 const whyAiDeals = [
-  { icon: Shield, title: 'Affordable', desc: 'Premium software access with clear checkout.' },
-  { icon: Zap, title: 'Instant delivery', desc: 'Fast digital delivery after purchase.' },
-  { icon: PackageCheck, title: 'Simple activation', desc: 'Clear access steps without confusion.' },
-  { icon: Headphones, title: 'Support', desc: 'Help is available when you need it.' },
+  { icon: Shield, titleKey: 'home.whyCards.affordableTitle', descKey: 'home.whyCards.affordableText' },
+  { icon: Zap, titleKey: 'home.whyCards.deliveryTitle', descKey: 'home.whyCards.deliveryText' },
+  { icon: PackageCheck, titleKey: 'home.whyCards.activationTitle', descKey: 'home.whyCards.activationText' },
+  { icon: Headphones, titleKey: 'home.whyCards.supportTitle', descKey: 'home.whyCards.supportText' },
 ];
 
 const SESSION_OFFER_MS = 15 * 60 * 1000;
