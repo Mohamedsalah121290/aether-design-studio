@@ -17,6 +17,8 @@ import SEO from '@/components/SEO';
 
 import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
 import { languages } from '@/lib/i18n';
+import { BLOG_POSTS, getBlogLocale } from '@/lib/seo/blogPosts';
+import { resolveSeoLang } from '@/lib/seo/seoMap';
 import { supportLinks } from '@/lib/socialLinks';
 import heroVideo from '@/assets/hero-video.mp4';
 import heroImage from '@/assets/hero-ai-models.png';
@@ -109,13 +111,30 @@ const customerFeedback = [
   'I would use AI Deals again.',
   'The experience felt professional.',
   'Everything was ready faster than expected.',
+  'The activation message was simple to understand.',
+  'I received exactly what I expected after checkout.',
+  'The website made the buying process feel safe.',
+  'The support channel was easy to find.',
+  'The instructions were short and useful.',
+  'I could compare the tools without confusion.',
+  'The mobile checkout experience was smooth.',
+  'Everything looked clean and professional.',
+  'The delivery process felt transparent.',
+  'It was easy to choose the right subscription.',
+  'The store layout helped me decide quickly.',
+  'I appreciated the clear activation steps.',
 ];
 
 const realMessages = [
   'Thanks, access is working now. Very clear instructions.',
   'Payment done and activation received. Appreciate the quick support.',
   'It works perfectly on my device. Thank you.',
-  'Fast response and simple process from checkout to access.',
+];
+
+const trustStrip = [
+  { icon: Zap, label: 'Instant delivery' },
+  { icon: CheckCircle, label: 'Simple activation' },
+  { icon: Headphones, label: 'Support available' },
 ];
 
 const faqs = [
