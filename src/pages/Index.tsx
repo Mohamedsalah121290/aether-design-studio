@@ -38,7 +38,7 @@ const popularTools = [
   { name: 'ChatGPT', id: 'chatgpt', benefitKey: 'home.popularBenefit.chatgpt' },
   { name: 'Microsoft Office', id: 'microsoft_office', benefitKey: 'home.popularBenefit.office' },
   { name: 'Windows', id: 'windows', benefitKey: 'home.popularBenefit.windows' },
-  { name: 'Microsoft Copilot', id: 'microsoft_365', benefitKey: 'home.popularBenefit.copilot' },
+  { name: 'Microsoft Office 365', id: 'microsoft_365', benefitKey: 'home.popularBenefit.copilot' },
   { name: 'Canva Pro', id: 'canva', benefitKey: 'home.popularBenefit.canva' },
 ];
 
