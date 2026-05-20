@@ -198,7 +198,15 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO page="home" jsonLd={{ '@context': 'https://schema.org', '@type': 'Organization', name: 'AI DEALS', url: 'https://aideals.be' }} />
+      <SEO page="home" jsonLd={{
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'AI DEALS',
+        url: 'https://www.aideals.be',
+        description: 'Premium AI tools subscription giving access to ChatGPT, Midjourney, Claude, Gemini and 50+ AI tools at member pricing.',
+        address: { '@type': 'PostalAddress', addressCountry: 'BE' },
+        areaServed: 'BE',
+      }} />
       <Navbar />
 
       <main>
