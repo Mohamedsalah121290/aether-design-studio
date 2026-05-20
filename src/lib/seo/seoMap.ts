@@ -5,7 +5,7 @@
 export const SEO_LANGS = ['en', 'fr', 'nl', 'de', 'es', 'pt', 'ar'] as const;
 export type SeoLang = typeof SEO_LANGS[number];
 
-export const SITE_URL = 'https://aideals.be';
+export const SITE_URL = 'https://www.aideals.be';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/lovable-uploads/64d447c1-4f6f-4d56-8e09-a6f5cc5a84e0.png`;
 
 export interface SeoEntry {
