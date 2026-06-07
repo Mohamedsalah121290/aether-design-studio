@@ -166,6 +166,7 @@ const App = () => {
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
+                  <LegacyLangRedirect />
                   <ErrorBoundary>
                     <AppRoutes />
                   </ErrorBoundary>
