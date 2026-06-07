@@ -63,9 +63,11 @@ const SEO = ({
   const dir = currentAppLang.rtl ? 'rtl' : 'ltr';
 
   // Build hreflang alternates for all 7 supported languages.
+  // All languages are served on the same clean URL (i18n via localStorage),
+  // so every hreflang alternate points at the canonical path — no ?lang= param.
   const alternates = SEO_LANGS.map((l) => ({
     hrefLang: l,
-    href: `${SITE_URL}${path === '/' ? '' : path}?lang=${l}`,
+    href: url,
   }));
 
   return (

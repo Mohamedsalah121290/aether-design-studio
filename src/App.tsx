@@ -120,6 +120,30 @@ const MobileStickyCTA = () => {
   );
 };
 
+// Strip legacy ?lang= query param (old SEO URLs) and switch the app language
+// to the requested locale before continuing to the clean URL.
+const LegacyLangRedirect = () => {
+  const location = useLocation();
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const lang = params.get('lang');
+    if (!lang) return;
+    try {
+      if (i18n && typeof i18n.changeLanguage === 'function') {
+        i18n.changeLanguage(lang);
+      }
+    } catch {}
+    params.delete('lang');
+    const qs = params.toString();
+    const cleanUrl = `${location.pathname}${qs ? `?${qs}` : ''}${location.hash || ''}`;
+    window.history.replaceState({}, '', cleanUrl);
+  }, [location.search, location.pathname, location.hash, i18n]);
+
+  return null;
+};
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -142,6 +166,7 @@ const App = () => {
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
+                  <LegacyLangRedirect />
                   <ErrorBoundary>
                     <AppRoutes />
                   </ErrorBoundary>

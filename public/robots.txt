@@ -1,16 +1,22 @@
 User-agent: Googlebot
 Allow: /
 Allow: /blog/
+Disallow: /*?lang=
+Disallow: /*&lang=
 
 User-agent: Bingbot
 Allow: /
 Allow: /blog/
+Disallow: /*?lang=
+Disallow: /*&lang=
 
 User-agent: Twitterbot
 Allow: /
+Disallow: /*?lang=
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /*?lang=
 
 User-agent: *
 Allow: /
@@ -22,6 +28,10 @@ Disallow: /dashboard
 Disallow: /profile
 Disallow: /payment/
 Disallow: /seo-audit
+
+# Block legacy query-parameter language URLs (now redirected client-side)
+Disallow: /*?lang=
+Disallow: /*&lang=
 
 # Sitemap
 Sitemap: https://www.aideals.be/sitemap.xml
