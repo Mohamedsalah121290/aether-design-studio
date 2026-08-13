@@ -18,6 +18,27 @@ const getStripeSecretKey = () => {
   return key;
 };
 
+/* ────────────────────────────────────────────────────────────────────
+   ORIGIN RESOLUTION
+   Production customers must ALWAYS return to https://www.aideals.be.
+   Only genuine development/preview origins may use their own origin,
+   and the fallback is production — never a Lovable preview domain.
+   ──────────────────────────────────────────────────────────────────── */
+const PRODUCTION_ORIGIN = "https://www.aideals.be";
+
+const isDevOrigin = (origin: string) =>
+  /^http:\/\/localhost(:\d+)?$/.test(origin) ||
+  /^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin) ||
+  /^https:\/\/[a-z0-9-]*preview[a-z0-9-]*\.lovable\.app$/.test(origin) ||
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/.test(origin);
+
+const resolveOrigin = (req: Request) => {
+  const origin = req.headers.get("origin") || "";
+  if (isDevOrigin(origin)) return origin;
+  return PRODUCTION_ORIGIN;
+};
+
+
 const withTimeout = async <T>(promise: Promise<T>, label: string, timeoutMs = 20000): Promise<T> => {
   let timeoutId: number | undefined;
   const timeout = new Promise<never>((_, reject) => {
