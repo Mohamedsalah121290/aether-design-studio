@@ -277,7 +277,7 @@ serve(async (req) => {
         status: "pending",
         payment_status: "pending",
         stripe_session_id: session.id,
-        customer_data: { email, cart_checkout: true, item_name: planName },
+        customer_data: { email, cart_checkout: true, item_name: planName, cart_reference: cartReference },
         activation_deadline: new Date(Date.now() + activationTime * 3600000).toISOString(),
       })));
 
@@ -548,9 +548,24 @@ serve(async (req) => {
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     logStep("ERROR", { message: msg });
-    return new Response(JSON.stringify({ error: msg }), {
+
+    /* Graceful degradation when a configured payment method is unavailable
+       in the active Stripe account/mode. We do NOT silently swap payment
+       methods — we surface a clear, actionable error instead. */
+    const lower = msg.toLowerCase();
+    const isPaymentMethodIssue =
+      lower.includes("payment_method_types") ||
+      lower.includes("payment method") ||
+      lower.includes("not activated") ||
+      lower.includes("is invalid for this session");
+    const clientError = isPaymentMethodIssue
+      ? "This payment method is currently unavailable. Please try another payment method or contact support."
+      : msg;
+
+    return new Response(JSON.stringify({ error: clientError, code: isPaymentMethodIssue ? "payment_method_unavailable" : "checkout_failed" }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
   }
+
 });
