@@ -181,7 +181,8 @@ serve(async (req) => {
 
       const customers = await stripe.customers.list({ email, limit: 1 });
       const customerId = customers.data.length > 0 ? customers.data[0].id : undefined;
-      const origin = req.headers.get("origin") || "https://id-preview--92b6864c-4966-485c-b321-32542f78bf88.lovable.app";
+      const origin = resolveOrigin(req);
+
       const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
       const pendingOrders: Array<{ tool: any; planName: string; activationTime: number }> = [];
 
@@ -386,7 +387,7 @@ serve(async (req) => {
       }
     }
 
-    const origin = req.headers.get("origin") || "https://id-preview--92b6864c-4966-485c-b321-32542f78bf88.lovable.app";
+    const origin = resolveOrigin(req);
 
     // --- Metadata for webhook ---
     const metadata: Record<string, string> = {
