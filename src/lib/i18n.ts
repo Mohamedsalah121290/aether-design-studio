@@ -6398,6 +6398,136 @@ Object.entries(chatContactTranslations).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
 
+/* Payment verification states (PaymentSuccess) + checkout failure message.
+   Product names are intentionally never translated. */
+const paymentVerificationTranslations = {
+  en: {
+    checkout: { checkoutFailed: 'We could not start the secure payment. Please try again.' },
+    paymentStatus: {
+      verifyingTitle: 'Verifying your payment…', verifyingBody: 'Please wait while we confirm your payment securely. Do not close this page.',
+      paidTitle: 'Payment Successful!', paidBody: 'Your access is being prepared. You will receive it shortly.',
+      pendingTitle: 'Payment is being processed', pendingBody: 'Your payment has not been confirmed yet. Some payment methods take a little longer. We will update your order automatically once the bank confirms it.',
+      failedTitle: 'Payment was not completed', failedBody: 'We could not confirm a successful payment for this checkout. You have not been charged for an active order. Please try again or contact support.',
+      invalidTitle: 'This payment link is not valid', invalidBody: 'We could not find a checkout matching this link. If you completed a payment, please check your dashboard or contact support.',
+      activationTitle: 'Activation in Progress', activationBody: 'Your account will be activated within the specified timeframe.',
+      securedTitle: 'Payment Verified', securedBody: 'Your payment was confirmed securely via Stripe.', securedSubscription: 'Your subscription was confirmed securely via Stripe.',
+      dashboardTitle: 'Check Your Dashboard', dashboardBody: 'Track your order status and secure access from your dashboard.',
+      supportTitle: 'Need help? Contact us instantly:', orderSummary: 'Confirmed order', product: 'Product', withinHours: 'within',
+      checkAgain: 'Check again', goToDashboard: 'Go to Dashboard', backToStore: 'Back to Store', browseMore: 'Browse More Tools',
+    },
+  },
+  fr: {
+    checkout: { checkoutFailed: 'Nous n’avons pas pu démarrer le paiement sécurisé. Veuillez réessayer.' },
+    paymentStatus: {
+      verifyingTitle: 'Vérification de votre paiement…', verifyingBody: 'Veuillez patienter pendant la confirmation sécurisée de votre paiement. Ne fermez pas cette page.',
+      paidTitle: 'Paiement réussi !', paidBody: 'Votre accès est en préparation. Vous le recevrez sous peu.',
+      pendingTitle: 'Paiement en cours de traitement', pendingBody: 'Votre paiement n’est pas encore confirmé. Certains moyens de paiement prennent un peu plus de temps. Votre commande sera mise à jour automatiquement.',
+      failedTitle: 'Le paiement n’a pas été finalisé', failedBody: 'Nous n’avons pas pu confirmer un paiement réussi pour ce règlement. Veuillez réessayer ou contacter le support.',
+      invalidTitle: 'Ce lien de paiement n’est pas valide', invalidBody: 'Aucun paiement ne correspond à ce lien. Si vous avez payé, consultez votre tableau de bord ou contactez le support.',
+      activationTitle: 'Activation en cours', activationBody: 'Votre compte sera activé dans le délai indiqué.',
+      securedTitle: 'Paiement vérifié', securedBody: 'Votre paiement a été confirmé en toute sécurité via Stripe.', securedSubscription: 'Votre abonnement a été confirmé en toute sécurité via Stripe.',
+      dashboardTitle: 'Consultez votre tableau de bord', dashboardBody: 'Suivez le statut de votre commande et votre accès sécurisé.',
+      supportTitle: 'Besoin d’aide ? Contactez-nous :', orderSummary: 'Commande confirmée', product: 'Produit', withinHours: 'sous',
+      checkAgain: 'Vérifier à nouveau', goToDashboard: 'Tableau de bord', backToStore: 'Retour à la boutique', browseMore: 'Voir plus d’outils',
+    },
+  },
+  nl: {
+    checkout: { checkoutFailed: 'We konden de veilige betaling niet starten. Probeer het opnieuw.' },
+    paymentStatus: {
+      verifyingTitle: 'Je betaling wordt gecontroleerd…', verifyingBody: 'Even geduld terwijl we je betaling veilig bevestigen. Sluit deze pagina niet.',
+      paidTitle: 'Betaling geslaagd!', paidBody: 'Je toegang wordt voorbereid. Je ontvangt deze binnenkort.',
+      pendingTitle: 'Betaling wordt verwerkt', pendingBody: 'Je betaling is nog niet bevestigd. Sommige betaalmethodes duren wat langer. Je bestelling wordt automatisch bijgewerkt.',
+      failedTitle: 'Betaling niet voltooid', failedBody: 'We konden geen geslaagde betaling bevestigen. Probeer het opnieuw of neem contact op met support.',
+      invalidTitle: 'Deze betaallink is niet geldig', invalidBody: 'We vonden geen betaling bij deze link. Heb je betaald? Bekijk je dashboard of neem contact op.',
+      activationTitle: 'Activering bezig', activationBody: 'Je account wordt binnen de aangegeven termijn geactiveerd.',
+      securedTitle: 'Betaling gecontroleerd', securedBody: 'Je betaling is veilig bevestigd via Stripe.', securedSubscription: 'Je abonnement is veilig bevestigd via Stripe.',
+      dashboardTitle: 'Bekijk je dashboard', dashboardBody: 'Volg je bestelstatus en veilige toegang.',
+      supportTitle: 'Hulp nodig? Neem direct contact op:', orderSummary: 'Bevestigde bestelling', product: 'Product', withinHours: 'binnen',
+      checkAgain: 'Opnieuw controleren', goToDashboard: 'Naar dashboard', backToStore: 'Terug naar winkel', browseMore: 'Meer tools bekijken',
+    },
+  },
+  de: {
+    checkout: { checkoutFailed: 'Die sichere Zahlung konnte nicht gestartet werden. Bitte versuche es erneut.' },
+    paymentStatus: {
+      verifyingTitle: 'Zahlung wird überprüft…', verifyingBody: 'Bitte warte, während wir deine Zahlung sicher bestätigen. Schließe diese Seite nicht.',
+      paidTitle: 'Zahlung erfolgreich!', paidBody: 'Dein Zugang wird vorbereitet. Du erhältst ihn in Kürze.',
+      pendingTitle: 'Zahlung wird verarbeitet', pendingBody: 'Deine Zahlung ist noch nicht bestätigt. Manche Zahlungsarten brauchen länger. Deine Bestellung wird automatisch aktualisiert.',
+      failedTitle: 'Zahlung nicht abgeschlossen', failedBody: 'Wir konnten keine erfolgreiche Zahlung bestätigen. Bitte versuche es erneut oder kontaktiere den Support.',
+      invalidTitle: 'Dieser Zahlungslink ist ungültig', invalidBody: 'Zu diesem Link wurde keine Zahlung gefunden. Falls du bezahlt hast, prüfe dein Dashboard oder kontaktiere den Support.',
+      activationTitle: 'Aktivierung läuft', activationBody: 'Dein Konto wird innerhalb des angegebenen Zeitraums aktiviert.',
+      securedTitle: 'Zahlung verifiziert', securedBody: 'Deine Zahlung wurde sicher über Stripe bestätigt.', securedSubscription: 'Dein Abo wurde sicher über Stripe bestätigt.',
+      dashboardTitle: 'Dashboard prüfen', dashboardBody: 'Verfolge Bestellstatus und sicheren Zugang.',
+      supportTitle: 'Brauchst du Hilfe? Kontaktiere uns:', orderSummary: 'Bestätigte Bestellung', product: 'Produkt', withinHours: 'innerhalb',
+      checkAgain: 'Erneut prüfen', goToDashboard: 'Zum Dashboard', backToStore: 'Zurück zum Shop', browseMore: 'Weitere Tools',
+    },
+  },
+  es: {
+    checkout: { checkoutFailed: 'No pudimos iniciar el pago seguro. Inténtalo de nuevo.' },
+    paymentStatus: {
+      verifyingTitle: 'Verificando tu pago…', verifyingBody: 'Espera mientras confirmamos tu pago de forma segura. No cierres esta página.',
+      paidTitle: '¡Pago realizado!', paidBody: 'Tu acceso se está preparando. Lo recibirás en breve.',
+      pendingTitle: 'El pago se está procesando', pendingBody: 'Tu pago aún no está confirmado. Algunos métodos tardan un poco más. Tu pedido se actualizará automáticamente.',
+      failedTitle: 'El pago no se completó', failedBody: 'No pudimos confirmar un pago correcto. Inténtalo de nuevo o contacta con soporte.',
+      invalidTitle: 'Este enlace de pago no es válido', invalidBody: 'No encontramos ningún pago con este enlace. Si pagaste, revisa tu panel o contacta con soporte.',
+      activationTitle: 'Activación en curso', activationBody: 'Tu cuenta se activará en el plazo indicado.',
+      securedTitle: 'Pago verificado', securedBody: 'Tu pago se confirmó de forma segura con Stripe.', securedSubscription: 'Tu suscripción se confirmó de forma segura con Stripe.',
+      dashboardTitle: 'Revisa tu panel', dashboardBody: 'Sigue el estado de tu pedido y tu acceso seguro.',
+      supportTitle: '¿Necesitas ayuda? Contáctanos:', orderSummary: 'Pedido confirmado', product: 'Producto', withinHours: 'en',
+      checkAgain: 'Comprobar de nuevo', goToDashboard: 'Ir al panel', backToStore: 'Volver a la tienda', browseMore: 'Ver más herramientas',
+    },
+  },
+  it: {
+    checkout: { checkoutFailed: 'Non è stato possibile avviare il pagamento sicuro. Riprova.' },
+    paymentStatus: {
+      verifyingTitle: 'Verifica del pagamento…', verifyingBody: 'Attendi mentre confermiamo il pagamento in modo sicuro. Non chiudere questa pagina.',
+      paidTitle: 'Pagamento riuscito!', paidBody: 'Il tuo accesso è in preparazione. Lo riceverai a breve.',
+      pendingTitle: 'Pagamento in elaborazione', pendingBody: 'Il pagamento non è ancora confermato. Alcuni metodi richiedono più tempo. L’ordine sarà aggiornato automaticamente.',
+      failedTitle: 'Pagamento non completato', failedBody: 'Non abbiamo potuto confermare un pagamento riuscito. Riprova o contatta il supporto.',
+      invalidTitle: 'Questo link di pagamento non è valido', invalidBody: 'Nessun pagamento corrisponde a questo link. Se hai pagato, controlla la dashboard o contatta il supporto.',
+      activationTitle: 'Attivazione in corso', activationBody: 'Il tuo account sarà attivato entro i tempi indicati.',
+      securedTitle: 'Pagamento verificato', securedBody: 'Il pagamento è stato confermato in sicurezza tramite Stripe.', securedSubscription: 'L’abbonamento è stato confermato in sicurezza tramite Stripe.',
+      dashboardTitle: 'Controlla la dashboard', dashboardBody: 'Monitora lo stato dell’ordine e l’accesso sicuro.',
+      supportTitle: 'Serve aiuto? Contattaci:', orderSummary: 'Ordine confermato', product: 'Prodotto', withinHours: 'entro',
+      checkAgain: 'Controlla di nuovo', goToDashboard: 'Vai alla dashboard', backToStore: 'Torna allo store', browseMore: 'Altri strumenti',
+    },
+  },
+  tr: {
+    checkout: { checkoutFailed: 'Güvenli ödeme başlatılamadı. Lütfen tekrar dene.' },
+    paymentStatus: {
+      verifyingTitle: 'Ödemen doğrulanıyor…', verifyingBody: 'Ödemeni güvenli şekilde onaylarken lütfen bekle. Bu sayfayı kapatma.',
+      paidTitle: 'Ödeme Başarılı!', paidBody: 'Erişimin hazırlanıyor. Kısa süre içinde alacaksın.',
+      pendingTitle: 'Ödeme işleniyor', pendingBody: 'Ödemen henüz onaylanmadı. Bazı ödeme yöntemleri biraz daha uzun sürer. Siparişin otomatik güncellenecek.',
+      failedTitle: 'Ödeme tamamlanmadı', failedBody: 'Başarılı bir ödeme doğrulayamadık. Lütfen tekrar dene veya destekle iletişime geç.',
+      invalidTitle: 'Bu ödeme bağlantısı geçerli değil', invalidBody: 'Bu bağlantıya ait bir ödeme bulunamadı. Ödeme yaptıysan panelini kontrol et veya destekle iletişime geç.',
+      activationTitle: 'Aktivasyon sürüyor', activationBody: 'Hesabın belirtilen süre içinde aktive edilecek.',
+      securedTitle: 'Ödeme doğrulandı', securedBody: 'Ödemen Stripe ile güvenli şekilde onaylandı.', securedSubscription: 'Aboneliğin Stripe ile güvenli şekilde onaylandı.',
+      dashboardTitle: 'Panelini kontrol et', dashboardBody: 'Sipariş durumunu ve güvenli erişimini takip et.',
+      supportTitle: 'Yardım gerekiyor mu? Bize ulaş:', orderSummary: 'Onaylanan sipariş', product: 'Ürün', withinHours: 'içinde',
+      checkAgain: 'Tekrar kontrol et', goToDashboard: 'Panele git', backToStore: 'Mağazaya dön', browseMore: 'Daha fazla araç',
+    },
+  },
+  ar: {
+    checkout: { checkoutFailed: 'لم نتمكن من بدء الدفع الآمن. يرجى المحاولة مرة أخرى.' },
+    paymentStatus: {
+      verifyingTitle: 'جارٍ التحقق من الدفع…', verifyingBody: 'يرجى الانتظار أثناء تأكيد دفعتك بشكل آمن. لا تغلق هذه الصفحة.',
+      paidTitle: 'تم الدفع بنجاح!', paidBody: 'يتم تحضير وصولك الآن وستستلمه قريبًا.',
+      pendingTitle: 'جارٍ معالجة الدفع', pendingBody: 'لم يتم تأكيد دفعتك بعد. بعض طرق الدفع تستغرق وقتًا أطول. سيتم تحديث طلبك تلقائيًا.',
+      failedTitle: 'لم تتم عملية الدفع', failedBody: 'لم نتمكن من تأكيد دفعة ناجحة لهذه العملية. يرجى المحاولة مرة أخرى أو التواصل مع الدعم.',
+      invalidTitle: 'رابط الدفع غير صالح', invalidBody: 'لم نجد أي عملية دفع مرتبطة بهذا الرابط. إذا كنت قد دفعت، تحقق من لوحة التحكم أو تواصل مع الدعم.',
+      activationTitle: 'التنشيط قيد التنفيذ', activationBody: 'سيتم تنشيط حسابك خلال المدة المحددة.',
+      securedTitle: 'تم التحقق من الدفع', securedBody: 'تم تأكيد دفعتك بشكل آمن عبر Stripe.', securedSubscription: 'تم تأكيد اشتراكك بشكل آمن عبر Stripe.',
+      dashboardTitle: 'تحقق من لوحة التحكم', dashboardBody: 'تابع حالة طلبك ووصولك الآمن.',
+      supportTitle: 'تحتاج مساعدة؟ تواصل معنا:', orderSummary: 'الطلب المؤكد', product: 'المنتج', withinHours: 'خلال',
+      checkAgain: 'تحقق مرة أخرى', goToDashboard: 'لوحة التحكم', backToStore: 'العودة إلى المتجر', browseMore: 'استعرض أدوات أخرى',
+    },
+  },
+} as const;
+
+Object.entries(paymentVerificationTranslations).forEach(([lng, bundle]) => {
+  i18n.addResourceBundle(lng, 'translation', bundle, true, true);
+});
+
+
 Object.entries(launchI18nPatches).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });

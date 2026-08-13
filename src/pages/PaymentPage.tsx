@@ -29,7 +29,6 @@ import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { getChatToBuyLinks, isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
 import { getRegionCategory } from '@/lib/geo';
-import { getStripeLink } from '@/lib/stripeLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
 
 const emailSchema = z.string().trim().email().max(255);
@@ -255,7 +254,6 @@ const PaymentPage = () => {
   const paymentMethods = isBelgianUser
     ? [...PAYMENT_METHODS].sort((a, b) => (a.id === 'bancontact' ? -1 : 0) - (b.id === 'bancontact' ? -1 : 0))
     : PAYMENT_METHODS;
-  const checkoutUrl = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name) : null;
   const productUrl = tool ? `${window.location.origin}/payment/${tool.tool_id}` : '';
   const chatToBuyLinks = tool ? getChatToBuyLinks(tool.name, productUrl) : { whatsapp: '', telegram: '' };
   const completedPurchases = Number(localStorage.getItem('aiDealsCompletedPurchases') || '0');
@@ -319,14 +317,15 @@ const PaymentPage = () => {
       window.location.href = data.url;
     } catch (error) {
       console.error('Checkout error:', error);
-      const fallbackPaymentLink = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name, email || user?.email || undefined) : null;
-      if (fallbackPaymentLink) {
-        localStorage.setItem('aiDealsCompletedPurchases', String(completedPurchases + 1));
-        window.open(fallbackPaymentLink, '_blank', 'noopener,noreferrer');
-      } else {
-        toast({ title: t('checkout.error', 'Error'), description: t('checkout.somethingWrong', 'Something went wrong. Please try again.'), variant: 'destructive' });
-      }
+      // No Payment Link fallback: never silently redirect a customer to a
+      // different Stripe checkout. Surface a localized error + retry instead.
+      toast({
+        title: t('checkout.error', 'Error'),
+        description: t('checkout.checkoutFailed', 'We could not start the secure payment. Please try again.'),
+        variant: 'destructive',
+      });
     } finally {
+
       setIsLoading(false);
     }
   };
@@ -845,7 +844,7 @@ const PaymentPage = () => {
                   <Button
                     type="submit"
                     className="w-full h-12 text-sm font-semibold rounded-xl relative overflow-hidden"
-                    disabled={isLoading || !agreedToTerms || !checkoutUrl}
+                    disabled={isLoading || !agreedToTerms || !selectedPlan}
                     style={{
                       background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)',
                       boxShadow: '0 8px 30px hsl(var(--primary) / 0.3)',
@@ -859,7 +858,7 @@ const PaymentPage = () => {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
-                        {checkoutUrl ? t('store.buyNow', 'Get Instant Access') : t('checkout.contactSupport', 'Contact support')}
+                        {t('store.buyNow', 'Get Instant Access')}
                       </span>
                     )}
                   </Button>

@@ -22,7 +22,6 @@ import { FINAL_PAYMENT_EUR_NOTE, formatApproxCurrency } from '@/lib/currency';
 import { useCurrency } from '@/hooks/useCurrency';
 import { ProductReviewsCarousel } from '@/components/ProductReviews';
 import TrustBadges from '@/components/TrustBadges';
-import { getStripeLink } from '@/lib/stripeLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
 
 interface CheckoutDialogProps {
@@ -79,7 +78,6 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
   const [plansLoading, setPlansLoading] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
   const [applyWalletCredit, setApplyWalletCredit] = useState(false);
-  const checkoutUrl = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name) : null;
   const logoUrl = getProductLogoUrl(tool?.tool_id, tool?.logo_url);
 
   // Guard: prevent checkout for non-active tools
@@ -172,13 +170,6 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
     setIsLoading(true);
     try {
       const buyerEmail = email || user?.email;
-      const directPaymentLink = getStripeLink(tool.name, selectedPlan.plan_name, buyerEmail || undefined);
-      if (directPaymentLink) {
-        if (buyerEmail && !user) localStorage.setItem('buyer_email', buyerEmail);
-        window.open(directPaymentLink, '_blank', 'noopener,noreferrer');
-        return;
-      }
-
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: {
           toolId: tool.id,
@@ -540,7 +531,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                   <Button
                     type="submit"
                     className="w-full h-14 text-base font-semibold rounded-2xl relative overflow-hidden group"
-                    disabled={isLoading || !agreedToTerms || !checkoutUrl}
+                    disabled={isLoading || !agreedToTerms || !selectedPlan}
                     style={{
                       background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)',
                       boxShadow: '0 8px 30px hsl(var(--primary) / 0.3)',
@@ -555,7 +546,7 @@ export const CheckoutDialog = ({ tool, open, onOpenChange, onSuccess }: Checkout
                       ) : (
                         <>
                           <Sparkles className="w-5 h-5" />
-                          {checkoutUrl ? t('store.buyNow') : t('checkout.contactSupport')}
+                          {t('store.buyNow')}
                         </>
                       )}
                     </span>

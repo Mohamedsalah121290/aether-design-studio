@@ -18,6 +18,27 @@ const getStripeSecretKey = () => {
   return key;
 };
 
+/* ────────────────────────────────────────────────────────────────────
+   ORIGIN RESOLUTION
+   Production customers must ALWAYS return to https://www.aideals.be.
+   Only genuine development/preview origins may use their own origin,
+   and the fallback is production — never a Lovable preview domain.
+   ──────────────────────────────────────────────────────────────────── */
+const PRODUCTION_ORIGIN = "https://www.aideals.be";
+
+const isDevOrigin = (origin: string) =>
+  /^http:\/\/localhost(:\d+)?$/.test(origin) ||
+  /^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin) ||
+  /^https:\/\/[a-z0-9-]*preview[a-z0-9-]*\.lovable\.app$/.test(origin) ||
+  /^https:\/\/[a-z0-9-]+\.lovableproject\.com$/.test(origin);
+
+const resolveOrigin = (req: Request) => {
+  const origin = req.headers.get("origin") || "";
+  if (isDevOrigin(origin)) return origin;
+  return PRODUCTION_ORIGIN;
+};
+
+
 const withTimeout = async <T>(promise: Promise<T>, label: string, timeoutMs = 20000): Promise<T> => {
   let timeoutId: number | undefined;
   const timeout = new Promise<never>((_, reject) => {
@@ -160,9 +181,15 @@ serve(async (req) => {
 
       const customers = await stripe.customers.list({ email, limit: 1 });
       const customerId = customers.data.length > 0 ? customers.data[0].id : undefined;
-      const origin = req.headers.get("origin") || "https://id-preview--92b6864c-4966-485c-b321-32542f78bf88.lovable.app";
+      const origin = resolveOrigin(req);
+
       const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
       const pendingOrders: Array<{ tool: any; planName: string; activationTime: number }> = [];
+      // Server-validated identifiers only — never the raw browser payload.
+      const verifiedToolDbIds: string[] = [];
+      const verifiedToolKeys: string[] = [];
+      const verifiedPlanIds: string[] = [];
+      const cartReference = crypto.randomUUID();
 
       for (const item of cartItems.slice(0, 25)) {
         if (!item?.toolId) continue;
@@ -175,6 +202,7 @@ serve(async (req) => {
         let planPrice = Number(tool.price);
         let planName = tool.name;
         let activationTime = tool.activation_time;
+        let verifiedPlanId = "default";
 
         if (item.planId) {
           const { data: plan } = await supabaseAdmin
@@ -188,6 +216,7 @@ serve(async (req) => {
             planPrice = Number(plan.monthly_price);
             planName = `${tool.name} — ${plan.plan_name}`;
             activationTime = plan.activation_time || tool.activation_time;
+            verifiedPlanId = plan.plan_id;
           }
         }
 
@@ -203,9 +232,30 @@ serve(async (req) => {
           || await stripe.prices.create({ product: product.id, unit_amount: unitAmount, currency });
         lineItems.push({ price: price.id, quantity: 1 });
         pendingOrders.push({ tool, planName, activationTime });
+        verifiedToolDbIds.push(tool.id);
+        verifiedToolKeys.push(tool.tool_id);
+        verifiedPlanIds.push(verifiedPlanId);
       }
 
       if (lineItems.length === 0) throw new Error("Cart is empty");
+
+      /* Cart session metadata.
+         Stripe limits: max 50 keys, 40 chars per key, 500 chars per value.
+         Lists are truncated defensively so session creation can never fail
+         because a large cart overflowed a metadata value. */
+      const clip = (value: string) => (value.length > 480 ? `${value.slice(0, 480)}…` : value);
+      const cartMetadata: Record<string, string> = {
+        cart_checkout: "true",
+        cart_reference: cartReference,
+        item_count: String(lineItems.length),
+        billing_mode: "payment",
+        tool_db_ids: clip(verifiedToolDbIds.join(",")),
+        tool_keys: clip(verifiedToolKeys.join(",")),
+        plan_ids: clip(verifiedPlanIds.join(",")),
+        customer_email: email,
+      };
+      if (user?.id) cartMetadata.user_id = user.id;
+
       const session = await withTimeout(stripe.checkout.sessions.create({
         customer: customerId,
         customer_email: customerId ? undefined : email,
@@ -215,8 +265,10 @@ serve(async (req) => {
         adaptive_pricing: { enabled: false },
         success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}&cart=1`,
         cancel_url: `${origin}/payment/cancelled`,
-        metadata: { cart_checkout: "true", item_count: String(lineItems.length), ...(user?.id ? { user_id: user.id } : {}), customer_email: email },
+        metadata: cartMetadata,
+        payment_intent_data: { metadata: cartMetadata },
       }), "Stripe checkout session");
+
 
       await supabaseAdmin.from("orders").insert(pendingOrders.map(({ tool, planName, activationTime }) => ({
         tool_id: tool.id,
@@ -225,7 +277,7 @@ serve(async (req) => {
         status: "pending",
         payment_status: "pending",
         stripe_session_id: session.id,
-        customer_data: { email, cart_checkout: true, item_name: planName },
+        customer_data: { email, cart_checkout: true, item_name: planName, cart_reference: cartReference },
         activation_deadline: new Date(Date.now() + activationTime * 3600000).toISOString(),
       })));
 
@@ -365,7 +417,7 @@ serve(async (req) => {
       }
     }
 
-    const origin = req.headers.get("origin") || "https://id-preview--92b6864c-4966-485c-b321-32542f78bf88.lovable.app";
+    const origin = resolveOrigin(req);
 
     // --- Metadata for webhook ---
     const metadata: Record<string, string> = {
@@ -496,9 +548,24 @@ serve(async (req) => {
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     logStep("ERROR", { message: msg });
-    return new Response(JSON.stringify({ error: msg }), {
+
+    /* Graceful degradation when a configured payment method is unavailable
+       in the active Stripe account/mode. We do NOT silently swap payment
+       methods — we surface a clear, actionable error instead. */
+    const lower = msg.toLowerCase();
+    const isPaymentMethodIssue =
+      lower.includes("payment_method_types") ||
+      lower.includes("payment method") ||
+      lower.includes("not activated") ||
+      lower.includes("is invalid for this session");
+    const clientError = isPaymentMethodIssue
+      ? "This payment method is currently unavailable. Please try another payment method or contact support."
+      : msg;
+
+    return new Response(JSON.stringify({ error: clientError, code: isPaymentMethodIssue ? "payment_method_unavailable" : "checkout_failed" }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
     });
   }
+
 });
