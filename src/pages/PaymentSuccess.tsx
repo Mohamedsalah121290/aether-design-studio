@@ -9,7 +9,7 @@ import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotCo
 import { isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
 import { clearCartItems } from '@/lib/cart';
 import { supabase } from '@/integrations/supabase/client';
-import { useLanguage } from '@/lib/i18n';
+import { useTranslation } from 'react-i18next';
 
 type VerificationState = 'verifying' | 'paid' | 'pending' | 'failed' | 'invalid';
 
@@ -40,7 +40,7 @@ const SupportBlock = ({ title }: { title: string }) => (
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t } = useTranslation();
   const sessionId = searchParams.get('session_id');
 
   const [state, setState] = useState<VerificationState>('verifying');

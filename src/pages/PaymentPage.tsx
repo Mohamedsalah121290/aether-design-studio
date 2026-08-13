@@ -319,14 +319,15 @@ const PaymentPage = () => {
       window.location.href = data.url;
     } catch (error) {
       console.error('Checkout error:', error);
-      const fallbackPaymentLink = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name, email || user?.email || undefined) : null;
-      if (fallbackPaymentLink) {
-        localStorage.setItem('aiDealsCompletedPurchases', String(completedPurchases + 1));
-        window.open(fallbackPaymentLink, '_blank', 'noopener,noreferrer');
-      } else {
-        toast({ title: t('checkout.error', 'Error'), description: t('checkout.somethingWrong', 'Something went wrong. Please try again.'), variant: 'destructive' });
-      }
+      // No Payment Link fallback: never silently redirect a customer to a
+      // different Stripe checkout. Surface a localized error + retry instead.
+      toast({
+        title: t('checkout.error', 'Error'),
+        description: t('checkout.checkoutFailed', 'We could not start the secure payment. Please try again.'),
+        variant: 'destructive',
+      });
     } finally {
+
       setIsLoading(false);
     }
   };
