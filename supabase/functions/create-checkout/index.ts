@@ -185,6 +185,11 @@ serve(async (req) => {
 
       const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
       const pendingOrders: Array<{ tool: any; planName: string; activationTime: number }> = [];
+      // Server-validated identifiers only — never the raw browser payload.
+      const verifiedToolDbIds: string[] = [];
+      const verifiedToolKeys: string[] = [];
+      const verifiedPlanIds: string[] = [];
+      const cartReference = crypto.randomUUID();
 
       for (const item of cartItems.slice(0, 25)) {
         if (!item?.toolId) continue;
@@ -197,6 +202,7 @@ serve(async (req) => {
         let planPrice = Number(tool.price);
         let planName = tool.name;
         let activationTime = tool.activation_time;
+        let verifiedPlanId = "default";
 
         if (item.planId) {
           const { data: plan } = await supabaseAdmin
@@ -210,6 +216,7 @@ serve(async (req) => {
             planPrice = Number(plan.monthly_price);
             planName = `${tool.name} — ${plan.plan_name}`;
             activationTime = plan.activation_time || tool.activation_time;
+            verifiedPlanId = plan.plan_id;
           }
         }
 
@@ -225,9 +232,30 @@ serve(async (req) => {
           || await stripe.prices.create({ product: product.id, unit_amount: unitAmount, currency });
         lineItems.push({ price: price.id, quantity: 1 });
         pendingOrders.push({ tool, planName, activationTime });
+        verifiedToolDbIds.push(tool.id);
+        verifiedToolKeys.push(tool.tool_id);
+        verifiedPlanIds.push(verifiedPlanId);
       }
 
       if (lineItems.length === 0) throw new Error("Cart is empty");
+
+      /* Cart session metadata.
+         Stripe limits: max 50 keys, 40 chars per key, 500 chars per value.
+         Lists are truncated defensively so session creation can never fail
+         because a large cart overflowed a metadata value. */
+      const clip = (value: string) => (value.length > 480 ? `${value.slice(0, 480)}…` : value);
+      const cartMetadata: Record<string, string> = {
+        cart_checkout: "true",
+        cart_reference: cartReference,
+        item_count: String(lineItems.length),
+        billing_mode: "payment",
+        tool_db_ids: clip(verifiedToolDbIds.join(",")),
+        tool_keys: clip(verifiedToolKeys.join(",")),
+        plan_ids: clip(verifiedPlanIds.join(",")),
+        customer_email: email,
+      };
+      if (user?.id) cartMetadata.user_id = user.id;
+
       const session = await withTimeout(stripe.checkout.sessions.create({
         customer: customerId,
         customer_email: customerId ? undefined : email,
@@ -237,8 +265,10 @@ serve(async (req) => {
         adaptive_pricing: { enabled: false },
         success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}&cart=1`,
         cancel_url: `${origin}/payment/cancelled`,
-        metadata: { cart_checkout: "true", item_count: String(lineItems.length), ...(user?.id ? { user_id: user.id } : {}), customer_email: email },
+        metadata: cartMetadata,
+        payment_intent_data: { metadata: cartMetadata },
       }), "Stripe checkout session");
+
 
       await supabaseAdmin.from("orders").insert(pendingOrders.map(({ tool, planName, activationTime }) => ({
         tool_id: tool.id,
