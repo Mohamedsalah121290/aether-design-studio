@@ -29,7 +29,6 @@ import TrustBadges from '@/components/TrustBadges';
 import { Social3DLink, TelegramIcon, WhatsAppIcon } from '@/components/ChatbotConversion';
 import { getChatToBuyLinks, isUsableSocialLink, supportLinks } from '@/lib/socialLinks';
 import { getRegionCategory } from '@/lib/geo';
-import { getStripeLink } from '@/lib/stripeLinks';
 import { getProductLogoUrl } from '@/lib/productLogos';
 
 const emailSchema = z.string().trim().email().max(255);
@@ -255,7 +254,6 @@ const PaymentPage = () => {
   const paymentMethods = isBelgianUser
     ? [...PAYMENT_METHODS].sort((a, b) => (a.id === 'bancontact' ? -1 : 0) - (b.id === 'bancontact' ? -1 : 0))
     : PAYMENT_METHODS;
-  const checkoutUrl = tool && selectedPlan ? getStripeLink(tool.name, selectedPlan.plan_name) : null;
   const productUrl = tool ? `${window.location.origin}/payment/${tool.tool_id}` : '';
   const chatToBuyLinks = tool ? getChatToBuyLinks(tool.name, productUrl) : { whatsapp: '', telegram: '' };
   const completedPurchases = Number(localStorage.getItem('aiDealsCompletedPurchases') || '0');
@@ -846,7 +844,7 @@ const PaymentPage = () => {
                   <Button
                     type="submit"
                     className="w-full h-12 text-sm font-semibold rounded-xl relative overflow-hidden"
-                    disabled={isLoading || !agreedToTerms || !checkoutUrl}
+                    disabled={isLoading || !agreedToTerms || !selectedPlan}
                     style={{
                       background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)',
                       boxShadow: '0 8px 30px hsl(var(--primary) / 0.3)',
@@ -860,7 +858,7 @@ const PaymentPage = () => {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4" />
-                        {checkoutUrl ? t('store.buyNow', 'Get Instant Access') : t('checkout.contactSupport', 'Contact support')}
+                        {t('store.buyNow', 'Get Instant Access')}
                       </span>
                     )}
                   </Button>
