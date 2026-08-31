@@ -355,8 +355,11 @@ const Navbar = () => {
             </button>
           </div>
 
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden">
+            <GroppiBadge compact className="sm:hidden" />
+            <GroppiBadge className="hidden sm:inline-flex" />
             <CartIconLink />
+
             <Button variant="ghost" size="icon" className="min-h-11 min-w-11" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X /> : <Menu />}
             </Button>
