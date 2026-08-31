@@ -166,8 +166,12 @@ const Navbar = () => {
 
           {/* Right Section */}
           <div className="hidden lg:flex items-center gap-4">
+            <GroppiBadge className="hidden xl:inline-flex" />
+            <GroppiBadge compact className="xl:hidden" />
+
             {/* Language Selector */}
             <div className="relative" ref={langMenuRef}>
+
               <Button
                 variant="ghost"
                 size="sm"
