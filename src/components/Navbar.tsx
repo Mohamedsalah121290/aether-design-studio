@@ -12,7 +12,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { BUILD_VERSION, SHORT_BUILD } from '@/lib/buildInfo';
 import AuthDialog from '@/components/AuthDialog';
 import { getCartItems } from '@/lib/cart';
+import GroppiBadge from '@/components/GroppiBadge';
 import logo from '@/assets/logo.png';
+
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -166,8 +168,12 @@ const Navbar = () => {
 
           {/* Right Section */}
           <div className="hidden lg:flex items-center gap-4">
+            <GroppiBadge className="hidden xl:inline-flex" />
+            <GroppiBadge compact className="xl:hidden" />
+
             {/* Language Selector */}
             <div className="relative" ref={langMenuRef}>
+
               <Button
                 variant="ghost"
                 size="sm"
@@ -351,8 +357,11 @@ const Navbar = () => {
             </button>
           </div>
 
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden">
+            <GroppiBadge compact className="sm:hidden" />
+            <GroppiBadge className="hidden sm:inline-flex" />
             <CartIconLink />
+
             <Button variant="ghost" size="icon" className="min-h-11 min-w-11" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X /> : <Menu />}
             </Button>
