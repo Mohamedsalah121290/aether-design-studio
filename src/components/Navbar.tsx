@@ -12,7 +12,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { BUILD_VERSION, SHORT_BUILD } from '@/lib/buildInfo';
 import AuthDialog from '@/components/AuthDialog';
 import { getCartItems } from '@/lib/cart';
+import GroppiBadge from '@/components/GroppiBadge';
 import logo from '@/assets/logo.png';
+
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
