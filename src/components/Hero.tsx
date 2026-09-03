@@ -179,8 +179,8 @@ const Hero = () => {
             }}
           >
             <span 
+              className="gradient-text"
               style={{
-                color: '#E43D86',
                 textShadow: '0 0 80px hsl(var(--primary) / 0.8)',
                 filter: 'drop-shadow(0 0 20px hsl(var(--primary) / 0.5))',
               }}
@@ -188,7 +188,7 @@ const Hero = () => {
               Get instant access to premium AI tools — no setup needed.
             </span>
             <br />
-            <span className="drop-shadow-2xl" style={{ color: '#E43D86' }}>Every Month.</span>
+            <span className="text-white drop-shadow-2xl">Every Month.</span>
           </motion.h1>
 
           {/* Supporting text */}
