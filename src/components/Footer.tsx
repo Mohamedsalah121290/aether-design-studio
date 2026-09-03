@@ -141,7 +141,7 @@ const Footer = () => {
                     href={social.href}
                     label={social.label}
                     tone={social.tone}
-                    className="w-10 h-10"
+                    className="w-11 h-11"
                   >
                     <Icon className="w-5 h-5" />
                   </Social3DLink>

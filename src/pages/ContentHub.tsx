@@ -71,7 +71,7 @@ const ContentHub = () => {
       id: 'v2',
       title: 'Canva V6: Complete Tutorial',
       description: 'Everything new in the latest Canva release including enhanced realism, text rendering, and style controls.',
-      thumbnail: 'https://images.unsplash.com/photo-1699839426298-dcb5c87df26b?w=800&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80',
       duration: '32:15',
       views: '256K',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
@@ -80,7 +80,7 @@ const ContentHub = () => {
       id: 'v3',
       title: 'Perplexity AI Deep Dive',
       description: 'Understanding Anthropic\'s latest model capabilities and how to maximize its potential for complex tasks.',
-      thumbnail: 'https://images.unsplash.com/photo-1676299081847-c3b7c4c9cdb6?w=800&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1678995632928-298d05d41671?w=800&q=80',
       duration: '18:42',
       views: '89K',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
@@ -98,7 +98,7 @@ const ContentHub = () => {
       id: 'v5',
       title: 'Canva Pro Masterclass',
       description: 'Advanced techniques for generating stunning AI art with precise control over composition and style.',
-      thumbnail: 'https://images.unsplash.com/photo-1686191128892-3b37add1101e?w=800&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1712002641088-9d76f9080889?w=800&q=80',
       duration: '22:10',
       views: '143K',
       videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
@@ -141,7 +141,7 @@ const ContentHub = () => {
       category: 'Design Tips',
       author: 'Alex Rivera',
       readTime: '8 min',
-      thumbnail: 'https://images.unsplash.com/photo-1686191128892-3b37add1101e?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1712002641088-9d76f9080889?w=600&q=80',
       date: 'Jan 4, 2026',
     },
     {
@@ -161,7 +161,7 @@ const ContentHub = () => {
       category: 'Tool Review',
       author: 'Emily Watson',
       readTime: '10 min',
-      thumbnail: 'https://images.unsplash.com/photo-1699839426298-dcb5c87df26b?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80',
       date: 'Jan 2, 2026',
     },
     {
@@ -181,7 +181,7 @@ const ContentHub = () => {
       category: 'Research',
       author: 'Dr. James Liu',
       readTime: '11 min',
-      thumbnail: 'https://images.unsplash.com/photo-1676299081847-c3b7c4c9cdb6?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1678995632928-298d05d41671?w=600&q=80',
       date: 'Dec 31, 2025',
     },
     {
@@ -231,7 +231,7 @@ const ContentHub = () => {
       category: 'Productivity',
       author: 'Lisa Thompson',
       readTime: '6 min',
-      thumbnail: 'https://images.unsplash.com/photo-1686191128892-3b37add1101e?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1712002641088-9d76f9080889?w=600&q=80',
       date: 'Dec 26, 2025',
     },
     {
@@ -262,7 +262,7 @@ const ContentHub = () => {
       category: 'Canva',
       author: 'AI DEALS Editorial',
       readTime: '7 min',
-      thumbnail: 'https://images.unsplash.com/photo-1699839426298-dcb5c87df26b?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80',
       date: 'Dec 23, 2025',
     },
     {
@@ -282,7 +282,7 @@ const ContentHub = () => {
       category: 'Students',
       author: 'AI DEALS Editorial',
       readTime: '8 min',
-      thumbnail: 'https://images.unsplash.com/photo-1676299081847-c3b7c4c9cdb6?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1678995632928-298d05d41671?w=600&q=80',
       date: 'Dec 21, 2025',
     },
     {
@@ -342,7 +342,7 @@ const ContentHub = () => {
       category: 'Canva',
       author: 'AI DEALS Editorial',
       readTime: '6 min',
-      thumbnail: 'https://images.unsplash.com/photo-1699839426298-dcb5c87df26b?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80',
       date: 'Dec 15, 2025',
     },
     {
@@ -372,7 +372,7 @@ const ContentHub = () => {
       category: 'Students',
       author: 'AI DEALS Editorial',
       readTime: '9 min',
-      thumbnail: 'https://images.unsplash.com/photo-1676299081847-c3b7c4c9cdb6?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1678995632928-298d05d41671?w=600&q=80',
       date: 'Dec 12, 2025',
     },
     {
@@ -402,7 +402,7 @@ const ContentHub = () => {
       category: 'Productivity',
       author: 'AI DEALS Editorial',
       readTime: '7 min',
-      thumbnail: 'https://images.unsplash.com/photo-1686191128892-3b37add1101e?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1712002641088-9d76f9080889?w=600&q=80',
       date: 'Dec 9, 2025',
     },
     {
@@ -422,7 +422,7 @@ const ContentHub = () => {
       category: 'Perplexity',
       author: 'AI DEALS Editorial',
       readTime: '8 min',
-      thumbnail: 'https://images.unsplash.com/photo-1676299081847-c3b7c4c9cdb6?w=600&q=80',
+      thumbnail: 'https://images.unsplash.com/photo-1678995632928-298d05d41671?w=600&q=80',
       date: 'Dec 7, 2025',
     },
     {
