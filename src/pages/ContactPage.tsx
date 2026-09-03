@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Facebook, Instagram, Mail, Clock, MessageSquare, Send, Globe, Shield } from 'lucide-react';
+import { Facebook, Instagram, Link2, Mail, Clock, MessageSquare, Send, Globe, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
