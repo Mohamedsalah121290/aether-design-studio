@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { detectAndStoreRegion, LANGUAGE_MANUAL_KEY, LANGUAGE_STORAGE_KEY, languageForRegion } from '@/lib/geo';
+import { LANGUAGE_MANUAL_KEY, LANGUAGE_STORAGE_KEY } from '@/lib/geo';
 import { supportLinks } from '@/lib/socialLinks';
 
 // Complete translations for 13 languages
@@ -4009,7 +4009,8 @@ export const setAppLanguage = async (lng: string): Promise<AppLanguage> => {
   return code;
 };
 
-// Get selected language from URL/storage first; only then use region/browser detection.
+// English is the default. Only an explicit URL ?lang= or a manually saved
+// preference overrides it — never browser language, region, IP or device settings.
 const getInitialLanguage = (): AppLanguage => {
   if (typeof window !== 'undefined') {
     const urlLang = new URLSearchParams(window.location.search).get('lang');
@@ -4017,17 +4018,10 @@ const getInitialLanguage = (): AppLanguage => {
       return normalizeAppLanguage(urlLang);
     }
 
-    const stored = readStoredLanguage();
-    if (stored) return stored;
-
-    const region = detectAndStoreRegion();
-    const geoLanguage = languageForRegion(region);
-    if (!window.localStorage.getItem(LANGUAGE_MANUAL_KEY) && supportedLanguageCodes.includes(geoLanguage)) {
-      return normalizeAppLanguage(geoLanguage);
+    if (window.localStorage.getItem(LANGUAGE_MANUAL_KEY) === 'true') {
+      const stored = readStoredLanguage();
+      if (stored) return stored;
     }
-
-    const browserLang = window.navigator.language.split('-')[0];
-    if (supportedLanguageCodes.includes(browserLang)) return normalizeAppLanguage(browserLang);
   }
 
   return 'en';

@@ -435,7 +435,7 @@ const Index = () => {
               </div>
             </motion.div>
             <div className="mt-8 text-center">
-              <Button variant="heroOutline" size="lg" asChild>
+              <Button variant="heroOutline" size="lg" asChild className="h-auto max-w-full whitespace-normal py-3 text-center leading-snug">
                 <Link to="/contact">Share your feedback after purchase</Link>
               </Button>
             </div>

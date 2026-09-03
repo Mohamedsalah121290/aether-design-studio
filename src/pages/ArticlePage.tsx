@@ -77,7 +77,7 @@ Mastering prompt engineering is an ongoing journey. As AI models evolve, so too 
     category: 'Design Tips',
     author: 'Alex Rivera',
     readTime: '8 min',
-    thumbnail: 'https://images.unsplash.com/photo-1686191128892-3b37add1101e?w=1200&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1712002641088-9d76f9080889?w=1200&q=80',
     date: 'Jan 4, 2026',
     content: `Creating stunning AI-generated images requires more than just typing in a prompt. Professional artists and designers have developed techniques that consistently produce exceptional results.
 
@@ -173,7 +173,7 @@ The key is to start small, learn continuously, and scale what works.`,
     category: 'Tool Review',
     author: 'Emily Watson',
     readTime: '10 min',
-    thumbnail: 'https://images.unsplash.com/photo-1699839426298-dcb5c87df26b?w=1200&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80',
     date: 'Jan 2, 2026',
     content: `Choosing between Canva and Canva Pro depends on your specific needs, workflow, and creative goals. Let's break down the key differences.
 
@@ -252,7 +252,7 @@ The best content combines AI efficiency with human creativity and judgment.`,
     category: 'Research',
     author: 'Dr. James Liu',
     readTime: '11 min',
-    thumbnail: 'https://images.unsplash.com/photo-1676299081847-c3b7c4c9cdb6?w=1200&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1678995632928-298d05d41671?w=1200&q=80',
     date: 'Dec 31, 2025',
     content: `Perplexity has become an invaluable tool for researchers across disciplines. Its ability to process and synthesize large amounts of information makes it perfect for academic work.
 
@@ -423,7 +423,7 @@ Calculate the time saved and compare it to tool costs. Most AI tools pay for the
     category: 'Productivity',
     author: 'Lisa Thompson',
     readTime: '6 min',
-    thumbnail: 'https://images.unsplash.com/photo-1686191128892-3b37add1101e?w=1200&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1712002641088-9d76f9080889?w=1200&q=80',
     date: 'Dec 26, 2025',
     content: `A well-organized prompt library is one of the most valuable assets for anyone working with AI regularly.
 

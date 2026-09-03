@@ -53,11 +53,11 @@ const seed = (s: LocaleSeed): BlogPostLocale => ({
 
 const THUMBS = [
   'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80',
-  'https://images.unsplash.com/photo-1686191128892-3b37add1101e?w=1200&q=80',
+  'https://images.unsplash.com/photo-1712002641088-9d76f9080889?w=1200&q=80',
   'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80',
-  'https://images.unsplash.com/photo-1699839426298-dcb5c87df26b?w=1200&q=80',
+  'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80',
   'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&q=80',
-  'https://images.unsplash.com/photo-1676299081847-c3b7c4c9cdb6?w=1200&q=80',
+  'https://images.unsplash.com/photo-1678995632928-298d05d41671?w=1200&q=80',
   'https://images.unsplash.com/photo-1675271591211-126ad94e495d?w=1200&q=80',
   'https://images.unsplash.com/photo-1680474569854-81216b34417a?w=1200&q=80',
 ];
