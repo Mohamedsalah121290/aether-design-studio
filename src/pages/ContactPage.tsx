@@ -199,7 +199,37 @@ const ContactPage = () => {
                   </div>
                 );
               })}
+
+              {/* Trusted digital supply partner */}
+              <div className="glass rounded-2xl p-5">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Link2 className="w-5 h-5 partner-name" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-display font-bold text-sm mb-1 partner-title">
+                      {t('contact.partner.title', 'Trusted Digital Supply Partner')}
+                    </h3>
+                    <p className="text-sm font-semibold partner-name break-words">Sawa Dealz</p>
+                    <p className="text-foreground text-xs font-medium mt-0.5">
+                      {t('contact.partner.reps', 'Mr. Emad & Mr. Mohamed')}
+                    </p>
+                    <p className="text-muted-foreground text-xs mt-2 leading-relaxed">
+                      {t('contact.partner.body', 'AI Deals is proud to work with Sawa Dealz, represented by Mr. Emad and Mr. Mohamed, as a trusted supply partner for selected digital products and software subscriptions. This collaboration helps us expand product availability and deliver orders efficiently, while all purchases, payments, warranties, and customer support remain managed directly by AI Deals.')}
+                    </p>
+                    <a
+                      href="https://sawadealz.com/"
+                      target="_blank"
+                      rel="noopener noreferrer sponsored"
+                      className="partner-link mt-3 inline-flex items-center gap-1.5 rounded-lg border border-border/60 bg-muted/20 px-3 py-1.5 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                    >
+                      {t('contact.partner.cta', 'Visit Sawa Dealz ↗')}
+                    </a>
+                  </div>
+                </div>
+              </div>
             </motion.div>
+
           </div>
         </div>
         <ChatbotPromoSection />
