@@ -167,6 +167,18 @@
     }
   }
 
+  /* Contact page — supply partner card accents */
+  .partner-title { color: #E43D86; }
+  .partner-name { color: #45E887; }
+  .partner-link {
+    color: #45E887;
+    transition: color 200ms ease;
+  }
+  @media (hover: hover) {
+    .partner-link:hover { color: #FFFFFF; }
+  }
+
+
   .gradient-text-accent {
     background: var(--gradient-accent);
     -webkit-background-clip: text;
