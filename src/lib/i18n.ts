@@ -6544,6 +6544,26 @@ Object.entries(launchQaPatches).forEach(([lng, bundle]) => {
   i18n.addResourceBundle(lng, 'translation', bundle, true, true);
 });
 
+// Contact page — trusted supply partner card (Sawa Dealz)
+const partnerBody = 'AI Deals is proud to work with Sawa Dealz, represented by Mr. Emad and Mr. Mohamed, as a trusted supply partner for selected digital products and software subscriptions. This collaboration helps us expand product availability and deliver orders efficiently, while all purchases, payments, warranties, and customer support remain managed directly by AI Deals.';
+
+const partnerTranslations: Record<string, { contact: { partner: { title: string; reps: string; body: string; cta: string } } }> = {
+  en: { contact: { partner: { title: 'Trusted Digital Supply Partner', reps: 'Mr. Emad & Mr. Mohamed', body: partnerBody, cta: 'Visit Sawa Dealz ↗' } } },
+  fr: { contact: { partner: { title: 'Partenaire de fourniture numérique de confiance', reps: 'M. Emad & M. Mohamed', body: 'AI Deals est fière de collaborer avec Sawa Dealz, représentée par M. Emad et M. Mohamed, en tant que partenaire de fourniture de confiance pour certains produits numériques et abonnements logiciels. Cette collaboration nous aide à élargir la disponibilité des produits et à livrer les commandes efficacement, tandis que tous les achats, paiements, garanties et le support client restent gérés directement par AI Deals.', cta: 'Visiter Sawa Dealz ↗' } } },
+  nl: { contact: { partner: { title: 'Vertrouwde digitale leveringspartner', reps: 'Dhr. Emad & Dhr. Mohamed', body: 'AI Deals werkt met trots samen met Sawa Dealz, vertegenwoordigd door dhr. Emad en dhr. Mohamed, als vertrouwde leveringspartner voor geselecteerde digitale producten en softwareabonnementen. Deze samenwerking helpt ons het aanbod uit te breiden en bestellingen efficiënt te leveren, terwijl alle aankopen, betalingen, garanties en klantenservice rechtstreeks door AI Deals worden beheerd.', cta: 'Bezoek Sawa Dealz ↗' } } },
+  de: { contact: { partner: { title: 'Vertrauenswürdiger digitaler Lieferpartner', reps: 'Herr Emad & Herr Mohamed', body: 'AI Deals arbeitet stolz mit Sawa Dealz zusammen, vertreten durch Herrn Emad und Herrn Mohamed, als vertrauenswürdiger Lieferpartner für ausgewählte digitale Produkte und Software-Abonnements. Diese Zusammenarbeit hilft uns, die Produktverfügbarkeit zu erweitern und Bestellungen effizient auszuliefern, während alle Käufe, Zahlungen, Garantien und der Kundensupport weiterhin direkt von AI Deals verwaltet werden.', cta: 'Sawa Dealz besuchen ↗' } } },
+  es: { contact: { partner: { title: 'Socio de suministro digital de confianza', reps: 'Sr. Emad y Sr. Mohamed', body: 'AI Deals se enorgullece de colaborar con Sawa Dealz, representada por el Sr. Emad y el Sr. Mohamed, como socio de suministro de confianza para determinados productos digitales y suscripciones de software. Esta colaboración nos ayuda a ampliar la disponibilidad de productos y a entregar los pedidos de forma eficiente, mientras que todas las compras, pagos, garantías y la atención al cliente siguen gestionadas directamente por AI Deals.', cta: 'Visitar Sawa Dealz ↗' } } },
+  it: { contact: { partner: { title: 'Partner di fornitura digitale affidabile', reps: 'Sig. Emad e Sig. Mohamed', body: 'AI Deals è orgogliosa di collaborare con Sawa Dealz, rappresentata dal Sig. Emad e dal Sig. Mohamed, come partner di fornitura affidabile per determinati prodotti digitali e abbonamenti software. Questa collaborazione ci aiuta ad ampliare la disponibilità dei prodotti e a consegnare gli ordini in modo efficiente, mentre tutti gli acquisti, i pagamenti, le garanzie e l’assistenza clienti restano gestiti direttamente da AI Deals.', cta: 'Visita Sawa Dealz ↗' } } },
+  tr: { contact: { partner: { title: 'Güvenilir Dijital Tedarik Ortağı', reps: 'Bay Emad & Bay Mohamed', body: 'AI Deals, seçili dijital ürünler ve yazılım abonelikleri için güvenilir tedarik ortağı olarak Bay Emad ve Bay Mohamed tarafından temsil edilen Sawa Dealz ile çalışmaktan gurur duyar. Bu iş birliği ürün çeşitliliğini genişletmemize ve siparişleri verimli şekilde teslim etmemize yardımcı olurken; tüm satın almalar, ödemeler, garantiler ve müşteri desteği doğrudan AI Deals tarafından yönetilmeye devam eder.', cta: 'Sawa Dealz’i ziyaret et ↗' } } },
+  ar: { contact: { partner: { title: 'شريك توريد رقمي موثوق', reps: 'السيد عماد والسيد محمد', body: 'تعتز AI Deals بالتعاون مع Sawa Dealz، ممثلةً بالسيد عماد والسيد محمد، كشريك توريد موثوق لبعض المنتجات الرقمية واشتراكات البرامج. يساهم هذا التعاون في توسيع نطاق المنتجات وتسريع تنفيذ الطلبات، مع بقاء جميع عمليات الشراء والدفع والضمان وخدمة العملاء تحت إدارة AI Deals مباشرةً.', cta: 'زيارة Sawa Dealz ↗' } } },
+};
+
+languages.forEach(({ code }) => {
+  i18n.addResourceBundle(code, 'translation', partnerTranslations[code] ?? partnerTranslations.en, true, true);
+});
+
+
+
 const runInternalI18nQa = () => {
   if (typeof window === 'undefined' || !new URLSearchParams(window.location.search).has('i18nQa')) return;
   const flatten = (value: unknown, prefix = '', out: Record<string, string> = {}) => {
