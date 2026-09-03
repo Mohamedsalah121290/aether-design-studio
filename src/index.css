@@ -154,6 +154,19 @@
     background-clip: text;
   }
 
+  /* Top navigation link accent color (green) with white hover.
+     Hover is gated behind @media (hover: hover) so touch devices
+     never get stuck in a hover state. */
+  .nav-link-accent {
+    color: #45E887;
+    transition: color 200ms ease;
+  }
+  @media (hover: hover) {
+    .nav-link-accent:hover {
+      color: #FFFFFF;
+    }
+  }
+
   .gradient-text-accent {
     background: var(--gradient-accent);
     -webkit-background-clip: text;
